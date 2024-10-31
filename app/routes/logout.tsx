@@ -6,6 +6,7 @@ import { LoaderFunction } from "@remix-run/node";
 export const loader: LoaderFunction = async ({ request }) => {
   const response = new Response();
 
+  //セッションを削除
   const session = await getIronSession<Session>(request, response, {
     cookieName: "sid",
     password: process.env.SESSION_SECRET!,

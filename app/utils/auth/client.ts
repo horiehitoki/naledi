@@ -2,8 +2,8 @@ import { NodeOAuthClient } from "@atproto/oauth-client-node";
 import { StateStore, SessionStore } from "~/utils/auth/store";
 import { createDb, migrateToLatest } from "../db";
 
-const createClient = async () => {
-  const db = createDb(":memory:");
+const createClient: () => Promise<NodeOAuthClient> = async () => {
+  const db = createDb("../../../user.db");
   await migrateToLatest(db);
 
   const publicUrl = "";
@@ -31,4 +31,4 @@ const createClient = async () => {
   });
 };
 
-export const client = await createClient();
+export const client: NodeOAuthClient = await createClient();
