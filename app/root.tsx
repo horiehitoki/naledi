@@ -15,9 +15,9 @@ import { SidebarProvider, SidebarTrigger } from "./components/ui/sidebar";
 import { getSessionAgent } from "~/utils/auth/session";
 import { Agent } from "@atproto/api";
 import { LinksFunction, LoaderFunction } from "@remix-run/node";
-import * as Profile from "~/lexicon/types/app/bsky/actor/profile";
 import NotFound from "./components/ui/404";
 import ErrorPage from "./components/ui/errorPage";
+import { getUserProfile } from "./utils/user/getUserProfile";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -28,35 +28,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const agent: Agent | null = await getSessionAgent(request);
 
   if (!agent) return null;
-
-  //profileの取得
-  const { data: profileRecord } = await agent.com.atproto.repo.getRecord({
-    repo: agent.assertDid,
-    collection: "app.bsky.actor.profile",
-    rkey: "self",
-  });
-
-  const profile =
-    Profile.isRecord(profileRecord.value) &&
-    Profile.validateRecord(profileRecord.value).success
-      ? profileRecord.value
-      : {};
-
-  //CIDからアイコンデータを取得
-  let avatarUrl = null;
-
-  if (profile.avatar) {
-    const icon = await agent.com.atproto.sync.getBlob({
-      did: agent.assertDid,
-      cid: profile.avatar.ref,
-    });
-
-    //base64に変換
-    const buffer = Buffer.from(icon.data);
-    avatarUrl = `data:${icon.headers["content-type"]};base64,${buffer.toString(
-      "base64"
-    )}`;
-  }
+  const { profile, avatarUrl } = await getUserProfile(agent, agent.assertDid);
 
   return { profile, avatarUrl };
 };
@@ -117,13 +89,11 @@ export function ErrorBoundary() {
         {isRouteErrorResponse(error) ? (
           error.status === 404 ? (
             <NotFound />
-          ) : error instanceof Error ? (
-            <ErrorPage message={error.message} />
           ) : (
-            <ErrorPage message={""} />
+            <ErrorPage />
           )
         ) : (
-          <ErrorPage message={""} />
+          <ErrorPage />
         )}
       </h1>
       <Scripts />
