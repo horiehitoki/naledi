@@ -1,6 +1,6 @@
 import { NodeOAuthClient } from "@atproto/oauth-client-node";
 import { StateStore, SessionStore } from "~/utils/auth/store";
-import { createDb, migrateToLatest } from "../db";
+import { createDb, migrateToLatest } from "./db";
 
 const createClient: () => Promise<NodeOAuthClient> = async () => {
   const db = createDb("../../../user.db");

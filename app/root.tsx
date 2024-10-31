@@ -1,24 +1,22 @@
 import {
-  Form,
+  isRouteErrorResponse,
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
   useLoaderData,
+  useRouteError,
 } from "@remix-run/react";
 import "./tailwind.css";
 import { AppSidebar } from "~/components/ui/app-sidebar";
 import { SidebarProvider, SidebarTrigger } from "./components/ui/sidebar";
-import { getSessionAgent } from "~/utils/session";
+import { getSessionAgent } from "~/utils/auth/session";
 import { Agent } from "@atproto/api";
 import { LoaderFunction } from "@remix-run/node";
 import * as Profile from "~/lexicon/types/app/bsky/actor/profile";
-import { Button } from "./components/ui/button";
-import { Input } from "./components/ui/input";
-import { redirect } from "@remix-run/node";
-import { client } from "~/utils/auth/client";
-import type { ActionFunctionArgs } from "@remix-run/node";
+import NotFound from "./components/ui/404";
+import ErrorPage from "./components/ui/errorPage";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const agent: Agent | null = await getSessionAgent(request);
@@ -57,28 +55,10 @@ export const loader: LoaderFunction = async ({ request }) => {
   return { profile, avatarUrl };
 };
 
-export const action = async ({ request }: ActionFunctionArgs) => {
-  const formData = await request.formData();
-  const handle = formData.get("handle");
-
-  if (typeof handle === "string") {
-    const url = await client.authorize(handle, {
-      scope: "atproto transition:generic",
-    });
-
-    return redirect(url.toString());
-  }
-
-  return null;
-};
-
 export function Layout({ children }: { children: React.ReactNode }) {
-  const data = useLoaderData();
+  const data = useLoaderData<typeof loader>();
 
-  if (data) {
-    const profile = data.profile;
-    const avatarUrl = data.avatarUrl;
-
+  if (data)
     return (
       <html lang="jp">
         <head>
@@ -89,7 +69,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         </head>
         <body>
           <SidebarProvider>
-            <AppSidebar profile={profile} avatarUrl={avatarUrl} />
+            <AppSidebar profile={data.profile} avatarUrl={data.avatarUrl} />
             <SidebarTrigger />
             {children}
             <ScrollRestoration />
@@ -98,39 +78,49 @@ export function Layout({ children }: { children: React.ReactNode }) {
         </body>
       </html>
     );
-  } else {
-    return (
-      <html lang="jp">
-        <head>
-          <meta charSet="utf-8" />
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <Meta />
-          <Links />
-        </head>
-        <body>
-          <div className="m-auto md:w-1/2 w-3/4 py-14">
-            <h1 className="text-4xl font-bold text-center py-10">
-              Atmosphereにログイン
-            </h1>
 
-            <Form method="post" className="py-10">
-              <div>
-                <label htmlFor="title">handle</label>
-                <Input type="handle" name="handle" id="handle" required />
-              </div>
-              <Button type="submit" className="my-5">
-                ログイン
-              </Button>
-            </Form>
-          </div>
-        </body>
-      </html>
-    );
-  }
+  return (
+    <html lang="jp">
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <Meta />
+        <Links />
+      </head>
+      <body>
+        {children}
+        <ScrollRestoration />
+        <Scripts />
+      </body>
+    </html>
+  );
 }
 
 export default function App() {
-  const ctx = useLoaderData();
+  const ctx = useLoaderData<typeof loader>();
 
   return <Outlet context={ctx} />;
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+
+  return (
+    <>
+      <h1>
+        {isRouteErrorResponse(error) ? (
+          error.status === 404 ? (
+            <NotFound />
+          ) : error instanceof Error ? (
+            <ErrorPage message={error.message} />
+          ) : (
+            <ErrorPage message={""} />
+          )
+        ) : (
+          <ErrorPage message={""} />
+        )}
+      </h1>
+      <Scripts />
+    </>
+  );
 }

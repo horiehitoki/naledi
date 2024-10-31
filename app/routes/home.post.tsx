@@ -10,7 +10,7 @@ import {
   DialogTitle,
 } from "~/components/ui/dialog";
 import { Textarea } from "~/components/ui/textarea";
-import { getSessionAgent } from "~/utils/session";
+import { getSessionAgent } from "~/utils/auth/session";
 import { useToast } from "~/hooks/use-toast";
 import { Toaster } from "~/components/ui/toaster";
 import { useState } from "react";
