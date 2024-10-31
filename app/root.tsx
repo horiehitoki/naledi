@@ -8,15 +8,21 @@ import {
   useLoaderData,
   useRouteError,
 } from "@remix-run/react";
-import "./tailwind.css";
+import stylesheet from "~/tailwind.css?url";
+import fontstyle from "~/font.css?url";
 import { AppSidebar } from "~/components/ui/app-sidebar";
 import { SidebarProvider, SidebarTrigger } from "./components/ui/sidebar";
 import { getSessionAgent } from "~/utils/auth/session";
 import { Agent } from "@atproto/api";
-import { LoaderFunction } from "@remix-run/node";
+import { LinksFunction, LoaderFunction } from "@remix-run/node";
 import * as Profile from "~/lexicon/types/app/bsky/actor/profile";
 import NotFound from "./components/ui/404";
 import ErrorPage from "./components/ui/errorPage";
+
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: stylesheet },
+  { rel: "stylesheet", href: fontstyle },
+];
 
 export const loader: LoaderFunction = async ({ request }) => {
   const agent: Agent | null = await getSessionAgent(request);

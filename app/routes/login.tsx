@@ -34,7 +34,7 @@ export default function Login() {
           <Input type="handle" name="handle" id="handle" required />
         </div>
         <Button type="submit" className="my-5">
-          ログイン
+          Login
         </Button>
       </Form>
     </div>
