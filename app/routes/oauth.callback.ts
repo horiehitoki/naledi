@@ -18,7 +18,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     clientSession.did = session.did;
     await clientSession.save();
 
-    return redirect("/", { headers: response.headers });
+    return redirect("/home", { headers: response.headers });
   } catch (error) {
     console.error("Error during session handling:", error);
     return null;
