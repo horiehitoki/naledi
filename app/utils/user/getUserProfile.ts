@@ -47,7 +47,7 @@ export async function getUserProfile(agent: Agent, did: string) {
   */
 
   const res = await agent.getProfile({ actor: did });
-  const feed = await agent.getAuthorFeed({ actor: did });
+  const feed = await agent.getAuthorFeed({ actor: did, limit: 50 });
 
   const posts = feed.data;
   const profile = res.data;

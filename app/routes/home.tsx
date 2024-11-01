@@ -1,18 +1,51 @@
 import { Agent } from "@atproto/api";
 import { LoaderFunction } from "@remix-run/node";
-import { Outlet, redirect } from "@remix-run/react";
+import { Outlet, redirect, useLoaderData } from "@remix-run/react";
+import { Post } from "~/components/timeline/post";
 import { getSessionAgent } from "~/utils/auth/session";
+import { getTimelineFeed } from "~/utils/timeline/timeline";
+import { useTimeline } from "~/hooks/useTimeline";
+import { Home } from "lucide-react";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const agent: Agent | null = await getSessionAgent(request);
   if (agent == null) return redirect("/login");
 
-  return null;
+  return getTimelineFeed(agent, { limit: 50 });
 };
 
 export default function Homepage() {
+  const data = useLoaderData<typeof loader>();
+  const { posts, isLoading, currentCursor, loadMoreRef } = useTimeline({
+    initialFeed: data?.feed || [],
+    initialCursor: data?.cursor,
+    fetchEndpoint: "/api/getTimeline",
+    did: null,
+  });
+
+  if (!data) return null;
+
   return (
     <div className="m-auto md:w-1/2 w-3/4 py-14">
+      <h1 className="text-4xl font-bold text-center py-10">
+        ホームタイムライン
+      </h1>
+
+      {posts.map((postItem) => (
+        <Post key={postItem.post.cid} post={postItem.post} />
+      ))}
+
+      {currentCursor && (
+        <div
+          ref={loadMoreRef}
+          className="w-full h-20 flex items-center justify-center"
+        >
+          {isLoading && (
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
+          )}
+        </div>
+      )}
+
       <Outlet />
     </div>
   );

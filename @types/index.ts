@@ -8,3 +8,17 @@ export type ProfileData = {
   avatarUrl: string | null;
   posts: OutputSchema;
 };
+
+export type PostType = {
+  post: {
+    cid: string;
+    author: {
+      avatar?: string;
+      displayName: string;
+      handle: string;
+    };
+    record: {
+      text: string;
+    };
+  };
+};

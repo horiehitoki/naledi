@@ -7,14 +7,20 @@ import {
 } from "~/components/ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "./button";
-import { LogOut, Plus } from "lucide-react";
+import { Home, LogOut, Plus } from "lucide-react";
 import { ProfileData } from "@types";
 
 export function AppSidebar(props: ProfileData) {
   return (
     <Sidebar>
       <SidebarHeader className="mx-4">
-        <a href="/home/post" className="my-5">
+        <a href="/home/" className="my-5">
+          <Button>
+            <Home />
+            Home
+          </Button>
+        </a>
+        <a href="/home/post">
           <Button>
             <Plus />
             投稿
@@ -26,7 +32,7 @@ export function AppSidebar(props: ProfileData) {
         <SidebarGroup />
       </SidebarContent>
       <SidebarFooter className="mx-4">
-        <a href={`/home/user?handle=${props.profile.handle}`}>
+        <a href={`/user?handle=${props.profile.handle}`}>
           <div className="flex">
             <Avatar className="w-12 h-12">
               <AvatarImage src={props.avatarUrl || ""} />

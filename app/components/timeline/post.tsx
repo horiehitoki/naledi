@@ -1,25 +1,12 @@
+import { PostType } from "@types";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Card, CardContent, CardHeader } from "../ui/card";
 
-type PostProps = {
-  post: {
-    cid: string;
-    author: {
-      avatar?: string;
-      displayName: string;
-      handle: string;
-    };
-    record: {
-      text: string;
-    };
-  };
-};
-
-export const Post = ({ post }: PostProps) => {
+export const Post = ({ post }: PostType) => {
   return (
     <Card key={post.cid} className="my-5">
       <CardHeader>
-        <a href={`/home/user?handle=${post.author.handle}`}>
+        <a href={`/user?handle=${post.author.handle}`}>
           <div className="flex items-center space-x-4">
             <Avatar>
               <AvatarImage
