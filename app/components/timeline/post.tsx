@@ -23,7 +23,7 @@ export const Post = ({ post }: { post: PostView }) => {
   const [open, setOpen] = useState(false);
 
   return (
-    <Card key={post.cid} className="my-5">
+    <Card key={post.cid}>
       <CardHeader>
         <a href={`/home/user?handle=${post.author.handle}`}>
           <div className="flex items-center space-x-4">

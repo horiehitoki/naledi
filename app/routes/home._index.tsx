@@ -30,11 +30,13 @@ export default function Homepage() {
 
   return (
     <>
-      {posts.map((postItem) => {
-        const postData = postItem.post as PostView;
+      <div className="space-y-8">
+        {posts.map((postItem) => {
+          const postData = postItem.post as PostView;
 
-        return <Post key={postData.cid} post={postData} />;
-      })}
+          return <Post key={postData.cid} post={postData} />;
+        })}
+      </div>
 
       {currentCursor && (
         <div

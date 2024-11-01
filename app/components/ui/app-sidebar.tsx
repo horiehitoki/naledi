@@ -8,45 +8,61 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "./button";
 import { Home, LogOut, Plus } from "lucide-react";
-import { ProfileData } from "@types";
 import { ModeToggle } from "./mode-toggle";
+import { SetStateAction } from "react";
+import { ProfileView } from "@atproto/api/dist/client/types/app/bsky/actor/defs";
 
-export function AppSidebar(props: ProfileData) {
+type Props = {
+  profile: ProfileView;
+  open: boolean;
+  SetOpen: React.Dispatch<SetStateAction<boolean>>;
+};
+
+export function AppSidebar(props: Props) {
   return (
-    <Sidebar>
-      <SidebarHeader className="mx-4">
-        <a href="/home/" className="my-5">
-          <Button>
-            <Home />
-            Home
-          </Button>
-        </a>
-        <a href="/home/post">
-          <Button>
+    <Sidebar className="p-5">
+      <SidebarHeader className="space-y-4">
+        <div>
+          <a href="/home/">
+            <Button>
+              <Home />
+              Home
+            </Button>
+          </a>
+        </div>
+
+        <div>
+          <Button
+            onClick={() => {
+              props.SetOpen(!props.open);
+            }}
+          >
             <Plus />
-            投稿
+            投稿する
           </Button>
-        </a>
+        </div>
+
         <ModeToggle />
       </SidebarHeader>
+
       <SidebarContent>
         <SidebarGroup />
         <SidebarGroup />
       </SidebarContent>
-      <SidebarFooter className="mx-4">
+      <SidebarFooter className="space-y-4">
         <a href={`/home/user?handle=${props.profile.handle}`}>
           <div className="flex">
             <Avatar className="w-12 h-12">
-              <AvatarImage src={props.avatarUrl || ""} />
+              <AvatarImage src={props.profile.avatar || ""} />
               <AvatarFallback>
                 {props.profile.displayName?.[0]?.toUpperCase() || "?"}
               </AvatarFallback>
             </Avatar>
-            <h1 className="font-bold mx-4 my-4">{props.profile.displayName}</h1>
+            <h1 className="font-bold p-4">{props.profile.displayName}</h1>
           </div>
         </a>
 
-        <a href="/logout" className="my-5">
+        <a href="/logout">
           <Button>
             <LogOut />
             ログアウト
