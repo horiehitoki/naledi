@@ -5,7 +5,7 @@ import { Post } from "~/components/timeline/post";
 import { getSessionAgent } from "~/utils/auth/session";
 import { getTimelineFeed } from "~/utils/timeline/timeline";
 import { useTimeline } from "~/hooks/useTimeline";
-import { Home } from "lucide-react";
+import { PostView } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const agent: Agent | null = await getSessionAgent(request);
@@ -31,9 +31,11 @@ export default function Homepage() {
         ホームタイムライン
       </h1>
 
-      {posts.map((postItem) => (
-        <Post key={postItem.post.cid} post={postItem.post} />
-      ))}
+      {posts.map((postItem) => {
+        const postData = postItem.post as PostView;
+
+        return <Post key={postData.cid} post={postData} />;
+      })}
 
       {currentCursor && (
         <div

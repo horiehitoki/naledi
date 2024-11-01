@@ -18,6 +18,13 @@ import { LinksFunction, LoaderFunction } from "@remix-run/node";
 import NotFound from "./components/ui/404";
 import ErrorPage from "./components/ui/errorPage";
 import { getUserProfile } from "./utils/user/getUserProfile";
+import clsx from "clsx";
+import {
+  PreventFlashOnWrongTheme,
+  ThemeProvider,
+  useTheme,
+} from "remix-themes";
+import { themeSessionResolver } from "./sessions.server";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -29,55 +36,46 @@ export const loader: LoaderFunction = async ({ request }) => {
 
   if (!agent) return null;
   const { profile, avatarUrl } = await getUserProfile(agent, agent.assertDid);
+  const { getTheme } = await themeSessionResolver(request);
 
-  return { profile, avatarUrl };
+  return { profile, avatarUrl, theme: getTheme() };
 };
 
-export function Layout({ children }: { children: React.ReactNode }) {
+export default function AppWithProviders() {
   const data = useLoaderData<typeof loader>();
+  return (
+    <ThemeProvider specifiedTheme={data?.theme} themeAction="/action/set-theme">
+      <App />
+    </ThemeProvider>
+  );
+}
 
-  if (data)
-    return (
-      <html lang="jp">
-        <head>
-          <meta charSet="utf-8" />
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <Meta />
-          <Links />
-        </head>
-        <body>
-          <SidebarProvider>
-            <AppSidebar profile={data.profile} avatarUrl={data.avatarUrl} />
-            <SidebarTrigger />
-            {children}
-            <ScrollRestoration />
-            <Scripts />
-          </SidebarProvider>
-        </body>
-      </html>
-    );
+export function App() {
+  const data = useLoaderData<typeof loader>();
+  const [theme] = useTheme();
 
   return (
-    <html lang="jp">
+    <html lang="jp" className={clsx(theme)}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
+        {data && <PreventFlashOnWrongTheme ssrTheme={Boolean(data.theme)} />}
       </head>
       <body>
-        {children}
-        <ScrollRestoration />
-        <Scripts />
+        <SidebarProvider>
+          {data && (
+            <AppSidebar profile={data.profile} avatarUrl={data.avatarUrl} />
+          )}
+          <SidebarTrigger />
+          <Outlet />
+          <ScrollRestoration />
+          <Scripts />
+        </SidebarProvider>
       </body>
     </html>
   );
-}
-
-export default function App() {
-  const ctx = useLoaderData<typeof loader>();
-
-  return <Outlet context={ctx} />;
 }
 
 export function ErrorBoundary() {

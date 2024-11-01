@@ -9,6 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "./button";
 import { Home, LogOut, Plus } from "lucide-react";
 import { ProfileData } from "@types";
+import { ModeToggle } from "./mode-toggle";
 
 export function AppSidebar(props: ProfileData) {
   return (
@@ -26,6 +27,7 @@ export function AppSidebar(props: ProfileData) {
             投稿
           </Button>
         </a>
+        <ModeToggle />
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup />

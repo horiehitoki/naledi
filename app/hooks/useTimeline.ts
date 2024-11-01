@@ -1,8 +1,8 @@
+import { PostView } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
 import { useState, useEffect, useCallback, useRef } from "react";
-import type { PostType } from "@types";
 
 interface TimelineParams {
-  initialFeed: PostType[];
+  initialFeed: PostView[];
   initialCursor?: string;
   fetchEndpoint: string;
   did: string | null;
@@ -14,7 +14,7 @@ export const useTimeline = ({
   fetchEndpoint,
   did,
 }: TimelineParams) => {
-  const [posts, setPosts] = useState<PostType[]>(initialFeed);
+  const [posts, setPosts] = useState<PostView[]>(initialFeed);
   const [isLoading, setIsLoading] = useState(false);
   const [currentCursor, setCurrentCursor] = useState<string | undefined>(
     initialCursor
