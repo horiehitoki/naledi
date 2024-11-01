@@ -10,8 +10,6 @@ import {
 } from "@remix-run/react";
 import stylesheet from "~/tailwind.css?url";
 import fontstyle from "~/font.css?url";
-import { AppSidebar } from "~/components/ui/app-sidebar";
-import { SidebarProvider, SidebarTrigger } from "./components/ui/sidebar";
 import { getSessionAgent } from "~/utils/auth/session";
 import { Agent } from "@atproto/api";
 import { LinksFunction, LoaderFunction } from "@remix-run/node";
@@ -64,15 +62,9 @@ export function App() {
         {data && <PreventFlashOnWrongTheme ssrTheme={Boolean(data.theme)} />}
       </head>
       <body>
-        <SidebarProvider>
-          {data && (
-            <AppSidebar profile={data.profile} avatarUrl={data.avatarUrl} />
-          )}
-          <SidebarTrigger />
-          <Outlet />
-          <ScrollRestoration />
-          <Scripts />
-        </SidebarProvider>
+        <Outlet />
+        <ScrollRestoration />
+        <Scripts />
       </body>
     </html>
   );
@@ -82,8 +74,14 @@ export function ErrorBoundary() {
   const error = useRouteError();
 
   return (
-    <>
-      <h1>
+    <html lang="jp">
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <Meta />
+        <Links />
+      </head>
+      <body>
         {isRouteErrorResponse(error) ? (
           error.status === 404 ? (
             <NotFound />
@@ -93,8 +91,9 @@ export function ErrorBoundary() {
         ) : (
           <ErrorPage />
         )}
-      </h1>
-      <Scripts />
-    </>
+        <ScrollRestoration />
+        <Scripts />
+      </body>
+    </html>
   );
 }

@@ -25,7 +25,7 @@ export const Post = ({ post }: { post: PostView }) => {
   return (
     <Card key={post.cid} className="my-5">
       <CardHeader>
-        <a href={`/user?handle=${post.author.handle}`}>
+        <a href={`/home/user?handle=${post.author.handle}`}>
           <div className="flex items-center space-x-4">
             <Avatar>
               <AvatarImage

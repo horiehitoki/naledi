@@ -7,14 +7,15 @@ import { getUserProfile } from "~/utils/user/getUserProfile";
 import { ProfileData } from "@types";
 import { Post } from "~/components/timeline/post";
 import { useTimeline } from "~/hooks/useTimeline";
+import { PostView } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
 
 export const loader = async ({ request }: ActionFunctionArgs) => {
   const agent = await getSessionAgent(request);
-  if (!agent) return;
+  if (!agent) return null;
 
   const { searchParams } = new URL(request.url);
   const handle = searchParams.get("handle");
-  if (!handle) return;
+  if (!handle) return null;
 
   const did = await resolver.resolvedHandleToDid(handle).catch(() => {
     throw new Error("Failed to resolve handle to DID");
@@ -45,7 +46,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="m-auto md:w-1/2 w-3/4 py-14">
+    <div>
       {data.profile.banner ? (
         <img
           src={data.profile.banner}
@@ -71,10 +72,12 @@ export default function ProfilePage() {
         <p className="whitespace-pre-wrap">{data.profile.description}</p>
       </div>
       <hr className="h-px my-8 bg-black border-0" />
+      {posts.map((postItem) => {
+        const postData = postItem.post as PostView;
 
-      {posts.map((postItem) => (
-        <Post key={postItem.post.cid} post={postItem.post} />
-      ))}
+        return <Post key={postData.cid} post={postData} />;
+      })}
+
       {currentCursor && (
         <div
           ref={loadMoreRef}

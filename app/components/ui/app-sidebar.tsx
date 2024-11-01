@@ -34,7 +34,7 @@ export function AppSidebar(props: ProfileData) {
         <SidebarGroup />
       </SidebarContent>
       <SidebarFooter className="mx-4">
-        <a href={`/user?handle=${props.profile.handle}`}>
+        <a href={`/home/user?handle=${props.profile.handle}`}>
           <div className="flex">
             <Avatar className="w-12 h-12">
               <AvatarImage src={props.avatarUrl || ""} />
