@@ -1,4 +1,5 @@
 import { Agent } from "@atproto/api";
+import { getFollowers, getFollows } from "./getFollowStatus";
 //import * as Profile from "~/lexicon/types/app/bsky/actor/profile";
 
 export async function getUserProfile(agent: Agent, did: string) {
@@ -48,10 +49,12 @@ export async function getUserProfile(agent: Agent, did: string) {
 
   const res = await agent.getProfile({ actor: did });
   const feed = await agent.getAuthorFeed({ actor: did, limit: 50 });
+  const follow = await getFollows(agent, did);
+  const follower = await getFollowers(agent, did);
 
   const posts = feed.data;
   const profile = res.data;
   const avatarUrl = profile.avatar!;
 
-  return { profile, avatarUrl, posts };
+  return { profile, avatarUrl, posts, follow, follower };
 }

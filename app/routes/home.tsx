@@ -21,7 +21,7 @@ import { useState } from "react";
 export const loader: LoaderFunction = async ({ request }) => {
   const agent: Agent | null = await getSessionAgent(request);
 
-  if (agent == null) return redirect("/login");
+  if (agent == null) return redirect("/");
 
   const { profile } = await getUserProfile(agent, agent.assertDid);
 
@@ -36,9 +36,17 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const content = formData.get("content");
 
   if (typeof content === "string") {
-    await agent.post({
+    const record = {
+      $type: "app.bsky.feed.post",
       text: content,
       createdAt: new Date().toISOString(),
+    };
+
+    await agent.com.atproto.repo.createRecord({
+      repo: agent.assertDid,
+      collection: "app.bsky.feed.post",
+      record: record,
+      via: "RemixClient",
     });
   }
 
