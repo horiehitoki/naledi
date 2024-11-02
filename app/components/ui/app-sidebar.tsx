@@ -20,7 +20,7 @@ type Props = {
 
 export function AppSidebar(props: Props) {
   return (
-    <Sidebar className="p-5">
+    <Sidebar className="p-5 z-0">
       <SidebarHeader className="space-y-4">
         <div>
           <a href="/home/">

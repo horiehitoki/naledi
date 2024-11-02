@@ -1,5 +1,5 @@
+import { useState, useCallback } from "react";
 import { PostView } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
-import { useState, useEffect, useCallback, useRef } from "react";
 
 interface TimelineParams {
   initialFeed: PostView[];
@@ -19,64 +19,36 @@ export const useTimeline = ({
   const [currentCursor, setCurrentCursor] = useState<string | undefined>(
     initialCursor
   );
+  const [hasMore, setHasMore] = useState<boolean>(!!initialCursor);
 
   const loadMorePosts = useCallback(async () => {
     if (!currentCursor || isLoading) return;
 
-    try {
-      setIsLoading(true);
-      let res;
+    setIsLoading(true);
+    let res;
 
-      if (did) {
-        res = await fetch(
-          `${fetchEndpoint}?cursor=${currentCursor}&did=${did}`
-        );
-      } else {
-        res = await fetch(`${fetchEndpoint}?cursor=${currentCursor}`);
-      }
-
-      const json = await res.json();
-
-      if (json.feed?.length) {
-        setPosts((prevPosts) => [...prevPosts, ...json.feed]);
-        setCurrentCursor(json.cursor);
-      } else {
-        setCurrentCursor(undefined);
-      }
-    } catch (error) {
-      console.error("Failed to load more posts:", error);
-    } finally {
-      setIsLoading(false);
+    if (did) {
+      res = await fetch(`${fetchEndpoint}?cursor=${currentCursor}&did=${did}`);
+    } else {
+      res = await fetch(`${fetchEndpoint}?cursor=${currentCursor}`);
     }
+
+    const json = await res.json();
+
+    if (json.feed?.length) {
+      setPosts((prevPosts) => [...prevPosts, ...json.feed]);
+      setCurrentCursor(json.cursor);
+      setHasMore(!!json.cursor);
+    } else {
+      setHasMore(false);
+    }
+
+    setIsLoading(false);
   }, [currentCursor, isLoading, fetchEndpoint, did]);
-
-  const loadMoreRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!currentCursor || isLoading) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          loadMorePosts();
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (loadMoreRef.current) {
-      observer.observe(loadMoreRef.current);
-    }
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [loadMorePosts, currentCursor, isLoading]);
 
   return {
     posts,
-    isLoading,
-    currentCursor,
-    loadMoreRef,
+    hasMore,
+    loadMorePosts,
   };
 };

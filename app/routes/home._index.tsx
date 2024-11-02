@@ -6,6 +6,8 @@ import { getSessionAgent } from "~/utils/auth/session";
 import { getTimelineFeed } from "~/utils/timeline/timeline";
 import { useTimeline } from "~/hooks/useTimeline";
 import { PostView } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
+import InfiniteScroll from "react-infinite-scroll-component";
+import Window from "~/components/window";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const agent: Agent | null = await getSessionAgent(request);
@@ -19,7 +21,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 export default function Homepage() {
   const data = useLoaderData<typeof loader>();
 
-  const { posts, isLoading, currentCursor, loadMoreRef } = useTimeline({
+  const { posts, hasMore, loadMorePosts } = useTimeline({
     initialFeed: data?.feed || [],
     initialCursor: data?.cursor,
     fetchEndpoint: "/api/getTimeline",
@@ -29,25 +31,26 @@ export default function Homepage() {
   if (!data) return null;
 
   return (
-    <>
-      <div className="space-y-8">
-        {posts.map((postItem) => {
-          const postData = postItem.post as PostView;
-
-          return <Post key={postData.cid} post={postData} />;
-        })}
-      </div>
-
-      {currentCursor && (
-        <div
-          ref={loadMoreRef}
-          className="w-full h-20 flex items-center justify-center"
+    <Window title="ホームタイムライン">
+      <div id="scrollable-timeline" className="h-full overflow-auto">
+        <InfiniteScroll
+          dataLength={posts.length}
+          next={loadMorePosts}
+          hasMore={hasMore}
+          scrollableTarget="scrollable-timeline"
+          loader={
+            <div className="m-auto my-16 animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
+          }
         >
-          {isLoading && (
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
-          )}
-        </div>
-      )}
-    </>
+          <div className="space-y-8">
+            {posts.map((postItem) => {
+              const postData = postItem.post as PostView;
+
+              return <Post key={postData.cid} post={postData} />;
+            })}
+          </div>
+        </InfiniteScroll>
+      </div>
+    </Window>
   );
 }
