@@ -15,7 +15,7 @@ import { ProfileView } from "@atproto/api/dist/client/types/app/bsky/actor/defs"
 type Props = {
   profile: ProfileView;
   open: boolean;
-  SetOpen: React.Dispatch<SetStateAction<boolean>>;
+  setOpen: React.Dispatch<SetStateAction<boolean>>;
 };
 
 export function AppSidebar(props: Props) {
@@ -34,7 +34,7 @@ export function AppSidebar(props: Props) {
         <div>
           <Button
             onClick={() => {
-              props.SetOpen(!props.open);
+              props.setOpen(!props.open);
             }}
           >
             <Plus />

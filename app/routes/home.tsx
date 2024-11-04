@@ -56,7 +56,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 export default function Homepage() {
   const data = useLoaderData<typeof loader>();
   const { toast } = useToast();
-  const [open, SetOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
   if (!data) return null;
 
@@ -65,14 +65,14 @@ export default function Homepage() {
       <div className="hidden md:block">
         <SidebarProvider>
           {data && (
-            <AppSidebar profile={data.profile} open={open} SetOpen={SetOpen} />
+            <AppSidebar profile={data.profile} open={open} setOpen={setOpen} />
           )}
           <SidebarTrigger />
 
           <Outlet />
 
           <Toaster />
-          <Dialog open={open} onOpenChange={SetOpen}>
+          <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
                 <DialogTitle className="font-bold text-2xl">
@@ -94,7 +94,7 @@ export default function Homepage() {
                   <Button
                     type="submit"
                     onClick={() => {
-                      SetOpen(!open);
+                      setOpen(!open);
                       toast({
                         title: "投稿完了✅",
                         description: "ポストが投稿されました",
