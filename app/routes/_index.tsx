@@ -25,12 +25,12 @@ export default function Index() {
   return (
     <div className="min-h-screen flex justify-start items-center px-36">
       <Card className="w-80 rounded-lg shadow-lg">
-        <CardContent className="p-6 space-y-6">
+        <CardContent className="p-6 space-y-8">
           <h1 className="text-2xl font-bold">Remix Client</h1>
 
           <h1 className="text-2xl font-bold">ログイン</h1>
 
-          <Form method="post" className="py-6">
+          <Form method="post">
             <div>
               <Input
                 type="text"
@@ -41,7 +41,7 @@ export default function Index() {
                 required
               />
             </div>
-            <Button type="submit" className="my-5 w-full font-semibold rounded">
+            <Button type="submit" className="my-8 w-full font-semibold rounded">
               <LogIn />
               Login
             </Button>

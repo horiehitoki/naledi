@@ -1,7 +1,8 @@
+import { ProfileView } from "@atproto/api/dist/client/types/app/bsky/actor/defs";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Card, CardHeader } from "../ui/card";
 
-export const UserCard = ({ data }: { data: unknown }) => {
+export const UserCard = ({ data }: { data: ProfileView }) => {
   return (
     <Card key={data.cid}>
       <CardHeader>

@@ -62,56 +62,45 @@ export default function Homepage() {
 
   return (
     <div>
-      <div className="hidden md:block">
-        <SidebarProvider>
-          {data && (
-            <AppSidebar profile={data.profile} open={open} setOpen={setOpen} />
-          )}
-          <SidebarTrigger />
+      <SidebarProvider>
+        {data && (
+          <AppSidebar profile={data.profile} open={open} setOpen={setOpen} />
+        )}
+        <SidebarTrigger />
 
-          <Outlet />
-
-          <Toaster />
-          <Dialog open={open} onOpenChange={setOpen}>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle className="font-bold text-2xl">
-                  投稿する
-                </DialogTitle>
-              </DialogHeader>
-              <Form method="post">
-                <div className="grid gap-4 py-4">
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Textarea
-                      name="content"
-                      id="content"
-                      className="w-80 h-64"
-                    />
-                  </div>
-                </div>
-
-                <DialogFooter>
-                  <Button
-                    type="submit"
-                    onClick={() => {
-                      setOpen(!open);
-                      toast({
-                        title: "投稿完了✅",
-                        description: "ポストが投稿されました",
-                      });
-                    }}
-                  >
-                    投稿
-                  </Button>
-                </DialogFooter>
-              </Form>
-            </DialogContent>
-          </Dialog>
-        </SidebarProvider>
-      </div>
-      <div className="md:hidden">
         <Outlet />
-      </div>
+
+        <Toaster />
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle className="font-bold text-2xl">投稿する</DialogTitle>
+            </DialogHeader>
+            <Form method="post">
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Textarea name="content" id="content" className="w-80 h-64" />
+                </div>
+              </div>
+
+              <DialogFooter>
+                <Button
+                  type="submit"
+                  onClick={() => {
+                    setOpen(!open);
+                    toast({
+                      title: "投稿完了✅",
+                      description: "ポストが投稿されました",
+                    });
+                  }}
+                >
+                  投稿
+                </Button>
+              </DialogFooter>
+            </Form>
+          </DialogContent>
+        </Dialog>
+      </SidebarProvider>
     </div>
   );
 }

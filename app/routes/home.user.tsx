@@ -62,7 +62,7 @@ export default function ProfilePage() {
 
   return (
     <Window title={`${data.profile.displayName} のプロフィール`}>
-      <div id="scrollable-timeline" className="h-full overflow-auto">
+      <div id="scrollable-timeline" className="h-full overflow-auto space-y-8">
         {data.profile.banner && (
           <img src={data.profile.banner} className="rounded-md" alt="banner" />
         )}
@@ -95,7 +95,7 @@ export default function ProfilePage() {
         <hr className="h-px my-8 bg-black dark:bg-white border-0" />
 
         <Tabs defaultValue="posts">
-          <TabsList>
+          <TabsList className="space-x-5">
             <TabsTrigger value="posts">投稿</TabsTrigger>
             <TabsTrigger value="follow">フォロー</TabsTrigger>
             <TabsTrigger value="follower">フォロワー</TabsTrigger>
@@ -142,7 +142,7 @@ export default function ProfilePage() {
           <TabsContent
             value="follower"
             id="follower"
-            className="space-y-5 h-full overflow-auto"
+            className="h-full overflow-auto"
           >
             <InfiniteScroll
               dataLength={follower.length}

@@ -10,12 +10,9 @@ import {
 } from "@remix-run/react";
 import stylesheet from "~/tailwind.css?url";
 import fontstyle from "~/font.css?url";
-import { getSessionAgent } from "~/utils/auth/session";
-import { Agent } from "@atproto/api";
 import { LinksFunction, LoaderFunction } from "@remix-run/node";
 import NotFound from "./components/ui/404";
 import ErrorPage from "./components/ui/errorPage";
-import { getUserProfile } from "./utils/user/getUserProfile";
 import clsx from "clsx";
 import {
   PreventFlashOnWrongTheme,
@@ -30,13 +27,9 @@ export const links: LinksFunction = () => [
 ];
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const agent: Agent | null = await getSessionAgent(request);
-
-  if (!agent) return null;
-  const { profile, avatarUrl } = await getUserProfile(agent, agent.assertDid);
   const { getTheme } = await themeSessionResolver(request);
 
-  return { profile, avatarUrl, theme: getTheme() };
+  return { theme: getTheme() };
 };
 
 export default function AppWithProviders() {

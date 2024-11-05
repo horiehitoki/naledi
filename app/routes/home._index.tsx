@@ -26,7 +26,7 @@ export default function Homepage() {
     {
       id: uuidv4(),
       type: "user",
-      did: "did:plc:4hvycwrqra4gu4vlh7q7sfvw",
+      did: "did:plc:hbpzfim6uqz522avxupaud5y",
       posts: [],
       hasMore: true,
     },
