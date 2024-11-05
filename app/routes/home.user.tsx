@@ -7,6 +7,12 @@ import { getUserProfile } from "~/utils/user/getUserProfile";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { UserCard } from "~/components/user/userCard";
 import Window from "~/components/window";
+import { useFollow } from "~/hooks/useFollow";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { v4 as uuidv4 } from "uuid";
+import { useTimeline } from "~/hooks/useTimeline";
+import { PostView } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
+import { Post } from "~/components/timeline/post";
 
 export const loader = async ({ request }: ActionFunctionArgs) => {
   const agent = await getSessionAgent(request);
@@ -36,11 +42,27 @@ export const loader = async ({ request }: ActionFunctionArgs) => {
 export default function ProfilePage() {
   const data = useLoaderData<typeof loader>()!;
 
-  if (!data) return;
+  const { timeline, fetcher: timelineFetcher } = useTimeline([
+    {
+      id: uuidv4(),
+      type: "user",
+      did: data.profile.did,
+      posts: [],
+      hasMore: true,
+    },
+  ]);
+
+  const { follow, follower, fetcher, hasMore } = useFollow({
+    did: data.profile.did,
+    initialFollow: data.follow,
+    initialFollower: data.follower,
+  });
+
+  if (!data) return null;
 
   return (
     <Window title={`${data.profile.displayName} のプロフィール`}>
-      <div id="scrollable-timeline" className="space-y-8 h-full overflow-auto">
+      <div id="scrollable-timeline" className="h-full overflow-auto">
         {data.profile.banner && (
           <img src={data.profile.banner} className="rounded-md" alt="banner" />
         )}
@@ -78,16 +100,65 @@ export default function ProfilePage() {
             <TabsTrigger value="follow">フォロー</TabsTrigger>
             <TabsTrigger value="follower">フォロワー</TabsTrigger>
           </TabsList>
-          <TabsContent value="posts"></TabsContent>
-          <TabsContent value="follow" className="space-y-5">
-            {data.follow.map((follow: any) => (
-              <UserCard key={follow.did ?? follow.cid} data={follow} />
-            ))}
+          <TabsContent value="posts">
+            <InfiniteScroll
+              dataLength={timeline[0].posts.length}
+              next={() => timelineFetcher(timeline[0])}
+              hasMore={timeline[0].hasMore}
+              scrollableTarget="scrollable-timeline"
+              loader={
+                <div className="m-auto my-16 animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
+              }
+            >
+              <div className="space-y-8">
+                {timeline[0].posts.map((postItem) => {
+                  const postData = postItem.post as PostView;
+                  return <Post key={postData.cid} post={postData} />;
+                })}
+              </div>
+            </InfiniteScroll>
           </TabsContent>
-          <TabsContent value="follower" className="space-y-5">
-            {data.follower.map((follower: any) => (
-              <UserCard key={follower.did ?? follower.cid} data={follower} />
-            ))}
+          <TabsContent
+            value="follow"
+            id="follow"
+            className="h-full overflow-auto"
+          >
+            <InfiniteScroll
+              dataLength={follow.length}
+              next={() => fetcher("follow")}
+              hasMore={hasMore.follow}
+              scrollableTarget="scrollable-timeline"
+              loader={
+                <div className="m-auto my-16 animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
+              }
+            >
+              <div className="space-y-8">
+                {follow.map((profile) => (
+                  <UserCard key={profile.did ?? profile.cid} data={profile} />
+                ))}
+              </div>
+            </InfiniteScroll>
+          </TabsContent>
+          <TabsContent
+            value="follower"
+            id="follower"
+            className="space-y-5 h-full overflow-auto"
+          >
+            <InfiniteScroll
+              dataLength={follower.length}
+              next={() => fetcher("follower")}
+              hasMore={hasMore.follower}
+              scrollableTarget="scrollable-timeline"
+              loader={
+                <div className="m-auto my-16 animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
+              }
+            >
+              <div className="space-y-8">
+                {follower.map((profile) => (
+                  <UserCard key={profile.did ?? profile.cid} data={profile} />
+                ))}
+              </div>
+            </InfiniteScroll>
           </TabsContent>
         </Tabs>
       </div>

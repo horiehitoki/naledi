@@ -1,5 +1,5 @@
 import { Agent } from "@atproto/api";
-import { json, LoaderFunction } from "@remix-run/node";
+import { LoaderFunction } from "@remix-run/node";
 import { getSessionAgent } from "~/utils/auth/session";
 
 const getCursorFromRequest = (request: Request) => {
@@ -17,8 +17,8 @@ export const loader: LoaderFunction = async ({ request }) => {
     limit: 50,
   });
 
-  return json({
+  return {
     feed: timeline.data.feed,
     cursor: timeline.data.cursor,
-  });
+  };
 };
