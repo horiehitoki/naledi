@@ -49,11 +49,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       repo: agent.assertDid,
       collection: "app.bsky.feed.post",
       record: record,
-      via: "RemixClient",
+      via: "stellar",
     });
   }
 
-  return null;
+  return redirect("/home");
 };
 
 export default function Homepage() {
@@ -66,13 +66,6 @@ export default function Homepage() {
       id: uuidv4(),
       type: "home",
       did: null,
-      posts: [],
-      hasMore: true,
-    },
-    {
-      id: uuidv4(),
-      type: "user",
-      did: "did:plc:hbpzfim6uqz522avxupaud5y",
       posts: [],
       hasMore: true,
     },

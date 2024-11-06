@@ -24,9 +24,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 export default function Index() {
   return (
     <div className="min-h-screen flex justify-start items-center px-36">
-      <Card className="w-80 rounded-lg shadow-lg">
+      <Card className="w-96 rounded-lg shadow-lg">
         <CardContent className="p-6 space-y-8">
-          <h1 className="text-2xl font-bold">Remix Client</h1>
+          <h1 className="text-2xl font-bold">stellar</h1>
+          <h1>
+            stellarは、日本で生まれた
+            <br />
+            AT ProtocolのWebクライアントです。
+          </h1>
 
           <h1 className="text-2xl font-bold">ログイン</h1>
 

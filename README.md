@@ -1,3 +1,3 @@
-# atproto-remix
+# stellar
 
-AT Protocol の Remix クライアント。
+Stellar is a web client for the AT Protocol, which was developed in Japan.
