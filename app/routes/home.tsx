@@ -43,13 +43,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       $type: "app.bsky.feed.post",
       text: content,
       createdAt: new Date().toISOString(),
+      via: "Stellar",
     };
 
     await agent.com.atproto.repo.createRecord({
       repo: agent.assertDid,
       collection: "app.bsky.feed.post",
       record: record,
-      via: "Stellar",
     });
   }
 
