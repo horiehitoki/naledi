@@ -49,7 +49,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       repo: agent.assertDid,
       collection: "app.bsky.feed.post",
       record: record,
-      via: "stellar",
+      via: "Stellar",
     });
   }
 

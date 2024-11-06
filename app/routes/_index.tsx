@@ -26,7 +26,7 @@ export default function Index() {
     <div className="min-h-screen flex justify-start items-center px-36">
       <Card className="w-96 rounded-lg shadow-lg">
         <CardContent className="p-6 space-y-8">
-          <h1 className="text-2xl font-bold">stellar</h1>
+          <h1 className="text-2xl font-bold">Stellar</h1>
           <h1>
             stellarは、日本で生まれた
             <br />
