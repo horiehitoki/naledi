@@ -5,7 +5,6 @@ import { TimelineState } from "@types";
 export const useTimeline = (defaultTimeline: TimelineState[]) => {
   const [timeline, setTimeline] = useState(defaultTimeline);
   const { createCursor, readCursor, updateCursor } = useCursor();
-  const [isLoading, setIsLoading] = useState(false);
 
   const updateTimelineItem = (id: string, updates: Partial<TimelineState>) => {
     setTimeline((prev) =>
@@ -15,7 +14,6 @@ export const useTimeline = (defaultTimeline: TimelineState[]) => {
 
   //先頭50件の取得
   useEffect(() => {
-    setIsLoading(true);
     (async () => {
       await Promise.all(
         timeline.map(async (timelineItem) => {
@@ -37,13 +35,10 @@ export const useTimeline = (defaultTimeline: TimelineState[]) => {
           }
         })
       );
-      setIsLoading(false);
     })();
   }, []);
 
   const fetcher = async (timelineItem: TimelineState) => {
-    if (isLoading) return;
-    setIsLoading(true);
     const currentCursor = readCursor(timelineItem.id)?.cursor;
     if (!currentCursor) return;
 
@@ -69,12 +64,10 @@ export const useTimeline = (defaultTimeline: TimelineState[]) => {
     } else {
       updateTimelineItem(timelineItem.id, { hasMore: false });
     }
-    setIsLoading(false);
   };
 
   return {
     timeline,
     fetcher,
-    isLoading,
   };
 };

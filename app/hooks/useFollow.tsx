@@ -24,7 +24,6 @@ export const useFollow = ({
     follow: !!initialFollow.cursor,
     follower: !!initialFollower.cursor,
   });
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     createCursor("follow", initialFollow.cursor!);
@@ -41,10 +40,8 @@ export const useFollow = ({
 
   // データのフェッチ
   const fetcher = async (type: FollowType) => {
-    if (isLoading) return;
     const currentCursor = readCursor(type)?.cursor;
     if (!currentCursor) return;
-    setIsLoading(true);
     const endpoint = getEndpoint(type, currentCursor);
     const res = await fetch(new URL(endpoint, window.origin));
     const json: FollowRes = await res.json();
@@ -59,7 +56,6 @@ export const useFollow = ({
     } else {
       setHasMore((prev) => ({ ...prev, [type]: false }));
     }
-    setIsLoading(false);
   };
 
   return {
@@ -67,6 +63,5 @@ export const useFollow = ({
     follower,
     fetcher,
     hasMore,
-    isLoading,
   };
 };

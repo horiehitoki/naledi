@@ -17,6 +17,9 @@ import { Textarea } from "~/components/ui/textarea";
 import { Button } from "~/components/ui/button";
 import { useToast } from "~/hooks/use-toast";
 import { useState } from "react";
+import { useTimeline } from "~/hooks/useTimeline";
+import { v4 as uuidv4 } from "uuid";
+import SNSTimeline from "~/components/timeline/timeline";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const agent: Agent | null = await getSessionAgent(request);
@@ -58,6 +61,23 @@ export default function Homepage() {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
 
+  const { timeline, fetcher } = useTimeline([
+    {
+      id: uuidv4(),
+      type: "home",
+      did: null,
+      posts: [],
+      hasMore: true,
+    },
+    {
+      id: uuidv4(),
+      type: "user",
+      did: "did:plc:hbpzfim6uqz522avxupaud5y",
+      posts: [],
+      hasMore: true,
+    },
+  ]);
+
   if (!data) return null;
 
   return (
@@ -68,6 +88,7 @@ export default function Homepage() {
         )}
         <SidebarTrigger />
 
+        <SNSTimeline timeline={timeline} fetcher={fetcher} />
         <Outlet />
 
         <Toaster />
