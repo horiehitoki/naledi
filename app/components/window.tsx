@@ -15,7 +15,7 @@ export default function Window({
   children,
   title,
   defaultPosition = { x: 500, y: 100 },
-  defaultSize = { width: 1200, height: 1200 },
+  defaultSize = { width: 500, height: 500 },
 }: Props) {
   const [windowState, setWindowState] = useState({
     width: defaultSize.width,
