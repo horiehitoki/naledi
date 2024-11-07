@@ -1,21 +1,35 @@
-"use client";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
-import { TimelineState } from "@types";
+import { TimelineState, TimelineStorage } from "@types";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { PostView } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
 import { Post } from "./post";
+import { useLocalStorage } from "@uidotdev/usehooks";
+import { useTimeline } from "~/hooks/useTimeline";
+import { v4 as uuidv4 } from "uuid";
+import { ClientOnly } from "remix-utils/client-only";
 
-export default function SNSTimeline({
-  timeline,
-  fetcher,
-}: {
-  timeline: TimelineState[];
-  fetcher: (timelineItem: TimelineState) => Promise<void>;
-}) {
+function SNSTimelineComponent() {
+  const [savedTimeline, setSavedTimeline] =
+    useLocalStorage<TimelineStorage[]>("timeline");
+
+  //初回ロード時にhomeタイムラインを追加
+  if (savedTimeline.length) {
+    null;
+  } else {
+    setSavedTimeline([{ id: uuidv4(), type: "home", did: "null" }]);
+  }
+
+  //timelineのStateを生成
+  const { timeline, fetcher } = useTimeline(
+    savedTimeline.map((prev: TimelineStorage) => {
+      return { ...prev, posts: [], hasMore: true };
+    })
+  );
+
   const [columns, setColumns] = useState<TimelineState[]>(timeline);
 
   useEffect(() => {
@@ -102,5 +116,14 @@ export default function SNSTimeline({
         </motion.div>
       ))}
     </div>
+  );
+}
+
+//client only
+export default function SNSTimeline() {
+  return (
+    <ClientOnly fallback={<div>Loading...</div>}>
+      {() => <SNSTimelineComponent />}
+    </ClientOnly>
   );
 }

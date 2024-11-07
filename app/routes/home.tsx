@@ -17,8 +17,6 @@ import { Textarea } from "~/components/ui/textarea";
 import { Button } from "~/components/ui/button";
 import { useToast } from "~/hooks/use-toast";
 import { useState } from "react";
-import { useTimeline } from "~/hooks/useTimeline";
-import { v4 as uuidv4 } from "uuid";
 import SNSTimeline from "~/components/timeline/timeline";
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -61,16 +59,6 @@ export default function Homepage() {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
 
-  const { timeline, fetcher } = useTimeline([
-    {
-      id: uuidv4(),
-      type: "home",
-      did: null,
-      posts: [],
-      hasMore: true,
-    },
-  ]);
-
   if (!data) return null;
 
   return (
@@ -81,10 +69,11 @@ export default function Homepage() {
         )}
         <SidebarTrigger />
 
-        <SNSTimeline timeline={timeline} fetcher={fetcher} />
+        <SNSTimeline />
         <Outlet />
 
         <Toaster />
+
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>

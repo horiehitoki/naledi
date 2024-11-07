@@ -9,8 +9,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "./button";
 import { Home, LogOut, Plus } from "lucide-react";
 import { ModeToggle } from "./mode-toggle";
-import { SetStateAction } from "react";
+import { SetStateAction, useState } from "react";
 import { ProfileView } from "@atproto/api/dist/client/types/app/bsky/actor/defs";
+import AddTimeline from "../timeline/addTimeline";
 
 type Props = {
   profile: ProfileView;
@@ -19,6 +20,8 @@ type Props = {
 };
 
 export function AppSidebar(props: Props) {
+  const [addTimelineOpen, setAddTimelineOpen] = useState(false);
+
   return (
     <Sidebar className="p-5 z-0">
       <SidebarHeader className="space-y-4">
@@ -30,7 +33,6 @@ export function AppSidebar(props: Props) {
             </Button>
           </a>
         </div>
-
         <div>
           <Button
             onClick={() => {
@@ -42,7 +44,19 @@ export function AppSidebar(props: Props) {
           </Button>
         </div>
 
+        <div>
+          <Button
+            onClick={() => {
+              setAddTimelineOpen(!addTimelineOpen);
+            }}
+          >
+            <Plus />
+            タイムラインの追加
+          </Button>
+        </div>
+
         <ModeToggle />
+        <AddTimeline open={addTimelineOpen} setOpen={setAddTimelineOpen} />
       </SidebarHeader>
 
       <SidebarContent>

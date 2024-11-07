@@ -3,7 +3,7 @@ import { StateStore, SessionStore } from "~/utils/auth/store";
 import { createDb, migrateToLatest } from "./db";
 
 const createClient: () => Promise<NodeOAuthClient> = async () => {
-  const db = createDb("../../../user.db");
+  const db = createDb(process.env.DB_PASS!);
   await migrateToLatest(db);
 
   const publicUrl = "";
