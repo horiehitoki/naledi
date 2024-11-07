@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
-import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
+import { ArrowLeftIcon, ArrowRightIcon, Trash } from "lucide-react";
 import { TimelineState, TimelineStorage } from "@types";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { PostView } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
@@ -52,6 +52,10 @@ function SNSTimelineComponent() {
     setColumns(newColumns);
   };
 
+  const deleteTimeline = (id: string) => {
+    setSavedTimeline((prev) => prev.filter((data) => data.id !== id));
+  };
+
   return (
     <div className="flex">
       {columns.map((timelineItem: TimelineState, index) => (
@@ -88,6 +92,13 @@ function SNSTimelineComponent() {
                   aria-label={`Move ${timelineItem.id} column right`}
                 >
                   <ArrowRightIcon className="h-4 w-4" />
+                </Button>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  onClick={() => deleteTimeline(timelineItem.id)}
+                >
+                  <Trash className="h-4 w-4" />
                 </Button>
               </div>
             </CardHeader>
