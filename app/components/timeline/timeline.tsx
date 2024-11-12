@@ -12,7 +12,7 @@ import { useTimeline } from "~/hooks/useTimeline";
 import { v4 as uuidv4 } from "uuid";
 import { ClientOnly } from "remix-utils/client-only";
 
-function SNSTimelineComponent() {
+function SNSTimelineComponent({ type }: { type: "default" | "deck" }) {
   const [savedTimeline, setSavedTimeline] =
     useLocalStorage<TimelineStorage[]>("timeline");
 
@@ -56,85 +56,102 @@ function SNSTimelineComponent() {
     setSavedTimeline((prev) => prev.filter((data) => data.id !== id));
   };
 
-  return (
-    <div className="flex">
-      {columns.map((timelineItem: TimelineState, index) => (
-        <motion.div
-          key={timelineItem.id}
-          id={`scrollable-timeline-${timelineItem.id}`}
-          className="w-96"
-          initial={{ x: 60 * index }}
-          animate={{ x: 60 * index }}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        >
-          <Card className="h-screen overflow-y-scroll">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle>
-                {timelineItem.type == "home"
-                  ? "ホームタイムライン"
-                  : "ユーザータイムライン"}
-              </CardTitle>
-              <div className="flex space-x-2">
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  onClick={() => moveColumn(index, "left")}
-                  disabled={index === 0}
-                  aria-label={`Move ${timelineItem.id} column left`}
-                >
-                  <ArrowLeftIcon className="h-4 w-4" />
-                </Button>
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  onClick={() => moveColumn(index, "right")}
-                  disabled={index === columns.length - 1}
-                  aria-label={`Move ${timelineItem.id} column right`}
-                >
-                  <ArrowRightIcon className="h-4 w-4" />
-                </Button>
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  onClick={() => deleteTimeline(timelineItem.id)}
-                >
-                  <Trash className="h-4 w-4" />
-                </Button>
-              </div>
-            </CardHeader>
-
-            <CardContent className="h-[calc(100vh-8rem)]">
-              <InfiniteScroll
-                dataLength={timelineItem.posts.length}
-                next={() => fetcher(timelineItem)}
-                hasMore={timelineItem.hasMore}
-                scrollableTarget={`scrollable-timeline-${timelineItem.id}`}
-                loader={
-                  <div className="m-auto my-16 animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
-                }
-                height="calc(100vh - 8rem)"
-                className="pr-4"
-              >
-                <div className="space-y-8">
-                  {timelineItem.posts.map((postItem) => {
-                    const postData = postItem.post as PostView;
-                    return <Post key={postData.cid} post={postData} />;
-                  })}
+  if (type == "deck")
+    return (
+      <div className="flex">
+        {columns.map((timelineItem: TimelineState, index) => (
+          <motion.div
+            key={timelineItem.id}
+            id={`scrollable-timeline-${timelineItem.id}`}
+            className="w-96"
+            initial={{ x: 60 * index }}
+            animate={{ x: 60 * index }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+          >
+            <Card className="h-screen overflow-y-scroll">
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle>
+                  {timelineItem.type == "home"
+                    ? "ホームタイムライン"
+                    : "ユーザータイムライン"}
+                </CardTitle>
+                <div className="flex space-x-2">
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    onClick={() => moveColumn(index, "left")}
+                    disabled={index === 0}
+                    aria-label={`Move ${timelineItem.id} column left`}
+                  >
+                    <ArrowLeftIcon className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    onClick={() => moveColumn(index, "right")}
+                    disabled={index === columns.length - 1}
+                    aria-label={`Move ${timelineItem.id} column right`}
+                  >
+                    <ArrowRightIcon className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    onClick={() => deleteTimeline(timelineItem.id)}
+                  >
+                    <Trash className="h-4 w-4" />
+                  </Button>
                 </div>
-              </InfiniteScroll>
-            </CardContent>
-          </Card>
-        </motion.div>
-      ))}
-    </div>
-  );
+              </CardHeader>
+
+              <CardContent className="h-[calc(100vh-8rem)]">
+                <InfiniteScroll
+                  dataLength={timelineItem.posts.length}
+                  next={() => fetcher(timelineItem)}
+                  hasMore={timelineItem.hasMore}
+                  scrollableTarget={`scrollable-timeline-${timelineItem.id}`}
+                  loader={<div></div>}
+                  height="calc(100vh - 8rem)"
+                  className="pr-4"
+                >
+                  <div className="space-y-8">
+                    {timelineItem.posts.map((postItem) => {
+                      const postData = postItem.post as PostView;
+                      return <Post key={postData.cid} post={postData} />;
+                    })}
+                  </div>
+                </InfiniteScroll>
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
+      </div>
+    );
+
+  if (type == "default")
+    return (
+      <InfiniteScroll
+        dataLength={timeline[0].posts.length}
+        next={() => fetcher(timeline[0])}
+        hasMore={timeline[0].hasMore}
+        loader={<div></div>}
+        className="h-screen md:w-1/2 m-auto"
+      >
+        <div className="space-y-8">
+          {timeline[0].posts.map((postItem) => {
+            const postData = postItem.post as PostView;
+            return <Post key={postData.cid} post={postData} />;
+          })}
+        </div>
+      </InfiniteScroll>
+    );
 }
 
 //client only
-export default function SNSTimeline() {
+export default function SNSTimeline({ type }: { type: "default" | "deck" }) {
   return (
     <ClientOnly fallback={<div>Loading...</div>}>
-      {() => <SNSTimelineComponent />}
+      {() => <SNSTimelineComponent type={type} />}
     </ClientOnly>
   );
 }
