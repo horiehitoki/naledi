@@ -1,6 +1,5 @@
 "use client";
-
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { Rnd } from "react-rnd";
 import { Maximize2, Minimize2, X } from "lucide-react";
 
@@ -17,24 +16,40 @@ export default function Window({
   defaultPosition = { x: 500, y: 100 },
   defaultSize = { width: 500, height: 500 },
 }: Props) {
-  const [windowState, setWindowState] = useState({
-    width: defaultSize.width,
-    height: defaultSize.height,
-    x: defaultPosition.x,
-    y: defaultPosition.y,
-    isVisible: true,
-    isMaximized: false,
-    previousState: null as {
+  const [windowState, setWindowState] = useState<{
+    width: number;
+    height: number;
+    x: number;
+    y: number;
+    maxWidth: number;
+    maxHeight: number;
+    isVisible: boolean;
+    isMaximized: boolean;
+    previousState: {
       width: number;
       height: number;
       x: number;
       y: number;
-    } | null,
+    } | null;
+  }>({
+    width: defaultSize.width,
+    height: defaultSize.height,
+    x: defaultPosition.x,
+    y: defaultPosition.y,
+    maxWidth: 0,
+    maxHeight: 0,
+    isVisible: true,
+    isMaximized: false,
+    previousState: null,
   });
 
-  if (!windowState.isVisible) {
-    return null;
-  }
+  useEffect(() => {
+    setWindowState((prev) => ({
+      ...prev,
+      maxWidth: window.innerWidth,
+      maxHeight: window.innerHeight,
+    }));
+  }, []);
 
   const handleMaximize = () => {
     setWindowState((prev) => {
@@ -54,14 +69,18 @@ export default function Window({
             x: prev.x,
             y: prev.y,
           },
-          width: window.innerWidth,
-          height: window.innerHeight,
+          width: prev.maxWidth,
+          height: prev.maxHeight,
           x: 0,
           y: 0,
         };
       }
     });
   };
+
+  if (!windowState.isVisible) {
+    return null;
+  }
 
   return (
     <Rnd
@@ -86,6 +105,8 @@ export default function Window({
       }}
       minWidth={300}
       minHeight={400}
+      maxWidth={windowState.maxWidth}
+      maxHeight={windowState.maxHeight}
       bounds="window"
       dragHandleClassName="drag-handle"
       enableResizing={!windowState.isMaximized}
@@ -117,7 +138,6 @@ export default function Window({
             </button>
           </div>
         </div>
-
         <div className="w-full overflow-scroll">{children}</div>
       </div>
     </Rnd>
