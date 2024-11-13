@@ -17,7 +17,7 @@ function SNSTimelineComponent({ type }: { type: "default" | "deck" }) {
     useLocalStorage<TimelineStorage[]>("timeline");
 
   //初回ロード時にhomeタイムラインを追加
-  if (savedTimeline.length) {
+  if (savedTimeline) {
     null;
   } else {
     setSavedTimeline([{ id: uuidv4(), type: "home", did: "null" }]);
