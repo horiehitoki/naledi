@@ -20,8 +20,9 @@ import {
   useTheme,
 } from "remix-themes";
 import { themeSessionResolver } from "./sessions.server";
-import Picker from "emoji-picker-react";
-import { useEmojiPicker } from "./hooks/useEmojiPicker";
+import { getSessionAgent } from "./utils/auth/session";
+import { getUserProfile } from "./utils/user/getUserProfile";
+import { Agent } from "@atproto/api";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -30,6 +31,13 @@ export const links: LinksFunction = () => [
 
 export const loader: LoaderFunction = async ({ request }) => {
   const { getTheme } = await themeSessionResolver(request);
+  const agent: Agent | null = await getSessionAgent(request);
+
+  if (agent) {
+    const { profile } = await getUserProfile(agent, agent.assertDid);
+
+    return { theme: getTheme(), profile };
+  }
   return { theme: getTheme() };
 };
 
@@ -45,8 +53,6 @@ export default function AppWithProviders() {
 export function App() {
   const data = useLoaderData<typeof loader>();
   const [theme] = useTheme();
-  const { isEmojiPickerOpen, position, handleEmojiClick, toggleEmojiPicker } =
-    useEmojiPicker();
 
   return (
     <html lang="jp" className={clsx(theme)}>
@@ -58,23 +64,7 @@ export function App() {
         {data && <PreventFlashOnWrongTheme ssrTheme={Boolean(data.theme)} />}
       </head>
       <body>
-        <Outlet
-          context={{
-            toggleEmojiPicker: toggleEmojiPicker,
-          }}
-        />
-        {isEmojiPickerOpen && (
-          <div
-            style={{
-              position: "absolute",
-              top: `${position.top}px`,
-              left: `${position.left}px`,
-              zIndex: 50,
-            }}
-          >
-            <Picker onEmojiClick={handleEmojiClick} lazyLoadEmojis={true} />
-          </div>
-        )}
+        <Outlet context={data.profile} />
         <ScrollRestoration />
         <Scripts />
       </body>

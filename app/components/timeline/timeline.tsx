@@ -5,13 +5,13 @@ import { Button } from "~/components/ui/button";
 import { ArrowLeftIcon, ArrowRightIcon, Trash } from "lucide-react";
 import { TimelineState, TimelineStorage } from "@types";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { PostView } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
 import { Post } from "./post";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import { useTimeline } from "~/hooks/useTimeline";
 import { v4 as uuidv4 } from "uuid";
 import { ClientOnly } from "remix-utils/client-only";
 import { LoadingSpinner } from "../ui/loading";
+import { PostView } from "~/generated/api/types/app/bsky/feed/defs";
 
 function SNSTimelineComponent({ type }: { type: "default" | "deck" }) {
   const [savedTimeline, setSavedTimeline] =

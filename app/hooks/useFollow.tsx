@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useCursor } from "./useCusor";
-import { ProfileView } from "@atproto/api/dist/client/types/app/bsky/actor/defs";
 import { FollowRes } from "@types";
+import { ProfileView } from "~/generated/api/types/app/bsky/actor/defs";
 
 type FollowType = "follow" | "follower";
 

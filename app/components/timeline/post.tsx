@@ -6,7 +6,6 @@ import {
   CardFooter,
   CardHeader,
 } from "~/components/ui/card";
-import { PostView } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
 import { useRef, useState } from "react";
 import { Lightbox } from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
@@ -14,6 +13,7 @@ import { Button } from "~/components/ui/button";
 import { Heart, MessageCircle, Repeat2, Smile } from "lucide-react";
 import { useOutletContext } from "@remix-run/react";
 import { toggleEmojiPicker } from "@types";
+import { PostView } from "~/generated/api/types/app/bsky/feed/defs";
 
 export const Post = ({ post }: { post: PostView }) => {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);

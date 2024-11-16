@@ -1,29 +1,23 @@
 import { Agent } from "@atproto/api";
 import { ActionFunctionArgs, LoaderFunction } from "@remix-run/node";
-import {
-  Outlet,
-  redirect,
-  useLoaderData,
-  useOutletContext,
-} from "@remix-run/react";
+import { Outlet, redirect, useOutletContext } from "@remix-run/react";
 import { useState } from "react";
 
 import { getSessionAgent } from "~/utils/auth/session";
-import { getUserProfile } from "~/utils/user/getUserProfile";
 import { useToast } from "~/hooks/use-toast";
 
 import { SidebarProvider, SidebarTrigger } from "~/components/ui/sidebar";
 import { AppSidebar } from "~/components/ui/app-sidebar";
 import { Toaster } from "~/components/ui/toaster";
 import { PostDialog } from "~/components/timeline/post-dialog";
-import { toggleEmojiPicker } from "@types";
+import Picker from "emoji-picker-react";
+import { useEmojiPicker } from "~/hooks/useEmojiPicker";
+import { ProfileView } from "~/generated/api/types/app/bsky/actor/defs";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const agent: Agent | null = await getSessionAgent(request);
   if (agent == null) return redirect("/");
-
-  const { profile } = await getUserProfile(agent, agent.assertDid);
-  return { profile };
+  return null;
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -52,16 +46,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 
 export default function Homepage() {
-  const data = useLoaderData<typeof loader>();
+  const context = useOutletContext<{ profile: ProfileView }>();
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
 
-  //絵文字ピッカー
-  const context = useOutletContext<{
-    toggleEmojiPicker: toggleEmojiPicker;
-  }>();
-
-  if (!data) return null;
+  //絵文字ピッカーのSetup
+  const { isEmojiPickerOpen, position, handleEmojiClick, toggleEmojiPicker } =
+    useEmojiPicker();
 
   //投稿完了時のtoast
   const handlePostSubmit = () => {
@@ -74,10 +65,23 @@ export default function Homepage() {
 
   return (
     <SidebarProvider>
-      <AppSidebar profile={data.profile} open={open} setOpen={setOpen} />
+      <AppSidebar profile={context.profile} open={open} setOpen={setOpen} />
       <SidebarTrigger />
 
-      <Outlet context={context.toggleEmojiPicker} />
+      <Outlet context={toggleEmojiPicker} />
+
+      {isEmojiPickerOpen && (
+        <div
+          style={{
+            position: "absolute",
+            top: `${position.top}px`,
+            left: `${position.left}px`,
+            zIndex: 50,
+          }}
+        >
+          <Picker onEmojiClick={handleEmojiClick} lazyLoadEmojis={true} />
+        </div>
+      )}
 
       <PostDialog
         open={open}

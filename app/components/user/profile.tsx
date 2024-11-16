@@ -1,4 +1,3 @@
-import { PostView } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Card, CardContent } from "~/components/ui/card";
@@ -6,9 +5,10 @@ import { Badge } from "~/components/ui/badge";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Post } from "~/components/timeline/post";
 import { UserCard } from "~/components/user/userCard";
-import { ProfileView } from "@atproto/api/dist/client/types/app/bsky/actor/defs";
 import { User, Users, UserCircle } from "lucide-react";
 import { LoadingSpinner } from "../ui/loading";
+import { ProfileView } from "~/generated/api/types/app/bsky/actor/defs";
+import { PostView } from "~/generated/api/types/app/bsky/feed/defs";
 
 export function ProfileHeader({
   profile,
@@ -23,7 +23,7 @@ export function ProfileHeader({
         {profile.banner! && (
           <div className="h-48">
             <img
-              src={profile.banner}
+              src={profile.banner as string}
               className="w-full object-cover h-48"
               alt="banner"
             />
@@ -63,7 +63,9 @@ export function ProfileHeader({
           <div className="flex items-center space-x-2">
             <Users className="w-4 h-4 text-muted-foreground" />
             <div>
-              <span className="font-semibold">{profile.followsCount}</span>
+              <span className="font-semibold">
+                {profile.followsCount as string}
+              </span>
               <span className="text-sm text-muted-foreground ml-1">
                 フォロー
               </span>
@@ -72,7 +74,9 @@ export function ProfileHeader({
           <div className="flex items-center space-x-2">
             <UserCircle className="w-4 h-4 text-muted-foreground" />
             <div>
-              <span className="font-semibold">{profile.followersCount}</span>
+              <span className="font-semibold">
+                {profile.followersCount as string}
+              </span>
               <span className="text-sm text-muted-foreground ml-1">
                 フォロワー
               </span>
@@ -124,7 +128,7 @@ export function ProfileTabs({
           loader={<LoadingSpinner />}
         >
           <div className="space-y-4">
-            {timeline.posts.map((postItem) => {
+            {timeline.posts.map((postItem: { post: PostView }) => {
               const postData = postItem.post as PostView;
               return <Post key={postData.cid} post={postData} />;
             })}
@@ -141,7 +145,7 @@ export function ProfileTabs({
           loader={<LoadingSpinner />}
         >
           <div className="space-y-4">
-            {follow.map((profile) => (
+            {follow.map((profile: ProfileView) => (
               <UserCard key={profile.did ?? profile.cid} data={profile} />
             ))}
           </div>
@@ -157,7 +161,7 @@ export function ProfileTabs({
           loader={<LoadingSpinner />}
         >
           <div className="space-y-4">
-            {follower.map((profile) => (
+            {follower.map((profile: ProfileView) => (
               <UserCard key={profile.did ?? profile.cid} data={profile} />
             ))}
           </div>

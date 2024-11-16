@@ -1,5 +1,5 @@
-import { ProfileView } from "@atproto/api/dist/client/types/app/bsky/actor/defs";
-import { PostView } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
+import { ProfileView } from "~/generated/api/types/app/bsky/actor/defs";
+import { PostView } from "~/generated/api/types/app/bsky/feed/defs";
 
 export type Session = { did: string };
 

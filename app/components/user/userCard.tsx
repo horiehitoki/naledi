@@ -1,10 +1,10 @@
-import { ProfileView } from "@atproto/api/dist/client/types/app/bsky/actor/defs";
+import { ProfileView } from "~/generated/api/types/app/bsky/actor/defs";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Card, CardHeader } from "../ui/card";
 
 export const UserCard = ({ data }: { data: ProfileView }) => {
   return (
-    <Card key={data.cid} className="w-1/2 mx-auto">
+    <Card key={data.cid as string} className="w-1/2 mx-auto">
       <CardHeader>
         <a href={`/home/user?handle=${data.handle}`}>
           <div className="flex items-center space-x-4">
