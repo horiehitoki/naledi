@@ -9280,9 +9280,94 @@ export const schemaDict = {
       },
     },
   },
-  'ComPdsMarukun-devComReactions': {
+  'ComMarukun-devPdsGetReaction': {
     lexicon: 1,
-    id: 'com.pds.marukun-dev.com.reactions',
+    id: 'com.marukun-dev.pds.getReaction',
+    defs: {
+      main: {
+        type: 'query',
+        description:
+          'Get reaction records which reference a subject (by AT-URI and CID).',
+        parameters: {
+          type: 'params',
+          required: ['uri'],
+          properties: {
+            uri: {
+              type: 'string',
+              format: 'at-uri',
+              description: 'AT-URI of the subject (eg, a post record).',
+            },
+            cid: {
+              type: 'string',
+              format: 'cid',
+              description:
+                'CID of the subject record (aka, specific version of record), to filter reaction.',
+            },
+            limit: {
+              type: 'integer',
+              minimum: 1,
+              maximum: 100,
+              default: 50,
+            },
+            cursor: {
+              type: 'string',
+            },
+          },
+        },
+        output: {
+          encoding: 'application/json',
+          schema: {
+            type: 'object',
+            required: ['uri', 'reaction'],
+            properties: {
+              uri: {
+                type: 'string',
+                format: 'at-uri',
+              },
+              cid: {
+                type: 'string',
+                format: 'cid',
+              },
+              cursor: {
+                type: 'string',
+              },
+              reaction: {
+                type: 'array',
+                items: {
+                  type: 'ref',
+                  ref: 'lex:com.marukun-dev.pds.getReaction#reaction',
+                },
+              },
+            },
+          },
+        },
+      },
+      reaction: {
+        type: 'object',
+        required: ['indexedAt', 'createdAt', 'actor', 'emoji'],
+        properties: {
+          indexedAt: {
+            type: 'string',
+            format: 'datetime',
+          },
+          createdAt: {
+            type: 'string',
+            format: 'datetime',
+          },
+          actor: {
+            type: 'ref',
+            ref: 'lex:app.bsky.actor.defs#profileView',
+          },
+          emoji: {
+            type: 'string',
+          },
+        },
+      },
+    },
+  },
+  'ComMarukun-devPdsReaction': {
+    lexicon: 1,
+    id: 'com.marukun-dev.pds.reaction',
     defs: {
       main: {
         type: 'record',
@@ -13514,7 +13599,8 @@ export const ids = {
   ChatBskyModerationGetActorMetadata: 'chat.bsky.moderation.getActorMetadata',
   ChatBskyModerationGetMessageContext: 'chat.bsky.moderation.getMessageContext',
   ChatBskyModerationUpdateActorAccess: 'chat.bsky.moderation.updateActorAccess',
-  'ComPdsMarukun-devComReactions': 'com.pds.marukun-dev.com.reactions',
+  'ComMarukun-devPdsGetReaction': 'com.marukun-dev.pds.getReaction',
+  'ComMarukun-devPdsReaction': 'com.marukun-dev.pds.reaction',
   ComAtprotoTempCheckSignupQueue: 'com.atproto.temp.checkSignupQueue',
   ComAtprotoTempRequestPhoneVerification:
     'com.atproto.temp.requestPhoneVerification',

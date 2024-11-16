@@ -1,6 +1,6 @@
 {
   "lexicon": 1,
-  "id": "com.pds.marukun-dev.com.reactions",
+  "id": "com.marukun-dev.pds.reaction",
   "defs": {
     "main": {
       "type": "record",

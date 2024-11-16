@@ -147,7 +147,8 @@ import * as ChatBskyActorDeleteAccount from './types/chat/bsky/actor/deleteAccou
 import * as ChatBskyModerationGetActorMetadata from './types/chat/bsky/moderation/getActorMetadata'
 import * as ChatBskyModerationGetMessageContext from './types/chat/bsky/moderation/getMessageContext'
 import * as ChatBskyModerationUpdateActorAccess from './types/chat/bsky/moderation/updateActorAccess'
-import * as ComPdsMarukunDevComReactions from './types/com/pds/marukun-dev/com/reactions'
+import * as ComMarukunDevPdsGetReaction from './types/com/marukun-dev/pds/getReaction'
+import * as ComMarukunDevPdsReaction from './types/com/marukun-dev/pds/reaction'
 import * as ComAtprotoTempCheckSignupQueue from './types/com/atproto/temp/checkSignupQueue'
 import * as ComAtprotoTempRequestPhoneVerification from './types/com/atproto/temp/requestPhoneVerification'
 import * as ComAtprotoTempFetchLabels from './types/com/atproto/temp/fetchLabels'
@@ -372,7 +373,8 @@ export * as ChatBskyActorDeleteAccount from './types/chat/bsky/actor/deleteAccou
 export * as ChatBskyModerationGetActorMetadata from './types/chat/bsky/moderation/getActorMetadata'
 export * as ChatBskyModerationGetMessageContext from './types/chat/bsky/moderation/getMessageContext'
 export * as ChatBskyModerationUpdateActorAccess from './types/chat/bsky/moderation/updateActorAccess'
-export * as ComPdsMarukunDevComReactions from './types/com/pds/marukun-dev/com/reactions'
+export * as ComMarukunDevPdsGetReaction from './types/com/marukun-dev/pds/getReaction'
+export * as ComMarukunDevPdsReaction from './types/com/marukun-dev/pds/reaction'
 export * as ComAtprotoTempCheckSignupQueue from './types/com/atproto/temp/checkSignupQueue'
 export * as ComAtprotoTempRequestPhoneVerification from './types/com/atproto/temp/requestPhoneVerification'
 export * as ComAtprotoTempFetchLabels from './types/com/atproto/temp/fetchLabels'
@@ -2918,47 +2920,49 @@ export class ChatBskyModerationNS {
 
 export class ComNS {
   _client: XrpcClient
-  pds: ComPdsNS
+  marukunDev: ComMarukunDevNS
   atproto: ComAtprotoNS
 
   constructor(client: XrpcClient) {
     this._client = client
-    this.pds = new ComPdsNS(client)
+    this.marukunDev = new ComMarukunDevNS(client)
     this.atproto = new ComAtprotoNS(client)
   }
 }
 
-export class ComPdsNS {
+export class ComMarukunDevNS {
   _client: XrpcClient
-  marukunDev: ComPdsMarukunDevNS
+  pds: ComMarukunDevPdsNS
 
   constructor(client: XrpcClient) {
     this._client = client
-    this.marukunDev = new ComPdsMarukunDevNS(client)
+    this.pds = new ComMarukunDevPdsNS(client)
   }
 }
 
-export class ComPdsMarukunDevNS {
+export class ComMarukunDevPdsNS {
   _client: XrpcClient
-  com: ComPdsMarukunDevComNS
+  reaction: ReactionRecord
 
   constructor(client: XrpcClient) {
     this._client = client
-    this.com = new ComPdsMarukunDevComNS(client)
+    this.reaction = new ReactionRecord(client)
+  }
+
+  getReaction(
+    params?: ComMarukunDevPdsGetReaction.QueryParams,
+    opts?: ComMarukunDevPdsGetReaction.CallOptions,
+  ): Promise<ComMarukunDevPdsGetReaction.Response> {
+    return this._client.call(
+      'com.marukun-dev.pds.getReaction',
+      params,
+      undefined,
+      opts,
+    )
   }
 }
 
-export class ComPdsMarukunDevComNS {
-  _client: XrpcClient
-  reactions: ReactionsRecord
-
-  constructor(client: XrpcClient) {
-    this._client = client
-    this.reactions = new ReactionsRecord(client)
-  }
-}
-
-export class ReactionsRecord {
+export class ReactionRecord {
   _client: XrpcClient
 
   constructor(client: XrpcClient) {
@@ -2969,10 +2973,10 @@ export class ReactionsRecord {
     params: Omit<ComAtprotoRepoListRecords.QueryParams, 'collection'>,
   ): Promise<{
     cursor?: string
-    records: { uri: string; value: ComPdsMarukunDevComReactions.Record }[]
+    records: { uri: string; value: ComMarukunDevPdsReaction.Record }[]
   }> {
     const res = await this._client.call('com.atproto.repo.listRecords', {
-      collection: 'com.pds.marukun-dev.com.reactions',
+      collection: 'com.marukun-dev.pds.reaction',
       ...params,
     })
     return res.data
@@ -2983,10 +2987,10 @@ export class ReactionsRecord {
   ): Promise<{
     uri: string
     cid: string
-    value: ComPdsMarukunDevComReactions.Record
+    value: ComMarukunDevPdsReaction.Record
   }> {
     const res = await this._client.call('com.atproto.repo.getRecord', {
-      collection: 'com.pds.marukun-dev.com.reactions',
+      collection: 'com.marukun-dev.pds.reaction',
       ...params,
     })
     return res.data
@@ -2997,14 +3001,14 @@ export class ReactionsRecord {
       ComAtprotoRepoCreateRecord.InputSchema,
       'collection' | 'record'
     >,
-    record: ComPdsMarukunDevComReactions.Record,
+    record: ComMarukunDevPdsReaction.Record,
     headers?: Record<string, string>,
   ): Promise<{ uri: string; cid: string }> {
-    record.$type = 'com.pds.marukun-dev.com.reactions'
+    record.$type = 'com.marukun-dev.pds.reaction'
     const res = await this._client.call(
       'com.atproto.repo.createRecord',
       undefined,
-      { collection: 'com.pds.marukun-dev.com.reactions', ...params, record },
+      { collection: 'com.marukun-dev.pds.reaction', ...params, record },
       { encoding: 'application/json', headers },
     )
     return res.data
@@ -3017,7 +3021,7 @@ export class ReactionsRecord {
     await this._client.call(
       'com.atproto.repo.deleteRecord',
       undefined,
-      { collection: 'com.pds.marukun-dev.com.reactions', ...params },
+      { collection: 'com.marukun-dev.pds.reaction', ...params },
       { headers },
     )
   }

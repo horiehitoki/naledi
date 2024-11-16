@@ -1,3 +1,5 @@
+import { toggleEmojiPicker } from "@types";
+import { EmojiClickData } from "emoji-picker-react";
 import { useState, useEffect } from "react";
 
 interface Position {
@@ -5,17 +7,23 @@ interface Position {
   left: number;
 }
 
+interface PostInfo {
+  postId: string;
+  uri: string;
+  cid: string;
+}
+
 interface UseEmojiPickerReturn {
   isEmojiPickerOpen: boolean;
   position: Position;
-  postId: string;
+  postInfo: PostInfo | null;
   handleEmojiClick: (event: any) => void;
-  toggleEmojiPicker: (postId: string, element: HTMLDivElement) => void;
+  toggleEmojiPicker: toggleEmojiPicker;
 }
 
 export const useEmojiPicker = (): UseEmojiPickerReturn => {
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
-  const [postId, setPostId] = useState("");
+  const [postInfo, setPostInfo] = useState<PostInfo | null>(null);
   const [position, setPosition] = useState<Position>({
     top: 0,
     left: 0,
@@ -29,17 +37,32 @@ export const useEmojiPicker = (): UseEmojiPickerReturn => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handleEmojiClick = (event: any) => {
+  const handleEmojiClick = async (event: EmojiClickData) => {
     const emojiName = event.names[0];
-    console.log(emojiName);
-    setIsEmojiPickerOpen(false);
+
+    if (postInfo) {
+      await fetch("/api/createEmojiRecord", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          subject: {
+            uri: postInfo.uri,
+            cid: postInfo.cid,
+          },
+          emoji: emojiName,
+        }),
+      });
+
+      setIsEmojiPickerOpen(false);
+    }
   };
 
   const calculatePickerPosition = (element: HTMLDivElement): Position => {
     const rect = element.getBoundingClientRect();
     const scrollY = window.scrollY || document.documentElement.scrollTop;
     const scrollX = window.scrollX || document.documentElement.scrollLeft;
-
     const pickerWidth = 350;
     const pickerHeight = 450;
 
@@ -59,17 +82,23 @@ export const useEmojiPicker = (): UseEmojiPickerReturn => {
     return { top, left };
   };
 
-  const toggleEmojiPicker = (postId: string, element: HTMLDivElement) => {
+  const toggleEmojiPicker = (
+    postId: string,
+    uri: string,
+    cid: string,
+    element: HTMLDivElement
+  ) => {
     const newPosition = calculatePickerPosition(element);
+
     setPosition(newPosition);
     setIsEmojiPickerOpen(!isEmojiPickerOpen);
-    setPostId(postId);
+    setPostInfo({ postId, uri, cid });
   };
 
   return {
     isEmojiPickerOpen,
     position,
-    postId,
+    postInfo,
     handleEmojiClick,
     toggleEmojiPicker,
   };

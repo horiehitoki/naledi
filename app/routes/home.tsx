@@ -17,6 +17,7 @@ import { ProfileView } from "~/generated/api/types/app/bsky/actor/defs";
 export const loader: LoaderFunction = async ({ request }) => {
   const agent: Agent | null = await getSessionAgent(request);
   if (agent == null) return redirect("/");
+
   return null;
 };
 

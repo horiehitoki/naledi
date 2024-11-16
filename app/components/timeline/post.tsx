@@ -115,7 +115,14 @@ export const Post = ({ post }: { post: PostView }) => {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => toggleEmojiPicker(post.cid, cardRef.current!)}
+              onClick={() =>
+                toggleEmojiPicker(
+                  post.id as string,
+                  post.uri,
+                  post.cid,
+                  cardRef.current!
+                )
+              }
               className="hover:text-yellow-500 hover:bg-yellow-50"
             >
               <Smile className="w-4 h-4" />
