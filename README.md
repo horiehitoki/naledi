@@ -1,3 +1,3 @@
 # Stellar
 
-Stellar is a web client for the AT Protocol, which was developed in Japan.
+Stellar is an AT Protocol web client with emoji reactions.

@@ -11,7 +11,7 @@ const createClient: () => Promise<NodeOAuthClient> = async () => {
   const enc = encodeURIComponent;
   return new NodeOAuthClient({
     clientMetadata: {
-      client_name: "AT Protocol Remix App",
+      client_name: "Stellar",
       client_id: publicUrl
         ? `${url}/client-metadata.json`
         : `http://localhost?redirect_uri=${enc(

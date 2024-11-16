@@ -28,7 +28,7 @@ export default function Index() {
         <CardContent className="p-6 space-y-8">
           <h1 className="text-2xl font-bold">Stellar</h1>
           <h1>
-            Stellarは、日本で生まれた
+            Stellarは、絵文字リアクションを行うことができる
             <br />
             AT ProtocolのWebクライアントです。
           </h1>
