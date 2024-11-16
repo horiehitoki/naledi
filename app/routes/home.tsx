@@ -13,6 +13,7 @@ import { PostDialog } from "~/components/timeline/post-dialog";
 import Picker from "emoji-picker-react";
 import { useEmojiPicker } from "~/hooks/useEmojiPicker";
 import { ProfileView } from "~/generated/api/types/app/bsky/actor/defs";
+import FooterMenu from "~/components/ui/footer";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const agent: Agent | null = await getSessionAgent(request);
@@ -65,32 +66,62 @@ export default function Homepage() {
   };
 
   return (
-    <SidebarProvider>
-      <AppSidebar profile={context} open={open} setOpen={setOpen} />
-      <SidebarTrigger />
+    <div>
+      <div className="md:block hidden">
+        <SidebarProvider>
+          <AppSidebar profile={context} open={open} setOpen={setOpen} />
+          <SidebarTrigger />
 
-      <Outlet context={toggleEmojiPicker} />
+          <Outlet context={toggleEmojiPicker} />
 
-      {isEmojiPickerOpen && (
-        <div
-          style={{
-            position: "absolute",
-            top: `${position.top}px`,
-            left: `${position.left}px`,
-            zIndex: 50,
-          }}
-        >
-          <Picker onEmojiClick={handleEmojiClick} lazyLoadEmojis={true} />
-        </div>
-      )}
+          {isEmojiPickerOpen && (
+            <div
+              style={{
+                position: "absolute",
+                top: `${position.top}px`,
+                left: `${position.left}px`,
+                zIndex: 50,
+              }}
+            >
+              <Picker onEmojiClick={handleEmojiClick} lazyLoadEmojis={false} />
+            </div>
+          )}
 
-      <PostDialog
-        open={open}
-        onOpenChange={setOpen}
-        onSubmit={handlePostSubmit}
-      />
+          <PostDialog
+            open={open}
+            onOpenChange={setOpen}
+            onSubmit={handlePostSubmit}
+          />
 
-      <Toaster />
-    </SidebarProvider>
+          <Toaster />
+        </SidebarProvider>
+      </div>
+
+      <div className="md:hidden block">
+        <Outlet context={toggleEmojiPicker} />
+
+        {isEmojiPickerOpen && (
+          <div
+            style={{
+              position: "absolute",
+              top: `${position.top}px`,
+              left: `${position.left}px`,
+              zIndex: 50,
+            }}
+          >
+            <Picker onEmojiClick={handleEmojiClick} lazyLoadEmojis={false} />
+          </div>
+        )}
+
+        <PostDialog
+          open={open}
+          onOpenChange={setOpen}
+          onSubmit={handlePostSubmit}
+        />
+
+        <Toaster />
+        <FooterMenu profile={context} open={open} setOpen={setOpen} />
+      </div>
+    </div>
   );
 }

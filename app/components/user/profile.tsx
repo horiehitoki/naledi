@@ -45,7 +45,7 @@ export function ProfileHeader({
             {profile.displayName}
           </h1>
 
-          <div className="items-center space-x-2 text-muted-foreground mt-1 hidden md:block">
+          <div className="items-center space-x-2 text-muted-foreground mt-1">
             <span>@{profile.handle}</span>
             <Badge variant="secondary" className="text-xs">
               {profile.did}
@@ -99,24 +99,24 @@ export function ProfileTabs({
   return (
     <Tabs defaultValue="posts">
       <div className="flex justify-center overflow-x-scroll">
-        <TabsList className="justify-start border-b rounded-none h-12 bg-transparent p-0">
+        <TabsList className="border-b rounded-none h-12 bg-transparent p-0">
           <TabsTrigger
             value="posts"
-            className="flex items-center h-12 px-4 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
+            className="data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
           >
             <User className="w-4 h-4 mr-2" />
             投稿
           </TabsTrigger>
           <TabsTrigger
             value="follow"
-            className="flex items-center h-12 px-4 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
+            className="data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
           >
             <Users className="w-4 h-4 mr-2" />
             フォロー
           </TabsTrigger>
           <TabsTrigger
             value="follower"
-            className="flex items-center h-12 px-4 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
+            className="data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
           >
             <UserCircle className="w-4 h-4 mr-2" />
             フォロワー
@@ -129,7 +129,7 @@ export function ProfileTabs({
           dataLength={timeline.posts.length}
           next={() => timelineFetcher(timeline)}
           hasMore={timeline.hasMore}
-          scrollableTarget="scrollable-timeline"
+          scrollableTarget="scrollableTarget"
           loader={<LoadingSpinner />}
         >
           <div className="space-y-4">
@@ -146,7 +146,6 @@ export function ProfileTabs({
           dataLength={follow.length}
           next={() => fetcher("follow")}
           hasMore={hasMore.follow}
-          scrollableTarget="scrollable-timeline"
           loader={<LoadingSpinner />}
         >
           <div className="space-y-4">
@@ -162,7 +161,6 @@ export function ProfileTabs({
           dataLength={follower.length}
           next={() => fetcher("follower")}
           hasMore={hasMore.follower}
-          scrollableTarget="scrollable-timeline"
           loader={<LoadingSpinner />}
         >
           <div className="space-y-4">

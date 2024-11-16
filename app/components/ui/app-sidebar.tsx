@@ -7,7 +7,7 @@ import {
 } from "~/components/ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "./button";
-import { Home, LogOut, Plus } from "lucide-react";
+import { Home, LogOut, Plus, Settings } from "lucide-react";
 import { ModeToggle } from "./mode-toggle";
 import { SetStateAction, useState } from "react";
 import AddTimeline from "../timeline/addTimeline";
@@ -23,7 +23,7 @@ export function AppSidebar(props: Props) {
   const [addTimelineOpen, setAddTimelineOpen] = useState(false);
 
   return (
-    <Sidebar className="p-5 z-0">
+    <Sidebar className="p-5">
       <SidebarHeader className="space-y-4">
         <div>
           <a href="/home/">
@@ -50,8 +50,8 @@ export function AppSidebar(props: Props) {
               setAddTimelineOpen(!addTimelineOpen);
             }}
           >
-            <Plus />
-            タイムラインの追加
+            <Settings />
+            タイムラインの設定
           </Button>
         </div>
 
