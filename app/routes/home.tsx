@@ -16,6 +16,7 @@ import { SidebarProvider, SidebarTrigger } from "~/components/ui/sidebar";
 import { AppSidebar } from "~/components/ui/app-sidebar";
 import { Toaster } from "~/components/ui/toaster";
 import { PostDialog } from "~/components/timeline/post-dialog";
+import { toggleEmojiPicker } from "@types";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const agent: Agent | null = await getSessionAgent(request);
@@ -57,7 +58,7 @@ export default function Homepage() {
 
   //絵文字ピッカー
   const context = useOutletContext<{
-    toggleEmojiPicker: (postId: string) => void;
+    toggleEmojiPicker: toggleEmojiPicker;
   }>();
 
   if (!data) return null;

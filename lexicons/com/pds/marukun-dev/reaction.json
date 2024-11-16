@@ -4,14 +4,15 @@
   "defs": {
     "main": {
       "type": "record",
-      "description": "Record declaring a 'like' of a piece of subject content.",
+      "description": "Record declaring a emoji reaction of a subject content.",
       "key": "tid",
       "record": {
         "type": "object",
-        "required": ["subject", "createdAt"],
+        "required": ["subject", "createdAt", "emoji"],
         "properties": {
           "subject": { "type": "ref", "ref": "com.atproto.repo.strongRef" },
-          "createdAt": { "type": "string", "format": "datetime" }
+          "createdAt": { "type": "string", "format": "datetime" },
+          "emoji": { "type": "string" }
         }
       }
     }

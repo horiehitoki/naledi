@@ -7,17 +7,19 @@ import {
   CardHeader,
 } from "~/components/ui/card";
 import { PostView } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Lightbox } from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import { Button } from "~/components/ui/button";
 import { Heart, MessageCircle, Repeat2, Smile } from "lucide-react";
 import { useOutletContext } from "@remix-run/react";
+import { toggleEmojiPicker } from "@types";
 
 export const Post = ({ post }: { post: PostView }) => {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
 
-  const toggleEmojiPicker = useOutletContext<(postId: string) => void>();
+  const toggleEmojiPicker = useOutletContext<toggleEmojiPicker>();
 
   //@ts-ignore
   const images = post.embed?.images as AppBskyEmbedImages.View | undefined;
@@ -30,7 +32,7 @@ export const Post = ({ post }: { post: PostView }) => {
   }));
 
   return (
-    <Card className="max-w-2xl mx-auto">
+    <Card className="max-w-2xl mx-auto" ref={cardRef}>
       <CardHeader>
         <a
           href={`/home/user?handle=${post.author.handle}`}
@@ -113,7 +115,7 @@ export const Post = ({ post }: { post: PostView }) => {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => toggleEmojiPicker(post.cid)}
+              onClick={() => toggleEmojiPicker(post.cid, cardRef.current!)}
               className="hover:text-yellow-500 hover:bg-yellow-50"
             >
               <Smile className="w-4 h-4" />

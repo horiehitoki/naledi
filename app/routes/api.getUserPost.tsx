@@ -22,7 +22,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const timeline = await agent.getAuthorFeed({
     actor: did,
     cursor: cursor,
-    limit: 50,
+    limit: 20,
   });
 
   return {

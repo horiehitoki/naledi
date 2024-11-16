@@ -26,3 +26,8 @@ export type Cursor = {
   id: string;
   cursor: string;
 };
+
+export type toggleEmojiPicker = (
+  postId: string,
+  element: HTMLDivElement
+) => void;

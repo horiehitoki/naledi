@@ -21,7 +21,7 @@ import {
 } from "remix-themes";
 import { themeSessionResolver } from "./sessions.server";
 import Picker from "emoji-picker-react";
-import { useState } from "react";
+import { useEmojiPicker } from "./hooks/useEmojiPicker";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -30,13 +30,11 @@ export const links: LinksFunction = () => [
 
 export const loader: LoaderFunction = async ({ request }) => {
   const { getTheme } = await themeSessionResolver(request);
-
   return { theme: getTheme() };
 };
 
 export default function AppWithProviders() {
   const data = useLoaderData<typeof loader>();
-
   return (
     <ThemeProvider specifiedTheme={data?.theme} themeAction="/action/set-theme">
       <App />
@@ -47,24 +45,8 @@ export default function AppWithProviders() {
 export function App() {
   const data = useLoaderData<typeof loader>();
   const [theme] = useTheme();
-
-  const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
-  const [selectedEmoji, setSelectedEmoji] = useState("");
-  const [postId, setPostId] = useState("");
-
-  //@ts-ignore
-  const handleEmojiClick = (event) => {
-    setSelectedEmoji(event.emoji);
-
-    console.log(postId, selectedEmoji);
-
-    setIsEmojiPickerOpen(false);
-  };
-
-  const toggleEmojiPicker = (postId: string) => {
-    setIsEmojiPickerOpen(!isEmojiPickerOpen);
-    setPostId(postId);
-  };
+  const { isEmojiPickerOpen, position, handleEmojiClick, toggleEmojiPicker } =
+    useEmojiPicker();
 
   return (
     <html lang="jp" className={clsx(theme)}>
@@ -81,13 +63,18 @@ export function App() {
             toggleEmojiPicker: toggleEmojiPicker,
           }}
         />
-
         {isEmojiPickerOpen && (
-          <div className="absolute top-20 left-20 z-50">
+          <div
+            style={{
+              position: "absolute",
+              top: `${position.top}px`,
+              left: `${position.left}px`,
+              zIndex: 50,
+            }}
+          >
             <Picker onEmojiClick={handleEmojiClick} lazyLoadEmojis={true} />
           </div>
         )}
-
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -97,7 +84,6 @@ export function App() {
 
 export function ErrorBoundary() {
   const error = useRouteError();
-
   return (
     <html lang="jp">
       <head>
@@ -116,7 +102,6 @@ export function ErrorBoundary() {
         ) : (
           <div></div>
         )}
-
         <ScrollRestoration />
         <Scripts />
       </body>

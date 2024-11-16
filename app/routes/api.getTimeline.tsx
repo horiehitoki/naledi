@@ -14,7 +14,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const cursor = getCursorFromRequest(request);
   const timeline = await agent.getTimeline({
     cursor: cursor,
-    limit: 50,
+    limit: 20,
   });
 
   return {

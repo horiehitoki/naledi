@@ -13,6 +13,7 @@
   "dependencies": {
     "@atproto/api": "latest",
     "@atproto/identity": "^0.4.2",
+    "@atproto/lex-cli": "^0.5.2",
     "@atproto/oauth-client-node": "^0.2.0",
     "@radix-ui/react-avatar": "^1.1.1",
     "@radix-ui/react-dialog": "^1.1.2",
