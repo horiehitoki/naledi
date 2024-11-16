@@ -20,6 +20,8 @@ import {
   useTheme,
 } from "remix-themes";
 import { themeSessionResolver } from "./sessions.server";
+import Picker from "emoji-picker-react";
+import { useState } from "react";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -34,6 +36,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export default function AppWithProviders() {
   const data = useLoaderData<typeof loader>();
+
   return (
     <ThemeProvider specifiedTheme={data?.theme} themeAction="/action/set-theme">
       <App />
@@ -45,6 +48,19 @@ export function App() {
   const data = useLoaderData<typeof loader>();
   const [theme] = useTheme();
 
+  const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
+  const [selectedEmojis, setSelectedEmojis] = useState<string[]>([]);
+
+  //@ts-ignore
+  const handleEmojiClick = (event, emojiObject) => {
+    setSelectedEmojis((prev) => [...prev, emojiObject.emoji]);
+    setIsEmojiPickerOpen(false);
+  };
+
+  const toggleEmojiPicker = () => {
+    setIsEmojiPickerOpen(!isEmojiPickerOpen);
+  };
+
   return (
     <html lang="jp" className={clsx(theme)}>
       <head>
@@ -55,7 +71,18 @@ export function App() {
         {data && <PreventFlashOnWrongTheme ssrTheme={Boolean(data.theme)} />}
       </head>
       <body>
-        <Outlet />
+        <Outlet
+          context={{
+            toggleEmojiPicker: toggleEmojiPicker,
+          }}
+        />
+
+        {isEmojiPickerOpen && (
+          <div className="absolute bottom-12 left-0 z-50">
+            <Picker onEmojiClick={handleEmojiClick} lazyLoadEmojis={true} />
+          </div>
+        )}
+
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -82,7 +109,7 @@ export function ErrorBoundary() {
             <ErrorPage />
           )
         ) : (
-          <ErrorPage />
+          <div></div>
         )}
         <ScrollRestoration />
         <Scripts />

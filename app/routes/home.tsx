@@ -1,31 +1,31 @@
 import { Agent } from "@atproto/api";
 import { ActionFunctionArgs, LoaderFunction } from "@remix-run/node";
-import { Form, Outlet, redirect, useLoaderData } from "@remix-run/react";
+import {
+  Outlet,
+  redirect,
+  useLoaderData,
+  useOutletContext,
+} from "@remix-run/react";
+import { useState } from "react";
+
 import { getSessionAgent } from "~/utils/auth/session";
+import { getUserProfile } from "~/utils/user/getUserProfile";
+import { useToast } from "~/hooks/use-toast";
+
 import { SidebarProvider, SidebarTrigger } from "~/components/ui/sidebar";
 import { AppSidebar } from "~/components/ui/app-sidebar";
-import { getUserProfile } from "~/utils/user/getUserProfile";
 import { Toaster } from "~/components/ui/toaster";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "~/components/ui/dialog";
-import { Textarea } from "~/components/ui/textarea";
-import { Button } from "~/components/ui/button";
-import { useToast } from "~/hooks/use-toast";
-import { useState } from "react";
-import SNSTimeline from "~/components/timeline/timeline";
+import { PostDialog } from "~/components/timeline/post-dialog";
+
+type OutletContextType = {
+  toggleEmojiPicker: () => void;
+};
 
 export const loader: LoaderFunction = async ({ request }) => {
   const agent: Agent | null = await getSessionAgent(request);
-
   if (agent == null) return redirect("/");
 
   const { profile } = await getUserProfile(agent, agent.assertDid);
-
   return { profile };
 };
 
@@ -59,109 +59,32 @@ export default function Homepage() {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
 
+  const context = useOutletContext<OutletContextType>();
+
   if (!data) return null;
 
+  const handlePostSubmit = () => {
+    setOpen(false);
+    toast({
+      title: "投稿完了✅",
+      description: "ポストが投稿されました",
+    });
+  };
+
   return (
-    <div>
-      <div>
-        <SidebarProvider>
-          {data && (
-            <AppSidebar profile={data.profile} open={open} setOpen={setOpen} />
-          )}
-          <SidebarTrigger />
+    <SidebarProvider>
+      <AppSidebar profile={data.profile} open={open} setOpen={setOpen} />
+      <SidebarTrigger />
 
-          <SNSTimeline type="deck" />
-          <Outlet />
+      <Outlet context={context.toggleEmojiPicker} />
 
-          <Toaster />
+      <PostDialog
+        open={open}
+        onOpenChange={setOpen}
+        onSubmit={handlePostSubmit}
+      />
 
-          <Dialog open={open} onOpenChange={setOpen}>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle className="font-bold text-2xl">
-                  投稿する
-                </DialogTitle>
-              </DialogHeader>
-              <Form method="post">
-                <div className="grid gap-4 py-4">
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Textarea
-                      name="content"
-                      id="content"
-                      className="w-80 h-64"
-                    />
-                  </div>
-                </div>
-
-                <DialogFooter>
-                  <Button
-                    type="submit"
-                    onClick={() => {
-                      setOpen(!open);
-                      toast({
-                        title: "投稿完了✅",
-                        description: "ポストが投稿されました",
-                      });
-                    }}
-                  >
-                    投稿
-                  </Button>
-                </DialogFooter>
-              </Form>
-            </DialogContent>
-          </Dialog>
-        </SidebarProvider>
-      </div>
-
-      <div className="hidden">
-        <SidebarProvider>
-          {data && (
-            <AppSidebar profile={data.profile} open={open} setOpen={setOpen} />
-          )}
-          <SidebarTrigger />
-
-          <SNSTimeline type="default" />
-          <Outlet />
-
-          <Toaster />
-
-          <Dialog open={open} onOpenChange={setOpen}>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle className="font-bold text-2xl">
-                  投稿する
-                </DialogTitle>
-              </DialogHeader>
-              <Form method="post">
-                <div className="grid gap-4 py-4">
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Textarea
-                      name="content"
-                      id="content"
-                      className="w-80 h-64"
-                    />
-                  </div>
-                </div>
-
-                <DialogFooter>
-                  <Button
-                    type="submit"
-                    onClick={() => {
-                      setOpen(!open);
-                      toast({
-                        title: "投稿完了✅",
-                        description: "ポストが投稿されました",
-                      });
-                    }}
-                  >
-                    投稿
-                  </Button>
-                </DialogFooter>
-              </Form>
-            </DialogContent>
-          </Dialog>
-        </SidebarProvider>
-      </div>
-    </div>
+      <Toaster />
+    </SidebarProvider>
   );
 }
