@@ -3,7 +3,7 @@ import SNSTimeline from "~/components/timeline/timeline";
 export default function Homepage() {
   return (
     <>
-      <SNSTimeline type="default" />
+      <SNSTimeline type="deck" />
     </>
   );
 }

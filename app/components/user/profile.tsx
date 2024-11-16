@@ -146,6 +146,7 @@ export function ProfileTabs({
           dataLength={follow.length}
           next={() => fetcher("follow")}
           hasMore={hasMore.follow}
+          scrollableTarget="scrollableTarget"
           loader={<LoadingSpinner />}
         >
           <div className="space-y-4">
@@ -161,6 +162,7 @@ export function ProfileTabs({
           dataLength={follower.length}
           next={() => fetcher("follower")}
           hasMore={hasMore.follower}
+          scrollableTarget="scrollableTarget"
           loader={<LoadingSpinner />}
         >
           <div className="space-y-4">
