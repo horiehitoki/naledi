@@ -17,7 +17,7 @@ import { useOutletContext } from "@remix-run/react";
 export const Post = ({ post }: { post: PostView }) => {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
-  const toggleEmojiPicker = useOutletContext<() => void>();
+  const toggleEmojiPicker = useOutletContext<(postId: string) => void>();
 
   //@ts-ignore
   const images = post.embed?.images as AppBskyEmbedImages.View | undefined;
@@ -113,7 +113,7 @@ export const Post = ({ post }: { post: PostView }) => {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => toggleEmojiPicker()}
+              onClick={() => toggleEmojiPicker(post.cid)}
               className="hover:text-yellow-500 hover:bg-yellow-50"
             >
               <Smile className="w-4 h-4" />

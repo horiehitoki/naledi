@@ -8,8 +8,8 @@ import { Post } from "~/components/timeline/post";
 import { UserCard } from "~/components/user/userCard";
 import { ProfileView } from "@atproto/api/dist/client/types/app/bsky/actor/defs";
 import { User, Users, UserCircle } from "lucide-react";
+import { LoadingSpinner } from "../ui/loading";
 
-//TODO いい感じに
 export function ProfileHeader({
   profile,
   avatarUrl,
@@ -18,10 +18,10 @@ export function ProfileHeader({
   avatarUrl: string;
 }) {
   return (
-    <Card className="overflow-hidden">
-      <div className="relative">
+    <Card>
+      <div>
         {profile.banner! && (
-          <div className="h-48 overflow-hidden">
+          <div className="h-48">
             <img
               src={profile.banner}
               className="w-full object-cover h-48"
@@ -44,7 +44,8 @@ export function ProfileHeader({
           <h1 className="text-2xl font-bold tracking-tight">
             {profile.displayName}
           </h1>
-          <div className="flex items-center space-x-2 text-muted-foreground mt-1">
+
+          <div className="items-center space-x-2 text-muted-foreground mt-1">
             <span>@{profile.handle}</span>
             <Badge variant="secondary" className="text-xs">
               {profile.did}
@@ -91,19 +92,10 @@ export function ProfileTabs({
   fetcher,
   hasMore,
 }: any) {
-  const LoadingSpinner = () => (
-    <div className="flex justify-center py-8">
-      <div className="animate-spin rounded-full h-8 w-8 border-2 border-primary border-t-transparent" />
-    </div>
-  );
-
   return (
-    <Tabs defaultValue="posts" className="mt-6">
+    <Tabs defaultValue="posts">
       <TabsList className="w-full justify-start border-b rounded-none h-12 bg-transparent p-0">
-        <TabsTrigger
-          value="posts"
-          className="flex items-center h-12 px-4 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
-        >
+        <TabsTrigger value="posts">
           <User className="w-4 h-4 mr-2" />
           投稿
         </TabsTrigger>

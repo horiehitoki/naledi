@@ -103,7 +103,7 @@ export default function AddTimeline({
   setOpen: React.Dispatch<SetStateAction<boolean>>;
 }) {
   return (
-    <ClientOnly fallback={<div>Loading...</div>}>
+    <ClientOnly fallback={<div></div>}>
       {() => <AddTimelineContent open={open} setOpen={setOpen} />}
     </ClientOnly>
   );

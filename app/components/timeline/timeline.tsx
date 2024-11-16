@@ -11,6 +11,7 @@ import { useLocalStorage } from "@uidotdev/usehooks";
 import { useTimeline } from "~/hooks/useTimeline";
 import { v4 as uuidv4 } from "uuid";
 import { ClientOnly } from "remix-utils/client-only";
+import { LoadingSpinner } from "../ui/loading";
 
 function SNSTimelineComponent({ type }: { type: "default" | "deck" }) {
   const [savedTimeline, setSavedTimeline] =
@@ -150,7 +151,13 @@ function SNSTimelineComponent({ type }: { type: "default" | "deck" }) {
 //client only
 export default function SNSTimeline({ type }: { type: "default" | "deck" }) {
   return (
-    <ClientOnly fallback={<div>Loading...</div>}>
+    <ClientOnly
+      fallback={
+        <div>
+          <LoadingSpinner />
+        </div>
+      }
+    >
       {() => <SNSTimelineComponent type={type} />}
     </ClientOnly>
   );

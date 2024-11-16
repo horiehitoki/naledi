@@ -49,16 +49,21 @@ export function App() {
   const [theme] = useTheme();
 
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
-  const [selectedEmojis, setSelectedEmojis] = useState<string[]>([]);
+  const [selectedEmoji, setSelectedEmoji] = useState("");
+  const [postId, setPostId] = useState("");
 
   //@ts-ignore
-  const handleEmojiClick = (event, emojiObject) => {
-    setSelectedEmojis((prev) => [...prev, emojiObject.emoji]);
+  const handleEmojiClick = (event) => {
+    setSelectedEmoji(event.emoji);
+
+    console.log(postId, selectedEmoji);
+
     setIsEmojiPickerOpen(false);
   };
 
-  const toggleEmojiPicker = () => {
+  const toggleEmojiPicker = (postId: string) => {
     setIsEmojiPickerOpen(!isEmojiPickerOpen);
+    setPostId(postId);
   };
 
   return (
@@ -78,7 +83,7 @@ export function App() {
         />
 
         {isEmojiPickerOpen && (
-          <div className="absolute bottom-12 left-0 z-50">
+          <div className="absolute top-20 left-20 z-50">
             <Picker onEmojiClick={handleEmojiClick} lazyLoadEmojis={true} />
           </div>
         )}
@@ -111,6 +116,7 @@ export function ErrorBoundary() {
         ) : (
           <div></div>
         )}
+
         <ScrollRestoration />
         <Scripts />
       </body>

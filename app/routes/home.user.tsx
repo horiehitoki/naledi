@@ -8,8 +8,7 @@ import { getUserProfile } from "~/utils/user/getUserProfile";
 import { useFollow } from "~/hooks/useFollow";
 import { useTimeline } from "~/hooks/useTimeline";
 
-import { ProfileHeader } from "~/components/user/profile";
-import { ProfileTabs } from "~/components/user/profile";
+import { ProfileHeader, ProfileTabs } from "~/components/user/profile";
 
 export const loader = async ({ request }: ActionFunctionArgs) => {
   const agent = await getSessionAgent(request);
@@ -56,9 +55,11 @@ export default function ProfilePage() {
 
   if (!data) return null;
 
-  //TODO いい感じに
   return (
-    <div id="scrollable-timeline" className="h-full overflow-auto m-auto">
+    <div
+      id="scrollable-timeline"
+      className="overflow-y-auto h-[calc(100vh-2rem)] m-auto w-3/4"
+    >
       <ProfileHeader profile={data.profile} avatarUrl={data.avatarUrl} />
 
       <hr className="h-px my-8 bg-black dark:bg-white border-0" />

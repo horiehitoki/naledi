@@ -17,10 +17,6 @@ import { AppSidebar } from "~/components/ui/app-sidebar";
 import { Toaster } from "~/components/ui/toaster";
 import { PostDialog } from "~/components/timeline/post-dialog";
 
-type OutletContextType = {
-  toggleEmojiPicker: () => void;
-};
-
 export const loader: LoaderFunction = async ({ request }) => {
   const agent: Agent | null = await getSessionAgent(request);
   if (agent == null) return redirect("/");
@@ -59,10 +55,14 @@ export default function Homepage() {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
 
-  const context = useOutletContext<OutletContextType>();
+  //絵文字ピッカー
+  const context = useOutletContext<{
+    toggleEmojiPicker: (postId: string) => void;
+  }>();
 
   if (!data) return null;
 
+  //投稿完了時のtoast
   const handlePostSubmit = () => {
     setOpen(false);
     toast({
