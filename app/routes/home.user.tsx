@@ -68,7 +68,7 @@ export default function ProfilePage() {
   return (
     <div
       id="scrollable-timeline"
-      className="overflow-y-auto h-[calc(100vh-2rem)] m-auto w-3/4"
+      className="overflow-y-auto h-[calc(100vh-2rem)] m-auto md:w-3/4"
     >
       <ProfileHeader profile={data.profile} avatarUrl={data.avatarUrl} />
 

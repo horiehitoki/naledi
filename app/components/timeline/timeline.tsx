@@ -136,7 +136,7 @@ function SNSTimelineComponent({ type }: { type: "default" | "deck" }) {
         next={() => fetcher(timeline[0])}
         hasMore={timeline[0].hasMore}
         loader={<div></div>}
-        className="h-screen md:w-1/2 m-auto"
+        className="h-screen"
       >
         <div className="space-y-8">
           {timeline[0].posts.map((postItem) => {

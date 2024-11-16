@@ -23,7 +23,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 export default function Index() {
   return (
-    <div className="min-h-screen flex justify-start items-center px-36">
+    <div className="min-h-screen flex justify-start items-center md:px-36">
       <Card className="w-96 rounded-lg shadow-lg">
         <CardContent className="p-6 space-y-8">
           <h1 className="text-2xl font-bold">Stellar</h1>

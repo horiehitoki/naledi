@@ -32,7 +32,7 @@ export const Post = ({ post }: { post: PostView }) => {
   }));
 
   return (
-    <Card className="max-w-2xl mx-auto" ref={cardRef}>
+    <Card className="md:max-w-2xl md:mx-auto" ref={cardRef}>
       <CardHeader>
         <a
           href={`/home/user?handle=${post.author.handle}`}

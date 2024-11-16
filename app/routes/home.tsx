@@ -46,7 +46,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 
 export default function Homepage() {
-  const context = useOutletContext<{ profile: ProfileView }>();
+  const context = useOutletContext<ProfileView>();
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
 
@@ -65,7 +65,7 @@ export default function Homepage() {
 
   return (
     <SidebarProvider>
-      <AppSidebar profile={context.profile} open={open} setOpen={setOpen} />
+      <AppSidebar profile={context} open={open} setOpen={setOpen} />
       <SidebarTrigger />
 
       <Outlet context={toggleEmojiPicker} />

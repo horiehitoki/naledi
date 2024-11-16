@@ -45,7 +45,7 @@ export function ProfileHeader({
             {profile.displayName}
           </h1>
 
-          <div className="items-center space-x-2 text-muted-foreground mt-1">
+          <div className="items-center space-x-2 text-muted-foreground mt-1 hidden md:block">
             <span>@{profile.handle}</span>
             <Badge variant="secondary" className="text-xs">
               {profile.did}
@@ -98,26 +98,31 @@ export function ProfileTabs({
 }: any) {
   return (
     <Tabs defaultValue="posts">
-      <TabsList className="w-full justify-start border-b rounded-none h-12 bg-transparent p-0">
-        <TabsTrigger value="posts">
-          <User className="w-4 h-4 mr-2" />
-          投稿
-        </TabsTrigger>
-        <TabsTrigger
-          value="follow"
-          className="flex items-center h-12 px-4 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
-        >
-          <Users className="w-4 h-4 mr-2" />
-          フォロー
-        </TabsTrigger>
-        <TabsTrigger
-          value="follower"
-          className="flex items-center h-12 px-4 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
-        >
-          <UserCircle className="w-4 h-4 mr-2" />
-          フォロワー
-        </TabsTrigger>
-      </TabsList>
+      <div className="flex justify-center overflow-x-scroll">
+        <TabsList className="justify-start border-b rounded-none h-12 bg-transparent p-0">
+          <TabsTrigger
+            value="posts"
+            className="flex items-center h-12 px-4 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
+          >
+            <User className="w-4 h-4 mr-2" />
+            投稿
+          </TabsTrigger>
+          <TabsTrigger
+            value="follow"
+            className="flex items-center h-12 px-4 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
+          >
+            <Users className="w-4 h-4 mr-2" />
+            フォロー
+          </TabsTrigger>
+          <TabsTrigger
+            value="follower"
+            className="flex items-center h-12 px-4 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
+          >
+            <UserCircle className="w-4 h-4 mr-2" />
+            フォロワー
+          </TabsTrigger>
+        </TabsList>
+      </div>
 
       <TabsContent value="posts" className="mt-6">
         <InfiniteScroll
