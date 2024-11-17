@@ -36,6 +36,7 @@ export const action: ActionFunction = async ({ request }) => {
     collection: "com.marukun-dev.pds.reaction",
     rkey,
     record,
+    validate: false,
   });
 
   return json({ ok: true });

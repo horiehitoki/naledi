@@ -45,6 +45,7 @@
     "isbot": "^4.1.0",
     "kysely": "^0.27.4",
     "lucide-react": "^0.454.0",
+    "mfm-js": "^0.24.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-emoji-render": "^2.0.1",

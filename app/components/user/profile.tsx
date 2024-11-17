@@ -9,7 +9,7 @@ import { User, Users, UserCircle } from "lucide-react";
 import { LoadingSpinner } from "../ui/loading";
 import { ProfileView } from "~/generated/api/types/app/bsky/actor/defs";
 import { PostView } from "~/generated/api/types/app/bsky/feed/defs";
-import { Emojione } from "react-emoji-render";
+import { Twemoji } from "react-emoji-render";
 import { ReactionData } from "@types";
 
 export function ProfileHeader({
@@ -188,8 +188,8 @@ export function ProfileTabs({
           {reactions.map((data: ReactionData) => {
             return (
               <div key={data.reaction.cid}>
-                <Emojione
-                  text={`:${data.reaction.value.emoji}:`}
+                <Twemoji
+                  text={`:${data.reaction.value.emoji.replace(/\s+/g, "_")}:`}
                   className="text-center text-3xl flex justify-center my-12"
                 />
                 <Post post={data.post} />

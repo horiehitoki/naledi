@@ -1,4 +1,5 @@
 import { Agent } from "@atproto/api";
+import { ReactionData } from "@types";
 
 export async function getUserProfile(agent: Agent, did: string) {
   const res = await agent.getProfile({ actor: did });
@@ -23,27 +24,33 @@ export async function getUserProfile(agent: Agent, did: string) {
     cursor: followerData.data.cursor,
   };
 
-  const emoji = await agent.com.atproto.repo.listRecords({
-    repo: did,
-    collection: "com.marukun-dev.pds.reaction",
-  });
-
   const posts = feed.data;
   const profile = res.data;
-  const avatarUrl = profile.avatar!;
-  const reactionsData = emoji.data.records;
+  const avatarUrl = profile.avatar;
+  let reactions: ReactionData[] = [];
 
-  const reactions = await Promise.all(
-    reactionsData.map(async (reaction) => {
-      const postData = await agent.app.bsky.feed.getPosts({
-        uris: [reaction.value.subject.uri],
-      });
+  try {
+    const emoji = await agent.com.atproto.repo.listRecords({
+      repo: did,
+      collection: "com.marukun-dev.pds.reaction",
+    });
 
-      const post = postData.data.posts[0];
+    const reactionsData = emoji.data.records;
 
-      return { reaction, post };
-    })
-  );
+    reactions = (await Promise.all(
+      reactionsData.map(async (reaction) => {
+        const postData = await agent.app.bsky.feed.getPosts({
+          uris: [reaction.value.subject.uri],
+        });
+
+        const post = postData.data.posts[0];
+
+        return { reaction, post };
+      })
+    )) as unknown as ReactionData[];
+  } catch (e) {
+    console.log("err! " + e);
+  }
 
   return { profile, avatarUrl, posts, follow, follower, reactions };
 }

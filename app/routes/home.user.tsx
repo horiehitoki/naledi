@@ -1,4 +1,4 @@
-import { ActionFunctionArgs } from "@remix-run/node";
+import { LoaderFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { v4 as uuidv4 } from "uuid";
 
@@ -12,7 +12,7 @@ import { ProfileHeader, ProfileTabs } from "~/components/user/profile";
 import { UserData } from "@types";
 
 //ユーザーデータの取得
-export const loader = async ({ request }: ActionFunctionArgs) => {
+export const loader: LoaderFunction = async ({ request }) => {
   const agent = await getSessionAgent(request);
   if (!agent) return null;
 
