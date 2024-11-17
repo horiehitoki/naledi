@@ -1,5 +1,6 @@
 import { ProfileView } from "~/generated/api/types/app/bsky/actor/defs";
 import { PostView } from "~/generated/api/types/app/bsky/feed/defs";
+import { Reaction } from "~/generated/api/types/com/marukun-dev/pds/getReaction";
 
 export type Session = { did: string };
 
@@ -33,3 +34,8 @@ export type toggleEmojiPicker = (
   cid: string,
   element: HTMLDivElement
 ) => void;
+
+export type ReactionData = {
+  reaction: { cid: string; value: Reaction };
+  post: PostView;
+};

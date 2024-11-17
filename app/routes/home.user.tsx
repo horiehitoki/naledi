@@ -11,7 +11,7 @@ import { useTimeline } from "~/hooks/useTimeline";
 import { ProfileHeader, ProfileTabs } from "~/components/user/profile";
 import { ProfileView } from "~/generated/api/types/app/bsky/actor/defs";
 import { PostView } from "~/generated/api/types/app/bsky/feed/defs";
-import { FollowRes } from "@types";
+import { FollowRes, ReactionData } from "@types";
 
 export const loader = async ({ request }: ActionFunctionArgs) => {
   const agent = await getSessionAgent(request);
@@ -22,10 +22,8 @@ export const loader = async ({ request }: ActionFunctionArgs) => {
   if (!handle) return null;
 
   const did = await resolver.resolvedHandleToDid(handle);
-  const { profile, avatarUrl, posts, follow, follower } = await getUserProfile(
-    agent,
-    did
-  );
+  const { profile, avatarUrl, posts, follow, follower, reactions } =
+    await getUserProfile(agent, did);
 
   return {
     profile,
@@ -34,6 +32,7 @@ export const loader = async ({ request }: ActionFunctionArgs) => {
     cursor: posts.cursor,
     follow,
     follower,
+    reactions,
   };
 };
 
@@ -45,6 +44,7 @@ export default function ProfilePage() {
     cursor: string;
     follow: FollowRes;
     follower: FollowRes;
+    reactions: ReactionData;
   }>();
 
   const { timeline, fetcher: timelineFetcher } = useTimeline([
@@ -81,6 +81,7 @@ export default function ProfilePage() {
         follower={follower}
         fetcher={fetcher}
         hasMore={hasMore}
+        reactions={data.reactions}
       />
     </div>
   );

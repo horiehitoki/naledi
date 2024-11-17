@@ -9,6 +9,8 @@ import { User, Users, UserCircle } from "lucide-react";
 import { LoadingSpinner } from "../ui/loading";
 import { ProfileView } from "~/generated/api/types/app/bsky/actor/defs";
 import { PostView } from "~/generated/api/types/app/bsky/feed/defs";
+import { Emojione } from "react-emoji-render";
+import { ReactionData } from "@types";
 
 export function ProfileHeader({
   profile,
@@ -95,6 +97,7 @@ export function ProfileTabs({
   follower,
   fetcher,
   hasMore,
+  reactions,
 }: any) {
   return (
     <Tabs defaultValue="posts">
@@ -120,6 +123,13 @@ export function ProfileTabs({
           >
             <UserCircle className="w-4 h-4 mr-2" />
             フォロワー
+          </TabsTrigger>
+          <TabsTrigger
+            value="reactions"
+            className="data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
+          >
+            <UserCircle className="w-4 h-4 mr-2" />
+            リアクション
           </TabsTrigger>
         </TabsList>
       </div>
@@ -171,6 +181,22 @@ export function ProfileTabs({
             ))}
           </div>
         </InfiniteScroll>
+      </TabsContent>
+
+      <TabsContent value="reactions" className="mt-6">
+        <div className="space-y-4">
+          {reactions.map((data: ReactionData) => {
+            return (
+              <div key={data.reaction.cid}>
+                <Emojione
+                  text={`:${data.reaction.value.emoji}:`}
+                  className="text-center text-3xl flex justify-center my-12"
+                />
+                <Post post={data.post} />
+              </div>
+            );
+          })}
+        </div>
       </TabsContent>
     </Tabs>
   );

@@ -39,10 +39,11 @@ export const useEmojiPicker = (): UseEmojiPickerReturn => {
 
   const handleEmojiClick = async (event: EmojiClickData) => {
     const emojiName = event.names[0];
-    console.log(postInfo);
 
     if (postInfo) {
-      await fetch("/api/reaction", {
+      setIsEmojiPickerOpen(false);
+
+      await fetch("/api/create-reaction", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -55,8 +56,6 @@ export const useEmojiPicker = (): UseEmojiPickerReturn => {
           emoji: emojiName,
         }),
       });
-
-      setIsEmojiPickerOpen(false);
     }
   };
 
@@ -94,8 +93,6 @@ export const useEmojiPicker = (): UseEmojiPickerReturn => {
     setPosition(newPosition);
     setIsEmojiPickerOpen(!isEmojiPickerOpen);
     setPostInfo({ postId, uri, cid });
-
-    console.log(uri);
   };
 
   return {

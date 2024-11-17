@@ -1,6 +1,5 @@
 import { Agent } from "@atproto/api";
-import { LoaderFunction } from "@remix-run/node";
-import { FollowRes } from "@types";
+import { json, LoaderFunction } from "@remix-run/node";
 import { getSessionAgent } from "~/utils/auth/session";
 
 const getCursorFromRequest = (request: Request) => {
@@ -13,11 +12,9 @@ const getDidFromRequest = (request: Request) => {
   return url.searchParams.get("did") || "";
 };
 
-export const loader: LoaderFunction = async ({
-  request,
-}): Promise<FollowRes | null> => {
+export const loader: LoaderFunction = async ({ request }) => {
   const agent: Agent | null = await getSessionAgent(request);
-  if (agent == null) return null;
+  if (agent == null) return json(null);
 
   const cursor = getCursorFromRequest(request);
   const did = getDidFromRequest(request);
@@ -28,8 +25,8 @@ export const loader: LoaderFunction = async ({
     cursor: cursor,
   });
 
-  return {
+  return json({
     list: follows.data.follows,
     cursor: follows.data.cursor,
-  };
+  });
 };

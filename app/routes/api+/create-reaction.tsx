@@ -1,5 +1,5 @@
 import { Agent } from "@atproto/api";
-import { ActionFunction } from "@remix-run/node";
+import { ActionFunction, json } from "@remix-run/node";
 import { getSessionAgent } from "~/utils/auth/session";
 import { TID } from "@atproto/common";
 
@@ -13,7 +13,7 @@ interface ReactionRequest {
 
 export const action: ActionFunction = async ({ request }) => {
   const agent: Agent | null = await getSessionAgent(request);
-  if (agent == null) return;
+  if (agent == null) return json(null);
 
   const body = (await request.json()) as ReactionRequest;
 
@@ -36,5 +36,5 @@ export const action: ActionFunction = async ({ request }) => {
     record,
   });
 
-  return null;
+  return json({ ok: true });
 };
