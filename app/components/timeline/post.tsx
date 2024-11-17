@@ -74,29 +74,29 @@ export const Post = ({ post }: { post: PostView }) => {
         <CardContent className="space-y-4">
           <a href={`/home/threads?uri=${post.uri}`}>
             <p className="text-sm">{post.record.text}</p>
-          </a>
 
-          {images && (
-            <div className="relative">
-              <div className="relative z-10">
-                <Lightbox
-                  open={isLightboxOpen}
-                  close={() => setIsLightboxOpen(false)}
-                  slides={slides}
-                />
-                <button
-                  onClick={() => setIsLightboxOpen(true)}
-                  className="w-full overflow-hidden rounded-lg hover:opacity-90 transition-opacity"
-                >
-                  <img
-                    src={images[0].thumb}
-                    alt="Post attachment"
-                    className="w-full h-auto object-cover"
+            {images && (
+              <div className="relative">
+                <div className="relative z-10">
+                  <Lightbox
+                    open={isLightboxOpen}
+                    close={() => setIsLightboxOpen(false)}
+                    slides={slides}
                   />
-                </button>
+                  <button
+                    onClick={() => setIsLightboxOpen(true)}
+                    className="w-full overflow-hidden rounded-lg hover:opacity-90 transition-opacity"
+                  >
+                    <img
+                      src={images[0].thumb}
+                      alt="Post attachment"
+                      className="w-full h-auto object-cover"
+                    />
+                  </button>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </a>
         </CardContent>
         <CardFooter className="flex justify-between items-center pt-2">
           <div className="flex space-x-2">

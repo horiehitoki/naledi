@@ -8,17 +8,8 @@ import {
 } from "kysely";
 
 export type DatabaseSchema = {
-  status: Status;
   auth_session: AuthSession;
   auth_state: AuthState;
-};
-
-export type Status = {
-  uri: string;
-  authorDid: string;
-  status: string;
-  createdAt: string;
-  indexedAt: string;
 };
 
 export type AuthSession = {
