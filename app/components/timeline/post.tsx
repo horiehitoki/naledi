@@ -22,7 +22,6 @@ export const Post = ({ post }: { post: PostView }) => {
   const toggleEmojiPicker = useOutletContext<toggleEmojiPicker>();
 
   //画像ビューワーのセットアップ
-
   //@ts-ignore
   const images = post.embed?.images as AppBskyEmbedImages.View | undefined;
 
@@ -92,7 +91,7 @@ export const Post = ({ post }: { post: PostView }) => {
             className="hover:text-blue-500 hover:bg-blue-50"
           >
             <Repeat2 className="w-4 h-4 mr-1" />
-            <span className="text-xs">12</span>
+            <span className="text-xs">{post.repostCount}</span>
           </Button>
 
           <Button
@@ -101,7 +100,7 @@ export const Post = ({ post }: { post: PostView }) => {
             className="hover:text-green-500 hover:bg-green-50"
           >
             <MessageCircle className="w-4 h-4 mr-1" />
-            <span className="text-xs">8</span>
+            <span className="text-xs">{post.replyCount}</span>
           </Button>
 
           <Button
@@ -110,7 +109,7 @@ export const Post = ({ post }: { post: PostView }) => {
             className="hover:text-red-500 hover:bg-red-50"
           >
             <Heart className="w-4 h-4 mr-1" />
-            <span className="text-xs">24</span>
+            <span className="text-xs">{post.likeCount}</span>
           </Button>
 
           <div className="relative">

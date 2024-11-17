@@ -4,7 +4,9 @@ import { FollowRes } from "@types";
 
 export async function getUserProfile(agent: Agent, did: string) {
   const res = await agent.getProfile({ actor: did });
+
   const feed = await agent.getAuthorFeed({ actor: did, limit: 50 });
+
   const follow: FollowRes = await getFollows(agent, did);
   const follower: FollowRes = await getFollowers(agent, did);
   const emoji = await agent.com.atproto.repo.listRecords({
