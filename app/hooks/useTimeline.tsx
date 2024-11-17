@@ -20,10 +20,10 @@ export const useTimeline = (defaultTimeline: TimelineState[]) => {
           let endpoint = "";
           switch (timelineItem.type) {
             case "home":
-              endpoint = "/api/getTimeline/";
+              endpoint = "/api/timeline/";
               break;
             case "user":
-              endpoint = `/api/getUserPost/?did=${timelineItem.did}`;
+              endpoint = `/api/users/?did=${timelineItem.did}`;
               break;
           }
           const res = await fetch(new URL(endpoint, window.origin));
@@ -45,10 +45,10 @@ export const useTimeline = (defaultTimeline: TimelineState[]) => {
     let endpoint = "";
     switch (timelineItem.type) {
       case "home":
-        endpoint = `/api/getTimeline?cursor=${currentCursor}`;
+        endpoint = `/api/timeline?cursor=${currentCursor}`;
         break;
       case "user":
-        endpoint = `/api/getUserPost?cursor=${currentCursor}&did=${timelineItem.did}`;
+        endpoint = `/api/users?cursor=${currentCursor}&did=${timelineItem.did}`;
         break;
     }
 

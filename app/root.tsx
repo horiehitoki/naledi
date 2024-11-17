@@ -23,6 +23,7 @@ import { themeSessionResolver } from "./sessions.server";
 import { getSessionAgent } from "./utils/auth/session";
 import { getUserProfile } from "./utils/user/getUserProfile";
 import { Agent } from "@atproto/api";
+import { LoadingSpinner } from "./components/ui/loading";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -90,7 +91,9 @@ export function ErrorBoundary() {
             <ErrorPage />
           )
         ) : (
-          <div></div>
+          <div>
+            <LoadingSpinner />
+          </div>
         )}
         <ScrollRestoration />
         <Scripts />

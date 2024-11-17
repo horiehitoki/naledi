@@ -32,8 +32,8 @@ export const useFollow = ({
 
   const getEndpoint = (type: FollowType, cursor: string): string => {
     const endpoints = {
-      follow: `/api/getFollows?cursor=${cursor}&did=${did}`,
-      follower: `/api/getFollowers?cursor=${cursor}&did=${did}`,
+      follow: `/api/follows?cursor=${cursor}&did=${did}`,
+      follower: `/api/followers?cursor=${cursor}&did=${did}`,
     };
     return endpoints[type];
   };
