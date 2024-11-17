@@ -1,11 +1,22 @@
 import { Button } from "~/components/ui/button";
 import { Card, CardContent } from "~/components/ui/card";
-import { ActionFunctionArgs, redirect } from "@remix-run/node";
+import { ActionFunctionArgs, LoaderFunction, redirect } from "@remix-run/node";
 import { client } from "~/utils/auth/client";
 import { Form } from "@remix-run/react";
 import { Input } from "~/components/ui/input";
 import { LogIn } from "lucide-react";
+import { getSessionAgent } from "~/utils/auth/session";
+import { Agent } from "@atproto/api";
 
+//ログイン状態のチェック
+export const loader: LoaderFunction = async ({ request }) => {
+  const agent: Agent | null = await getSessionAgent(request);
+  if (agent) return redirect("/home");
+
+  return null;
+};
+
+//ログイン処理
 export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
   const handle = formData.get("handle");

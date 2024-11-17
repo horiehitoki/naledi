@@ -11,6 +11,7 @@ interface ReactionRequest {
   emoji: string;
 }
 
+//リアクションの作成
 export const action: ActionFunction = async ({ request }) => {
   const agent: Agent | null = await getSessionAgent(request);
   if (agent == null) return json(null);
@@ -19,6 +20,7 @@ export const action: ActionFunction = async ({ request }) => {
 
   const rkey = TID.nextStr();
 
+  //リアクションレコード
   const record = {
     $type: "com.marukun-dev.pds.reaction",
     subject: {

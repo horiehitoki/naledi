@@ -41,6 +41,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   return { theme: getTheme() };
 };
 
+//テーマの設定
 export default function AppWithProviders() {
   const data = useLoaderData<typeof loader>();
   return (

@@ -15,6 +15,7 @@ import { useEmojiPicker } from "~/hooks/useEmojiPicker";
 import { ProfileView } from "~/generated/api/types/app/bsky/actor/defs";
 import FooterMenu from "~/components/ui/footer";
 
+//ログイン状態のチェック
 export const loader: LoaderFunction = async ({ request }) => {
   const agent: Agent | null = await getSessionAgent(request);
   if (agent == null) return redirect("/");
@@ -22,6 +23,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   return null;
 };
 
+//投稿処理
 export const action = async ({ request }: ActionFunctionArgs) => {
   const agent: Agent | null = await getSessionAgent(request);
   if (!agent) return;
@@ -34,7 +36,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       $type: "app.bsky.feed.post",
       text: content,
       createdAt: new Date().toISOString(),
-      via: "Stellar",
+      via: "Stellar", //投稿元を含める
     };
 
     await agent.com.atproto.repo.createRecord({

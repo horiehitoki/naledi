@@ -39,3 +39,13 @@ export type ReactionData = {
   reaction: { cid: string; value: Reaction };
   post: PostView;
 };
+
+export type UserData = {
+  profile: ProfileView;
+  avatarUrl: string;
+  feed: PostView[];
+  cursor: string;
+  follow: FollowRes;
+  follower: FollowRes;
+  reactions: ReactionData;
+};

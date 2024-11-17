@@ -21,6 +21,8 @@ export const Post = ({ post }: { post: PostView }) => {
 
   const toggleEmojiPicker = useOutletContext<toggleEmojiPicker>();
 
+  //画像ビューワーのセットアップ
+
   //@ts-ignore
   const images = post.embed?.images as AppBskyEmbedImages.View | undefined;
 

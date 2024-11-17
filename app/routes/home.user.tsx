@@ -9,10 +9,9 @@ import { useFollow } from "~/hooks/useFollow";
 import { useTimeline } from "~/hooks/useTimeline";
 
 import { ProfileHeader, ProfileTabs } from "~/components/user/profile";
-import { ProfileView } from "~/generated/api/types/app/bsky/actor/defs";
-import { PostView } from "~/generated/api/types/app/bsky/feed/defs";
-import { FollowRes, ReactionData } from "@types";
+import { UserData } from "@types";
 
+//ユーザーデータの取得
 export const loader = async ({ request }: ActionFunctionArgs) => {
   const agent = await getSessionAgent(request);
   if (!agent) return null;
@@ -37,16 +36,9 @@ export const loader = async ({ request }: ActionFunctionArgs) => {
 };
 
 export default function ProfilePage() {
-  const data = useLoaderData<{
-    profile: ProfileView;
-    avatarUrl: string;
-    feed: PostView[];
-    cursor: string;
-    follow: FollowRes;
-    follower: FollowRes;
-    reactions: ReactionData;
-  }>();
+  const data = useLoaderData<UserData>();
 
+  //タイムラインとフォロー欄の初期化
   const { timeline, fetcher: timelineFetcher } = useTimeline([
     {
       id: uuidv4(),

@@ -30,6 +30,7 @@ function AddTimelineContent({
   );
 
   const handleAddTimeline = () => {
+    //タイムラインをLocal Storageに保存
     const newTimeline: TimelineStorage = {
       id: uuidv4(),
       type: timelineType,
