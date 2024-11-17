@@ -18,8 +18,8 @@ export type TimelineState = {
   hasMore: boolean;
 };
 
-export type FollowRes = {
-  list: ProfileView[];
+export type CursorRes = {
+  data: ProfileView[];
   cursor: string | undefined;
 };
 
@@ -45,7 +45,7 @@ export type UserData = {
   avatarUrl: string;
   feed: PostView[];
   cursor: string;
-  follow: FollowRes;
-  follower: FollowRes;
-  reactions: ReactionData;
+  follow: CursorRes;
+  follower: CursorRes;
+  reactions: ReactionData[];
 };

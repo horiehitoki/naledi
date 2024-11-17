@@ -26,7 +26,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   });
 
   return json({
-    feed: timeline.data.feed,
+    data: timeline.data.feed,
     cursor: timeline.data.cursor,
   });
 };

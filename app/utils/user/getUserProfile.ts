@@ -1,14 +1,28 @@
 import { Agent } from "@atproto/api";
-import { getFollowers, getFollows } from "./getFollowStatus";
-import { FollowRes } from "@types";
 
 export async function getUserProfile(agent: Agent, did: string) {
   const res = await agent.getProfile({ actor: did });
 
   const feed = await agent.getAuthorFeed({ actor: did, limit: 50 });
 
-  const follow: FollowRes = await getFollows(agent, did);
-  const follower: FollowRes = await getFollowers(agent, did);
+  const followsData = await agent.getFollows({
+    actor: did,
+    limit: 50,
+  });
+  const follow = {
+    data: followsData.data.follows,
+    cursor: followsData.data.cursor,
+  };
+
+  const followerData = await agent.getFollowers({
+    actor: did,
+    limit: 50,
+  });
+  const follower = {
+    data: followerData.data.followers,
+    cursor: followerData.data.cursor,
+  };
+
   const emoji = await agent.com.atproto.repo.listRecords({
     repo: did,
     collection: "com.marukun-dev.pds.reaction",

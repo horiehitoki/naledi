@@ -26,7 +26,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   });
 
   return json({
-    list: follows.data.follows,
+    data: follows.data.follows,
     cursor: follows.data.cursor,
   });
 };

@@ -28,8 +28,8 @@ export const useTimeline = (defaultTimeline: TimelineState[]) => {
           }
           const res = await fetch(new URL(endpoint, window.origin));
           const json = await res.json();
-          if (json.feed?.length) {
-            updateTimelineItem(timelineItem.id, { posts: json.feed });
+          if (json.data?.length) {
+            updateTimelineItem(timelineItem.id, { posts: json.data });
             createCursor(timelineItem.id, json.cursor);
             updateTimelineItem(timelineItem.id, { hasMore: !!json.cursor });
           }
@@ -55,9 +55,9 @@ export const useTimeline = (defaultTimeline: TimelineState[]) => {
     const res = await fetch(new URL(endpoint, window.origin));
     const json = await res.json();
 
-    if (json.feed?.length) {
+    if (json.data?.length) {
       updateTimelineItem(timelineItem.id, {
-        posts: [...timelineItem.posts, ...json.feed],
+        posts: [...timelineItem.posts, ...json.data],
       });
       updateCursor(timelineItem.id, json.cursor);
       updateTimelineItem(timelineItem.id, { hasMore: !!json.cursor });
