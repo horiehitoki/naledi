@@ -21,6 +21,8 @@ const resolver = createIdResolver();
 
 const firehose = createFirehose(resolver);
 
+firehose.start();
+
 export default function handleRequest(
   request: Request,
   responseStatusCode: number,

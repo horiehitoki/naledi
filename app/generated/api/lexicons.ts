@@ -9290,7 +9290,7 @@ export const schemaDict = {
         key: 'tid',
         record: {
           type: 'object',
-          required: ['subject', 'createdAt', 'emoji'],
+          required: ['subject', 'createdAt', 'emoji', 'postedBy'],
           properties: {
             subject: {
               type: 'ref',
@@ -9302,6 +9302,10 @@ export const schemaDict = {
             },
             emoji: {
               type: 'string',
+            },
+            postedBy: {
+              type: 'string',
+              format: 'at-identifier',
             },
           },
         },

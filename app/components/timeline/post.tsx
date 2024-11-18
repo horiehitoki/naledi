@@ -14,6 +14,7 @@ import { Heart, MessageCircle, Repeat2, Smile } from "lucide-react";
 import { useOutletContext } from "@remix-run/react";
 import { toggleEmojiPicker } from "@types";
 import { PostView } from "~/generated/api/types/app/bsky/feed/defs";
+import { ProfileView } from "~/generated/api/types/app/bsky/actor/defs";
 
 export const Post = ({ post }: { post: PostView }) => {
   async function like() {
@@ -55,7 +56,10 @@ export const Post = ({ post }: { post: PostView }) => {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
-  const toggleEmojiPicker = useOutletContext<toggleEmojiPicker>();
+  const { toggleEmojiPicker, profile } = useOutletContext<{
+    toggleEmojiPicker: toggleEmojiPicker;
+    profile: ProfileView;
+  }>();
 
   //画像ビューワーのセットアップ
   //@ts-ignore
@@ -190,6 +194,7 @@ export const Post = ({ post }: { post: PostView }) => {
                     post.id as string,
                     post.uri,
                     post.cid,
+                    profile,
                     cardRef.current!
                   )
                 }

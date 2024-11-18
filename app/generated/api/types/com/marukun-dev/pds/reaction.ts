@@ -11,6 +11,7 @@ export interface Record {
   subject: ComAtprotoRepoStrongRef.Main
   createdAt: string
   emoji: string
+  postedBy: string
   [k: string]: unknown
 }
 
