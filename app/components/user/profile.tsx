@@ -5,12 +5,14 @@ import { Badge } from "~/components/ui/badge";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Post } from "~/components/timeline/post";
 import { UserCard } from "~/components/user/userCard";
-import { User, Users, UserCircle } from "lucide-react";
+import { User, Users, UserCircle, Plus, Delete } from "lucide-react";
 import { LoadingSpinner } from "../ui/loading";
 import { ProfileView } from "~/generated/api/types/app/bsky/actor/defs";
 import { PostView } from "~/generated/api/types/app/bsky/feed/defs";
 import { Twemoji } from "react-emoji-render";
 import { ReactionData } from "@types";
+import { Button } from "../ui/button";
+import { useOutletContext } from "@remix-run/react";
 
 export function ProfileHeader({
   profile,
@@ -19,6 +21,26 @@ export function ProfileHeader({
   profile: ProfileView;
   avatarUrl: string;
 }) {
+  async function follow() {
+    const res = await fetch("/api/create/follow/", {
+      method: "POST",
+      body: JSON.stringify({ did: profile.did }),
+    });
+
+    return res;
+  }
+
+  async function deleteFollow() {
+    const res = await fetch("/api/delete/follow/", {
+      method: "POST",
+      body: JSON.stringify({ followUri: profile.viewer!.following }),
+    });
+
+    return res;
+  }
+
+  const context = useOutletContext<{ profile: ProfileView }>();
+
   return (
     <Card>
       <div>
@@ -31,14 +53,32 @@ export function ProfileHeader({
             />
           </div>
         )}
-        <div>
-          <Avatar className="w-24 h-24 border-4 border-white shadow-lg m-6">
-            <AvatarImage src={avatarUrl || ""} />
-            <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-500 text-white text-xl">
-              {profile.displayName?.[0]?.toUpperCase() || "?"}
-            </AvatarFallback>
-          </Avatar>
-        </div>
+        <Avatar className="w-24 h-24 border-4 border-white shadow-lg m-6">
+          <AvatarImage src={avatarUrl || ""} />
+          <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-500 text-white text-xl">
+            {profile.displayName?.[0]?.toUpperCase() || "?"}
+          </AvatarFallback>
+        </Avatar>
+
+        {profile.did !== context.profile.did ? (
+          <div>
+            {profile.viewer?.following ? (
+              <div className="flex justify-end mx-12">
+                <Button onClick={deleteFollow}>
+                  <Delete /> フォロー解除
+                </Button>
+              </div>
+            ) : (
+              <div className="flex justify-end mx-12">
+                <Button onClick={follow}>
+                  <Plus /> フォロー
+                </Button>
+              </div>
+            )}
+          </div>
+        ) : (
+          ""
+        )}
       </div>
 
       <CardContent className="space-y-4">

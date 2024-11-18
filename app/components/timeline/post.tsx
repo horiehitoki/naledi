@@ -74,7 +74,7 @@ export const Post = ({ post }: { post: PostView }) => {
       {post.viewer?.repost ? (
         <h1 className="font-bold flex">
           <Repeat2 className="mx-3" />
-          <h1>{post.author.displayName + "がリポスト"}</h1>
+          <h1>{post.viewer.repost.split("/")[2] + "がリポスト"}</h1>
         </h1>
       ) : (
         ""

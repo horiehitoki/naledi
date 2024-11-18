@@ -74,7 +74,7 @@ export default function Homepage() {
           <AppSidebar profile={context} open={open} setOpen={setOpen} />
           <SidebarTrigger />
 
-          <Outlet context={toggleEmojiPicker} />
+          <Outlet context={{ toggleEmojiPicker, profile: context }} />
 
           {isEmojiPickerOpen && (
             <div
@@ -100,7 +100,7 @@ export default function Homepage() {
       </div>
 
       <div className="md:hidden block">
-        <Outlet context={toggleEmojiPicker} />
+        <Outlet context={{ toggleEmojiPicker, profile: context }} />
 
         {isEmojiPickerOpen && (
           <div
