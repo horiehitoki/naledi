@@ -1,11 +1,7 @@
 import { NodeOAuthClient } from "@atproto/oauth-client-node";
 import { StateStore, SessionStore } from "~/utils/auth/store";
-import { createDb, migrateToLatest } from "./db";
 
 const createClient: () => Promise<NodeOAuthClient> = async () => {
-  const db = createDb(process.env.DB_PASS!);
-  await migrateToLatest(db);
-
   const publicUrl = "";
   const url = publicUrl || `http://127.0.0.1:5173`;
   const enc = encodeURIComponent;
@@ -26,8 +22,8 @@ const createClient: () => Promise<NodeOAuthClient> = async () => {
       token_endpoint_auth_method: "none",
       dpop_bound_access_tokens: true,
     },
-    stateStore: new StateStore(db),
-    sessionStore: new SessionStore(db),
+    stateStore: new StateStore(),
+    sessionStore: new SessionStore(),
   });
 };
 

@@ -11,7 +11,7 @@ import { createReadableStreamFromReadable } from "@remix-run/node";
 import { RemixServer } from "@remix-run/react";
 import { isbot } from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
-import { createFirehose } from "~/utils/firehose/firehose";
+import { createFirehose } from "~/utils/firehose";
 import { createIdResolver } from "~/utils/resolver";
 
 const ABORT_DELAY = 5_000;
