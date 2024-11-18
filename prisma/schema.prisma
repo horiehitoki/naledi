@@ -22,3 +22,11 @@ model AuthState {
   key   String @id
   state String
 }
+
+model Reaction {
+  id        String @id
+  uri       String
+  cid       String
+  emoji     String
+  createdBy String
+}

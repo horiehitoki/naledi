@@ -16,6 +16,42 @@ import { toggleEmojiPicker } from "@types";
 import { PostView } from "~/generated/api/types/app/bsky/feed/defs";
 
 export const Post = ({ post }: { post: PostView }) => {
+  async function like() {
+    const res = await fetch("/api/create/like/", {
+      method: "POST",
+      body: JSON.stringify({ uri: post.uri, cid: post.cid }),
+    });
+
+    return res;
+  }
+
+  async function cancelLike() {
+    const res = await fetch("/api/delete/like/", {
+      method: "POST",
+      body: JSON.stringify({ likeUri: post.viewer!.like }),
+    });
+
+    return res;
+  }
+
+  async function repost() {
+    const res = await fetch("/api/create/repost/", {
+      method: "POST",
+      body: JSON.stringify({ uri: post.uri, cid: post.cid }),
+    });
+
+    return res;
+  }
+
+  async function cancelRepost() {
+    const res = await fetch("/api/delete/repost/", {
+      method: "POST",
+      body: JSON.stringify({ repostUri: post.viewer!.repost }),
+    });
+
+    return res;
+  }
+
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -71,61 +107,79 @@ export const Post = ({ post }: { post: PostView }) => {
             </div>
           </a>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <a href={`/home/threads?uri=${post.uri}`}>
-            <p className="text-sm">{post.record.text}</p>
 
-            {images && (
-              <div className="relative">
-                <div className="relative z-10">
-                  <Lightbox
-                    open={isLightboxOpen}
-                    close={() => setIsLightboxOpen(false)}
-                    slides={slides}
+        <CardContent className="space-y-4">
+          <p className="text-sm">{post.record.text}</p>
+
+          {images && (
+            <div className="relative">
+              <div className="relative z-10">
+                <Lightbox
+                  open={isLightboxOpen}
+                  close={() => setIsLightboxOpen(false)}
+                  slides={slides}
+                />
+                <button
+                  onClick={() => setIsLightboxOpen(true)}
+                  className="w-full overflow-hidden rounded-lg hover:opacity-90 transition-opacity"
+                >
+                  <img
+                    src={images[0].thumb}
+                    alt="Post attachment"
+                    className="w-full h-auto object-cover"
                   />
-                  <button
-                    onClick={() => setIsLightboxOpen(true)}
-                    className="w-full overflow-hidden rounded-lg hover:opacity-90 transition-opacity"
-                  >
-                    <img
-                      src={images[0].thumb}
-                      alt="Post attachment"
-                      className="w-full h-auto object-cover"
-                    />
-                  </button>
-                </div>
+                </button>
               </div>
-            )}
-          </a>
+            </div>
+          )}
         </CardContent>
+
         <CardFooter className="flex justify-between items-center pt-2">
           <div className="flex space-x-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="hover:text-blue-500 hover:bg-blue-50"
-            >
-              <Repeat2 className="w-4 h-4 mr-1" />
-              <span className="text-xs">{post.repostCount}</span>
-            </Button>
+            {post.viewer?.repost ? (
+              <Button variant="ghost" size="sm" onClick={cancelRepost}>
+                <Repeat2 className="w-4 h-4 mr-1 text-green-500" />
+                <span className="text-xs">{post.repostCount}</span>
+              </Button>
+            ) : (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="hover:text-green-500 hover:bg-green-50"
+                onClick={repost}
+              >
+                <Repeat2 className="w-4 h-4 mr-1" />
+                <span className="text-xs">{post.repostCount}</span>
+              </Button>
+            )}
 
-            <Button
-              variant="ghost"
-              size="sm"
-              className="hover:text-green-500 hover:bg-green-50"
-            >
-              <MessageCircle className="w-4 h-4 mr-1" />
-              <span className="text-xs">{post.replyCount}</span>
-            </Button>
+            <a href={`/home/threads?uri=${post.uri}`}>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="hover:text-blue-500 hover:bg-blue-50"
+              >
+                <MessageCircle className="w-4 h-4 mr-1" />
+                <span className="text-xs">{post.replyCount}</span>
+              </Button>
+            </a>
 
-            <Button
-              variant="ghost"
-              size="sm"
-              className="hover:text-red-500 hover:bg-red-50"
-            >
-              <Heart className="w-4 h-4 mr-1" />
-              <span className="text-xs">{post.likeCount}</span>
-            </Button>
+            {post.viewer?.like ? (
+              <Button variant="ghost" size="sm" onClick={cancelLike}>
+                <Heart className="w-4 h-4 mr-1 text-red-500 fill-red-500" />
+                <span className="text-xs">{post.likeCount}</span>
+              </Button>
+            ) : (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="hover:text-red-500 hover:bg-red-50"
+                onClick={like}
+              >
+                <Heart className="w-4 h-4 mr-1" />
+                <span className="text-xs">{post.likeCount}</span>
+              </Button>
+            )}
 
             <div className="relative">
               <Button

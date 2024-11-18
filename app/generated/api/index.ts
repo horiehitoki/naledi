@@ -147,7 +147,6 @@ import * as ChatBskyActorDeleteAccount from './types/chat/bsky/actor/deleteAccou
 import * as ChatBskyModerationGetActorMetadata from './types/chat/bsky/moderation/getActorMetadata'
 import * as ChatBskyModerationGetMessageContext from './types/chat/bsky/moderation/getMessageContext'
 import * as ChatBskyModerationUpdateActorAccess from './types/chat/bsky/moderation/updateActorAccess'
-import * as ComMarukunDevPdsGetReaction from './types/com/marukun-dev/pds/getReaction'
 import * as ComMarukunDevPdsReaction from './types/com/marukun-dev/pds/reaction'
 import * as ComAtprotoTempCheckSignupQueue from './types/com/atproto/temp/checkSignupQueue'
 import * as ComAtprotoTempRequestPhoneVerification from './types/com/atproto/temp/requestPhoneVerification'
@@ -373,7 +372,6 @@ export * as ChatBskyActorDeleteAccount from './types/chat/bsky/actor/deleteAccou
 export * as ChatBskyModerationGetActorMetadata from './types/chat/bsky/moderation/getActorMetadata'
 export * as ChatBskyModerationGetMessageContext from './types/chat/bsky/moderation/getMessageContext'
 export * as ChatBskyModerationUpdateActorAccess from './types/chat/bsky/moderation/updateActorAccess'
-export * as ComMarukunDevPdsGetReaction from './types/com/marukun-dev/pds/getReaction'
 export * as ComMarukunDevPdsReaction from './types/com/marukun-dev/pds/reaction'
 export * as ComAtprotoTempCheckSignupQueue from './types/com/atproto/temp/checkSignupQueue'
 export * as ComAtprotoTempRequestPhoneVerification from './types/com/atproto/temp/requestPhoneVerification'
@@ -2947,18 +2945,6 @@ export class ComMarukunDevPdsNS {
   constructor(client: XrpcClient) {
     this._client = client
     this.reaction = new ReactionRecord(client)
-  }
-
-  getReaction(
-    params?: ComMarukunDevPdsGetReaction.QueryParams,
-    opts?: ComMarukunDevPdsGetReaction.CallOptions,
-  ): Promise<ComMarukunDevPdsGetReaction.Response> {
-    return this._client.call(
-      'com.marukun-dev.pds.getReaction',
-      params,
-      undefined,
-      opts,
-    )
   }
 }
 
