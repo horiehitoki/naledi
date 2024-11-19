@@ -16,7 +16,6 @@ export const useFollow = ({
   initialFollow,
   initialFollower,
 }: UseFollowProps) => {
-  // フォローとフォロワーのState
   const [follow, setFollow] = useState<ProfileView[]>(initialFollow.data);
   const [follower, setFollower] = useState<ProfileView[]>(initialFollower.data);
   const { createCursor, readCursor, updateCursor } = useCursor();
@@ -38,7 +37,6 @@ export const useFollow = ({
     return endpoints[type];
   };
 
-  // データのフェッチ
   const fetcher = async (type: FollowType) => {
     const currentCursor = readCursor(type)?.cursor;
     if (!currentCursor) return;

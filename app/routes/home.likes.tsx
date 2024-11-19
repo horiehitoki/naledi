@@ -23,6 +23,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 export default function Threads() {
   const { initialLikes, uri } = useLoaderData<typeof loader>();
 
+  //無限スクロール用に初期化
   const { likes, fetcher, hasMore } = useLikes({
     uri: uri,
     initialLikes,

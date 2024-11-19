@@ -1,4 +1,4 @@
-import { ReactionRecord } from "~/generated/api";
+import { Reaction } from "@prisma/client";
 import { ProfileView } from "~/generated/api/types/app/bsky/actor/defs";
 import { PostView } from "~/generated/api/types/app/bsky/feed/defs";
 
@@ -37,7 +37,7 @@ export type toggleEmojiPicker = (
 ) => void;
 
 export type ReactionData = {
-  reaction: { cid: string; value: ReactionRecord };
+  reaction: Reaction;
   post: PostView;
 };
 

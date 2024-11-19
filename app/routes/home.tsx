@@ -31,6 +31,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
   const content = formData.get("content");
 
+  //投稿レコードの作成
   if (typeof content === "string") {
     const record = {
       $type: "app.bsky.feed.post",
@@ -67,6 +68,7 @@ export default function Homepage() {
     });
   };
 
+  //レスポンシブ設定
   return (
     <div>
       <div className="md:block hidden">

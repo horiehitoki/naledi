@@ -20,14 +20,16 @@ export const useTimeline = (defaultTimeline: TimelineState[]) => {
           let endpoint = "";
           switch (timelineItem.type) {
             case "home":
-              endpoint = "/api/timeline/";
+              endpoint = "/api/timeline";
               break;
             case "user":
-              endpoint = `/api/users/?did=${timelineItem.did}`;
+              endpoint = `/api/timeline?did=${timelineItem.did}`;
               break;
           }
+
           const res = await fetch(new URL(endpoint, window.origin));
           const json = await res.json();
+
           if (json.data?.length) {
             updateTimelineItem(timelineItem.id, { posts: json.data });
             createCursor(timelineItem.id, json.cursor);
@@ -48,7 +50,7 @@ export const useTimeline = (defaultTimeline: TimelineState[]) => {
         endpoint = `/api/timeline?cursor=${currentCursor}`;
         break;
       case "user":
-        endpoint = `/api/users?cursor=${currentCursor}&did=${timelineItem.did}`;
+        endpoint = `/api/timeline?cursor=${currentCursor}&did=${timelineItem.did}`;
         break;
     }
 

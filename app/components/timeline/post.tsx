@@ -13,10 +13,14 @@ import { Button } from "~/components/ui/button";
 import { Heart, MessageCircle, Repeat2, Smile } from "lucide-react";
 import { useOutletContext } from "@remix-run/react";
 import { toggleEmojiPicker } from "@types";
-import { PostView } from "~/generated/api/types/app/bsky/feed/defs";
 import { ProfileView } from "~/generated/api/types/app/bsky/actor/defs";
+import { Twemoji } from "react-emoji-render";
+import { Reaction } from "@prisma/client";
 
-export const Post = ({ post }: { post: PostView }) => {
+export const Post = (data: any) => {
+  const post = data.data.post.post;
+  const reaction = data.data.reaction;
+
   async function like() {
     const res = await fetch("/api/create/like/", {
       method: "POST",
@@ -62,7 +66,6 @@ export const Post = ({ post }: { post: PostView }) => {
   }>();
 
   //画像ビューワーのセットアップ
-  //@ts-ignore
   const images = post.embed?.images as AppBskyEmbedImages.View | undefined;
 
   //@ts-ignore
@@ -138,71 +141,82 @@ export const Post = ({ post }: { post: PostView }) => {
           )}
         </CardContent>
 
-        <CardFooter className="flex justify-between items-center pt-2">
-          <div className="flex space-x-2">
-            {post.viewer?.repost ? (
-              <Button variant="ghost" size="sm" onClick={cancelRepost}>
-                <Repeat2 className="w-4 h-4 mr-1 text-green-500" />
-                <span className="text-xs">{post.repostCount}</span>
-              </Button>
-            ) : (
-              <Button
-                variant="ghost"
-                size="sm"
-                className="hover:text-green-500 hover:bg-green-50"
-                onClick={repost}
-              >
-                <Repeat2 className="w-4 h-4 mr-1" />
-                <span className="text-xs">{post.repostCount}</span>
-              </Button>
-            )}
+        <CardFooter className="flex flex-col pt-2 space-y-2">
+          <div className="flex justify-between items-center">
+            <div className="flex space-x-2">
+              {post.viewer?.repost ? (
+                <Button variant="ghost" size="sm" onClick={cancelRepost}>
+                  <Repeat2 className="w-4 h-4 mr-1 text-green-500" />
+                  <span className="text-xs">{post.repostCount}</span>
+                </Button>
+              ) : (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="hover:text-green-500 hover:bg-green-50"
+                  onClick={repost}
+                >
+                  <Repeat2 className="w-4 h-4 mr-1" />
+                  <span className="text-xs">{post.repostCount}</span>
+                </Button>
+              )}
 
-            <a href={`/home/threads?uri=${post.uri}`}>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="hover:text-blue-500 hover:bg-blue-50"
-              >
-                <MessageCircle className="w-4 h-4 mr-1" />
-                <span className="text-xs">{post.replyCount}</span>
-              </Button>
-            </a>
+              <a href={`/home/threads?uri=${post.uri}`}>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="hover:text-blue-500 hover:bg-blue-50"
+                >
+                  <MessageCircle className="w-4 h-4 mr-1" />
+                  <span className="text-xs">{post.replyCount}</span>
+                </Button>
+              </a>
 
-            {post.viewer?.like ? (
-              <Button variant="ghost" size="sm" onClick={cancelLike}>
-                <Heart className="w-4 h-4 mr-1 text-red-500 fill-red-500" />
-                <span className="text-xs">{post.likeCount}</span>
-              </Button>
-            ) : (
-              <Button
-                variant="ghost"
-                size="sm"
-                className="hover:text-red-500 hover:bg-red-50"
-                onClick={like}
-              >
-                <Heart className="w-4 h-4 mr-1" />
-                <span className="text-xs">{post.likeCount}</span>
-              </Button>
-            )}
-
-            <div className="relative">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() =>
-                  toggleEmojiPicker(
-                    post.id as string,
-                    post.uri,
-                    post.cid,
-                    profile,
-                    cardRef.current!
-                  )
-                }
-                className="hover:text-yellow-500 hover:bg-yellow-50"
-              >
-                <Smile className="w-4 h-4" />
-              </Button>
+              {post.viewer?.like ? (
+                <Button variant="ghost" size="sm" onClick={cancelLike}>
+                  <Heart className="w-4 h-4 mr-1 text-red-500 fill-red-500" />
+                  <span className="text-xs">{post.likeCount}</span>
+                </Button>
+              ) : (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="hover:text-red-500 hover:bg-red-50"
+                  onClick={like}
+                >
+                  <Heart className="w-4 h-4 mr-1" />
+                  <span className="text-xs">{post.likeCount}</span>
+                </Button>
+              )}
             </div>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-4 mt-2">
+            {reaction.map((data: Reaction) => (
+              <button
+                key={data.cid}
+                className="flex items-center space-x-1 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-2 py-1 rounded-full text-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+              >
+                <Twemoji
+                  text={`:${data.emoji.replace(/\s+/g, "_")}:`}
+                  options={{ className: "text-base" }}
+                />
+              </button>
+            ))}
+            <button
+              onClick={() =>
+                toggleEmojiPicker(
+                  post.id as string,
+                  post.uri,
+                  post.cid,
+                  profile,
+                  cardRef.current!
+                )
+              }
+              className="flex items-center space-x-1 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-2 py-1 rounded-full text-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+            >
+              <Smile className="w-4 h-4" />
+            </button>
           </div>
         </CardFooter>
       </Card>

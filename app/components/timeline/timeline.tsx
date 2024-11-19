@@ -9,7 +9,6 @@ import { useTimeline } from "~/hooks/useTimeline";
 import { v4 as uuidv4 } from "uuid";
 import { ClientOnly } from "remix-utils/client-only";
 import { LoadingSpinner } from "../ui/loading";
-import { PostView } from "~/generated/api/types/app/bsky/feed/defs";
 
 function SNSTimelineComponent({ type }: { type: "default" | "deck" }) {
   const [savedTimeline, setSavedTimeline] =
@@ -68,9 +67,8 @@ function SNSTimelineComponent({ type }: { type: "default" | "deck" }) {
                 className="pr-4"
               >
                 <div className="space-y-8">
-                  {timelineItem.posts.map((postItem) => {
-                    const postData = postItem.post as PostView;
-                    return <Post key={postData.cid} post={postData} />;
+                  {timelineItem.posts.map((data: any) => {
+                    return <Post key={data.post.cid} data={data} />;
                   })}
                 </div>
               </InfiniteScroll>
@@ -91,9 +89,8 @@ function SNSTimelineComponent({ type }: { type: "default" | "deck" }) {
           height="100vh"
         >
           <div className="space-y-8">
-            {timeline[0].posts.map((postItem) => {
-              const postData = postItem.post as PostView;
-              return <Post key={postData.cid} post={postData} />;
+            {timeline[0].posts.map((data: any) => {
+              return <Post key={data.post.cid} data={data} />;
             })}
           </div>
         </InfiniteScroll>

@@ -29,4 +29,5 @@ model Reaction {
   cid       String
   emoji     String
   createdBy String
+  @@unique([uri, createdBy])
 }

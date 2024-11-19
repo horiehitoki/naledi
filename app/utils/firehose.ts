@@ -16,9 +16,16 @@ export function createFirehose(idResolver: IdResolver) {
         ) {
           const record = evt.record;
 
+          //DBの更新
           await prisma.reaction.upsert({
-            where: { id: evt.rkey },
+            where: {
+              uri_createdBy: {
+                uri: record.subject.uri,
+                createdBy: record.postedBy,
+              },
+            },
             update: {
+              id: evt.rkey,
               emoji: record.emoji,
             },
             create: {
@@ -40,7 +47,7 @@ export function createFirehose(idResolver: IdResolver) {
       }
     },
     onError: (err) => {
-      console.error({ err }, "error on firehose ingestion");
+      null;
     },
     filterCollections: ["com.marukun-dev.pds.reaction"],
     excludeIdentity: true,

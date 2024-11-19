@@ -25,8 +25,18 @@ export const action: ActionFunction = async ({ request }) => {
   const rkey = TID.nextStr();
 
   //楽観的更新
-  await prisma.reaction.create({
-    data: {
+  await prisma.reaction.upsert({
+    where: {
+      uri_createdBy: {
+        uri: body.subject.uri,
+        createdBy: body.postedBy,
+      },
+    },
+    update: {
+      id: rkey,
+      emoji: body.emoji,
+    },
+    create: {
       id: rkey,
       uri: body.subject.uri,
       cid: body.subject.cid,

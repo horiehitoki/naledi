@@ -1,11 +1,10 @@
 import { Agent } from "@atproto/api";
-import { ReactionData } from "@types";
+import { prisma } from "../db/prisma";
 
 export async function getUserProfile(agent: Agent, did: string) {
   const res = await agent.getProfile({ actor: did });
 
-  const feed = await agent.getAuthorFeed({ actor: did, limit: 50 });
-
+  //フォロー/フォロワーの取得
   const followsData = await agent.getFollows({
     actor: did,
     limit: 50,
@@ -24,33 +23,27 @@ export async function getUserProfile(agent: Agent, did: string) {
     cursor: followerData.data.cursor,
   };
 
-  const posts = feed.data;
   const profile = res.data;
   const avatarUrl = profile.avatar;
-  let reactions: ReactionData[] = [];
 
-  try {
-    const emoji = await agent.com.atproto.repo.listRecords({
-      repo: did,
-      collection: "com.marukun-dev.pds.reaction",
-    });
+  //ユーザーのリアクション一覧を取得
+  const reactionsData = await prisma.reaction.findMany({
+    where: {
+      createdBy: did,
+    },
+  });
 
-    const reactionsData = emoji.data.records;
+  //投稿データとセットで返す
+  const reactions = await Promise.all(
+    reactionsData.map(async (reaction) => {
+      const post = await agent.getPosts({ uris: [reaction.uri] });
 
-    reactions = (await Promise.all(
-      reactionsData.map(async (reaction) => {
-        const postData = await agent.app.bsky.feed.getPosts({
-          uris: [reaction.value.subject.uri],
-        });
+      return {
+        reaction: { cid: reaction.cid, emoji: reaction.emoji },
+        post: post.data.posts[0],
+      };
+    })
+  );
 
-        const post = postData.data.posts[0];
-
-        return { reaction, post };
-      })
-    )) as unknown as ReactionData[];
-  } catch (e) {
-    console.log("err! " + e);
-  }
-
-  return { profile, avatarUrl, posts, follow, follower, reactions };
+  return { profile, avatarUrl, follow, follower, reactions };
 }

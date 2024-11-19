@@ -8,7 +8,6 @@ import { UserCard } from "~/components/user/userCard";
 import { User, Users, UserCircle, Plus, Delete } from "lucide-react";
 import { LoadingSpinner } from "../ui/loading";
 import { ProfileView } from "~/generated/api/types/app/bsky/actor/defs";
-import { PostView } from "~/generated/api/types/app/bsky/feed/defs";
 import { Twemoji } from "react-emoji-render";
 import { ReactionData } from "@types";
 import { Button } from "../ui/button";
@@ -183,9 +182,8 @@ export function ProfileTabs({
           loader={<LoadingSpinner />}
         >
           <div className="space-y-4">
-            {timeline.posts.map((postItem: { post: PostView }) => {
-              const postData = postItem.post as PostView;
-              return <Post key={postData.cid} post={postData} />;
+            {timeline.posts.map((data: any) => {
+              return <Post key={data.post.cid} data={data} />;
             })}
           </div>
         </InfiniteScroll>
@@ -229,10 +227,10 @@ export function ProfileTabs({
             return (
               <div key={data.reaction.cid}>
                 <Twemoji
-                  text={`:${data.reaction.value.emoji.replace(/\s+/g, "_")}:`}
+                  text={`:${data.reaction.emoji.replace(/\s+/g, "_")}:`}
                   className="text-center text-3xl flex justify-center my-12"
                 />
-                <Post post={data.post} />
+                <Post data={data} />
               </div>
             );
           })}

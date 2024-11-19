@@ -23,6 +23,7 @@ interface UseEmojiPickerReturn {
   toggleEmojiPicker: toggleEmojiPicker;
 }
 
+//絵文字ピッカー用のhooks
 export const useEmojiPicker = (): UseEmojiPickerReturn => {
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
   const [postInfo, setPostInfo] = useState<PostInfo | null>(null);
@@ -39,13 +40,14 @@ export const useEmojiPicker = (): UseEmojiPickerReturn => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  //絵文字クリック時の処理
   const handleEmojiClick = async (event: EmojiClickData) => {
     const emojiName = event.names[0];
 
     if (postInfo) {
       setIsEmojiPickerOpen(false);
 
-      await fetch("/api/create/reaction/", {
+      await fetch("/api/create/reaction", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -66,25 +68,14 @@ export const useEmojiPicker = (): UseEmojiPickerReturn => {
     const rect = element.getBoundingClientRect();
     const scrollY = window.scrollY || document.documentElement.scrollTop;
     const scrollX = window.scrollX || document.documentElement.scrollLeft;
-    const pickerWidth = 350;
-    const pickerHeight = 450;
 
-    let top = rect.bottom + scrollY;
-    let left = rect.left + scrollX;
-
-    // 画面下部がはみ出す場合は上に表示
-    if (top + pickerHeight > window.innerHeight + scrollY) {
-      top = rect.top + scrollY - pickerHeight;
-    }
-
-    // 画面右側がはみ出す場合は左に表示
-    if (left + pickerWidth > window.innerWidth + scrollX) {
-      left = rect.right + scrollX - pickerWidth;
-    }
+    const top = rect.bottom + scrollY;
+    const left = rect.left + scrollX;
 
     return { top, left };
   };
 
+  //絵文字ピッカーを開いたタイミングで、ターゲットの投稿を取得
   const toggleEmojiPicker = (
     postId: string,
     uri: string,

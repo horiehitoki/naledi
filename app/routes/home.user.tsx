@@ -20,15 +20,15 @@ export const loader: LoaderFunction = async ({ request }) => {
   const handle = searchParams.get("handle");
   if (!handle) return null;
 
+  //ハンドルを解決
   const did = await resolver.resolvedHandleToDid(handle);
-  const { profile, avatarUrl, posts, follow, follower, reactions } =
+
+  const { profile, avatarUrl, follow, follower, reactions } =
     await getUserProfile(agent, did);
 
   return {
     profile,
     avatarUrl,
-    feed: posts.feed,
-    cursor: posts.cursor,
     follow,
     follower,
     reactions,
