@@ -5,6 +5,7 @@ import { TID } from "@atproto/common";
 import { prisma } from "~/utils/db/prisma";
 import { isRecord } from "~/generated/api/types/com/marukun-dev/pds/reaction";
 import { validateRecord } from "~/generated/api/types/com/marukun-dev/pds/reaction";
+import { Record } from "~/generated/api/types/com/marukun-dev/pds/reaction";
 
 interface ReactionRequest {
   subject: {
@@ -46,7 +47,7 @@ export const action: ActionFunction = async ({ request }) => {
   });
 
   //リアクションレコード
-  const record = {
+  const record: Record = {
     $type: "com.marukun-dev.pds.reaction",
     subject: {
       uri: body.subject.uri,

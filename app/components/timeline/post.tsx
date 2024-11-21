@@ -57,6 +57,15 @@ export const Post = ({ data }: { data: PostData }) => {
     return res;
   }
 
+  async function cancelReaction(rkey: string) {
+    const res = await fetch("/api/delete/reaction/", {
+      method: "POST",
+      body: JSON.stringify({ rkey: rkey }),
+    });
+
+    return res;
+  }
+
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -195,6 +204,8 @@ export const Post = ({ data }: { data: PostData }) => {
             {reaction.map((data: Reaction) => (
               <button
                 key={data.cid}
+                disabled={data.createdBy !== profile.did}
+                onClick={() => cancelReaction(data.id)}
                 className="flex items-center space-x-1 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-2 py-1 rounded-full text-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
               >
                 <Twemoji
