@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
 import { Trash } from "lucide-react";
-import { TimelineState, TimelineStorage } from "@types";
+import { PostData, TimelineState, TimelineStorage } from "@types";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Post } from "./post";
 import { useLocalStorage } from "@uidotdev/usehooks";
@@ -67,8 +67,8 @@ function SNSTimelineComponent({ type }: { type: "default" | "deck" }) {
                 className="pr-4"
               >
                 <div className="space-y-8">
-                  {timelineItem.posts.map((data: any) => {
-                    return <Post key={data.post.cid} data={data} />;
+                  {timelineItem.posts.map((data: PostData) => {
+                    return <Post key={data.post.post.cid} data={data} />;
                   })}
                 </div>
               </InfiniteScroll>
@@ -89,8 +89,8 @@ function SNSTimelineComponent({ type }: { type: "default" | "deck" }) {
           height="100vh"
         >
           <div className="space-y-8">
-            {timeline[0].posts.map((data: any) => {
-              return <Post key={data.post.cid} data={data} />;
+            {timeline[0].posts.map((data: PostData) => {
+              return <Post key={data.post.post.cid} data={data} />;
             })}
           </div>
         </InfiniteScroll>

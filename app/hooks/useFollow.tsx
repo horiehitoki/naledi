@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { useCursor } from "./useCusor";
-import { CursorRes } from "@types";
+import { DataWithCursor } from "@types";
 import { ProfileView } from "~/generated/api/types/app/bsky/actor/defs";
 
 type FollowType = "follow" | "follower";
 
 interface UseFollowProps {
   did: string;
-  initialFollow: CursorRes;
-  initialFollower: CursorRes;
+  initialFollow: DataWithCursor;
+  initialFollower: DataWithCursor;
 }
 
 export const useFollow = ({
@@ -42,7 +42,7 @@ export const useFollow = ({
     if (!currentCursor) return;
     const endpoint = getEndpoint(type, currentCursor);
     const res = await fetch(new URL(endpoint, window.origin));
-    const json: CursorRes = await res.json();
+    const json: DataWithCursor = await res.json();
     if (json.data) {
       if (type === "follow") {
         setFollow((prev) => [...prev, ...json.data]);

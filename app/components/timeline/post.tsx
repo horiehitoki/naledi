@@ -12,14 +12,14 @@ import "yet-another-react-lightbox/styles.css";
 import { Button } from "~/components/ui/button";
 import { Heart, MessageCircle, Repeat2, Smile } from "lucide-react";
 import { useOutletContext } from "@remix-run/react";
-import { toggleEmojiPicker } from "@types";
+import { PostData, toggleEmojiPicker } from "@types";
 import { ProfileView } from "~/generated/api/types/app/bsky/actor/defs";
 import { Twemoji } from "react-emoji-render";
 import { Reaction } from "@prisma/client";
 
-export const Post = (data: any) => {
-  const post = data.data.post.post;
-  const reaction = data.data.reaction;
+export const Post = ({ data }: { data: PostData }) => {
+  const { reaction } = data;
+  const { post } = data.post;
 
   async function like() {
     const res = await fetch("/api/create/like/", {

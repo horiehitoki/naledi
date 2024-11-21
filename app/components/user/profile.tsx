@@ -7,34 +7,45 @@ import { Post } from "~/components/timeline/post";
 import { UserCard } from "~/components/user/userCard";
 import { User, Users, UserCircle, Plus, Delete } from "lucide-react";
 import { LoadingSpinner } from "../ui/loading";
-import { ProfileView } from "~/generated/api/types/app/bsky/actor/defs";
-import { Twemoji } from "react-emoji-render";
-import { ReactionData } from "@types";
 import { Button } from "../ui/button";
 import { useOutletContext } from "@remix-run/react";
+import { ProfileView } from "~/generated/api/types/app/bsky/actor/defs";
+import { PostData, TimelineState } from "@types";
 
-export function ProfileHeader({
-  profile,
-  avatarUrl,
-}: {
+interface HasMore {
+  follow: boolean;
+  follower: boolean;
+}
+
+interface ProfileHeaderProps {
   profile: ProfileView;
   avatarUrl: string;
-}) {
+}
+
+interface ProfileTabsProps {
+  profile: ProfileView;
+  timeline: TimelineState;
+  timelineFetcher: (timeline: TimelineState) => void;
+  follow: ProfileView[];
+  follower: ProfileView[];
+  fetcher: (type: "follow" | "follower") => void;
+  hasMore: HasMore;
+}
+
+export function ProfileHeader({ profile, avatarUrl }: ProfileHeaderProps) {
   async function follow() {
     const res = await fetch("/api/create/follow/", {
       method: "POST",
       body: JSON.stringify({ did: profile.did }),
     });
-
     return res;
   }
 
   async function deleteFollow() {
     const res = await fetch("/api/delete/follow/", {
       method: "POST",
-      body: JSON.stringify({ followUri: profile.viewer!.following }),
+      body: JSON.stringify({ followUri: profile.viewer?.following }),
     });
-
     return res;
   }
 
@@ -53,13 +64,13 @@ export function ProfileHeader({
           </div>
         )}
         <Avatar className="w-24 h-24 border-4 border-white shadow-lg m-6">
-          <AvatarImage src={avatarUrl || ""} />
+          <AvatarImage src={avatarUrl} />
           <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-500 text-white text-xl">
             {profile.displayName?.[0]?.toUpperCase() || "?"}
           </AvatarFallback>
         </Avatar>
 
-        {profile.did !== context.profile.did ? (
+        {profile.did !== context.profile.did && (
           <div>
             {profile.viewer?.following ? (
               <div className="flex justify-end mx-12">
@@ -75,8 +86,6 @@ export function ProfileHeader({
               </div>
             )}
           </div>
-        ) : (
-          ""
         )}
       </div>
 
@@ -136,8 +145,7 @@ export function ProfileTabs({
   follower,
   fetcher,
   hasMore,
-  reactions,
-}: any) {
+}: ProfileTabsProps) {
   return (
     <Tabs defaultValue="posts">
       <div className="flex justify-center overflow-x-scroll">
@@ -182,8 +190,8 @@ export function ProfileTabs({
           loader={<LoadingSpinner />}
         >
           <div className="space-y-4">
-            {timeline.posts.map((data: any) => {
-              return <Post key={data.post.cid} data={data} />;
+            {timeline.posts.map((data: PostData) => {
+              return <Post key={data.post.post.cid} data={data} />;
             })}
           </div>
         </InfiniteScroll>
@@ -198,8 +206,8 @@ export function ProfileTabs({
           loader={<LoadingSpinner />}
         >
           <div className="space-y-4">
-            {follow.map((profile: ProfileView) => (
-              <UserCard key={profile.did ?? profile.cid} data={profile} />
+            {follow.map((profile) => (
+              <UserCard key={profile.did} data={profile} />
             ))}
           </div>
         </InfiniteScroll>
@@ -214,27 +222,11 @@ export function ProfileTabs({
           loader={<LoadingSpinner />}
         >
           <div className="space-y-4">
-            {follower.map((profile: ProfileView) => (
-              <UserCard key={profile.did ?? profile.cid} data={profile} />
+            {follower.map((profile) => (
+              <UserCard key={profile.did} data={profile} />
             ))}
           </div>
         </InfiniteScroll>
-      </TabsContent>
-
-      <TabsContent value="reactions" className="mt-6">
-        <div className="space-y-4">
-          {reactions.map((data: ReactionData) => {
-            return (
-              <div key={data.reaction.cid}>
-                <Twemoji
-                  text={`:${data.reaction.emoji.replace(/\s+/g, "_")}:`}
-                  className="text-center text-3xl flex justify-center my-12"
-                />
-                <Post data={data} />
-              </div>
-            );
-          })}
-        </div>
       </TabsContent>
     </Tabs>
   );

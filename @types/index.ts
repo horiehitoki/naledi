@@ -1,6 +1,6 @@
 import { Reaction } from "@prisma/client";
 import { ProfileView } from "~/generated/api/types/app/bsky/actor/defs";
-import { PostView } from "~/generated/api/types/app/bsky/feed/defs";
+import { FeedViewPost } from "~/generated/api/types/app/bsky/feed/defs";
 
 export type Session = { did: string };
 
@@ -14,11 +14,11 @@ export type TimelineState = {
   id: string;
   type: "home" | "user";
   did: string | null;
-  posts: PostView[];
+  posts: PostData[];
   hasMore: boolean;
 };
 
-export type CursorRes = {
+export type DataWithCursor = {
   data: ProfileView[];
   cursor: string | undefined;
 };
@@ -36,17 +36,14 @@ export type toggleEmojiPicker = (
   element: HTMLDivElement
 ) => void;
 
-export type ReactionData = {
-  reaction: Reaction;
-  post: PostView;
+export type PostData = {
+  reaction: Reaction[];
+  post: FeedViewPost;
 };
 
 export type UserData = {
   profile: ProfileView;
   avatarUrl: string;
-  feed: PostView[];
-  cursor: string;
-  follow: CursorRes;
-  follower: CursorRes;
-  reactions: ReactionData[];
+  follow: DataWithCursor;
+  follower: DataWithCursor;
 };

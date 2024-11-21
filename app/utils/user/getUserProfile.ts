@@ -1,7 +1,10 @@
 import { Agent } from "@atproto/api";
-import { prisma } from "../db/prisma";
+import { UserData } from "@types";
 
-export async function getUserProfile(agent: Agent, did: string) {
+export async function getUserProfile(
+  agent: Agent,
+  did: string
+): Promise<UserData> {
   const res = await agent.getProfile({ actor: did });
 
   //フォロー/フォロワーの取得
@@ -24,26 +27,7 @@ export async function getUserProfile(agent: Agent, did: string) {
   };
 
   const profile = res.data;
-  const avatarUrl = profile.avatar;
+  const avatarUrl = profile.avatar ?? "";
 
-  //ユーザーのリアクション一覧を取得
-  const reactionsData = await prisma.reaction.findMany({
-    where: {
-      createdBy: did,
-    },
-  });
-
-  //投稿データとセットで返す
-  const reactions = await Promise.all(
-    reactionsData.map(async (reaction) => {
-      const post = await agent.getPosts({ uris: [reaction.uri] });
-
-      return {
-        reaction: { cid: reaction.cid, emoji: reaction.emoji },
-        post: post.data.posts[0],
-      };
-    })
-  );
-
-  return { profile, avatarUrl, follow, follower, reactions };
+  return { profile, avatarUrl, follow, follower };
 }

@@ -8,7 +8,7 @@ export const action: ActionFunction = async ({ request }) => {
 
   const body = await request.json();
 
-  await agent.like(body.uri, body.cid);
+  const res = await agent.like(body.uri, body.cid);
 
-  return json({ ok: true });
+  return json(res ? { ok: true } : { ok: false });
 };

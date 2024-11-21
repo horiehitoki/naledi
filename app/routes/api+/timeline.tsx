@@ -1,5 +1,8 @@
 import { Agent } from "@atproto/api";
+import { Reaction } from "@prisma/client";
 import { json, LoaderFunction } from "@remix-run/node";
+import { PostData } from "@types";
+import { FeedViewPost } from "~/generated/api/types/app/bsky/feed/defs";
 import { getSessionAgent } from "~/utils/auth/session";
 import { prisma } from "~/utils/db/prisma";
 import { getParams } from "~/utils/getParams";
@@ -8,9 +11,9 @@ export const loader: LoaderFunction = async ({ request }) => {
   const agent: Agent | null = await getSessionAgent(request);
   if (agent == null) return json(null);
 
-  const cursor = getParams(request, "cursor");
+  const cursor: string = getParams(request, "cursor");
 
-  const did = getParams(request, "did");
+  const did: string = getParams(request, "did");
 
   if (did) {
     //特定ユーザーの投稿を取得
@@ -20,9 +23,10 @@ export const loader: LoaderFunction = async ({ request }) => {
       limit: 20,
     });
 
-    const data = await Promise.all(
-      timeline.data.feed.map(async (post) => {
-        const reaction = await prisma.reaction.findMany({
+    //リアクションデータ付きで返す
+    const data: PostData[] = await Promise.all(
+      timeline.data.feed.map(async (post: FeedViewPost) => {
+        const reaction: Reaction[] = await prisma.reaction.findMany({
           where: {
             uri: post.post.uri,
           },
@@ -43,9 +47,10 @@ export const loader: LoaderFunction = async ({ request }) => {
       limit: 20,
     });
 
-    const data = await Promise.all(
-      timeline.data.feed.map(async (post) => {
-        const reaction = await prisma.reaction.findMany({
+    //リアクションデータ付きで返す
+    const data: PostData[] = await Promise.all(
+      timeline.data.feed.map(async (post: FeedViewPost) => {
+        const reaction: Reaction[] = await prisma.reaction.findMany({
           where: {
             uri: post.post.uri,
           },

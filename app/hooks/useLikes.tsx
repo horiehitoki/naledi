@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useCursor } from "./useCusor";
-import { CursorRes } from "@types";
+import { DataWithCursor } from "@types";
 
 interface UseLikesProps {
   uri: string;
@@ -23,7 +23,7 @@ export const useLikes = ({ uri, initialLikes }: UseLikesProps) => {
 
     const res = await fetch(new URL(endpoint, window.origin));
 
-    const json: CursorRes = await res.json();
+    const json: DataWithCursor = await res.json();
 
     if (json.data) {
       setLikes((prev) => [...prev, ...json.data]);

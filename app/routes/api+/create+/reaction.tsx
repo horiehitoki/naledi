@@ -62,12 +62,12 @@ export const action: ActionFunction = async ({ request }) => {
     return json({ ok: false });
   }
 
-  await agent.com.atproto.repo.putRecord({
+  const res = await agent.com.atproto.repo.putRecord({
     repo: agent.assertDid,
     collection: "com.marukun-dev.pds.reaction",
     rkey,
     record,
   });
 
-  return json({ ok: true });
+  return json(res ? { ok: true } : { ok: false });
 };

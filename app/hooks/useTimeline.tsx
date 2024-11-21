@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useCursor } from "./useCusor";
-import { TimelineState } from "@types";
+import { PostData, TimelineState } from "@types";
 
 export const useTimeline = (defaultTimeline: TimelineState[]) => {
   const [timeline, setTimeline] = useState(defaultTimeline);
@@ -18,6 +18,7 @@ export const useTimeline = (defaultTimeline: TimelineState[]) => {
       await Promise.all(
         timeline.map(async (timelineItem) => {
           let endpoint = "";
+
           switch (timelineItem.type) {
             case "home":
               endpoint = "/api/timeline";
@@ -29,8 +30,9 @@ export const useTimeline = (defaultTimeline: TimelineState[]) => {
 
           const res = await fetch(new URL(endpoint, window.origin));
           const json = await res.json();
+          const data: PostData[] = json.data;
 
-          if (json.data?.length) {
+          if (data.length) {
             updateTimelineItem(timelineItem.id, { posts: json.data });
             createCursor(timelineItem.id, json.cursor);
             updateTimelineItem(timelineItem.id, { hasMore: !!json.cursor });
@@ -45,6 +47,7 @@ export const useTimeline = (defaultTimeline: TimelineState[]) => {
     if (!currentCursor) return;
 
     let endpoint = "";
+
     switch (timelineItem.type) {
       case "home":
         endpoint = `/api/timeline?cursor=${currentCursor}`;
@@ -56,8 +59,9 @@ export const useTimeline = (defaultTimeline: TimelineState[]) => {
 
     const res = await fetch(new URL(endpoint, window.origin));
     const json = await res.json();
+    const data: PostData[] = json.data;
 
-    if (json.data?.length) {
+    if (data.length) {
       updateTimelineItem(timelineItem.id, {
         posts: [...timelineItem.posts, ...json.data],
       });

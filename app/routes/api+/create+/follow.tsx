@@ -8,7 +8,7 @@ export const action: ActionFunction = async ({ request }) => {
 
   const body = await request.json();
 
-  await agent.follow(body.did);
+  const res = await agent.follow(body.did);
 
-  return json({ ok: true });
+  return json(res ? { ok: true } : { ok: false });
 };

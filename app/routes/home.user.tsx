@@ -23,15 +23,16 @@ export const loader: LoaderFunction = async ({ request }) => {
   //ハンドルを解決
   const did = await resolver.resolvedHandleToDid(handle);
 
-  const { profile, avatarUrl, follow, follower, reactions } =
-    await getUserProfile(agent, did);
+  const { profile, avatarUrl, follow, follower } = await getUserProfile(
+    agent,
+    did
+  );
 
   return {
     profile,
     avatarUrl,
     follow,
     follower,
-    reactions,
   };
 };
 
@@ -67,13 +68,13 @@ export default function ProfilePage() {
       <hr className="h-px my-8 bg-black dark:bg-white border-0" />
 
       <ProfileTabs
+        profile={data.profile}
         timeline={timeline[0]}
         timelineFetcher={timelineFetcher}
         follow={follow}
         follower={follower}
         fetcher={fetcher}
         hasMore={hasMore}
-        reactions={data.reactions}
       />
     </div>
   );
