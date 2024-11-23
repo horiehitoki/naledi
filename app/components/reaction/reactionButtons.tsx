@@ -81,11 +81,15 @@ export default function ReactionButtons({
               <TooltipTrigger>
                 <button
                   onClick={() =>
-                    userReaction
-                      ? cancelReaction(userReaction.reaction.id)
+                    userReaction //ユーザーがすでにそのリアクションをしていれば
+                      ? cancelReaction(userReaction.reaction.id) //レコードを削除
                       : createReaction(group.emoji)
                   }
-                  className="flex items-center space-x-1 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-2 py-1 rounded-full text-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                  className={
+                    userReaction
+                      ? "flex items-center space-x-1 bg-pink-400 px-2 py-1 rounded-full text-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                      : "flex items-center space-x-1 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-full text-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                  }
                 >
                   <Twemoji
                     text={`:${group.emoji}:`}

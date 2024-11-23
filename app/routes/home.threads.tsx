@@ -1,15 +1,11 @@
-import { Reaction } from "@prisma/client";
 import { LoaderFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { PostData } from "@types";
 import { Heart, Repeat, MessageCircle } from "lucide-react";
 import Post from "~/components/timeline/post";
-import {
-  FeedViewPost,
-  PostView,
-} from "~/generated/api/types/app/bsky/feed/defs";
+import { PostView } from "~/generated/api/types/app/bsky/feed/defs";
 import { getSessionAgent } from "~/utils/auth/session";
-import { prisma } from "~/utils/db/prisma";
+import { ReactionAgent } from "~/utils/reactions/reactionAgent";
 
 //TODO 投稿の取得処理をシンプルにする
 export const loader: LoaderFunction = async ({ request }) => {
@@ -21,43 +17,31 @@ export const loader: LoaderFunction = async ({ request }) => {
   if (!uri) return null;
 
   const threads = await agent.getPostThread({ uri: uri });
+  const reactionAgent = new ReactionAgent(agent);
 
   const replies = threads.data.thread.replies as [];
 
   const post = threads.data.thread.post as PostView;
 
-  const originalPostReaction: Reaction[] = await prisma.reaction.findMany({
-    where: {
-      uri: post.uri,
-    },
+  //元のポストのリアクションデータを取得
+  const [originalPost] = await reactionAgent.getReactions({
+    posts: [{ post: post }],
   });
 
-  //返信をリアクションデータ付きで返す
-  const data: PostData[] = await Promise.all(
-    replies.map(async (post: FeedViewPost) => {
-      const reaction: Reaction[] = await prisma.reaction.findMany({
-        where: {
-          uri: post.post.uri,
-        },
-      });
+  //返信のリアクションデータを取得
+  const data = await reactionAgent.getReactions({
+    posts: replies,
+  });
 
-      return { post, reaction };
-    })
-  );
-
-  return { originalPostReaction, threads: threads.data.thread, data, uri };
+  return { originalPost, threads: threads.data.thread, data, uri };
 };
 
 export default function Threads() {
-  const { originalPostReaction, threads, data, uri } =
-    useLoaderData<typeof loader>();
+  const { originalPost, threads, data, uri } = useLoaderData<typeof loader>();
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-6">
-      <Post
-        data={{ post: { post: threads.post }, reaction: originalPostReaction }}
-        key={threads.post.cid}
-      />
+    <div className="w-1/2 mx-auto px-4 py-6">
+      <Post data={originalPost} key={threads.post.cid} />
 
       <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 my-6">
         <div className="flex justify-center space-x-8">

@@ -195,8 +195,8 @@ export const Post = ({ data }: { data: PostData }) => {
               post={post}
               reactions={reaction}
               profile={profile}
-              key={"data.reaction.cid"}
             />
+
             <button
               onClick={() =>
                 toggleEmojiPicker(
