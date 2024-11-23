@@ -1,19 +1,13 @@
 import { IdResolver } from "@atproto/identity";
 import { Firehose } from "@atproto/sync";
 import { prisma } from "./db/prisma";
-import { isRecord } from "~/generated/api/types/com/marukun-dev/pds/reaction";
-import { validateRecord } from "~/generated/api/types/com/marukun-dev/pds/reaction";
 
 export function createFirehose(idResolver: IdResolver) {
   return new Firehose({
     idResolver,
     handleEvent: async (evt) => {
       if (evt.event === "create" || evt.event === "update") {
-        if (
-          evt.collection === "com.marukun-dev.pds.reaction" &&
-          isRecord(evt.record) &&
-          validateRecord(evt.record).success
-        ) {
+        if (evt.collection === "app.vercel.stellarbsky.reaction") {
           const record = evt.record;
 
           //DBの更新
@@ -39,7 +33,7 @@ export function createFirehose(idResolver: IdResolver) {
         }
       }
       if (evt.event === "delete") {
-        if (evt.collection === "com.marukun-dev.pds.reaction") {
+        if (evt.collection === "app.vercel.stellarbsky.reaction") {
           await prisma.reaction.delete({
             where: { id: evt.rkey },
           });
@@ -49,7 +43,7 @@ export function createFirehose(idResolver: IdResolver) {
     onError: (err) => {
       null;
     },
-    filterCollections: ["com.marukun-dev.pds.reaction"],
+    filterCollections: ["app.vercel.stellarbsky.reaction"],
     excludeIdentity: true,
     excludeAccount: true,
   });

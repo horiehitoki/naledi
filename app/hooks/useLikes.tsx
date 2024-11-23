@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { useCursor } from "./useCusor";
 import { DataWithCursor } from "@types";
+import { Like } from "~/generated/api/types/app/bsky/feed/getLikes";
 
 interface UseLikesProps {
   uri: string;
-  initialLikes: any;
+  initialLikes: { likes: Like[]; cursor: string };
 }
 
 export const useLikes = ({ uri, initialLikes }: UseLikesProps) => {

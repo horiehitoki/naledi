@@ -4,42 +4,8 @@
 import { XrpcClient, FetchHandler, FetchHandlerOptions } from '@atproto/xrpc'
 import { schemas } from './lexicons'
 import { CID } from 'multiformats/cid'
-import * as ToolsOzoneSignatureFindCorrelation from './types/tools/ozone/signature/findCorrelation'
-import * as ToolsOzoneSignatureDefs from './types/tools/ozone/signature/defs'
-import * as ToolsOzoneSignatureSearchAccounts from './types/tools/ozone/signature/searchAccounts'
-import * as ToolsOzoneSignatureFindRelatedAccounts from './types/tools/ozone/signature/findRelatedAccounts'
-import * as ToolsOzoneServerGetConfig from './types/tools/ozone/server/getConfig'
-import * as ToolsOzoneTeamListMembers from './types/tools/ozone/team/listMembers'
-import * as ToolsOzoneTeamDefs from './types/tools/ozone/team/defs'
-import * as ToolsOzoneTeamDeleteMember from './types/tools/ozone/team/deleteMember'
-import * as ToolsOzoneTeamUpdateMember from './types/tools/ozone/team/updateMember'
-import * as ToolsOzoneTeamAddMember from './types/tools/ozone/team/addMember'
-import * as ToolsOzoneCommunicationDefs from './types/tools/ozone/communication/defs'
-import * as ToolsOzoneCommunicationUpdateTemplate from './types/tools/ozone/communication/updateTemplate'
-import * as ToolsOzoneCommunicationCreateTemplate from './types/tools/ozone/communication/createTemplate'
-import * as ToolsOzoneCommunicationListTemplates from './types/tools/ozone/communication/listTemplates'
-import * as ToolsOzoneCommunicationDeleteTemplate from './types/tools/ozone/communication/deleteTemplate'
-import * as ToolsOzoneSetDefs from './types/tools/ozone/set/defs'
-import * as ToolsOzoneSetAddValues from './types/tools/ozone/set/addValues'
-import * as ToolsOzoneSetGetValues from './types/tools/ozone/set/getValues'
-import * as ToolsOzoneSetDeleteSet from './types/tools/ozone/set/deleteSet'
-import * as ToolsOzoneSetUpsertSet from './types/tools/ozone/set/upsertSet'
-import * as ToolsOzoneSetDeleteValues from './types/tools/ozone/set/deleteValues'
-import * as ToolsOzoneSetQuerySets from './types/tools/ozone/set/querySets'
-import * as ToolsOzoneSettingDefs from './types/tools/ozone/setting/defs'
-import * as ToolsOzoneSettingListOptions from './types/tools/ozone/setting/listOptions'
-import * as ToolsOzoneSettingRemoveOptions from './types/tools/ozone/setting/removeOptions'
-import * as ToolsOzoneSettingUpsertOption from './types/tools/ozone/setting/upsertOption'
-import * as ToolsOzoneModerationQueryStatuses from './types/tools/ozone/moderation/queryStatuses'
-import * as ToolsOzoneModerationGetRepo from './types/tools/ozone/moderation/getRepo'
-import * as ToolsOzoneModerationDefs from './types/tools/ozone/moderation/defs'
-import * as ToolsOzoneModerationGetRecords from './types/tools/ozone/moderation/getRecords'
-import * as ToolsOzoneModerationGetEvent from './types/tools/ozone/moderation/getEvent'
-import * as ToolsOzoneModerationQueryEvents from './types/tools/ozone/moderation/queryEvents'
-import * as ToolsOzoneModerationGetRecord from './types/tools/ozone/moderation/getRecord'
-import * as ToolsOzoneModerationEmitEvent from './types/tools/ozone/moderation/emitEvent'
-import * as ToolsOzoneModerationSearchRepos from './types/tools/ozone/moderation/searchRepos'
-import * as ToolsOzoneModerationGetRepos from './types/tools/ozone/moderation/getRepos'
+import * as AppVercelStellarbskyGetReactions from './types/app/vercel/stellarbsky/getReactions'
+import * as AppVercelStellarbskyReaction from './types/app/vercel/stellarbsky/reaction'
 import * as AppBskyVideoUploadVideo from './types/app/bsky/video/uploadVideo'
 import * as AppBskyVideoDefs from './types/app/bsky/video/defs'
 import * as AppBskyVideoGetJobStatus from './types/app/bsky/video/getJobStatus'
@@ -127,27 +93,6 @@ import * as AppBskyActorProfile from './types/app/bsky/actor/profile'
 import * as AppBskyLabelerDefs from './types/app/bsky/labeler/defs'
 import * as AppBskyLabelerService from './types/app/bsky/labeler/service'
 import * as AppBskyLabelerGetServices from './types/app/bsky/labeler/getServices'
-import * as ChatBskyConvoListConvos from './types/chat/bsky/convo/listConvos'
-import * as ChatBskyConvoUnmuteConvo from './types/chat/bsky/convo/unmuteConvo'
-import * as ChatBskyConvoDefs from './types/chat/bsky/convo/defs'
-import * as ChatBskyConvoGetLog from './types/chat/bsky/convo/getLog'
-import * as ChatBskyConvoSendMessage from './types/chat/bsky/convo/sendMessage'
-import * as ChatBskyConvoLeaveConvo from './types/chat/bsky/convo/leaveConvo'
-import * as ChatBskyConvoMuteConvo from './types/chat/bsky/convo/muteConvo'
-import * as ChatBskyConvoDeleteMessageForSelf from './types/chat/bsky/convo/deleteMessageForSelf'
-import * as ChatBskyConvoUpdateRead from './types/chat/bsky/convo/updateRead'
-import * as ChatBskyConvoGetConvo from './types/chat/bsky/convo/getConvo'
-import * as ChatBskyConvoGetMessages from './types/chat/bsky/convo/getMessages'
-import * as ChatBskyConvoGetConvoForMembers from './types/chat/bsky/convo/getConvoForMembers'
-import * as ChatBskyConvoSendMessageBatch from './types/chat/bsky/convo/sendMessageBatch'
-import * as ChatBskyActorDefs from './types/chat/bsky/actor/defs'
-import * as ChatBskyActorDeclaration from './types/chat/bsky/actor/declaration'
-import * as ChatBskyActorExportAccountData from './types/chat/bsky/actor/exportAccountData'
-import * as ChatBskyActorDeleteAccount from './types/chat/bsky/actor/deleteAccount'
-import * as ChatBskyModerationGetActorMetadata from './types/chat/bsky/moderation/getActorMetadata'
-import * as ChatBskyModerationGetMessageContext from './types/chat/bsky/moderation/getMessageContext'
-import * as ChatBskyModerationUpdateActorAccess from './types/chat/bsky/moderation/updateActorAccess'
-import * as ComMarukunDevPdsReaction from './types/com/marukun-dev/pds/reaction'
 import * as ComAtprotoTempCheckSignupQueue from './types/com/atproto/temp/checkSignupQueue'
 import * as ComAtprotoTempRequestPhoneVerification from './types/com/atproto/temp/requestPhoneVerification'
 import * as ComAtprotoTempFetchLabels from './types/com/atproto/temp/fetchLabels'
@@ -229,42 +174,8 @@ import * as ComAtprotoRepoListRecords from './types/com/atproto/repo/listRecords
 import * as ComAtprotoModerationDefs from './types/com/atproto/moderation/defs'
 import * as ComAtprotoModerationCreateReport from './types/com/atproto/moderation/createReport'
 
-export * as ToolsOzoneSignatureFindCorrelation from './types/tools/ozone/signature/findCorrelation'
-export * as ToolsOzoneSignatureDefs from './types/tools/ozone/signature/defs'
-export * as ToolsOzoneSignatureSearchAccounts from './types/tools/ozone/signature/searchAccounts'
-export * as ToolsOzoneSignatureFindRelatedAccounts from './types/tools/ozone/signature/findRelatedAccounts'
-export * as ToolsOzoneServerGetConfig from './types/tools/ozone/server/getConfig'
-export * as ToolsOzoneTeamListMembers from './types/tools/ozone/team/listMembers'
-export * as ToolsOzoneTeamDefs from './types/tools/ozone/team/defs'
-export * as ToolsOzoneTeamDeleteMember from './types/tools/ozone/team/deleteMember'
-export * as ToolsOzoneTeamUpdateMember from './types/tools/ozone/team/updateMember'
-export * as ToolsOzoneTeamAddMember from './types/tools/ozone/team/addMember'
-export * as ToolsOzoneCommunicationDefs from './types/tools/ozone/communication/defs'
-export * as ToolsOzoneCommunicationUpdateTemplate from './types/tools/ozone/communication/updateTemplate'
-export * as ToolsOzoneCommunicationCreateTemplate from './types/tools/ozone/communication/createTemplate'
-export * as ToolsOzoneCommunicationListTemplates from './types/tools/ozone/communication/listTemplates'
-export * as ToolsOzoneCommunicationDeleteTemplate from './types/tools/ozone/communication/deleteTemplate'
-export * as ToolsOzoneSetDefs from './types/tools/ozone/set/defs'
-export * as ToolsOzoneSetAddValues from './types/tools/ozone/set/addValues'
-export * as ToolsOzoneSetGetValues from './types/tools/ozone/set/getValues'
-export * as ToolsOzoneSetDeleteSet from './types/tools/ozone/set/deleteSet'
-export * as ToolsOzoneSetUpsertSet from './types/tools/ozone/set/upsertSet'
-export * as ToolsOzoneSetDeleteValues from './types/tools/ozone/set/deleteValues'
-export * as ToolsOzoneSetQuerySets from './types/tools/ozone/set/querySets'
-export * as ToolsOzoneSettingDefs from './types/tools/ozone/setting/defs'
-export * as ToolsOzoneSettingListOptions from './types/tools/ozone/setting/listOptions'
-export * as ToolsOzoneSettingRemoveOptions from './types/tools/ozone/setting/removeOptions'
-export * as ToolsOzoneSettingUpsertOption from './types/tools/ozone/setting/upsertOption'
-export * as ToolsOzoneModerationQueryStatuses from './types/tools/ozone/moderation/queryStatuses'
-export * as ToolsOzoneModerationGetRepo from './types/tools/ozone/moderation/getRepo'
-export * as ToolsOzoneModerationDefs from './types/tools/ozone/moderation/defs'
-export * as ToolsOzoneModerationGetRecords from './types/tools/ozone/moderation/getRecords'
-export * as ToolsOzoneModerationGetEvent from './types/tools/ozone/moderation/getEvent'
-export * as ToolsOzoneModerationQueryEvents from './types/tools/ozone/moderation/queryEvents'
-export * as ToolsOzoneModerationGetRecord from './types/tools/ozone/moderation/getRecord'
-export * as ToolsOzoneModerationEmitEvent from './types/tools/ozone/moderation/emitEvent'
-export * as ToolsOzoneModerationSearchRepos from './types/tools/ozone/moderation/searchRepos'
-export * as ToolsOzoneModerationGetRepos from './types/tools/ozone/moderation/getRepos'
+export * as AppVercelStellarbskyGetReactions from './types/app/vercel/stellarbsky/getReactions'
+export * as AppVercelStellarbskyReaction from './types/app/vercel/stellarbsky/reaction'
 export * as AppBskyVideoUploadVideo from './types/app/bsky/video/uploadVideo'
 export * as AppBskyVideoDefs from './types/app/bsky/video/defs'
 export * as AppBskyVideoGetJobStatus from './types/app/bsky/video/getJobStatus'
@@ -352,27 +263,6 @@ export * as AppBskyActorProfile from './types/app/bsky/actor/profile'
 export * as AppBskyLabelerDefs from './types/app/bsky/labeler/defs'
 export * as AppBskyLabelerService from './types/app/bsky/labeler/service'
 export * as AppBskyLabelerGetServices from './types/app/bsky/labeler/getServices'
-export * as ChatBskyConvoListConvos from './types/chat/bsky/convo/listConvos'
-export * as ChatBskyConvoUnmuteConvo from './types/chat/bsky/convo/unmuteConvo'
-export * as ChatBskyConvoDefs from './types/chat/bsky/convo/defs'
-export * as ChatBskyConvoGetLog from './types/chat/bsky/convo/getLog'
-export * as ChatBskyConvoSendMessage from './types/chat/bsky/convo/sendMessage'
-export * as ChatBskyConvoLeaveConvo from './types/chat/bsky/convo/leaveConvo'
-export * as ChatBskyConvoMuteConvo from './types/chat/bsky/convo/muteConvo'
-export * as ChatBskyConvoDeleteMessageForSelf from './types/chat/bsky/convo/deleteMessageForSelf'
-export * as ChatBskyConvoUpdateRead from './types/chat/bsky/convo/updateRead'
-export * as ChatBskyConvoGetConvo from './types/chat/bsky/convo/getConvo'
-export * as ChatBskyConvoGetMessages from './types/chat/bsky/convo/getMessages'
-export * as ChatBskyConvoGetConvoForMembers from './types/chat/bsky/convo/getConvoForMembers'
-export * as ChatBskyConvoSendMessageBatch from './types/chat/bsky/convo/sendMessageBatch'
-export * as ChatBskyActorDefs from './types/chat/bsky/actor/defs'
-export * as ChatBskyActorDeclaration from './types/chat/bsky/actor/declaration'
-export * as ChatBskyActorExportAccountData from './types/chat/bsky/actor/exportAccountData'
-export * as ChatBskyActorDeleteAccount from './types/chat/bsky/actor/deleteAccount'
-export * as ChatBskyModerationGetActorMetadata from './types/chat/bsky/moderation/getActorMetadata'
-export * as ChatBskyModerationGetMessageContext from './types/chat/bsky/moderation/getMessageContext'
-export * as ChatBskyModerationUpdateActorAccess from './types/chat/bsky/moderation/updateActorAccess'
-export * as ComMarukunDevPdsReaction from './types/com/marukun-dev/pds/reaction'
 export * as ComAtprotoTempCheckSignupQueue from './types/com/atproto/temp/checkSignupQueue'
 export * as ComAtprotoTempRequestPhoneVerification from './types/com/atproto/temp/requestPhoneVerification'
 export * as ComAtprotoTempFetchLabels from './types/com/atproto/temp/fetchLabels'
@@ -454,17 +344,6 @@ export * as ComAtprotoRepoListRecords from './types/com/atproto/repo/listRecords
 export * as ComAtprotoModerationDefs from './types/com/atproto/moderation/defs'
 export * as ComAtprotoModerationCreateReport from './types/com/atproto/moderation/createReport'
 
-export const TOOLS_OZONE_TEAM = {
-  DefsRoleAdmin: 'tools.ozone.team.defs#roleAdmin',
-  DefsRoleModerator: 'tools.ozone.team.defs#roleModerator',
-  DefsRoleTriage: 'tools.ozone.team.defs#roleTriage',
-}
-export const TOOLS_OZONE_MODERATION = {
-  DefsReviewOpen: 'tools.ozone.moderation.defs#reviewOpen',
-  DefsReviewEscalated: 'tools.ozone.moderation.defs#reviewEscalated',
-  DefsReviewClosed: 'tools.ozone.moderation.defs#reviewClosed',
-  DefsReviewNone: 'tools.ozone.moderation.defs#reviewNone',
-}
 export const APP_BSKY_GRAPH = {
   DefsModlist: 'app.bsky.graph.defs#modlist',
   DefsCuratelist: 'app.bsky.graph.defs#curatelist',
@@ -495,16 +374,12 @@ export const COM_ATPROTO_MODERATION = {
 }
 
 export class AtpBaseClient extends XrpcClient {
-  tools: ToolsNS
   app: AppNS
-  chat: ChatNS
   com: ComNS
 
   constructor(options: FetchHandler | FetchHandlerOptions) {
     super(options, schemas)
-    this.tools = new ToolsNS(this)
     this.app = new AppNS(this)
-    this.chat = new ChatNS(this)
     this.com = new ComNS(this)
   }
 
@@ -514,440 +389,112 @@ export class AtpBaseClient extends XrpcClient {
   }
 }
 
-export class ToolsNS {
-  _client: XrpcClient
-  ozone: ToolsOzoneNS
-
-  constructor(client: XrpcClient) {
-    this._client = client
-    this.ozone = new ToolsOzoneNS(client)
-  }
-}
-
-export class ToolsOzoneNS {
-  _client: XrpcClient
-  signature: ToolsOzoneSignatureNS
-  server: ToolsOzoneServerNS
-  team: ToolsOzoneTeamNS
-  communication: ToolsOzoneCommunicationNS
-  set: ToolsOzoneSetNS
-  setting: ToolsOzoneSettingNS
-  moderation: ToolsOzoneModerationNS
-
-  constructor(client: XrpcClient) {
-    this._client = client
-    this.signature = new ToolsOzoneSignatureNS(client)
-    this.server = new ToolsOzoneServerNS(client)
-    this.team = new ToolsOzoneTeamNS(client)
-    this.communication = new ToolsOzoneCommunicationNS(client)
-    this.set = new ToolsOzoneSetNS(client)
-    this.setting = new ToolsOzoneSettingNS(client)
-    this.moderation = new ToolsOzoneModerationNS(client)
-  }
-}
-
-export class ToolsOzoneSignatureNS {
-  _client: XrpcClient
-
-  constructor(client: XrpcClient) {
-    this._client = client
-  }
-
-  findCorrelation(
-    params?: ToolsOzoneSignatureFindCorrelation.QueryParams,
-    opts?: ToolsOzoneSignatureFindCorrelation.CallOptions,
-  ): Promise<ToolsOzoneSignatureFindCorrelation.Response> {
-    return this._client.call(
-      'tools.ozone.signature.findCorrelation',
-      params,
-      undefined,
-      opts,
-    )
-  }
-
-  searchAccounts(
-    params?: ToolsOzoneSignatureSearchAccounts.QueryParams,
-    opts?: ToolsOzoneSignatureSearchAccounts.CallOptions,
-  ): Promise<ToolsOzoneSignatureSearchAccounts.Response> {
-    return this._client.call(
-      'tools.ozone.signature.searchAccounts',
-      params,
-      undefined,
-      opts,
-    )
-  }
-
-  findRelatedAccounts(
-    params?: ToolsOzoneSignatureFindRelatedAccounts.QueryParams,
-    opts?: ToolsOzoneSignatureFindRelatedAccounts.CallOptions,
-  ): Promise<ToolsOzoneSignatureFindRelatedAccounts.Response> {
-    return this._client.call(
-      'tools.ozone.signature.findRelatedAccounts',
-      params,
-      undefined,
-      opts,
-    )
-  }
-}
-
-export class ToolsOzoneServerNS {
-  _client: XrpcClient
-
-  constructor(client: XrpcClient) {
-    this._client = client
-  }
-
-  getConfig(
-    params?: ToolsOzoneServerGetConfig.QueryParams,
-    opts?: ToolsOzoneServerGetConfig.CallOptions,
-  ): Promise<ToolsOzoneServerGetConfig.Response> {
-    return this._client.call(
-      'tools.ozone.server.getConfig',
-      params,
-      undefined,
-      opts,
-    )
-  }
-}
-
-export class ToolsOzoneTeamNS {
-  _client: XrpcClient
-
-  constructor(client: XrpcClient) {
-    this._client = client
-  }
-
-  listMembers(
-    params?: ToolsOzoneTeamListMembers.QueryParams,
-    opts?: ToolsOzoneTeamListMembers.CallOptions,
-  ): Promise<ToolsOzoneTeamListMembers.Response> {
-    return this._client.call(
-      'tools.ozone.team.listMembers',
-      params,
-      undefined,
-      opts,
-    )
-  }
-
-  deleteMember(
-    data?: ToolsOzoneTeamDeleteMember.InputSchema,
-    opts?: ToolsOzoneTeamDeleteMember.CallOptions,
-  ): Promise<ToolsOzoneTeamDeleteMember.Response> {
-    return this._client
-      .call('tools.ozone.team.deleteMember', opts?.qp, data, opts)
-      .catch((e) => {
-        throw ToolsOzoneTeamDeleteMember.toKnownErr(e)
-      })
-  }
-
-  updateMember(
-    data?: ToolsOzoneTeamUpdateMember.InputSchema,
-    opts?: ToolsOzoneTeamUpdateMember.CallOptions,
-  ): Promise<ToolsOzoneTeamUpdateMember.Response> {
-    return this._client
-      .call('tools.ozone.team.updateMember', opts?.qp, data, opts)
-      .catch((e) => {
-        throw ToolsOzoneTeamUpdateMember.toKnownErr(e)
-      })
-  }
-
-  addMember(
-    data?: ToolsOzoneTeamAddMember.InputSchema,
-    opts?: ToolsOzoneTeamAddMember.CallOptions,
-  ): Promise<ToolsOzoneTeamAddMember.Response> {
-    return this._client
-      .call('tools.ozone.team.addMember', opts?.qp, data, opts)
-      .catch((e) => {
-        throw ToolsOzoneTeamAddMember.toKnownErr(e)
-      })
-  }
-}
-
-export class ToolsOzoneCommunicationNS {
-  _client: XrpcClient
-
-  constructor(client: XrpcClient) {
-    this._client = client
-  }
-
-  updateTemplate(
-    data?: ToolsOzoneCommunicationUpdateTemplate.InputSchema,
-    opts?: ToolsOzoneCommunicationUpdateTemplate.CallOptions,
-  ): Promise<ToolsOzoneCommunicationUpdateTemplate.Response> {
-    return this._client
-      .call('tools.ozone.communication.updateTemplate', opts?.qp, data, opts)
-      .catch((e) => {
-        throw ToolsOzoneCommunicationUpdateTemplate.toKnownErr(e)
-      })
-  }
-
-  createTemplate(
-    data?: ToolsOzoneCommunicationCreateTemplate.InputSchema,
-    opts?: ToolsOzoneCommunicationCreateTemplate.CallOptions,
-  ): Promise<ToolsOzoneCommunicationCreateTemplate.Response> {
-    return this._client
-      .call('tools.ozone.communication.createTemplate', opts?.qp, data, opts)
-      .catch((e) => {
-        throw ToolsOzoneCommunicationCreateTemplate.toKnownErr(e)
-      })
-  }
-
-  listTemplates(
-    params?: ToolsOzoneCommunicationListTemplates.QueryParams,
-    opts?: ToolsOzoneCommunicationListTemplates.CallOptions,
-  ): Promise<ToolsOzoneCommunicationListTemplates.Response> {
-    return this._client.call(
-      'tools.ozone.communication.listTemplates',
-      params,
-      undefined,
-      opts,
-    )
-  }
-
-  deleteTemplate(
-    data?: ToolsOzoneCommunicationDeleteTemplate.InputSchema,
-    opts?: ToolsOzoneCommunicationDeleteTemplate.CallOptions,
-  ): Promise<ToolsOzoneCommunicationDeleteTemplate.Response> {
-    return this._client.call(
-      'tools.ozone.communication.deleteTemplate',
-      opts?.qp,
-      data,
-      opts,
-    )
-  }
-}
-
-export class ToolsOzoneSetNS {
-  _client: XrpcClient
-
-  constructor(client: XrpcClient) {
-    this._client = client
-  }
-
-  addValues(
-    data?: ToolsOzoneSetAddValues.InputSchema,
-    opts?: ToolsOzoneSetAddValues.CallOptions,
-  ): Promise<ToolsOzoneSetAddValues.Response> {
-    return this._client.call('tools.ozone.set.addValues', opts?.qp, data, opts)
-  }
-
-  getValues(
-    params?: ToolsOzoneSetGetValues.QueryParams,
-    opts?: ToolsOzoneSetGetValues.CallOptions,
-  ): Promise<ToolsOzoneSetGetValues.Response> {
-    return this._client
-      .call('tools.ozone.set.getValues', params, undefined, opts)
-      .catch((e) => {
-        throw ToolsOzoneSetGetValues.toKnownErr(e)
-      })
-  }
-
-  deleteSet(
-    data?: ToolsOzoneSetDeleteSet.InputSchema,
-    opts?: ToolsOzoneSetDeleteSet.CallOptions,
-  ): Promise<ToolsOzoneSetDeleteSet.Response> {
-    return this._client
-      .call('tools.ozone.set.deleteSet', opts?.qp, data, opts)
-      .catch((e) => {
-        throw ToolsOzoneSetDeleteSet.toKnownErr(e)
-      })
-  }
-
-  upsertSet(
-    data?: ToolsOzoneSetUpsertSet.InputSchema,
-    opts?: ToolsOzoneSetUpsertSet.CallOptions,
-  ): Promise<ToolsOzoneSetUpsertSet.Response> {
-    return this._client.call('tools.ozone.set.upsertSet', opts?.qp, data, opts)
-  }
-
-  deleteValues(
-    data?: ToolsOzoneSetDeleteValues.InputSchema,
-    opts?: ToolsOzoneSetDeleteValues.CallOptions,
-  ): Promise<ToolsOzoneSetDeleteValues.Response> {
-    return this._client
-      .call('tools.ozone.set.deleteValues', opts?.qp, data, opts)
-      .catch((e) => {
-        throw ToolsOzoneSetDeleteValues.toKnownErr(e)
-      })
-  }
-
-  querySets(
-    params?: ToolsOzoneSetQuerySets.QueryParams,
-    opts?: ToolsOzoneSetQuerySets.CallOptions,
-  ): Promise<ToolsOzoneSetQuerySets.Response> {
-    return this._client.call(
-      'tools.ozone.set.querySets',
-      params,
-      undefined,
-      opts,
-    )
-  }
-}
-
-export class ToolsOzoneSettingNS {
-  _client: XrpcClient
-
-  constructor(client: XrpcClient) {
-    this._client = client
-  }
-
-  listOptions(
-    params?: ToolsOzoneSettingListOptions.QueryParams,
-    opts?: ToolsOzoneSettingListOptions.CallOptions,
-  ): Promise<ToolsOzoneSettingListOptions.Response> {
-    return this._client.call(
-      'tools.ozone.setting.listOptions',
-      params,
-      undefined,
-      opts,
-    )
-  }
-
-  removeOptions(
-    data?: ToolsOzoneSettingRemoveOptions.InputSchema,
-    opts?: ToolsOzoneSettingRemoveOptions.CallOptions,
-  ): Promise<ToolsOzoneSettingRemoveOptions.Response> {
-    return this._client.call(
-      'tools.ozone.setting.removeOptions',
-      opts?.qp,
-      data,
-      opts,
-    )
-  }
-
-  upsertOption(
-    data?: ToolsOzoneSettingUpsertOption.InputSchema,
-    opts?: ToolsOzoneSettingUpsertOption.CallOptions,
-  ): Promise<ToolsOzoneSettingUpsertOption.Response> {
-    return this._client.call(
-      'tools.ozone.setting.upsertOption',
-      opts?.qp,
-      data,
-      opts,
-    )
-  }
-}
-
-export class ToolsOzoneModerationNS {
-  _client: XrpcClient
-
-  constructor(client: XrpcClient) {
-    this._client = client
-  }
-
-  queryStatuses(
-    params?: ToolsOzoneModerationQueryStatuses.QueryParams,
-    opts?: ToolsOzoneModerationQueryStatuses.CallOptions,
-  ): Promise<ToolsOzoneModerationQueryStatuses.Response> {
-    return this._client.call(
-      'tools.ozone.moderation.queryStatuses',
-      params,
-      undefined,
-      opts,
-    )
-  }
-
-  getRepo(
-    params?: ToolsOzoneModerationGetRepo.QueryParams,
-    opts?: ToolsOzoneModerationGetRepo.CallOptions,
-  ): Promise<ToolsOzoneModerationGetRepo.Response> {
-    return this._client
-      .call('tools.ozone.moderation.getRepo', params, undefined, opts)
-      .catch((e) => {
-        throw ToolsOzoneModerationGetRepo.toKnownErr(e)
-      })
-  }
-
-  getRecords(
-    params?: ToolsOzoneModerationGetRecords.QueryParams,
-    opts?: ToolsOzoneModerationGetRecords.CallOptions,
-  ): Promise<ToolsOzoneModerationGetRecords.Response> {
-    return this._client.call(
-      'tools.ozone.moderation.getRecords',
-      params,
-      undefined,
-      opts,
-    )
-  }
-
-  getEvent(
-    params?: ToolsOzoneModerationGetEvent.QueryParams,
-    opts?: ToolsOzoneModerationGetEvent.CallOptions,
-  ): Promise<ToolsOzoneModerationGetEvent.Response> {
-    return this._client.call(
-      'tools.ozone.moderation.getEvent',
-      params,
-      undefined,
-      opts,
-    )
-  }
-
-  queryEvents(
-    params?: ToolsOzoneModerationQueryEvents.QueryParams,
-    opts?: ToolsOzoneModerationQueryEvents.CallOptions,
-  ): Promise<ToolsOzoneModerationQueryEvents.Response> {
-    return this._client.call(
-      'tools.ozone.moderation.queryEvents',
-      params,
-      undefined,
-      opts,
-    )
-  }
-
-  getRecord(
-    params?: ToolsOzoneModerationGetRecord.QueryParams,
-    opts?: ToolsOzoneModerationGetRecord.CallOptions,
-  ): Promise<ToolsOzoneModerationGetRecord.Response> {
-    return this._client
-      .call('tools.ozone.moderation.getRecord', params, undefined, opts)
-      .catch((e) => {
-        throw ToolsOzoneModerationGetRecord.toKnownErr(e)
-      })
-  }
-
-  emitEvent(
-    data?: ToolsOzoneModerationEmitEvent.InputSchema,
-    opts?: ToolsOzoneModerationEmitEvent.CallOptions,
-  ): Promise<ToolsOzoneModerationEmitEvent.Response> {
-    return this._client
-      .call('tools.ozone.moderation.emitEvent', opts?.qp, data, opts)
-      .catch((e) => {
-        throw ToolsOzoneModerationEmitEvent.toKnownErr(e)
-      })
-  }
-
-  searchRepos(
-    params?: ToolsOzoneModerationSearchRepos.QueryParams,
-    opts?: ToolsOzoneModerationSearchRepos.CallOptions,
-  ): Promise<ToolsOzoneModerationSearchRepos.Response> {
-    return this._client.call(
-      'tools.ozone.moderation.searchRepos',
-      params,
-      undefined,
-      opts,
-    )
-  }
-
-  getRepos(
-    params?: ToolsOzoneModerationGetRepos.QueryParams,
-    opts?: ToolsOzoneModerationGetRepos.CallOptions,
-  ): Promise<ToolsOzoneModerationGetRepos.Response> {
-    return this._client.call(
-      'tools.ozone.moderation.getRepos',
-      params,
-      undefined,
-      opts,
-    )
-  }
-}
-
 export class AppNS {
   _client: XrpcClient
+  vercel: AppVercelNS
   bsky: AppBskyNS
 
   constructor(client: XrpcClient) {
     this._client = client
+    this.vercel = new AppVercelNS(client)
     this.bsky = new AppBskyNS(client)
+  }
+}
+
+export class AppVercelNS {
+  _client: XrpcClient
+  stellarbsky: AppVercelStellarbskyNS
+
+  constructor(client: XrpcClient) {
+    this._client = client
+    this.stellarbsky = new AppVercelStellarbskyNS(client)
+  }
+}
+
+export class AppVercelStellarbskyNS {
+  _client: XrpcClient
+  reaction: ReactionRecord
+
+  constructor(client: XrpcClient) {
+    this._client = client
+    this.reaction = new ReactionRecord(client)
+  }
+
+  getReactions(
+    params?: AppVercelStellarbskyGetReactions.QueryParams,
+    opts?: AppVercelStellarbskyGetReactions.CallOptions,
+  ): Promise<AppVercelStellarbskyGetReactions.Response> {
+    return this._client.call(
+      'app.vercel.stellarbsky.getReactions',
+      params,
+      undefined,
+      opts,
+    )
+  }
+}
+
+export class ReactionRecord {
+  _client: XrpcClient
+
+  constructor(client: XrpcClient) {
+    this._client = client
+  }
+
+  async list(
+    params: Omit<ComAtprotoRepoListRecords.QueryParams, 'collection'>,
+  ): Promise<{
+    cursor?: string
+    records: { uri: string; value: AppVercelStellarbskyReaction.Record }[]
+  }> {
+    const res = await this._client.call('com.atproto.repo.listRecords', {
+      collection: 'app.vercel.stellarbsky.reaction',
+      ...params,
+    })
+    return res.data
+  }
+
+  async get(
+    params: Omit<ComAtprotoRepoGetRecord.QueryParams, 'collection'>,
+  ): Promise<{
+    uri: string
+    cid: string
+    value: AppVercelStellarbskyReaction.Record
+  }> {
+    const res = await this._client.call('com.atproto.repo.getRecord', {
+      collection: 'app.vercel.stellarbsky.reaction',
+      ...params,
+    })
+    return res.data
+  }
+
+  async create(
+    params: Omit<
+      ComAtprotoRepoCreateRecord.InputSchema,
+      'collection' | 'record'
+    >,
+    record: AppVercelStellarbskyReaction.Record,
+    headers?: Record<string, string>,
+  ): Promise<{ uri: string; cid: string }> {
+    record.$type = 'app.vercel.stellarbsky.reaction'
+    const res = await this._client.call(
+      'com.atproto.repo.createRecord',
+      undefined,
+      { collection: 'app.vercel.stellarbsky.reaction', ...params, record },
+      { encoding: 'application/json', headers },
+    )
+    return res.data
+  }
+
+  async delete(
+    params: Omit<ComAtprotoRepoDeleteRecord.InputSchema, 'collection'>,
+    headers?: Record<string, string>,
+  ): Promise<void> {
+    await this._client.call(
+      'com.atproto.repo.deleteRecord',
+      undefined,
+      { collection: 'app.vercel.stellarbsky.reaction', ...params },
+      { headers },
+    )
   }
 }
 
@@ -2612,404 +2159,13 @@ export class ServiceRecord {
   }
 }
 
-export class ChatNS {
-  _client: XrpcClient
-  bsky: ChatBskyNS
-
-  constructor(client: XrpcClient) {
-    this._client = client
-    this.bsky = new ChatBskyNS(client)
-  }
-}
-
-export class ChatBskyNS {
-  _client: XrpcClient
-  convo: ChatBskyConvoNS
-  actor: ChatBskyActorNS
-  moderation: ChatBskyModerationNS
-
-  constructor(client: XrpcClient) {
-    this._client = client
-    this.convo = new ChatBskyConvoNS(client)
-    this.actor = new ChatBskyActorNS(client)
-    this.moderation = new ChatBskyModerationNS(client)
-  }
-}
-
-export class ChatBskyConvoNS {
-  _client: XrpcClient
-
-  constructor(client: XrpcClient) {
-    this._client = client
-  }
-
-  listConvos(
-    params?: ChatBskyConvoListConvos.QueryParams,
-    opts?: ChatBskyConvoListConvos.CallOptions,
-  ): Promise<ChatBskyConvoListConvos.Response> {
-    return this._client.call(
-      'chat.bsky.convo.listConvos',
-      params,
-      undefined,
-      opts,
-    )
-  }
-
-  unmuteConvo(
-    data?: ChatBskyConvoUnmuteConvo.InputSchema,
-    opts?: ChatBskyConvoUnmuteConvo.CallOptions,
-  ): Promise<ChatBskyConvoUnmuteConvo.Response> {
-    return this._client.call(
-      'chat.bsky.convo.unmuteConvo',
-      opts?.qp,
-      data,
-      opts,
-    )
-  }
-
-  getLog(
-    params?: ChatBskyConvoGetLog.QueryParams,
-    opts?: ChatBskyConvoGetLog.CallOptions,
-  ): Promise<ChatBskyConvoGetLog.Response> {
-    return this._client.call('chat.bsky.convo.getLog', params, undefined, opts)
-  }
-
-  sendMessage(
-    data?: ChatBskyConvoSendMessage.InputSchema,
-    opts?: ChatBskyConvoSendMessage.CallOptions,
-  ): Promise<ChatBskyConvoSendMessage.Response> {
-    return this._client.call(
-      'chat.bsky.convo.sendMessage',
-      opts?.qp,
-      data,
-      opts,
-    )
-  }
-
-  leaveConvo(
-    data?: ChatBskyConvoLeaveConvo.InputSchema,
-    opts?: ChatBskyConvoLeaveConvo.CallOptions,
-  ): Promise<ChatBskyConvoLeaveConvo.Response> {
-    return this._client.call('chat.bsky.convo.leaveConvo', opts?.qp, data, opts)
-  }
-
-  muteConvo(
-    data?: ChatBskyConvoMuteConvo.InputSchema,
-    opts?: ChatBskyConvoMuteConvo.CallOptions,
-  ): Promise<ChatBskyConvoMuteConvo.Response> {
-    return this._client.call('chat.bsky.convo.muteConvo', opts?.qp, data, opts)
-  }
-
-  deleteMessageForSelf(
-    data?: ChatBskyConvoDeleteMessageForSelf.InputSchema,
-    opts?: ChatBskyConvoDeleteMessageForSelf.CallOptions,
-  ): Promise<ChatBskyConvoDeleteMessageForSelf.Response> {
-    return this._client.call(
-      'chat.bsky.convo.deleteMessageForSelf',
-      opts?.qp,
-      data,
-      opts,
-    )
-  }
-
-  updateRead(
-    data?: ChatBskyConvoUpdateRead.InputSchema,
-    opts?: ChatBskyConvoUpdateRead.CallOptions,
-  ): Promise<ChatBskyConvoUpdateRead.Response> {
-    return this._client.call('chat.bsky.convo.updateRead', opts?.qp, data, opts)
-  }
-
-  getConvo(
-    params?: ChatBskyConvoGetConvo.QueryParams,
-    opts?: ChatBskyConvoGetConvo.CallOptions,
-  ): Promise<ChatBskyConvoGetConvo.Response> {
-    return this._client.call(
-      'chat.bsky.convo.getConvo',
-      params,
-      undefined,
-      opts,
-    )
-  }
-
-  getMessages(
-    params?: ChatBskyConvoGetMessages.QueryParams,
-    opts?: ChatBskyConvoGetMessages.CallOptions,
-  ): Promise<ChatBskyConvoGetMessages.Response> {
-    return this._client.call(
-      'chat.bsky.convo.getMessages',
-      params,
-      undefined,
-      opts,
-    )
-  }
-
-  getConvoForMembers(
-    params?: ChatBskyConvoGetConvoForMembers.QueryParams,
-    opts?: ChatBskyConvoGetConvoForMembers.CallOptions,
-  ): Promise<ChatBskyConvoGetConvoForMembers.Response> {
-    return this._client.call(
-      'chat.bsky.convo.getConvoForMembers',
-      params,
-      undefined,
-      opts,
-    )
-  }
-
-  sendMessageBatch(
-    data?: ChatBskyConvoSendMessageBatch.InputSchema,
-    opts?: ChatBskyConvoSendMessageBatch.CallOptions,
-  ): Promise<ChatBskyConvoSendMessageBatch.Response> {
-    return this._client.call(
-      'chat.bsky.convo.sendMessageBatch',
-      opts?.qp,
-      data,
-      opts,
-    )
-  }
-}
-
-export class ChatBskyActorNS {
-  _client: XrpcClient
-  declaration: DeclarationRecord
-
-  constructor(client: XrpcClient) {
-    this._client = client
-    this.declaration = new DeclarationRecord(client)
-  }
-
-  exportAccountData(
-    params?: ChatBskyActorExportAccountData.QueryParams,
-    opts?: ChatBskyActorExportAccountData.CallOptions,
-  ): Promise<ChatBskyActorExportAccountData.Response> {
-    return this._client.call(
-      'chat.bsky.actor.exportAccountData',
-      params,
-      undefined,
-      opts,
-    )
-  }
-
-  deleteAccount(
-    data?: ChatBskyActorDeleteAccount.InputSchema,
-    opts?: ChatBskyActorDeleteAccount.CallOptions,
-  ): Promise<ChatBskyActorDeleteAccount.Response> {
-    return this._client.call(
-      'chat.bsky.actor.deleteAccount',
-      opts?.qp,
-      data,
-      opts,
-    )
-  }
-}
-
-export class DeclarationRecord {
-  _client: XrpcClient
-
-  constructor(client: XrpcClient) {
-    this._client = client
-  }
-
-  async list(
-    params: Omit<ComAtprotoRepoListRecords.QueryParams, 'collection'>,
-  ): Promise<{
-    cursor?: string
-    records: { uri: string; value: ChatBskyActorDeclaration.Record }[]
-  }> {
-    const res = await this._client.call('com.atproto.repo.listRecords', {
-      collection: 'chat.bsky.actor.declaration',
-      ...params,
-    })
-    return res.data
-  }
-
-  async get(
-    params: Omit<ComAtprotoRepoGetRecord.QueryParams, 'collection'>,
-  ): Promise<{
-    uri: string
-    cid: string
-    value: ChatBskyActorDeclaration.Record
-  }> {
-    const res = await this._client.call('com.atproto.repo.getRecord', {
-      collection: 'chat.bsky.actor.declaration',
-      ...params,
-    })
-    return res.data
-  }
-
-  async create(
-    params: Omit<
-      ComAtprotoRepoCreateRecord.InputSchema,
-      'collection' | 'record'
-    >,
-    record: ChatBskyActorDeclaration.Record,
-    headers?: Record<string, string>,
-  ): Promise<{ uri: string; cid: string }> {
-    record.$type = 'chat.bsky.actor.declaration'
-    const res = await this._client.call(
-      'com.atproto.repo.createRecord',
-      undefined,
-      {
-        collection: 'chat.bsky.actor.declaration',
-        rkey: 'self',
-        ...params,
-        record,
-      },
-      { encoding: 'application/json', headers },
-    )
-    return res.data
-  }
-
-  async delete(
-    params: Omit<ComAtprotoRepoDeleteRecord.InputSchema, 'collection'>,
-    headers?: Record<string, string>,
-  ): Promise<void> {
-    await this._client.call(
-      'com.atproto.repo.deleteRecord',
-      undefined,
-      { collection: 'chat.bsky.actor.declaration', ...params },
-      { headers },
-    )
-  }
-}
-
-export class ChatBskyModerationNS {
-  _client: XrpcClient
-
-  constructor(client: XrpcClient) {
-    this._client = client
-  }
-
-  getActorMetadata(
-    params?: ChatBskyModerationGetActorMetadata.QueryParams,
-    opts?: ChatBskyModerationGetActorMetadata.CallOptions,
-  ): Promise<ChatBskyModerationGetActorMetadata.Response> {
-    return this._client.call(
-      'chat.bsky.moderation.getActorMetadata',
-      params,
-      undefined,
-      opts,
-    )
-  }
-
-  getMessageContext(
-    params?: ChatBskyModerationGetMessageContext.QueryParams,
-    opts?: ChatBskyModerationGetMessageContext.CallOptions,
-  ): Promise<ChatBskyModerationGetMessageContext.Response> {
-    return this._client.call(
-      'chat.bsky.moderation.getMessageContext',
-      params,
-      undefined,
-      opts,
-    )
-  }
-
-  updateActorAccess(
-    data?: ChatBskyModerationUpdateActorAccess.InputSchema,
-    opts?: ChatBskyModerationUpdateActorAccess.CallOptions,
-  ): Promise<ChatBskyModerationUpdateActorAccess.Response> {
-    return this._client.call(
-      'chat.bsky.moderation.updateActorAccess',
-      opts?.qp,
-      data,
-      opts,
-    )
-  }
-}
-
 export class ComNS {
   _client: XrpcClient
-  marukunDev: ComMarukunDevNS
   atproto: ComAtprotoNS
 
   constructor(client: XrpcClient) {
     this._client = client
-    this.marukunDev = new ComMarukunDevNS(client)
     this.atproto = new ComAtprotoNS(client)
-  }
-}
-
-export class ComMarukunDevNS {
-  _client: XrpcClient
-  pds: ComMarukunDevPdsNS
-
-  constructor(client: XrpcClient) {
-    this._client = client
-    this.pds = new ComMarukunDevPdsNS(client)
-  }
-}
-
-export class ComMarukunDevPdsNS {
-  _client: XrpcClient
-  reaction: ReactionRecord
-
-  constructor(client: XrpcClient) {
-    this._client = client
-    this.reaction = new ReactionRecord(client)
-  }
-}
-
-export class ReactionRecord {
-  _client: XrpcClient
-
-  constructor(client: XrpcClient) {
-    this._client = client
-  }
-
-  async list(
-    params: Omit<ComAtprotoRepoListRecords.QueryParams, 'collection'>,
-  ): Promise<{
-    cursor?: string
-    records: { uri: string; value: ComMarukunDevPdsReaction.Record }[]
-  }> {
-    const res = await this._client.call('com.atproto.repo.listRecords', {
-      collection: 'com.marukun-dev.pds.reaction',
-      ...params,
-    })
-    return res.data
-  }
-
-  async get(
-    params: Omit<ComAtprotoRepoGetRecord.QueryParams, 'collection'>,
-  ): Promise<{
-    uri: string
-    cid: string
-    value: ComMarukunDevPdsReaction.Record
-  }> {
-    const res = await this._client.call('com.atproto.repo.getRecord', {
-      collection: 'com.marukun-dev.pds.reaction',
-      ...params,
-    })
-    return res.data
-  }
-
-  async create(
-    params: Omit<
-      ComAtprotoRepoCreateRecord.InputSchema,
-      'collection' | 'record'
-    >,
-    record: ComMarukunDevPdsReaction.Record,
-    headers?: Record<string, string>,
-  ): Promise<{ uri: string; cid: string }> {
-    record.$type = 'com.marukun-dev.pds.reaction'
-    const res = await this._client.call(
-      'com.atproto.repo.createRecord',
-      undefined,
-      { collection: 'com.marukun-dev.pds.reaction', ...params, record },
-      { encoding: 'application/json', headers },
-    )
-    return res.data
-  }
-
-  async delete(
-    params: Omit<ComAtprotoRepoDeleteRecord.InputSchema, 'collection'>,
-    headers?: Record<string, string>,
-  ): Promise<void> {
-    await this._client.call(
-      'com.atproto.repo.deleteRecord',
-      undefined,
-      { collection: 'com.marukun-dev.pds.reaction', ...params },
-      { headers },
-    )
   }
 }
 

@@ -220,7 +220,6 @@ export const Post = ({ data }: { data: PostData }) => {
                   post.id as string,
                   post.uri,
                   post.cid,
-                  profile,
                   cardRef.current!
                 )
               }

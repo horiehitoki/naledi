@@ -1,7 +1,7 @@
 import { Agent } from "@atproto/api";
 import { ActionFunction, json } from "@remix-run/node";
 import { getSessionAgent } from "~/utils/auth/session";
-import { prisma } from "~/utils/db/prisma";
+import { ReactionAgent } from "~/utils/reactions/reactionAgent";
 
 export const action: ActionFunction = async ({ request }) => {
   const agent: Agent | null = await getSessionAgent(request);
@@ -9,13 +9,9 @@ export const action: ActionFunction = async ({ request }) => {
 
   const body = await request.json();
 
-  await prisma.reaction.delete({
-    where: { id: body.rkey },
-  });
+  const reactionAgent = new ReactionAgent(agent);
 
-  await agent.com.atproto.repo.deleteRecord({
-    repo: agent.assertDid,
-    collection: "com.marukun-dev.pds.reaction",
+  await reactionAgent.delete({
     rkey: body.rkey,
   });
 

@@ -19,7 +19,7 @@ export type TimelineState = {
 };
 
 export type DataWithCursor = {
-  data: ProfileView[];
+  data: any[];
   cursor: string | undefined;
 };
 
@@ -32,7 +32,6 @@ export type toggleEmojiPicker = (
   postId: string,
   uri: string,
   cid: string,
-  profile: ProfileView,
   element: HTMLDivElement
 ) => void;
 

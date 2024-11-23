@@ -1,7 +1,6 @@
 import { toggleEmojiPicker } from "@types";
 import { EmojiClickData } from "emoji-picker-react";
 import { useState, useEffect } from "react";
-import { ProfileView } from "~/generated/api/types/app/bsky/actor/defs";
 
 interface Position {
   top: number;
@@ -12,14 +11,13 @@ interface PostInfo {
   postId: string;
   uri: string;
   cid: string;
-  profile: ProfileView;
 }
 
 interface UseEmojiPickerReturn {
   isEmojiPickerOpen: boolean;
   position: Position;
   postInfo: PostInfo | null;
-  handleEmojiClick: (event: any) => void;
+  handleEmojiClick: (event: EmojiClickData) => void;
   toggleEmojiPicker: toggleEmojiPicker;
 }
 
@@ -58,7 +56,6 @@ export const useEmojiPicker = (): UseEmojiPickerReturn => {
             cid: postInfo.cid,
           },
           emoji: emojiName,
-          postedBy: postInfo.profile.did,
         }),
       });
     }
@@ -80,14 +77,13 @@ export const useEmojiPicker = (): UseEmojiPickerReturn => {
     postId: string,
     uri: string,
     cid: string,
-    profile: ProfileView,
     element: HTMLDivElement
   ) => {
     const newPosition = calculatePickerPosition(element);
 
     setPosition(newPosition);
     setIsEmojiPickerOpen(!isEmojiPickerOpen);
-    setPostInfo({ postId, uri, cid, profile });
+    setPostInfo({ postId, uri, cid });
   };
 
   return {

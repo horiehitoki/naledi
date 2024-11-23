@@ -1,11 +1,7 @@
 import { Agent } from "@atproto/api";
 import { ActionFunction, json } from "@remix-run/node";
 import { getSessionAgent } from "~/utils/auth/session";
-import { TID } from "@atproto/common";
-import { prisma } from "~/utils/db/prisma";
-import { isRecord } from "~/generated/api/types/com/marukun-dev/pds/reaction";
-import { validateRecord } from "~/generated/api/types/com/marukun-dev/pds/reaction";
-import { Record } from "~/generated/api/types/com/marukun-dev/pds/reaction";
+import { ReactionAgent } from "~/utils/reactions/reactionAgent";
 
 interface ReactionRequest {
   subject: {
@@ -13,7 +9,6 @@ interface ReactionRequest {
     cid: string;
   };
   emoji: string;
-  postedBy: string;
 }
 
 //リアクションの作成
@@ -23,51 +18,14 @@ export const action: ActionFunction = async ({ request }) => {
 
   const body = (await request.json()) as ReactionRequest;
 
-  const rkey = TID.nextStr();
+  const reactionAgent = new ReactionAgent(agent);
 
-  //楽観的更新
-  await prisma.reaction.upsert({
-    where: {
-      uri_createdBy: {
-        uri: body.subject.uri,
-        createdBy: body.postedBy,
-      },
-    },
-    update: {
-      id: rkey,
-      emoji: body.emoji,
-    },
-    create: {
-      id: rkey,
-      uri: body.subject.uri,
-      cid: body.subject.cid,
-      emoji: body.emoji,
-      createdBy: body.postedBy,
-    },
-  });
-
-  //リアクションレコード
-  const record: Record = {
-    $type: "com.marukun-dev.pds.reaction",
+  const res = await reactionAgent.put({
     subject: {
       uri: body.subject.uri,
       cid: body.subject.cid,
     },
-    createdAt: new Date().toISOString(),
     emoji: body.emoji,
-    postedBy: body.postedBy,
-  };
-
-  //バリデーション
-  if (!isRecord(record) && !validateRecord(record).success) {
-    return json({ ok: false });
-  }
-
-  const res = await agent.com.atproto.repo.putRecord({
-    repo: agent.assertDid,
-    collection: "com.marukun-dev.pds.reaction",
-    rkey,
-    record,
   });
 
   return json(res ? { ok: true } : { ok: false });
