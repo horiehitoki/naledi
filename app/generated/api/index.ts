@@ -4,7 +4,6 @@
 import { XrpcClient, FetchHandler, FetchHandlerOptions } from '@atproto/xrpc'
 import { schemas } from './lexicons'
 import { CID } from 'multiformats/cid'
-import * as AppVercelStellarbskyGetReactions from './types/app/vercel/stellarbsky/getReactions'
 import * as AppVercelStellarbskyReaction from './types/app/vercel/stellarbsky/reaction'
 import * as AppBskyVideoUploadVideo from './types/app/bsky/video/uploadVideo'
 import * as AppBskyVideoDefs from './types/app/bsky/video/defs'
@@ -174,7 +173,6 @@ import * as ComAtprotoRepoListRecords from './types/com/atproto/repo/listRecords
 import * as ComAtprotoModerationDefs from './types/com/atproto/moderation/defs'
 import * as ComAtprotoModerationCreateReport from './types/com/atproto/moderation/createReport'
 
-export * as AppVercelStellarbskyGetReactions from './types/app/vercel/stellarbsky/getReactions'
 export * as AppVercelStellarbskyReaction from './types/app/vercel/stellarbsky/reaction'
 export * as AppBskyVideoUploadVideo from './types/app/bsky/video/uploadVideo'
 export * as AppBskyVideoDefs from './types/app/bsky/video/defs'
@@ -418,18 +416,6 @@ export class AppVercelStellarbskyNS {
   constructor(client: XrpcClient) {
     this._client = client
     this.reaction = new ReactionRecord(client)
-  }
-
-  getReactions(
-    params?: AppVercelStellarbskyGetReactions.QueryParams,
-    opts?: AppVercelStellarbskyGetReactions.CallOptions,
-  ): Promise<AppVercelStellarbskyGetReactions.Response> {
-    return this._client.call(
-      'app.vercel.stellarbsky.getReactions',
-      params,
-      undefined,
-      opts,
-    )
   }
 }
 

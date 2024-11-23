@@ -4,91 +4,6 @@
 import { LexiconDoc, Lexicons } from '@atproto/lexicon'
 
 export const schemaDict = {
-  AppVercelStellarbskyGetReactions: {
-    lexicon: 1,
-    id: 'app.vercel.stellarbsky.getReactions',
-    defs: {
-      main: {
-        type: 'query',
-        description:
-          'Get reaction records which reference a subject (by AT-URI and CID).',
-        parameters: {
-          type: 'params',
-          required: ['uri'],
-          properties: {
-            uri: {
-              type: 'string',
-              format: 'at-uri',
-              description: 'AT-URI of the subject (eg, a post record).',
-            },
-            cid: {
-              type: 'string',
-              format: 'cid',
-              description:
-                'CID of the subject record (aka, specific version of record), to filter reaction.',
-            },
-            limit: {
-              type: 'integer',
-              minimum: 1,
-              maximum: 100,
-              default: 50,
-            },
-            cursor: {
-              type: 'string',
-            },
-          },
-        },
-        output: {
-          encoding: 'application/json',
-          schema: {
-            type: 'object',
-            required: ['uri', 'reactions'],
-            properties: {
-              uri: {
-                type: 'string',
-                format: 'at-uri',
-              },
-              cid: {
-                type: 'string',
-                format: 'cid',
-              },
-              cursor: {
-                type: 'string',
-              },
-              reactions: {
-                type: 'array',
-                items: {
-                  type: 'ref',
-                  ref: 'lex:app.vercel.stellarbsky.getReactions#reaction',
-                },
-              },
-            },
-          },
-        },
-      },
-      reaction: {
-        type: 'object',
-        required: ['indexedAt', 'createdAt', 'actor', 'emoji'],
-        properties: {
-          indexedAt: {
-            type: 'string',
-            format: 'datetime',
-          },
-          createdAt: {
-            type: 'string',
-            format: 'datetime',
-          },
-          actor: {
-            type: 'ref',
-            ref: 'lex:app.bsky.actor.defs#profileView',
-          },
-          emoji: {
-            type: 'string',
-          },
-        },
-      },
-    },
-  },
   AppVercelStellarbskyReaction: {
     lexicon: 1,
     id: 'app.vercel.stellarbsky.reaction',
@@ -9780,7 +9695,6 @@ export const schemaDict = {
 export const schemas = Object.values(schemaDict)
 export const lexicons: Lexicons = new Lexicons(schemas)
 export const ids = {
-  AppVercelStellarbskyGetReactions: 'app.vercel.stellarbsky.getReactions',
   AppVercelStellarbskyReaction: 'app.vercel.stellarbsky.reaction',
   AppBskyVideoUploadVideo: 'app.bsky.video.uploadVideo',
   AppBskyVideoDefs: 'app.bsky.video.defs',

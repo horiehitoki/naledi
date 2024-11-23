@@ -11,6 +11,7 @@ import {
 import { getSessionAgent } from "~/utils/auth/session";
 import { prisma } from "~/utils/db/prisma";
 
+//TODO 投稿の取得処理をシンプルにする
 export const loader: LoaderFunction = async ({ request }) => {
   const agent = await getSessionAgent(request);
   if (!agent) return null;

@@ -1,6 +1,9 @@
 import { Agent } from "@atproto/api";
-import { TID } from "@atproto/common";
+import { PostData } from "@types";
 import { AppVercelStellarbskyNS } from "~/generated/api";
+import { FeedViewPost } from "~/generated/api/types/app/bsky/feed/defs";
+import { prisma } from "../db/prisma";
+import { Reaction } from "@prisma/client";
 
 export class ReactionAgent extends Agent {
   agent: AppVercelStellarbskyNS;
@@ -10,29 +13,48 @@ export class ReactionAgent extends Agent {
     this.agent = new AppVercelStellarbskyNS(this);
   }
 
-  async getReactions(params: {
-    uri: string;
-    cid?: string;
-    limit?: number;
-    cursor?: string;
-  }) {
-    return await this.agent.getReactions({
-      uri: params.uri,
-      cid: params.cid,
-      limit: params.limit,
-      cursor: params.cursor,
-    });
+  async getReactions(params: { posts: FeedViewPost[] }) {
+    //投稿データとリアクションデータをセットで返す
+    const data: PostData[] = await Promise.all(
+      params.posts.map(async (post: FeedViewPost) => {
+        const reactions: Reaction[] = await prisma.reaction.findMany({
+          where: {
+            uri: post.post.uri,
+          },
+        });
+
+        //リアクションしたユーザーの情報を追加
+        const result = await Promise.all(
+          reactions.map(async (reaction) => {
+            const authorProfile = await this.getProfile({
+              actor: reaction.createdBy,
+            });
+
+            return {
+              reaction,
+              author: authorProfile.data,
+            };
+          })
+        );
+
+        return {
+          post,
+          reaction: result,
+        };
+      })
+    );
+
+    return data;
   }
 
   async put(params: {
+    rkey: string;
     subject: {
       uri: string;
       cid: string;
     };
     emoji: string;
   }) {
-    const rkey = TID.nextStr();
-
     const record = {
       subject: {
         uri: params.subject.uri,
@@ -46,7 +68,7 @@ export class ReactionAgent extends Agent {
     return await this.com.atproto.repo.putRecord({
       repo: this.assertDid,
       collection: "app.vercel.stellarbsky.reaction",
-      rkey,
+      rkey: params.rkey,
       record,
     });
   }

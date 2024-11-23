@@ -1,11 +1,8 @@
 import { Agent } from "@atproto/api";
-import { Reaction } from "@prisma/client";
 import { json, LoaderFunction } from "@remix-run/node";
-import { PostData } from "@types";
-import { FeedViewPost } from "~/generated/api/types/app/bsky/feed/defs";
 import { getSessionAgent } from "~/utils/auth/session";
-import { prisma } from "~/utils/db/prisma";
 import { getParams } from "~/utils/getParams";
+import { ReactionAgent } from "~/utils/reactions/reactionAgent";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const agent: Agent | null = await getSessionAgent(request);
@@ -14,6 +11,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const cursor: string = getParams(request, "cursor");
 
   const did: string = getParams(request, "did");
+  const reactionAgent = new ReactionAgent(agent);
 
   if (did) {
     //特定ユーザーの投稿を取得
@@ -23,18 +21,10 @@ export const loader: LoaderFunction = async ({ request }) => {
       limit: 20,
     });
 
-    //リアクションデータ付きで返す
-    const data: PostData[] = await Promise.all(
-      timeline.data.feed.map(async (post: FeedViewPost) => {
-        const reaction: Reaction[] = await prisma.reaction.findMany({
-          where: {
-            uri: post.post.uri,
-          },
-        });
-
-        return { post, reaction };
-      })
-    );
+    //タイムラインからリアクション情報を取得
+    const data = await reactionAgent.getReactions({
+      posts: timeline.data.feed,
+    });
 
     return json({
       data,
@@ -47,18 +37,10 @@ export const loader: LoaderFunction = async ({ request }) => {
       limit: 20,
     });
 
-    //リアクションデータ付きで返す
-    const data: PostData[] = await Promise.all(
-      timeline.data.feed.map(async (post: FeedViewPost) => {
-        const reaction: Reaction[] = await prisma.reaction.findMany({
-          where: {
-            uri: post.post.uri,
-          },
-        });
-
-        return { post, reaction };
-      })
-    );
+    //タイムラインからリアクション情報を取得
+    const data = await reactionAgent.getReactions({
+      posts: timeline.data.feed,
+    });
 
     return json({
       data,

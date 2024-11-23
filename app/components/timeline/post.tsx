@@ -14,8 +14,7 @@ import { Heart, MessageCircle, Repeat2, Smile } from "lucide-react";
 import { useOutletContext } from "@remix-run/react";
 import { PostData, toggleEmojiPicker } from "@types";
 import { ProfileView } from "~/generated/api/types/app/bsky/actor/defs";
-import { Twemoji } from "react-emoji-render";
-import { Reaction } from "@prisma/client";
+import ReactionButtons from "../reaction/reactionButtons";
 
 export const Post = ({ data }: { data: PostData }) => {
   const { reaction } = data;
@@ -52,15 +51,6 @@ export const Post = ({ data }: { data: PostData }) => {
     const res = await fetch("/api/delete/repost/", {
       method: "POST",
       body: JSON.stringify({ repostUri: post.viewer!.repost }),
-    });
-
-    return res;
-  }
-
-  async function cancelReaction(rkey: string) {
-    const res = await fetch("/api/delete/reaction/", {
-      method: "POST",
-      body: JSON.stringify({ rkey: rkey }),
     });
 
     return res;
@@ -201,19 +191,12 @@ export const Post = ({ data }: { data: PostData }) => {
           </div>
 
           <div className="flex flex-wrap items-center gap-4 mt-2">
-            {reaction.map((data: Reaction) => (
-              <button
-                key={data.cid}
-                disabled={data.createdBy !== profile.did}
-                onClick={() => cancelReaction(data.id)}
-                className="flex items-center space-x-1 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-2 py-1 rounded-full text-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-              >
-                <Twemoji
-                  text={`:${data.emoji.replace(/\s+/g, "_")}:`}
-                  options={{ className: "text-base" }}
-                />
-              </button>
-            ))}
+            <ReactionButtons
+              post={post}
+              reactions={reaction}
+              profile={profile}
+              key={"data.reaction.cid"}
+            />
             <button
               onClick={() =>
                 toggleEmojiPicker(

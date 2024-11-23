@@ -3,7 +3,7 @@ import { useCursor } from "./useCusor";
 import { PostData, TimelineState } from "@types";
 
 export const useTimeline = (defaultTimeline: TimelineState[]) => {
-  const [timeline, setTimeline] = useState(defaultTimeline);
+  const [timeline, setTimeline] = useState<TimelineState[]>(defaultTimeline);
   const { createCursor, readCursor, updateCursor } = useCursor();
 
   const updateTimelineItem = (id: string, updates: Partial<TimelineState>) => {

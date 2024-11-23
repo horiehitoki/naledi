@@ -9,7 +9,7 @@ interface UseLikesProps {
 }
 
 export const useLikes = ({ uri, initialLikes }: UseLikesProps) => {
-  const [likes, setLikes] = useState(initialLikes.likes);
+  const [likes, setLikes] = useState<Like[]>(initialLikes.likes);
   const { createCursor, readCursor, updateCursor } = useCursor();
   const [hasMore, setHasMore] = useState(!!initialLikes.cursor);
 

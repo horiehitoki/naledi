@@ -35,8 +35,10 @@ export type toggleEmojiPicker = (
   element: HTMLDivElement
 ) => void;
 
+export type ReactionData = { reaction: Reaction; author: ProfileView };
+
 export type PostData = {
-  reaction: Reaction[];
+  reaction: ReactionData[];
   post: FeedViewPost;
 };
 

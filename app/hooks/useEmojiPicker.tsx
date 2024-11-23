@@ -40,8 +40,10 @@ export const useEmojiPicker = (): UseEmojiPickerReturn => {
 
   //絵文字クリック時の処理
   const handleEmojiClick = async (event: EmojiClickData) => {
-    const emojiName = event.names[0];
+    //空白をアンダーバーに置き換え
+    const emojiName = event.names[0].replace(/\s+/g, "_");
 
+    //絵文字レコードをcreate
     if (postInfo) {
       setIsEmojiPickerOpen(false);
 

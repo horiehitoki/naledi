@@ -20,14 +20,12 @@ export const loader: LoaderFunction = async ({ request }) => {
   const agent: Agent | null = await getSessionAgent(request);
   if (agent == null) return redirect("/");
 
-  /*
-  const reactionAgent = new ReactionAgent(agent);
-
-  reactionAgent.getReactions({
-    uri: "at://did:plc:hbpzfim6uqz522avxupaud5y/app.bsky.feed.post/3lazjpet6pc2c",
-    limit: 50,
+  const reactions = await agent.com.atproto.repo.listRecords({
+    collection: "app.vercel.stellarbsky.reaction",
+    repo: agent.assertDid,
   });
-  */
+
+  console.log(reactions.data.records);
 
   return null;
 };
