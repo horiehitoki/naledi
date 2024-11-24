@@ -10,7 +10,7 @@ import { Button } from "./button";
 import { Home, LogOut, Plus, Settings } from "lucide-react";
 import { ModeToggle } from "./mode-toggle";
 import { SetStateAction, useState } from "react";
-import AddTimeline from "../timeline/addTimeline";
+import AddTimeline from "../timeline/addTimelineDialog";
 import { ProfileView } from "~/generated/api/types/app/bsky/actor/defs";
 
 type Props = {

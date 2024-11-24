@@ -19,6 +19,7 @@ import ReactionButtons from "../reaction/reactionButtons";
 export const Post = ({ data }: { data: PostData }) => {
   const { reaction } = data;
   const { post } = data.post;
+  const { reason } = data.post;
 
   async function like() {
     const res = await fetch("/api/create/like/", {
@@ -74,13 +75,12 @@ export const Post = ({ data }: { data: PostData }) => {
     height: 936,
   }));
 
-  //TODO 正しいユーザーネームを入れる
   return (
     <div className="md:max-w-2xl md:mx-auto">
-      {post.viewer?.repost ? (
+      {reason ? (
         <h1 className="font-bold flex">
           <Repeat2 className="mx-3" />
-          <h1>{post.viewer.repost.split("/")[2] + "がリポスト"}</h1>
+          <h1>{reason.by.displayName + "がリポスト"}</h1>
         </h1>
       ) : (
         ""

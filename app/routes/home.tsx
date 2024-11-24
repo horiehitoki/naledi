@@ -9,7 +9,7 @@ import { useToast } from "~/hooks/use-toast";
 import { SidebarProvider, SidebarTrigger } from "~/components/ui/sidebar";
 import { AppSidebar } from "~/components/ui/app-sidebar";
 import { Toaster } from "~/components/ui/toaster";
-import { PostDialog } from "~/components/timeline/post-dialog";
+import { PostDialog } from "~/components/timeline/postDialog";
 import Picker from "emoji-picker-react";
 import { useEmojiPicker } from "~/hooks/useEmojiPicker";
 import { ProfileView } from "~/generated/api/types/app/bsky/actor/defs";
@@ -19,13 +19,6 @@ import FooterMenu from "~/components/ui/footer";
 export const loader: LoaderFunction = async ({ request }) => {
   const agent: Agent | null = await getSessionAgent(request);
   if (agent == null) return redirect("/");
-
-  const reactions = await agent.com.atproto.repo.listRecords({
-    collection: "app.vercel.stellarbsky.reaction",
-    repo: agent.assertDid,
-  });
-
-  console.log(reactions.data.records);
 
   return null;
 };

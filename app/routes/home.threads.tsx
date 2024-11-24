@@ -7,7 +7,6 @@ import { PostView } from "~/generated/api/types/app/bsky/feed/defs";
 import { getSessionAgent } from "~/utils/auth/session";
 import { ReactionAgent } from "~/utils/reactions/reactionAgent";
 
-//TODO 投稿の取得処理をシンプルにする
 export const loader: LoaderFunction = async ({ request }) => {
   const agent = await getSessionAgent(request);
   if (!agent) return null;

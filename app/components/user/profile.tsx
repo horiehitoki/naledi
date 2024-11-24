@@ -10,26 +10,14 @@ import { LoadingSpinner } from "../ui/loading";
 import { Button } from "../ui/button";
 import { useOutletContext } from "@remix-run/react";
 import { ProfileView } from "~/generated/api/types/app/bsky/actor/defs";
-import { PostData, TimelineState } from "@types";
-
-interface HasMore {
-  follow: boolean;
-  follower: boolean;
-}
+import { PostData, UserData } from "@types";
+import { useTimeline } from "~/hooks/useTimeline";
+import { useFollow } from "~/hooks/useFollow";
+import { v4 as uuidv4 } from "uuid";
 
 interface ProfileHeaderProps {
   profile: ProfileView;
   avatarUrl: string;
-}
-
-interface ProfileTabsProps {
-  profile: ProfileView;
-  timeline: TimelineState;
-  timelineFetcher: (timeline: TimelineState) => void;
-  follow: ProfileView[];
-  follower: ProfileView[];
-  fetcher: (type: "follow" | "follower") => void;
-  hasMore: HasMore;
 }
 
 export function ProfileHeader({ profile, avatarUrl }: ProfileHeaderProps) {
@@ -138,14 +126,29 @@ export function ProfileHeader({ profile, avatarUrl }: ProfileHeaderProps) {
   );
 }
 
-export function ProfileTabs({
-  timeline,
-  timelineFetcher,
-  follow,
-  follower,
-  fetcher,
-  hasMore,
-}: ProfileTabsProps) {
+export function ProfileTabs({ data }: { data: UserData }) {
+  //タイムラインとフォロー欄の初期化
+  const { timeline, fetcher: timelineFetcher } = useTimeline([
+    {
+      id: uuidv4(),
+      type: "user",
+      did: data!.profile.did ?? null,
+      posts: [],
+      hasMore: true,
+    },
+  ]);
+
+  const {
+    follow,
+    follower,
+    fetcher: followFetcher,
+    hasMore,
+  } = useFollow({
+    did: data!.profile.did!,
+    initialFollow: data!.follow,
+    initialFollower: data!.follower,
+  });
+
   return (
     <Tabs defaultValue="posts">
       <div className="flex justify-center overflow-x-scroll">
@@ -183,14 +186,14 @@ export function ProfileTabs({
 
       <TabsContent value="posts" className="mt-6">
         <InfiniteScroll
-          dataLength={timeline.posts.length}
-          next={() => timelineFetcher(timeline)}
-          hasMore={timeline.hasMore}
+          dataLength={timeline[0].posts.length}
+          next={() => timelineFetcher(timeline[0])}
+          hasMore={timeline[0].hasMore}
           scrollableTarget="scrollableTarget"
           loader={<LoadingSpinner />}
         >
           <div className="space-y-4">
-            {timeline.posts.map((data: PostData) => {
+            {timeline[0].posts.map((data: PostData) => {
               return <Post key={data.post.post.cid} data={data} />;
             })}
           </div>
@@ -200,7 +203,7 @@ export function ProfileTabs({
       <TabsContent value="follow" className="mt-6">
         <InfiniteScroll
           dataLength={follow.length}
-          next={() => fetcher("follow")}
+          next={() => followFetcher("follow")}
           hasMore={hasMore.follow}
           scrollableTarget="scrollableTarget"
           loader={<LoadingSpinner />}
@@ -216,7 +219,7 @@ export function ProfileTabs({
       <TabsContent value="follower" className="mt-6">
         <InfiniteScroll
           dataLength={follower.length}
-          next={() => fetcher("follower")}
+          next={() => followFetcher("follower")}
           hasMore={hasMore.follower}
           scrollableTarget="scrollableTarget"
           loader={<LoadingSpinner />}

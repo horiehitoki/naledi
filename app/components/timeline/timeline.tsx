@@ -21,7 +21,7 @@ function SNSTimelineComponent({ type }: { type: "default" | "deck" }) {
     setSavedTimeline([{ id: uuidv4(), type: "home", did: "null" }]);
   }
 
-  //timelineのStateを生成
+  //localStorageからtimelineのStateを生成
   const { timeline, fetcher } = useTimeline(
     savedTimeline.map((prev: TimelineStorage) => {
       return { ...prev, posts: [], hasMore: true };
