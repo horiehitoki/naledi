@@ -4,18 +4,10 @@ import { FeedViewPost } from "~/generated/api/types/app/bsky/feed/defs";
 
 export type Session = { did: string };
 
-export type TimelineStorage = {
+export type TimelineOptions = {
   id: string;
   type: "home" | "user";
   did: string | null;
-};
-
-export type TimelineState = {
-  id: string;
-  type: "home" | "user";
-  did: string | null;
-  posts: PostData[];
-  hasMore: boolean;
 };
 
 export type DataWithCursor = {

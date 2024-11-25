@@ -8,12 +8,13 @@ import { UserCard } from "~/components/user/userCard";
 import { User, Users, UserCircle, Plus, Delete } from "lucide-react";
 import { LoadingSpinner } from "../ui/loading";
 import { Button } from "../ui/button";
-import { useOutletContext } from "@remix-run/react";
 import { ProfileView } from "~/generated/api/types/app/bsky/actor/defs";
 import { PostData, UserData } from "@types";
 import { useTimeline } from "~/hooks/useTimeline";
 import { useFollow } from "~/hooks/useFollow";
 import { v4 as uuidv4 } from "uuid";
+import { useRecoilValue } from "recoil";
+import { sessionState } from "~/state/session";
 
 interface ProfileHeaderProps {
   profile: ProfileView;
@@ -37,106 +38,107 @@ export function ProfileHeader({ profile, avatarUrl }: ProfileHeaderProps) {
     return res;
   }
 
-  const context = useOutletContext<{ profile: ProfileView }>();
+  const myProfile = useRecoilValue(sessionState);
 
-  return (
-    <Card>
-      <div>
-        {profile.banner! && (
-          <div className="h-48">
-            <img
-              src={profile.banner as string}
-              className="w-full object-cover h-48"
-              alt="banner"
-            />
-          </div>
-        )}
-        <Avatar className="w-24 h-24 border-4 border-white shadow-lg m-6">
-          <AvatarImage src={avatarUrl} />
-          <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-500 text-white text-xl">
-            {profile.displayName?.[0]?.toUpperCase() || "?"}
-          </AvatarFallback>
-        </Avatar>
-
-        {profile.did !== context.profile.did && (
-          <div>
-            {profile.viewer?.following ? (
-              <div className="flex justify-end mx-12">
-                <Button onClick={deleteFollow}>
-                  <Delete /> フォロー解除
-                </Button>
-              </div>
-            ) : (
-              <div className="flex justify-end mx-12">
-                <Button onClick={follow}>
-                  <Plus /> フォロー
-                </Button>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-
-      <CardContent className="space-y-4">
+  if (myProfile)
+    return (
+      <Card>
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">
-            {profile.displayName}
-          </h1>
+          {profile.banner! && (
+            <div className="h-48">
+              <img
+                src={profile.banner as string}
+                className="w-full object-cover h-48"
+                alt="banner"
+              />
+            </div>
+          )}
+          <Avatar className="w-24 h-24 border-4 border-white shadow-lg m-6">
+            <AvatarImage src={avatarUrl} />
+            <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-500 text-white text-xl">
+              {profile.displayName?.[0]?.toUpperCase() || "?"}
+            </AvatarFallback>
+          </Avatar>
 
-          <div className="items-center space-x-2 text-muted-foreground mt-1">
-            <span>@{profile.handle}</span>
-            <Badge variant="secondary" className="text-xs">
-              {profile.did}
-            </Badge>
-          </div>
+          {profile.did !== myProfile.did && (
+            <div>
+              {profile.viewer?.following ? (
+                <div className="flex justify-end mx-12">
+                  <Button onClick={deleteFollow}>
+                    <Delete /> フォロー解除
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex justify-end mx-12">
+                  <Button onClick={follow}>
+                    <Plus /> フォロー
+                  </Button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
-        {profile.description && (
-          <p className="text-sm text-muted-foreground whitespace-pre-wrap leading-relaxed">
-            {profile.description}
-          </p>
-        )}
+        <CardContent className="space-y-4">
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight">
+              {profile.displayName}
+            </h1>
 
-        <div className="flex space-x-6 pt-2">
-          <div className="flex items-center space-x-2">
-            <Users className="w-4 h-4 text-muted-foreground" />
-            <div>
-              <span className="font-semibold">
-                {profile.followsCount as string}
-              </span>
-              <span className="text-sm text-muted-foreground ml-1">
-                フォロー
-              </span>
+            <div className="items-center space-x-2 text-muted-foreground mt-1">
+              <span>@{profile.handle}</span>
+              <Badge variant="secondary" className="text-xs">
+                {profile.did}
+              </Badge>
             </div>
           </div>
-          <div className="flex items-center space-x-2">
-            <UserCircle className="w-4 h-4 text-muted-foreground" />
-            <div>
-              <span className="font-semibold">
-                {profile.followersCount as string}
-              </span>
-              <span className="text-sm text-muted-foreground ml-1">
-                フォロワー
-              </span>
+
+          {profile.description && (
+            <p className="text-sm text-muted-foreground whitespace-pre-wrap leading-relaxed">
+              {profile.description}
+            </p>
+          )}
+
+          <div className="flex space-x-6 pt-2">
+            <div className="flex items-center space-x-2">
+              <Users className="w-4 h-4 text-muted-foreground" />
+              <div>
+                <span className="font-semibold">
+                  {profile.followsCount as string}
+                </span>
+                <span className="text-sm text-muted-foreground ml-1">
+                  フォロー
+                </span>
+              </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <UserCircle className="w-4 h-4 text-muted-foreground" />
+              <div>
+                <span className="font-semibold">
+                  {profile.followersCount as string}
+                </span>
+                <span className="text-sm text-muted-foreground ml-1">
+                  フォロワー
+                </span>
+              </div>
             </div>
           </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
+        </CardContent>
+      </Card>
+    );
 }
 
 export function ProfileTabs({ data }: { data: UserData }) {
   //タイムラインとフォロー欄の初期化
-  const { timeline, fetcher: timelineFetcher } = useTimeline([
-    {
-      id: uuidv4(),
-      type: "user",
-      did: data!.profile.did ?? null,
-      posts: [],
-      hasMore: true,
-    },
-  ]);
+  const {
+    posts,
+    fetcher: timelineFetcher,
+    hasMore: timelineHasMore,
+  } = useTimeline({
+    id: uuidv4(),
+    type: "user",
+    did: data!.profile.did ?? null,
+  });
 
   const {
     follow,
@@ -186,14 +188,14 @@ export function ProfileTabs({ data }: { data: UserData }) {
 
       <TabsContent value="posts" className="mt-6">
         <InfiniteScroll
-          dataLength={timeline[0].posts.length}
-          next={() => timelineFetcher(timeline[0])}
-          hasMore={timeline[0].hasMore}
+          dataLength={posts.length}
+          next={() => timelineFetcher()}
+          hasMore={timelineHasMore}
           scrollableTarget="scrollableTarget"
           loader={<LoadingSpinner />}
         >
           <div className="space-y-4">
-            {timeline[0].posts.map((data: PostData) => {
+            {posts.map((data: PostData) => {
               return <Post key={data.post.post.cid} data={data} />;
             })}
           </div>

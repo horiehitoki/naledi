@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { useCursor } from "./useCusor";
+import { useState } from "react";
 import { DataWithCursor } from "@types";
 import { Like } from "~/generated/api/types/app/bsky/feed/getLikes";
 
@@ -10,17 +9,12 @@ interface UseLikesProps {
 
 export const useLikes = ({ uri, initialLikes }: UseLikesProps) => {
   const [likes, setLikes] = useState<Like[]>(initialLikes.likes);
-  const { createCursor, readCursor, updateCursor } = useCursor();
+  const [cursor, setCursor] = useState<string>(initialLikes.cursor!);
   const [hasMore, setHasMore] = useState(!!initialLikes.cursor);
 
-  useEffect(() => {
-    createCursor("likes", initialLikes.cursor!);
-  }, []);
-
   const fetcher = async () => {
-    const currentCursor = readCursor("likes")?.cursor;
-    if (!currentCursor) return;
-    const endpoint = `/api/likes?uri=${uri}&cursor=${currentCursor}`;
+    if (!cursor) return;
+    const endpoint = `/api/likes?uri=${uri}&cursor=${cursor}`;
 
     const res = await fetch(new URL(endpoint, window.origin));
 
@@ -29,7 +23,7 @@ export const useLikes = ({ uri, initialLikes }: UseLikesProps) => {
     if (json.data) {
       setLikes((prev) => [...prev, ...json.data]);
 
-      updateCursor("likes", json.cursor!);
+      setCursor(json.cursor!);
       setHasMore(!!json.cursor);
     } else {
       setHasMore(false);

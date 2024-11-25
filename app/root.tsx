@@ -23,6 +23,8 @@ import { themeSessionResolver } from "./sessions.server";
 import { getSessionAgent } from "./utils/auth/session";
 import { getUserProfile } from "./utils/user/getUserProfile";
 import { Agent } from "@atproto/api";
+import { RecoilRoot, useRecoilState } from "recoil";
+import { sessionState } from "~/state/session";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -45,15 +47,23 @@ export const loader: LoaderFunction = async ({ request }) => {
 export default function AppWithProviders() {
   const data = useLoaderData<typeof loader>();
   return (
-    <ThemeProvider specifiedTheme={data?.theme} themeAction="/action/set-theme">
-      <App />
-    </ThemeProvider>
+    <RecoilRoot>
+      <ThemeProvider
+        specifiedTheme={data?.theme}
+        themeAction="/action/set-theme"
+      >
+        <App />
+      </ThemeProvider>
+    </RecoilRoot>
   );
 }
 
 export function App() {
   const data = useLoaderData<typeof loader>();
   const [theme] = useTheme();
+
+  const [, setSession] = useRecoilState(sessionState);
+  setSession(data.profile);
 
   return (
     <html lang="jp" className={clsx(theme)}>
@@ -65,7 +75,7 @@ export function App() {
         {data && <PreventFlashOnWrongTheme ssrTheme={Boolean(data.theme)} />}
       </head>
       <body>
-        <Outlet context={data.profile} />
+        <Outlet />
         <ScrollRestoration />
         <Scripts />
       </body>

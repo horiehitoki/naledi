@@ -6,69 +6,48 @@ import {
   CardFooter,
   CardHeader,
 } from "~/components/ui/card";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Lightbox } from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import { Button } from "~/components/ui/button";
-import { Heart, MessageCircle, Repeat2, Smile } from "lucide-react";
+import { MessageCircle, Repeat2, Smile } from "lucide-react";
 import { useOutletContext } from "@remix-run/react";
 import { PostData, toggleEmojiPicker } from "@types";
-import { ProfileView } from "~/generated/api/types/app/bsky/actor/defs";
-import ReactionButtons from "../reaction/reactionButtons";
+import ReactionButtons from "../buttons/reactionButtons";
+import { RepostButton } from "../buttons/repostButton";
+import { LikeButton } from "../buttons/likeButton";
+import { useSetPost } from "~/state/post";
 
 export const Post = ({ data }: { data: PostData }) => {
   const { reaction } = data;
   const { post } = data.post;
   const { reason } = data.post;
 
-  async function like() {
-    const res = await fetch("/api/create/like/", {
-      method: "POST",
-      body: JSON.stringify({ uri: post.uri, cid: post.cid }),
+  const setState = useSetPost(post.cid);
+
+  useEffect(() => {
+    setState({
+      uri: post.uri,
+      cid: post.cid,
+      isReposted: post.viewer?.repost ? true : false,
+      isLiked: post.viewer?.like ? true : false,
+      repostCount: post.repostCount!,
+      likeCount: post.likeCount!,
+      reactions: reaction,
+      likeUri: post.viewer?.like ?? "",
+      repostUri: post.viewer?.repost ?? "",
     });
-
-    return res;
-  }
-
-  async function cancelLike() {
-    const res = await fetch("/api/delete/like/", {
-      method: "POST",
-      body: JSON.stringify({ likeUri: post.viewer!.like }),
-    });
-
-    return res;
-  }
-
-  async function repost() {
-    const res = await fetch("/api/create/repost/", {
-      method: "POST",
-      body: JSON.stringify({ uri: post.uri, cid: post.cid }),
-    });
-
-    return res;
-  }
-
-  async function cancelRepost() {
-    const res = await fetch("/api/delete/repost/", {
-      method: "POST",
-      body: JSON.stringify({ repostUri: post.viewer!.repost }),
-    });
-
-    return res;
-  }
+  }, [post, reaction, setState]);
 
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
-  const { toggleEmojiPicker, profile } = useOutletContext<{
-    toggleEmojiPicker: toggleEmojiPicker;
-    profile: ProfileView;
-  }>();
+  const toggleEmojiPicker = useOutletContext<toggleEmojiPicker>();
 
   //画像ビューワーのセットアップ
   const images = post.embed?.images as AppBskyEmbedImages.View | undefined;
 
-  //@ts-ignore
+  //@ts-expect-error todo
   const slides = images?.map((image) => ({
     src: image.fullsize,
     width: 1664,
@@ -76,7 +55,7 @@ export const Post = ({ data }: { data: PostData }) => {
   }));
 
   return (
-    <div className="md:max-w-2xl md:mx-auto">
+    <div className="md:max-w-2xl">
       {reason ? (
         <h1 className="font-bold flex">
           <Repeat2 className="mx-3" />
@@ -143,22 +122,7 @@ export const Post = ({ data }: { data: PostData }) => {
         <CardFooter className="flex flex-col pt-2 space-y-2">
           <div className="flex justify-between items-center">
             <div className="flex space-x-2">
-              {post.viewer?.repost ? (
-                <Button variant="ghost" size="sm" onClick={cancelRepost}>
-                  <Repeat2 className="w-4 h-4 mr-1 text-green-500" />
-                  <span className="text-xs">{post.repostCount}</span>
-                </Button>
-              ) : (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="hover:text-green-500 hover:bg-green-50"
-                  onClick={repost}
-                >
-                  <Repeat2 className="w-4 h-4 mr-1" />
-                  <span className="text-xs">{post.repostCount}</span>
-                </Button>
-              )}
+              <RepostButton post={post} />
 
               <a href={`/home/threads?uri=${post.uri}`}>
                 <Button
@@ -171,31 +135,12 @@ export const Post = ({ data }: { data: PostData }) => {
                 </Button>
               </a>
 
-              {post.viewer?.like ? (
-                <Button variant="ghost" size="sm" onClick={cancelLike}>
-                  <Heart className="w-4 h-4 mr-1 text-red-500 fill-red-500" />
-                  <span className="text-xs">{post.likeCount}</span>
-                </Button>
-              ) : (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="hover:text-red-500 hover:bg-red-50"
-                  onClick={like}
-                >
-                  <Heart className="w-4 h-4 mr-1" />
-                  <span className="text-xs">{post.likeCount}</span>
-                </Button>
-              )}
+              <LikeButton post={post} />
             </div>
           </div>
 
           <div className="flex flex-wrap items-center gap-4 mt-2">
-            <ReactionButtons
-              post={post}
-              reactions={reaction}
-              profile={profile}
-            />
+            <ReactionButtons post={post} />
 
             <button
               onClick={() =>

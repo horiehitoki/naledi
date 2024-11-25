@@ -10,5 +10,5 @@ export const action: ActionFunction = async ({ request }) => {
 
   const res = await agent.follow(body.did);
 
-  return json(res ? { ok: true } : { ok: false });
+  return json({ uri: res.uri });
 };

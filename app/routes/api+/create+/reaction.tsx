@@ -81,6 +81,6 @@ export const action: ActionFunction = async ({ request }) => {
       emoji: body.emoji,
     });
 
-    return json({ ok: true });
+    return json({ id: rkey });
   }
 };
