@@ -44,7 +44,7 @@ export default function Threads() {
         hasMore={hasMore}
         loader={<LoadingSpinner />}
         scrollableTarget="scrollableTarget"
-        className="pr-4"
+        className="pr-4 flex justify-center"
       >
         <div className="space-y-8 mx-auto">
           {likes.map((like: { actor: ProfileView }) => {

@@ -6,7 +6,7 @@ import { resolver } from "~/utils/resolver";
 import { getUserProfile } from "~/utils/user/getUserProfile";
 
 import { ProfileHeader, ProfileTabs } from "~/components/user/profile";
-import { UserData } from "@types";
+import { ReactionAgent } from "~/utils/reactions/reactionAgent";
 
 //ユーザーデータの取得
 export const loader: LoaderFunction = async ({ request }) => {
@@ -20,6 +20,24 @@ export const loader: LoaderFunction = async ({ request }) => {
   //ハンドルを解決
   const did = await resolver.resolvedHandleToDid(handle);
 
+  const reactionAgent = new ReactionAgent(agent);
+
+  //特定ユーザーの投稿を取得
+  const timeline = await agent.getAuthorFeed({
+    actor: did,
+    limit: 20,
+  });
+
+  //タイムラインからリアクション情報を取得
+  const data = await reactionAgent.getReactions({
+    posts: timeline.data.feed,
+  });
+
+  const feed = {
+    data,
+    cursor: timeline.data.cursor,
+  };
+
   const { profile, avatarUrl, follow, follower } = await getUserProfile(
     agent,
     did
@@ -30,11 +48,12 @@ export const loader: LoaderFunction = async ({ request }) => {
     avatarUrl,
     follow,
     follower,
+    feed,
   };
 };
 
 export default function ProfilePage() {
-  const data = useLoaderData<UserData>();
+  const data = useLoaderData<typeof loader>();
 
   if (!data) return null;
 
