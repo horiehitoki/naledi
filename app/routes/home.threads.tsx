@@ -39,7 +39,7 @@ export default function Threads() {
   const { originalPost, threads, data, uri } = useLoaderData<typeof loader>();
 
   return (
-    <div className="m-auto px-4 py-6 h-[100vh]">
+    <div className="m-auto px-4 py-6 h-[100vh] md:h-full">
       <Post data={originalPost} key={threads.post.cid} />
 
       <div className="rounded-lg p-4 my-6">
