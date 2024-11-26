@@ -11,10 +11,7 @@ const sessionStorage = createCookieSessionStorage({
     httpOnly: true,
     sameSite: "lax",
     secrets: ["s3cr3t"],
-    // Set domain and secure only if in production
-    ...(isProduction
-      ? { domain: "your-production-domain.com", secure: true }
-      : {}),
+    ...(isProduction ? { domain: "stellarbsky.vercel.app", secure: true } : {}),
   },
 });
 
