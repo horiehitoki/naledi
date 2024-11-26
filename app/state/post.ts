@@ -38,32 +38,36 @@ export const useLike = (postId: string) => {
   const setState = useSetPost(postId);
 
   async function like() {
-    const res = await fetch("/api/create/like/", {
-      method: "POST",
-      body: JSON.stringify({ uri: state.uri, cid: state.cid }),
-    });
-    const json = await res.json();
-    setState((prev) => ({
-      ...prev,
-      isLiked: true,
-      likeUri: json.uri,
-      likeCount: prev.likeCount + 1,
-    }));
-    return res;
+    if (!state.likeUri) {
+      const res = await fetch("/api/create/like/", {
+        method: "POST",
+        body: JSON.stringify({ uri: state.uri, cid: state.cid }),
+      });
+      const json = await res.json();
+      setState((prev) => ({
+        ...prev,
+        isLiked: true,
+        likeUri: json.uri,
+        likeCount: prev.likeCount + 1,
+      }));
+      return res;
+    }
   }
 
   async function cancelLike() {
-    const res = await fetch("/api/delete/like/", {
-      method: "POST",
-      body: JSON.stringify({ likeUri: state.likeUri }),
-    });
-    setState((prev) => ({
-      ...prev,
-      isLiked: false,
-      likeUri: "",
-      likeCount: prev.likeCount - 1,
-    }));
-    return res;
+    if (state.likeUri) {
+      const res = await fetch("/api/delete/like/", {
+        method: "POST",
+        body: JSON.stringify({ likeUri: state.likeUri }),
+      });
+      setState((prev) => ({
+        ...prev,
+        isLiked: false,
+        likeUri: "",
+        likeCount: prev.likeCount - 1,
+      }));
+      return res;
+    }
   }
 
   return { like, cancelLike };
@@ -74,32 +78,36 @@ export const useRepost = (postId: string) => {
   const setState = useSetPost(postId);
 
   async function repost() {
-    const res = await fetch("/api/create/repost/", {
-      method: "POST",
-      body: JSON.stringify({ uri: state.uri, cid: state.cid }),
-    });
-    const json = await res.json();
-    setState((prev) => ({
-      ...prev,
-      isReposted: true,
-      repostUri: json.uri,
-      repostCount: prev.repostCount + 1,
-    }));
-    return res;
+    if (!state.repostUri) {
+      const res = await fetch("/api/create/repost/", {
+        method: "POST",
+        body: JSON.stringify({ uri: state.uri, cid: state.cid }),
+      });
+      const json = await res.json();
+      setState((prev) => ({
+        ...prev,
+        isReposted: true,
+        repostUri: json.uri,
+        repostCount: prev.repostCount + 1,
+      }));
+      return res;
+    }
   }
 
   async function cancelRepost() {
-    const res = await fetch("/api/delete/repost/", {
-      method: "POST",
-      body: JSON.stringify({ repostUri: state.repostUri }),
-    });
-    setState((prev) => ({
-      ...prev,
-      isReposted: false,
-      repostUri: "",
-      repostCount: prev.repostCount - 1,
-    }));
-    return res;
+    if (state.repostUri) {
+      const res = await fetch("/api/delete/repost/", {
+        method: "POST",
+        body: JSON.stringify({ repostUri: state.repostUri }),
+      });
+      setState((prev) => ({
+        ...prev,
+        isReposted: false,
+        repostUri: "",
+        repostCount: prev.repostCount - 1,
+      }));
+      return res;
+    }
   }
 
   return { repost, cancelRepost };
@@ -115,6 +123,7 @@ export const useReactions = (postId: string) => {
   );
 
   const createReaction = async (emoji: string) => {
+    //自分のリアクションをクリア
     setState((prev) => ({
       ...prev,
       reactions: prev.reactions.filter(
@@ -140,27 +149,31 @@ export const useReactions = (postId: string) => {
         {
           reaction: {
             id: json.id,
+            uri: state.uri,
+            cid: state.cid,
             emoji,
             createdBy: profile!.did,
           },
-          author: profile,
-        } as ReactionData,
+          author: profile!,
+        },
       ],
     }));
   };
 
   const cancelReaction = async () => {
-    await fetch("/api/delete/reaction/", {
-      method: "POST",
-      body: JSON.stringify({ rkey: myReaction?.reaction.id }),
-    });
+    if (myReaction?.reaction.id) {
+      await fetch("/api/delete/reaction/", {
+        method: "POST",
+        body: JSON.stringify({ rkey: myReaction?.reaction.id }),
+      });
 
-    setState((prev) => ({
-      ...prev,
-      reactions: prev.reactions.filter(
-        (reaction) => reaction.reaction.id !== myReaction?.reaction.id
-      ),
-    }));
+      setState((prev) => ({
+        ...prev,
+        reactions: prev.reactions.filter(
+          (reaction) => reaction.reaction.id !== myReaction?.reaction.id
+        ),
+      }));
+    }
   };
 
   return { state, myReaction, createReaction, cancelReaction };

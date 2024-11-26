@@ -22,7 +22,7 @@ export const action: ActionFunction = async ({ request }) => {
 
   const reactionAgent = new ReactionAgent(agent);
 
-  //すでにリアクションを行っているかチェック
+  //その投稿にすでにリアクションを行っているかチェック
   const prevReaction = await prisma.reaction.findUnique({
     where: {
       uri_createdBy: {
@@ -56,8 +56,10 @@ export const action: ActionFunction = async ({ request }) => {
       emoji: body.emoji,
     });
 
-    return json({ ok: true });
+    return json({ id: prevReaction.id });
   } else {
+    //リアクションを行っていない場合
+
     //新規にレコードを作成
     const rkey = TID.nextStr();
 
