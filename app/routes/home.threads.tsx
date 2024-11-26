@@ -39,14 +39,14 @@ export default function Threads() {
   const { originalPost, threads, data, uri } = useLoaderData<typeof loader>();
 
   return (
-    <div className="m-auto px-4 py-6 h-[100vh] md:h-full">
+    <div>
       <Post data={originalPost} key={threads.post.cid} />
 
       <div className="rounded-lg p-4 my-6">
         <div className="flex justify-center space-x-8">
           <a href={`/home/likes?uri=${uri}`}>
             <div className="flex items-center space-x-2">
-              <Heart className="w-5 h-5 text-red-500" />
+              <Heart className="w-5 h-5" />
               <span className="font-medium">
                 {threads.post.likeCount.toLocaleString()}
               </span>
@@ -54,13 +54,13 @@ export default function Threads() {
           </a>
 
           <div className="flex items-center space-x-2">
-            <Repeat className="w-5 h-5 text-green-500" />
+            <Repeat className="w-5 h-5" />
             <span className="font-medium">
               {threads.post.repostCount.toLocaleString()}
             </span>
           </div>
           <div className="flex items-center space-x-2">
-            <MessageCircle className="w-5 h-5 text-blue-500" />
+            <MessageCircle className="w-5 h-5" />
             <span className="font-medium">
               {threads.post.replyCount.toLocaleString()}
             </span>

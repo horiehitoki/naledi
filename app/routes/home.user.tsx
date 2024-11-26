@@ -58,10 +58,7 @@ export default function ProfilePage() {
   if (!data) return null;
 
   return (
-    <div
-      className="overflow-y-auto m-auto md:w-3/4 h-[100vh]"
-      id="scrollableTarget"
-    >
+    <div className="overflow-y-auto h-[100vh]" id="scrollableTarget">
       <ProfileHeader profile={data.profile} avatarUrl={data.avatarUrl} />
 
       <hr className="h-px my-8 bg-black dark:bg-white border-0" />

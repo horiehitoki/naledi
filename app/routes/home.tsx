@@ -2,7 +2,6 @@ import { Agent } from "@atproto/api";
 import { ActionFunctionArgs, LoaderFunction } from "@remix-run/node";
 import { Outlet, redirect } from "@remix-run/react";
 import { getSessionAgent } from "~/utils/auth/session";
-import { SidebarProvider, SidebarTrigger } from "~/components/ui/sidebar";
 import { AppSidebar } from "~/components/ui/app-sidebar";
 import Picker from "emoji-picker-react";
 import { useEmojiPicker } from "~/hooks/useEmojiPicker";
@@ -54,7 +53,7 @@ export default function Homepage() {
 
   //レスポンシブ設定
   return (
-    <div>
+    <div className="w-full h-full">
       {isEmojiPickerOpen && (
         <div
           style={{
@@ -68,18 +67,18 @@ export default function Homepage() {
         </div>
       )}
 
-      <div className="md:block hidden">
-        <SidebarProvider>
+      <div className="md:flex md:m-auto md:w-1/3 md:space-x-4">
+        <div className="md:block hidden">
           <AppSidebar />
-          <SidebarTrigger />
+        </div>
 
+        <div className="md:hidden block">
+          <FooterMenu />
+        </div>
+
+        <div>
           <Outlet context={toggleEmojiPicker} />
-        </SidebarProvider>
-      </div>
-
-      <div className="md:hidden block">
-        <Outlet context={toggleEmojiPicker} />
-        <FooterMenu />
+        </div>
       </div>
     </div>
   );

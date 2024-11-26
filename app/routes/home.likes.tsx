@@ -29,10 +29,7 @@ export default function Threads() {
   });
 
   return (
-    <div
-      className="overflow-y-auto m-auto md:w-3/4 h-[100vh]"
-      id="scrollableTarget"
-    >
+    <div>
       <h1 className="text-center text-2xl font-bold my-12">
         いいねしたユーザー
       </h1>
@@ -42,8 +39,6 @@ export default function Threads() {
         next={() => fetcher()}
         hasMore={hasMore}
         loader={<div></div>}
-        scrollableTarget="scrollableTarget"
-        className="pr-4 flex justify-center"
       >
         <div className="space-y-8">
           {likes.map((like: { actor: ProfileView }) => {

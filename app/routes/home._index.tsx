@@ -27,9 +27,5 @@ export const loader: LoaderFunction = async ({
 export default function Timeline() {
   const data = useLoaderData<DataWithCursor>();
 
-  return (
-    <div className="w-screen h-screen">
-      <SNSTimeline initialData={data} />
-    </div>
-  );
+  return <SNSTimeline initialData={data} />;
 }

@@ -207,7 +207,6 @@ export function ProfileTabs({ data }: { data: any }) {
           hasMore={timelineHasMore}
           scrollableTarget="scrollableTarget"
           loader={<div></div>}
-          className="flex justify-center"
         >
           <div className="space-y-4">
             {posts.map((data: PostData) => {
@@ -224,7 +223,6 @@ export function ProfileTabs({ data }: { data: any }) {
           hasMore={hasMore.follow}
           scrollableTarget="scrollableTarget"
           loader={<div></div>}
-          className="flex justify-center"
         >
           <div className="space-y-4">
             {follow.map((profile) => (
@@ -241,7 +239,6 @@ export function ProfileTabs({ data }: { data: any }) {
           hasMore={hasMore.follower}
           scrollableTarget="scrollableTarget"
           loader={<div></div>}
-          className="flex justify-center"
         >
           <div className="space-y-4">
             {follower.map((profile) => (

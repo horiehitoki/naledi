@@ -22,6 +22,7 @@ export function PostDialog({ open, onOpenChange, onSubmit }: PostDialogProps) {
         <DialogHeader>
           <DialogTitle className="font-bold text-2xl">投稿する</DialogTitle>
         </DialogHeader>
+
         <Form method="post">
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">

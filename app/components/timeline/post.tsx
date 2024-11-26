@@ -55,7 +55,7 @@ export const Post = ({ data }: { data: PostData }) => {
   }));
 
   return (
-    <div className="md:max-w-2xl">
+    <div>
       {reason ? (
         <h1 className="font-bold flex">
           <Repeat2 className="mx-3" />
@@ -65,7 +65,7 @@ export const Post = ({ data }: { data: PostData }) => {
         ""
       )}
 
-      <Card ref={cardRef}>
+      <Card ref={cardRef} className="md:w-[40vh] w-screen">
         <CardHeader>
           <a
             href={`/home/user?handle=${post.author.handle}`}

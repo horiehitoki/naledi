@@ -19,20 +19,17 @@ export default function SNSTimeline({
   );
 
   return (
-    <div className="flex justify-center">
-      <InfiniteScroll
-        dataLength={posts.length}
-        next={() => fetcher()}
-        hasMore={hasMore}
-        loader={<div></div>}
-        height="100vh"
-      >
-        <div className="space-y-8">
-          {posts.map((data: PostData) => {
-            return <Post key={data.post.post.cid} data={data} />;
-          })}
-        </div>
-      </InfiniteScroll>
-    </div>
+    <InfiniteScroll
+      dataLength={posts.length}
+      next={() => fetcher()}
+      hasMore={hasMore}
+      loader={<div></div>}
+    >
+      <div className="space-y-8">
+        {posts.map((data: PostData) => {
+          return <Post key={data.post.post.cid} data={data} />;
+        })}
+      </div>
+    </InfiniteScroll>
   );
 }
