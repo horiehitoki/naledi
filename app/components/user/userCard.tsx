@@ -4,7 +4,7 @@ import { Card, CardHeader } from "../ui/card";
 
 export const UserCard = ({ data }: { data: ProfileView }) => {
   return (
-    <Card key={data.cid as string} className="w-[60vh]">
+    <Card key={data.cid as string} className="md:max-w-2xl w-screen">
       <CardHeader>
         <a href={`/home/user?handle=${data.handle}`}>
           <div className="flex items-center space-x-4">

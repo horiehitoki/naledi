@@ -19,7 +19,7 @@ export default function SNSTimeline({
   );
 
   return (
-    <div className="flex justify-center px-4 py-6">
+    <div className="flex justify-center">
       <InfiniteScroll
         dataLength={posts.length}
         next={() => fetcher()}

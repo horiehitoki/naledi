@@ -33,6 +33,78 @@ export const postState = atomFamily<
 export const usePost = (id: string) => useRecoilValue(postState(id));
 export const useSetPost = (id: string) => useSetRecoilState(postState(id));
 
+export const useLike = (postId: string) => {
+  const state = usePost(postId);
+  const setState = useSetPost(postId);
+
+  async function like() {
+    const res = await fetch("/api/create/like/", {
+      method: "POST",
+      body: JSON.stringify({ uri: state.uri, cid: state.cid }),
+    });
+    const json = await res.json();
+    setState((prev) => ({
+      ...prev,
+      isLiked: true,
+      likeUri: json.uri,
+      likeCount: prev.likeCount + 1,
+    }));
+    return res;
+  }
+
+  async function cancelLike() {
+    const res = await fetch("/api/delete/like/", {
+      method: "POST",
+      body: JSON.stringify({ likeUri: state.likeUri }),
+    });
+    setState((prev) => ({
+      ...prev,
+      isLiked: false,
+      likeUri: "",
+      likeCount: prev.likeCount - 1,
+    }));
+    return res;
+  }
+
+  return { like, cancelLike };
+};
+
+export const useRepost = (postId: string) => {
+  const state = usePost(postId);
+  const setState = useSetPost(postId);
+
+  async function repost() {
+    const res = await fetch("/api/create/repost/", {
+      method: "POST",
+      body: JSON.stringify({ uri: state.uri, cid: state.cid }),
+    });
+    const json = await res.json();
+    setState((prev) => ({
+      ...prev,
+      isReposted: true,
+      repostUri: json.uri,
+      repostCount: prev.repostCount + 1,
+    }));
+    return res;
+  }
+
+  async function cancelRepost() {
+    const res = await fetch("/api/delete/repost/", {
+      method: "POST",
+      body: JSON.stringify({ repostUri: state.repostUri }),
+    });
+    setState((prev) => ({
+      ...prev,
+      isReposted: false,
+      repostUri: "",
+      repostCount: prev.repostCount - 1,
+    }));
+    return res;
+  }
+
+  return { repost, cancelRepost };
+};
+
 export const useReactions = (postId: string) => {
   const state = usePost(postId);
   const setState = useSetPost(postId);

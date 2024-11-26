@@ -28,7 +28,7 @@ export default function Timeline() {
   const data = useLoaderData<DataWithCursor>();
 
   return (
-    <div className="w-full">
+    <div className="w-screen h-screen">
       <SNSTimeline initialData={data} />
     </div>
   );

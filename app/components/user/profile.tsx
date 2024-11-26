@@ -6,7 +6,6 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { Post } from "~/components/timeline/post";
 import { UserCard } from "~/components/user/userCard";
 import { User, Users, UserCircle, Plus, Delete } from "lucide-react";
-import { LoadingSpinner } from "../ui/loading";
 import { Button } from "../ui/button";
 import { ProfileView } from "~/generated/api/types/app/bsky/actor/defs";
 import { PostData } from "@types";
@@ -224,7 +223,7 @@ export function ProfileTabs({ data }: { data: any }) {
           next={() => followFetcher("follow")}
           hasMore={hasMore.follow}
           scrollableTarget="scrollableTarget"
-          loader={<LoadingSpinner />}
+          loader={<div></div>}
           className="flex justify-center"
         >
           <div className="space-y-4">
@@ -241,7 +240,7 @@ export function ProfileTabs({ data }: { data: any }) {
           next={() => followFetcher("follower")}
           hasMore={hasMore.follower}
           scrollableTarget="scrollableTarget"
-          loader={<LoadingSpinner />}
+          loader={<div></div>}
           className="flex justify-center"
         >
           <div className="space-y-4">

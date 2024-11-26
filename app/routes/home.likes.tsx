@@ -1,7 +1,6 @@
 import { LoaderFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { LoadingSpinner } from "~/components/ui/loading";
 import { UserCard } from "~/components/user/userCard";
 import { ProfileView } from "~/generated/api/types/app/bsky/actor/defs";
 import { useLikes } from "~/hooks/useLikes";
@@ -42,11 +41,11 @@ export default function Threads() {
         dataLength={likes.length}
         next={() => fetcher()}
         hasMore={hasMore}
-        loader={<LoadingSpinner />}
+        loader={<div></div>}
         scrollableTarget="scrollableTarget"
         className="pr-4 flex justify-center"
       >
-        <div className="space-y-8 mx-auto">
+        <div className="space-y-8">
           {likes.map((like: { actor: ProfileView }) => {
             return <UserCard data={like.actor} key={like.actor.did}></UserCard>;
           })}
