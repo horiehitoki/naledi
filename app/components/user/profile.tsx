@@ -205,7 +205,6 @@ export function ProfileTabs({ data }: { data: any }) {
           dataLength={posts.length}
           next={() => timelineFetcher()}
           hasMore={timelineHasMore}
-          scrollableTarget="scrollableTarget"
           loader={<div></div>}
         >
           <div className="space-y-4">
@@ -221,7 +220,6 @@ export function ProfileTabs({ data }: { data: any }) {
           dataLength={follow.length}
           next={() => followFetcher("follow")}
           hasMore={hasMore.follow}
-          scrollableTarget="scrollableTarget"
           loader={<div></div>}
         >
           <div className="space-y-4">
@@ -237,7 +235,6 @@ export function ProfileTabs({ data }: { data: any }) {
           dataLength={follower.length}
           next={() => followFetcher("follower")}
           hasMore={hasMore.follower}
-          scrollableTarget="scrollableTarget"
           loader={<div></div>}
         >
           <div className="space-y-4">
