@@ -1,3 +1,4 @@
+import { ThreadViewPost } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
 import { LoaderFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import Main from "~/components/layout/main";
@@ -22,11 +23,15 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export default function Threads() {
-  const { post } = useLoaderData<typeof loader>();
+  const { post, replies } = useLoaderData<typeof loader>();
 
   return (
     <Main>
       <Post post={post} reason={post.reason} />
+
+      {replies.map((post: ThreadViewPost) => {
+        return <Post post={post.post} reason={undefined} key={post.post.uri} />;
+      })}
     </Main>
   );
 }

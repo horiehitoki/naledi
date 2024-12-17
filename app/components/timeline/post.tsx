@@ -1,16 +1,24 @@
 import { AppBskyEmbedImages } from "@atproto/api";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
-import { Card, CardContent, CardHeader } from "~/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "~/components/ui/card";
 import { useEffect, useState } from "react";
 import { Lightbox } from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
-import { Repeat2 } from "lucide-react";
+import { MessageCircle, Repeat2 } from "lucide-react";
 import {
   PostView,
   ReasonPin,
   ReasonRepost,
 } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
 import { useSetPost } from "~/state/post";
+import { RepostButton } from "../buttons/repostButton";
+import { LikeButton } from "../buttons/likeButton";
+import { Button } from "../ui/button";
 
 export default function Post({
   post,
@@ -48,7 +56,7 @@ export default function Post({
   }));
 
   return (
-    <div className="max-w-96">
+    <div>
       {reason?.by ? (
         <h1 className="font-bold flex">
           <Repeat2 className="mx-3" />
@@ -124,6 +132,27 @@ export default function Post({
             </div>
           )}
         </CardContent>
+
+        <CardFooter className="flex flex-col pt-2 space-y-2">
+          <div className="flex justify-between items-center">
+            <div className="flex space-x-2">
+              <RepostButton post={post} />
+
+              <a href={`/post?uri=${post.uri}`}>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="hover:text-blue-500 hover:bg-blue-50"
+                >
+                  <MessageCircle className="w-4 h-4 mr-1" />
+                  <span className="text-xs">{post.replyCount}</span>
+                </Button>
+              </a>
+
+              <LikeButton post={post} />
+            </div>
+          </div>
+        </CardFooter>
       </Card>
     </div>
   );

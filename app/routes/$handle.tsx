@@ -23,10 +23,8 @@ export default function Threads() {
 
   return (
     <Main>
-      <div className="space-y-8">
-        <Profile profile={profile.data} />
-        <Timeline type="user" did={did} />
-      </div>
+      <Profile profile={profile.data} />
+      <Timeline type="user" did={did} />
     </Main>
   );
 }

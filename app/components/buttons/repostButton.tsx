@@ -1,9 +1,11 @@
 import { Button } from "~/components/ui/button";
 import { Repeat2 } from "lucide-react";
-import { usePost } from "~/state/post";
+import { usePost, useRepost } from "~/state/post";
+import { PostView } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
 
 export const RepostButton = ({ post }: { post: PostView }) => {
   const state = usePost(post.cid);
+  const { repost, cancelRepost } = useRepost(post.cid);
 
   return state.isReposted ? (
     <Button variant="ghost" size="sm" onClick={cancelRepost}>

@@ -14,7 +14,7 @@ export default function Timeline(options: options) {
       hasMore={hasNextPage}
       loader={<div></div>}
     >
-      <div className="space-y-8 w-full">
+      <div className="space-y-8">
         {posts.map((post: FeedViewPost) => {
           return (
             <Post post={post.post} reason={post.reason} key={post.post.cid} />
