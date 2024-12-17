@@ -1,111 +1,81 @@
 import {
-  isRouteErrorResponse,
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
   useLoaderData,
-  useRouteError,
 } from "@remix-run/react";
-import stylesheet from "~/tailwind.css?url";
-import fontstyle from "~/font.css?url";
-import { LinksFunction, LoaderFunction } from "@remix-run/node";
-import NotFound from "./components/ui/404";
-import ErrorPage from "./components/ui/errorPage";
-import clsx from "clsx";
-import {
-  PreventFlashOnWrongTheme,
-  ThemeProvider,
-  useTheme,
-} from "remix-themes";
-import { themeSessionResolver } from "./sessions.server";
-import { getSessionAgent } from "./utils/auth/session";
-import { getUserProfile } from "./utils/user/getUserProfile";
-import { Agent } from "@atproto/api";
-import { RecoilRoot, useRecoilState } from "recoil";
-import { sessionState } from "~/state/session";
+import type { LinksFunction, LoaderFunction } from "@remix-run/node";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import "./tailwind.css";
+import { RecoilRoot } from "recoil";
+import { getSessionAgent } from "./lib/auth/session";
+import { useSetProfile } from "./state/profile";
 
 export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: stylesheet },
-  { rel: "stylesheet", href: fontstyle },
+  { rel: "preconnect", href: "https://fonts.googleapis.com" },
+  {
+    rel: "preconnect",
+    href: "https://fonts.gstatic.com",
+    crossOrigin: "anonymous",
+  },
+  {
+    rel: "stylesheet",
+    href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
+  },
 ];
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const { getTheme } = await themeSessionResolver(request);
-  const agent: Agent | null = await getSessionAgent(request);
+  const agent = await getSessionAgent(request);
+  if (!agent) return null;
 
-  if (agent) {
-    const { profile } = await getUserProfile(agent, agent.assertDid);
+  const profile = await agent.getProfile({ actor: agent.assertDid });
 
-    return { theme: getTheme(), profile };
-  }
-  return { theme: getTheme() };
+  return { profile };
 };
 
-//テーマの設定
-export default function AppWithProviders() {
-  const data = useLoaderData<typeof loader>();
+const queryClient: QueryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
+
+export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <RecoilRoot>
-      <ThemeProvider
-        specifiedTheme={data?.theme}
-        themeAction="/action/set-theme"
-      >
-        <App />
-      </ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <html lang="jp" className="dark">
+          <head>
+            <meta charSet="utf-8" />
+            <meta
+              name="viewport"
+              content="width=device-width, initial-scale=1"
+            />
+            <Meta />
+            <Links />
+          </head>
+          <body>
+            {children}
+            <ScrollRestoration />
+            <Scripts />
+          </body>
+        </html>
+      </QueryClientProvider>
     </RecoilRoot>
   );
 }
 
-export function App() {
-  const data = useLoaderData<typeof loader>();
-  const [theme] = useTheme();
+export default function App() {
+  const { profile } = useLoaderData<typeof loader>();
 
-  const [, setSession] = useRecoilState(sessionState);
-  setSession(data.profile);
+  const setProfile = useSetProfile();
 
-  return (
-    <html lang="jp" className={clsx(theme)}>
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <Meta />
-        <Links />
-        {data && <PreventFlashOnWrongTheme ssrTheme={Boolean(data.theme)} />}
-      </head>
-      <body>
-        <Outlet />
-        <ScrollRestoration />
-        <Scripts />
-      </body>
-    </html>
-  );
-}
+  if (profile) {
+    setProfile(profile.data);
+  }
 
-export function ErrorBoundary() {
-  const error = useRouteError();
-  return (
-    <html lang="jp">
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <Meta />
-        <Links />
-      </head>
-      <body>
-        {isRouteErrorResponse(error) ? (
-          error.status === 404 ? (
-            <NotFound />
-          ) : (
-            <ErrorPage />
-          )
-        ) : (
-          <ErrorPage />
-        )}
-        <ScrollRestoration />
-        <Scripts />
-      </body>
-    </html>
-  );
+  return <Outlet />;
 }

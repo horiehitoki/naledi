@@ -1,26 +1,24 @@
 import { LoaderFunctionArgs, redirect } from "@remix-run/node";
-import { Session } from "@types";
-import { getIronSession } from "iron-session";
-import { client } from "~/utils/auth/client";
+import { createClient } from "~/lib/auth/client";
+import { commitSession, getSession } from "~/sessions";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const params = new URLSearchParams(url.search);
-  const response = new Response();
+  const client = await createClient();
 
   try {
-    const { session } = await client.callback(params);
-    const clientSession = await getIronSession<Session>(request, response, {
-      cookieName: "sid",
-      password: process.env.SESSION_SECRET!,
+    const { session: oauthSession } = await client.callback(params);
+    const session = await getSession(request.headers.get("Cookie"));
+
+    session.set("did", oauthSession.did);
+
+    return redirect("/", {
+      headers: { "Set-Cookie": await commitSession(session) },
     });
+  } catch (e) {
+    console.error(e);
 
-    clientSession.did = session.did;
-    await clientSession.save();
-
-    return redirect("/home", { headers: response.headers });
-  } catch (error) {
-    console.error("Error during session handling:", error);
-    return null;
+    return redirect("/login");
   }
 }

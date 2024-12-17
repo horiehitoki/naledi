@@ -1,7 +1,7 @@
 import { vitePlugin as remix } from "@remix-run/dev";
 import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
-import { flatRoutes } from "remix-flat-routes";
+
 declare module "@remix-run/node" {
   interface Future {
     v3_singleFetch: true;
@@ -9,9 +9,6 @@ declare module "@remix-run/node" {
 }
 
 export default defineConfig({
-  build: {
-    target: ["es2022", "edge89", "firefox89", "chrome89", "safari15"],
-  },
   server: {
     host: "127.0.0.1",
   },
@@ -24,8 +21,6 @@ export default defineConfig({
         v3_singleFetch: true,
         v3_lazyRouteDiscovery: true,
       },
-      ignoredRouteFiles: ["**/*"],
-      routes: async (defineRoutes) => flatRoutes("routes", defineRoutes),
     }),
     tsconfigPaths(),
   ],

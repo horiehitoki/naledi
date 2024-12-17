@@ -11,17 +11,12 @@ import { createReadableStreamFromReadable } from "@remix-run/node";
 import { RemixServer } from "@remix-run/react";
 import { isbot } from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
-import { createFirehose } from "~/utils/firehose";
-import { createIdResolver } from "~/utils/resolver";
+import { jetstream } from "./lib/jetstream/subscription";
+
+//jetstreamを開始
+jetstream.start();
 
 const ABORT_DELAY = 5_000;
-
-//firehoseをリッスン
-const resolver = createIdResolver();
-
-const firehose = createFirehose(resolver);
-
-firehose.start();
 
 export default function handleRequest(
   request: Request,

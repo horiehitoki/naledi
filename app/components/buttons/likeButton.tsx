@@ -1,11 +1,10 @@
 import { Button } from "~/components/ui/button";
 import { Heart } from "lucide-react";
-import { PostView } from "~/generated/api/types/app/bsky/feed/defs";
-import { useLike, usePost } from "~/state/post";
+import { usePost } from "~/state/post";
+import { PostView } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
 
 export const LikeButton = ({ post }: { post: PostView }) => {
   const state = usePost(post.cid);
-  const { like, cancelLike } = useLike(post.cid);
 
   return state.isLiked ? (
     <Button variant="ghost" size="sm" onClick={cancelLike}>
