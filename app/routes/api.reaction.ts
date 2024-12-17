@@ -6,6 +6,7 @@ import {
   isRecord,
   validateRecord,
 } from "~/generated/api/types/app/netlify/stellarbsky/reaction";
+import { prisma } from "~/lib/db/prisma";
 
 export const action: ActionFunction = async ({ request }) => {
   const agent: Agent | null = await getSessionAgent(request);
@@ -16,6 +17,27 @@ export const action: ActionFunction = async ({ request }) => {
       const body = await request.json();
 
       const rkey = TID.nextStr();
+
+      //楽観的更新
+      await prisma.reaction.upsert({
+        where: {
+          uri_authorDid: {
+            uri: body.subject.uri,
+            authorDid: agent.assertDid,
+          },
+        },
+        update: {
+          id: rkey,
+          emoji: body.emoji,
+        },
+        create: {
+          id: rkey,
+          uri: body.subject.uri,
+          cid: body.subject.cid,
+          emoji: body.emoji,
+          authorDid: agent.assertDid,
+        },
+      });
 
       const record = {
         subject: {
@@ -41,6 +63,13 @@ export const action: ActionFunction = async ({ request }) => {
 
     case "DELETE": {
       const body = await request.json();
+
+      //楽観的更新
+      await prisma.reaction.delete({
+        where: {
+          id: body.rkey,
+        },
+      });
 
       await agent.com.atproto.repo.deleteRecord({
         collection: "app.netlify.stellarbsky.reaction",

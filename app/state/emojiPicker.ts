@@ -48,6 +48,9 @@ export const useEmojiPicker = () => {
   };
 
   const handleEmojiClick = async (emoji: { shortcodes: string }) => {
+    // 絵文字ピッカーを閉じる
+    setIsOpen(false);
+
     await fetch("/api/reaction/", {
       method: "POST",
       body: JSON.stringify({
@@ -55,9 +58,6 @@ export const useEmojiPicker = () => {
         emoji: emoji.shortcodes,
       }),
     });
-
-    // 絵文字ピッカーを閉じる
-    setIsOpen(false);
   };
 
   return {
