@@ -6,16 +6,20 @@ import { schemas } from './lexicons'
 import { CID } from 'multiformats/cid'
 import * as AppNetlifyStellarbskyGetReaction from './types/app/netlify/stellarbsky/getReaction'
 import * as AppNetlifyStellarbskyReaction from './types/app/netlify/stellarbsky/reaction'
+import * as ComAtprotoRepoStrongRef from './types/com/atproto/repo/strongRef'
 
 export * as AppNetlifyStellarbskyGetReaction from './types/app/netlify/stellarbsky/getReaction'
 export * as AppNetlifyStellarbskyReaction from './types/app/netlify/stellarbsky/reaction'
+export * as ComAtprotoRepoStrongRef from './types/com/atproto/repo/strongRef'
 
 export class AtpBaseClient extends XrpcClient {
   app: AppNS
+  com: ComNS
 
   constructor(options: FetchHandler | FetchHandlerOptions) {
     super(options, schemas)
     this.app = new AppNS(this)
+    this.com = new ComNS(this)
   }
 
   /** @deprecated use `this` instead */
@@ -128,5 +132,33 @@ export class ReactionRecord {
       { collection: 'app.netlify.stellarbsky.reaction', ...params },
       { headers },
     )
+  }
+}
+
+export class ComNS {
+  _client: XrpcClient
+  atproto: ComAtprotoNS
+
+  constructor(client: XrpcClient) {
+    this._client = client
+    this.atproto = new ComAtprotoNS(client)
+  }
+}
+
+export class ComAtprotoNS {
+  _client: XrpcClient
+  repo: ComAtprotoRepoNS
+
+  constructor(client: XrpcClient) {
+    this._client = client
+    this.repo = new ComAtprotoRepoNS(client)
+  }
+}
+
+export class ComAtprotoRepoNS {
+  _client: XrpcClient
+
+  constructor(client: XrpcClient) {
+    this._client = client
   }
 }

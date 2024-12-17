@@ -57,17 +57,18 @@ export const useLike = (postId: string) => {
 
   async function cancelLike() {
     if (state.likeUri) {
-      const res = await fetch("/api/like/", {
-        method: "DELETE",
-        body: JSON.stringify({ likeUri: state.likeUri }),
-      });
-
       setState((prev) => ({
         ...prev,
         isLiked: false,
         likeUri: "",
         likeCount: prev.likeCount - 1,
       }));
+
+      const res = await fetch("/api/like/", {
+        method: "DELETE",
+        body: JSON.stringify({ likeUri: state.likeUri }),
+      });
+
       return res;
     }
   }
@@ -99,17 +100,18 @@ export const useRepost = (postId: string) => {
 
   async function cancelRepost() {
     if (state.repostUri) {
-      const res = await fetch("/api/repost/", {
-        method: "DELETE",
-        body: JSON.stringify({ repostUri: state.repostUri }),
-      });
-
       setState((prev) => ({
         ...prev,
         isReposted: false,
         repostUri: "",
         repostCount: prev.repostCount - 1,
       }));
+
+      const res = await fetch("/api/repost/", {
+        method: "DELETE",
+        body: JSON.stringify({ repostUri: state.repostUri }),
+      });
+
       return res;
     }
   }

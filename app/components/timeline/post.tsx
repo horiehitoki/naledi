@@ -6,10 +6,10 @@ import {
   CardFooter,
   CardHeader,
 } from "~/components/ui/card";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Lightbox } from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
-import { MessageCircle, Repeat2 } from "lucide-react";
+import { MessageCircle, Repeat2, Smile } from "lucide-react";
 import {
   PostView,
   ReasonPin,
@@ -19,6 +19,7 @@ import { useSetPost } from "~/state/post";
 import { RepostButton } from "../buttons/repostButton";
 import { LikeButton } from "../buttons/likeButton";
 import { Button } from "../ui/button";
+import { useEmojiPicker } from "~/state/emojiPicker";
 
 export default function Post({
   post,
@@ -32,6 +33,8 @@ export default function Post({
     | undefined;
 }) {
   const setState = useSetPost(post.cid);
+
+  const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setState({
@@ -55,6 +58,8 @@ export default function Post({
     height: 936,
   }));
 
+  const { toggleEmojiPicker } = useEmojiPicker();
+
   return (
     <div>
       {reason?.by ? (
@@ -66,7 +71,7 @@ export default function Post({
         ""
       )}
 
-      <Card>
+      <Card ref={cardRef}>
         <CardHeader>
           <a
             href={`/${post.author.handle}`}
@@ -151,6 +156,17 @@ export default function Post({
 
               <LikeButton post={post} />
             </div>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-4 mt-2">
+            <button
+              onClick={() =>
+                toggleEmojiPicker(post.uri, post.cid, cardRef.current!)
+              }
+              className="flex items-center space-x-1 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-2 py-1 rounded-full text-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+            >
+              <Smile className="w-4 h-4" />
+            </button>
           </div>
         </CardFooter>
       </Card>

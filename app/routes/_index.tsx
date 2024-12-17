@@ -12,7 +12,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 export default function Index() {
   return (
     <Main>
-      <Timeline type="home" did="null" />
+      <Timeline type="home" did={null} />
     </Main>
   );
 }

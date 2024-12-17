@@ -9,7 +9,7 @@ export const jetstream = new Jetstream({
 });
 
 jetstream.onCreate("app.netlify.stellarbsky.reaction", async (event) => {
-  console.log(`New post: ${event.commit.record}`);
+  console.log(`New Reaction: ${event.commit.record}`);
 
   const record = event.commit.record as unknown as Record;
 
@@ -36,7 +36,7 @@ jetstream.onCreate("app.netlify.stellarbsky.reaction", async (event) => {
 });
 
 jetstream.onUpdate("app.netlify.stellarbsky.reaction", async (event) => {
-  console.log(`Updated post: ${event.commit.record}`);
+  console.log(`Updated Reaction: ${event.commit.record}`);
 
   const record = event.commit.record as unknown as Record;
 
@@ -63,7 +63,7 @@ jetstream.onUpdate("app.netlify.stellarbsky.reaction", async (event) => {
 });
 
 jetstream.onDelete("app.netlify.stellarbsky.reaction", async (event) => {
-  console.log(`Deleted post: ${event.commit.rkey}`);
+  console.log(`Deleted Reaction: ${event.commit.rkey}`);
 
   await prisma.reaction.delete({
     where: { id: event.commit.rkey },

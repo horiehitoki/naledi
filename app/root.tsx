@@ -12,6 +12,7 @@ import "./tailwind.css";
 import { RecoilRoot } from "recoil";
 import { getSessionAgent } from "./lib/auth/session";
 import { useSetProfile } from "./state/profile";
+import { EmojiPicker } from "./components/timeline/emojiPicker";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -32,7 +33,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
   const profile = await agent.getProfile({ actor: agent.assertDid });
 
-  return { profile };
+  return { profile, agent };
 };
 
 const queryClient: QueryClient = new QueryClient({
@@ -58,6 +59,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <Links />
           </head>
           <body>
+            <EmojiPicker />
+
             {children}
             <ScrollRestoration />
             <Scripts />
@@ -69,12 +72,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  const { profile } = useLoaderData<typeof loader>();
+  const data = useLoaderData<typeof loader>();
 
   const setProfile = useSetProfile();
 
-  if (profile) {
-    setProfile(profile.data);
+  if (data?.profile) {
+    setProfile(data?.profile?.data);
   }
 
   return <Outlet />;
