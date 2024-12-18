@@ -7,7 +7,7 @@ import { getParams } from "~/utils/getParams";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const agent: Agent | null = await getSessionAgent(request);
-  if (agent == null) return new Response(null, { status: 401 });
+  if (agent == null) return new Response("Unauthorized", { status: 401 });
 
   const uri = getParams(request, "uri");
   const cid: string | null = getParams(request, "cid");

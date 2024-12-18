@@ -1,7 +1,22 @@
-import { FeedViewPost } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
+import {
+  PostView,
+  ReasonPin,
+  ReasonRepost,
+} from "@atproto/api/dist/client/types/app/bsky/feed/defs";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { options, useTimeline } from "~/hooks/useTimeline";
 import Post from "./post";
+import { Reaction } from "@prisma/client";
+
+type Post = {
+  post: PostView;
+  reason:
+    | ReasonRepost
+    | ReasonPin
+    | { [k: string]: unknown; $type: string }
+    | undefined;
+  reactions: Reaction[];
+};
 
 export default function Timeline(options: options) {
   const { data, fetchNextPage, hasNextPage } = useTimeline(options);
@@ -15,9 +30,14 @@ export default function Timeline(options: options) {
       loader={<div></div>}
     >
       <div className="space-y-8">
-        {posts.map((post: FeedViewPost) => {
+        {posts.map((post: Post) => {
           return (
-            <Post post={post.post} reason={post.reason} key={post.post.cid} />
+            <Post
+              post={post.post}
+              reason={post.reason}
+              reactions={post.reactions}
+              key={post.post.cid}
+            />
           );
         })}
       </div>

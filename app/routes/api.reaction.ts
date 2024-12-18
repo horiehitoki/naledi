@@ -19,18 +19,8 @@ export const action: ActionFunction = async ({ request }) => {
       const rkey = TID.nextStr();
 
       //楽観的更新
-      await prisma.reaction.upsert({
-        where: {
-          uri_authorDid: {
-            uri: body.subject.uri,
-            authorDid: agent.assertDid,
-          },
-        },
-        update: {
-          id: rkey,
-          emoji: body.emoji,
-        },
-        create: {
+      await prisma.reaction.create({
+        data: {
           id: rkey,
           uri: body.subject.uri,
           cid: body.subject.cid,
@@ -58,18 +48,11 @@ export const action: ActionFunction = async ({ request }) => {
         record: record,
       });
 
-      return { ok: true };
+      return { rkey };
     }
 
     case "DELETE": {
       const body = await request.json();
-
-      //楽観的更新
-      await prisma.reaction.delete({
-        where: {
-          id: body.rkey,
-        },
-      });
 
       await agent.com.atproto.repo.deleteRecord({
         collection: "app.netlify.stellarbsky.reaction",

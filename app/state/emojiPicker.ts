@@ -1,4 +1,6 @@
 import { atom, useRecoilValue, useSetRecoilState } from "recoil";
+import { usePost, useSetPost } from "./post";
+import { useProfile } from "./profile";
 
 export const isEmojiPickerOpenState = atom<boolean>({
   key: "isEmojiPickerOpen",
@@ -20,6 +22,11 @@ export const useSetIsEmojiPickerOpen = () =>
 
 export const useEmojiPicker = () => {
   const picker = usePickerState();
+
+  const post = usePost(picker.cid);
+  const setState = useSetPost(picker.cid);
+
+  const profile = useProfile();
 
   const setPicker = useSetPickerState();
   const setIsOpen = useSetIsEmojiPickerOpen();
@@ -51,13 +58,38 @@ export const useEmojiPicker = () => {
     // 絵文字ピッカーを閉じる
     setIsOpen(false);
 
-    await fetch("/api/reaction/", {
-      method: "POST",
-      body: JSON.stringify({
-        subject: { uri: picker.uri, cid: picker.cid },
-        emoji: emoji.shortcodes,
-      }),
-    });
+    const myReactions = post.reactions.filter(
+      (reaction) =>
+        reaction.authorDid === profile?.did &&
+        reaction.emoji === emoji.shortcodes
+    );
+
+    if (myReactions.length <= 0) {
+      const res = await fetch("/api/reaction/", {
+        method: "POST",
+        body: JSON.stringify({
+          subject: { uri: picker.uri, cid: picker.cid },
+          emoji: emoji.shortcodes,
+        }),
+      });
+
+      const json = await res.json();
+
+      //stateに絵文字を追加する
+      setState((prev) => ({
+        ...prev,
+        reactions: [
+          ...prev.reactions,
+          {
+            id: json.rkey,
+            uri: post.uri,
+            cid: post.cid,
+            emoji: emoji.shortcodes,
+            authorDid: profile!.did,
+          },
+        ],
+      }));
+    }
   };
 
   return {

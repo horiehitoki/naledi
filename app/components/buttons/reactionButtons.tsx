@@ -5,29 +5,107 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
-import Emoji from "@emoji-mart/react";
+import { usePost, useSetPost } from "~/state/post";
+import { useProfile } from "~/state/profile";
 
-export default function ReactionButtons({
-  reactions,
-}: {
-  reactions: Reaction[];
-}) {
+export default function ReactionButtons({ cid }: { cid: string }) {
+  const post = usePost(cid);
+  const profile = useProfile();
+
+  const setState = useSetPost(cid);
+
+  //リアクションをグループ化
+  const emojiSet = new Set();
+  const group: { [key: string]: number } = {};
+
+  post.reactions.forEach((reaction) => {
+    const name = reaction.emoji;
+
+    if (emojiSet.has(name)) {
+      group[name] += 1;
+    } else {
+      emojiSet.add(name);
+      group[name] = 1;
+    }
+  });
+
+  async function createReaction(emoji: string) {
+    const res = await fetch("/api/reaction/", {
+      method: "POST",
+      body: JSON.stringify({
+        subject: { uri: post.uri, cid: post.cid },
+        emoji: emoji,
+      }),
+    });
+
+    const json = await res.json();
+
+    setState((prev) => ({
+      ...prev,
+      reactions: [
+        ...prev.reactions,
+        {
+          id: json.rkey,
+          uri: post.uri,
+          cid: post.cid,
+          emoji: emoji,
+          authorDid: profile!.did,
+        },
+      ],
+    }));
+  }
+
+  async function cancelReaction(reactions: Reaction[]) {
+    reactions.map(async (r) => {
+      setState((prev) => ({
+        ...prev,
+        reactions: prev.reactions.filter((reaction) => reaction.id !== r.id),
+      }));
+
+      await fetch("/api/reaction/", {
+        method: "DELETE",
+        body: JSON.stringify({
+          rkey: r.id,
+        }),
+      });
+    });
+  }
+
   return (
-    <div className="flex flex-wrap gap-2">
-      {reactions.map((reaction) => (
-        <TooltipProvider key={reaction.id}>
-          <Tooltip>
-            <TooltipTrigger>
-              <button>
-                <Emoji emoji={reaction.emoji} />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <div className="text-center">{reaction.emoji}</div>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      ))}
-    </div>
+    <TooltipProvider>
+      <div className="flex flex-wrap gap-2">
+        {Object.keys(group).map((name) => {
+          const myReactions = post.reactions.filter(
+            (reaction) =>
+              reaction.authorDid === profile?.did && reaction.emoji === name
+          );
+
+          return (
+            <Tooltip key={name}>
+              <TooltipTrigger>
+                <button
+                  onClick={() =>
+                    myReactions.length > 0
+                      ? cancelReaction(myReactions)
+                      : createReaction(name)
+                  }
+                  className={`flex items-center space-x-1 px-2 py-1 rounded-full text-sm transition-colors ${
+                    myReactions.length > 0
+                      ? "bg-pink-400 hover:bg-gray-200"
+                      : "bg-gray-100 dark:bg-gray-700 hover:bg-gray-200"
+                  }`}
+                >
+                  <em-emoji shortcodes={name} size={22}></em-emoji>
+                  <p>{group[name]}</p>
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <div className="text-center">{name}</div>
+              </TooltipContent>
+            </Tooltip>
+          );
+        })}
+      </div>
+    </TooltipProvider>
   );
 }

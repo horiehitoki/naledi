@@ -38,6 +38,12 @@ export const useLike = (postId: string) => {
 
   async function like() {
     if (!state.likeUri) {
+      setState((prev) => ({
+        ...prev,
+        isLiked: true,
+        likeCount: prev.likeCount + 1,
+      }));
+
       const res = await fetch("/api/like/", {
         method: "POST",
         body: JSON.stringify({ uri: state.uri, cid: state.cid }),
@@ -47,9 +53,7 @@ export const useLike = (postId: string) => {
 
       setState((prev) => ({
         ...prev,
-        isLiked: true,
         likeUri: json.uri,
-        likeCount: prev.likeCount + 1,
       }));
       return res;
     }
@@ -82,6 +86,12 @@ export const useRepost = (postId: string) => {
 
   async function repost() {
     if (!state.repostUri) {
+      setState((prev) => ({
+        ...prev,
+        isReposted: true,
+        repostCount: prev.repostCount + 1,
+      }));
+
       const res = await fetch("/api/repost/", {
         method: "POST",
         body: JSON.stringify({ uri: state.uri, cid: state.cid }),
@@ -90,9 +100,7 @@ export const useRepost = (postId: string) => {
 
       setState((prev) => ({
         ...prev,
-        isReposted: true,
         repostUri: json.uri,
-        repostCount: prev.repostCount + 1,
       }));
       return res;
     }

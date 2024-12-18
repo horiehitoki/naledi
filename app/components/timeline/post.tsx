@@ -20,10 +20,13 @@ import { RepostButton } from "../buttons/repostButton";
 import { LikeButton } from "../buttons/likeButton";
 import { Button } from "../ui/button";
 import { useEmojiPicker } from "~/state/emojiPicker";
+import { Reaction } from "@prisma/client";
+import ReactionButtons from "../buttons/reactionButtons";
 
 export default function Post({
   post,
   reason,
+  reactions,
 }: {
   post: PostView;
   reason:
@@ -31,6 +34,7 @@ export default function Post({
     | ReasonPin
     | { [k: string]: unknown; $type: string }
     | undefined;
+  reactions: Reaction[];
 }) {
   const setState = useSetPost(post.cid);
 
@@ -44,11 +48,11 @@ export default function Post({
       isLiked: post.viewer?.like ? true : false,
       repostCount: post.repostCount ?? 0,
       likeCount: post.likeCount ?? 0,
-      reactions: [],
+      reactions: reactions,
       likeUri: post.viewer?.like ?? "",
       repostUri: post.viewer?.repost ?? "",
     });
-  }, [post, setState]);
+  }, [post, setState, reactions]);
 
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const images = (post.embed as AppBskyEmbedImages.View)?.images;
@@ -159,6 +163,8 @@ export default function Post({
           </div>
 
           <div className="flex flex-wrap items-center gap-4 mt-2">
+            <ReactionButtons cid={post.cid} />
+
             <button
               onClick={() =>
                 toggleEmojiPicker(post.uri, post.cid, cardRef.current!)

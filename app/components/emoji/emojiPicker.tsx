@@ -5,14 +5,22 @@ import {
   useIsEmojiPickerOpen,
   useSetIsEmojiPickerOpen,
 } from "~/state/emojiPicker";
+import data from "@emoji-mart/data";
+import { useEffect } from "react";
 
 export function EmojiPicker() {
   const { handleEmojiClick } = useEmojiPicker();
 
   const isOpen = useIsEmojiPickerOpen();
   const setIsOpen = useSetIsEmojiPickerOpen();
-
   const emojiPicker = usePickerState();
+
+  //dynamic import
+  useEffect(() => {
+    import("emoji-mart").then((emojiMart) => {
+      emojiMart.init({ data });
+    });
+  }, []);
 
   return (
     <div

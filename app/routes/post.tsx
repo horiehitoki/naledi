@@ -22,15 +22,23 @@ export const loader: LoaderFunction = async ({ request }) => {
   return { post, replies };
 };
 
+//TODO リアクション対応
 export default function Threads() {
   const { post, replies } = useLoaderData<typeof loader>();
 
   return (
     <Main>
-      <Post post={post} reason={post.reason} />
+      <Post post={post} reason={post.reason} reactions={[]} />
 
       {replies.map((post: ThreadViewPost) => {
-        return <Post post={post.post} reason={undefined} key={post.post.uri} />;
+        return (
+          <Post
+            post={post.post}
+            reason={undefined}
+            key={post.post.uri}
+            reactions={[]}
+          />
+        );
       })}
     </Main>
   );

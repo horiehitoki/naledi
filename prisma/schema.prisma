@@ -23,6 +23,4 @@ model Reaction {
   cid       String
   emoji     String
   authorDid String
-
-  @@unique([uri, authorDid])
 }

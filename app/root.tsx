@@ -12,7 +12,7 @@ import "./tailwind.css";
 import { RecoilRoot } from "recoil";
 import { getSessionAgent } from "./lib/auth/session";
 import { useSetProfile } from "./state/profile";
-import { EmojiPicker } from "./components/timeline/emojiPicker";
+import { EmojiPicker } from "./components/emoji/emojiPicker";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },

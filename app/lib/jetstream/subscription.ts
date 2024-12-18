@@ -16,13 +16,9 @@ jetstream.onCreate("app.netlify.stellarbsky.reaction", async (event) => {
   //DBの更新
   await prisma.reaction.upsert({
     where: {
-      uri_authorDid: {
-        uri: record.subject.uri,
-        authorDid: record.authorDid,
-      },
+      id: event.commit.rkey,
     },
     update: {
-      id: event.commit.rkey,
       emoji: record.emoji,
     },
     create: {
@@ -43,10 +39,7 @@ jetstream.onUpdate("app.netlify.stellarbsky.reaction", async (event) => {
   //DBの更新
   await prisma.reaction.upsert({
     where: {
-      uri_authorDid: {
-        uri: record.subject.uri,
-        authorDid: record.authorDid,
-      },
+      id: event.commit.rkey,
     },
     update: {
       id: event.commit.rkey,

@@ -6,6 +6,7 @@ import { getSessionAgent } from "~/lib/auth/session";
 export const loader: LoaderFunction = async ({ request }) => {
   const agent = await getSessionAgent(request);
   if (agent == null) return redirect("/login");
+
   return null;
 };
 
