@@ -9,19 +9,13 @@ export const jetstream = new Jetstream({
 });
 
 jetstream.onCreate("app.netlify.stellarbsky.reaction", async (event) => {
-  console.log(`New Reaction: ${event.commit.record}`);
+  console.log(`New Reaction: ${event.commit.rkey}`);
 
   const record = event.commit.record as unknown as Record;
 
   //DBの更新
-  await prisma.reaction.upsert({
-    where: {
-      id: event.commit.rkey,
-    },
-    update: {
-      emoji: record.emoji,
-    },
-    create: {
+  await prisma.reaction.create({
+    data: {
       id: event.commit.rkey,
       uri: record.subject.uri,
       cid: record.subject.cid,
@@ -32,7 +26,7 @@ jetstream.onCreate("app.netlify.stellarbsky.reaction", async (event) => {
 });
 
 jetstream.onUpdate("app.netlify.stellarbsky.reaction", async (event) => {
-  console.log(`Updated Reaction: ${event.commit.record}`);
+  console.log(`Updated Reaction: ${event.commit.rkey}`);
 
   const record = event.commit.record as unknown as Record;
 
@@ -42,7 +36,6 @@ jetstream.onUpdate("app.netlify.stellarbsky.reaction", async (event) => {
       id: event.commit.rkey,
     },
     update: {
-      id: event.commit.rkey,
       emoji: record.emoji,
     },
     create: {
