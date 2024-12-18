@@ -13,9 +13,14 @@ jetstream.onCreate("app.netlify.stellarbsky.reaction", async (event) => {
 
   const record = event.commit.record as unknown as Record;
 
-  //DBの更新
-  await prisma.reaction.create({
-    data: {
+  await prisma.reaction.upsert({
+    where: {
+      id: event.commit.rkey,
+    },
+    update: {
+      emoji: record.emoji,
+    },
+    create: {
       id: event.commit.rkey,
       uri: record.subject.uri,
       cid: record.subject.cid,
@@ -30,7 +35,6 @@ jetstream.onUpdate("app.netlify.stellarbsky.reaction", async (event) => {
 
   const record = event.commit.record as unknown as Record;
 
-  //DBの更新
   await prisma.reaction.upsert({
     where: {
       id: event.commit.rkey,
