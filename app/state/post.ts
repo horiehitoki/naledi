@@ -1,5 +1,6 @@
 import { Reaction } from "@prisma/client";
 import { atomFamily, useRecoilValue, useSetRecoilState } from "recoil";
+import { useProfile } from "./profile";
 
 export const postState = atomFamily<
   {
@@ -125,4 +126,65 @@ export const useRepost = (postId: string) => {
   }
 
   return { repost, cancelRepost };
+};
+
+export const useReaction = (postId: string) => {
+  const post = usePost(postId);
+  const setState = useSetPost(postId);
+  const profile = useProfile();
+
+  async function reaction(emoji: string) {
+    const tempId = `temp-${Date.now()}`;
+
+    //楽観的UI
+    setState((prev) => ({
+      ...prev,
+      reactions: [
+        ...prev.reactions,
+        {
+          id: tempId,
+          uri: post.uri,
+          cid: post.cid,
+          emoji,
+          authorDid: profile!.did,
+        },
+      ],
+    }));
+
+    const res = await fetch("/api/reaction/", {
+      method: "POST",
+      body: JSON.stringify({
+        subject: { uri: post.uri, cid: post.cid },
+        emoji: emoji,
+      }),
+    });
+
+    const json = await res.json();
+
+    //IDを更新
+    setState((prev) => ({
+      ...prev,
+      reactions: prev.reactions.map((r) =>
+        r.id === tempId ? { ...r, id: json.rkey } : r
+      ),
+    }));
+  }
+
+  async function cancelReaction(reactions: Reaction[]) {
+    reactions.map(async (r) => {
+      setState((prev) => ({
+        ...prev,
+        reactions: prev.reactions.filter((reaction) => reaction.id !== r.id),
+      }));
+
+      await fetch("/api/reaction/", {
+        method: "DELETE",
+        body: JSON.stringify({
+          rkey: r.id,
+        }),
+      });
+    });
+  }
+
+  return { reaction, cancelReaction };
 };

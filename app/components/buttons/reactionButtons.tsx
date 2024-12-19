@@ -1,20 +1,19 @@
-import { Reaction } from "@prisma/client";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
-import { usePost, useSetPost } from "~/state/post";
+import { usePost, useReaction } from "~/state/post";
 import { useProfile } from "~/state/profile";
 
 export default function ReactionButtons({ cid }: { cid: string }) {
   const post = usePost(cid);
   const profile = useProfile();
 
-  const setState = useSetPost(cid);
+  const { reaction, cancelReaction } = useReaction(cid);
 
-  //リアクションをグループ化
+  //リアクションをカウント
   const emojiSet = new Set();
   const group: { [key: string]: number } = {};
 
@@ -28,48 +27,6 @@ export default function ReactionButtons({ cid }: { cid: string }) {
       group[name] = 1;
     }
   });
-
-  async function createReaction(emoji: string) {
-    const res = await fetch("/api/reaction/", {
-      method: "POST",
-      body: JSON.stringify({
-        subject: { uri: post.uri, cid: post.cid },
-        emoji: emoji,
-      }),
-    });
-
-    const json = await res.json();
-
-    setState((prev) => ({
-      ...prev,
-      reactions: [
-        ...prev.reactions,
-        {
-          id: json.rkey,
-          uri: post.uri,
-          cid: post.cid,
-          emoji: emoji,
-          authorDid: profile!.did,
-        },
-      ],
-    }));
-  }
-
-  async function cancelReaction(reactions: Reaction[]) {
-    reactions.map(async (r) => {
-      setState((prev) => ({
-        ...prev,
-        reactions: prev.reactions.filter((reaction) => reaction.id !== r.id),
-      }));
-
-      await fetch("/api/reaction/", {
-        method: "DELETE",
-        body: JSON.stringify({
-          rkey: r.id,
-        }),
-      });
-    });
-  }
 
   return (
     <TooltipProvider>
@@ -87,7 +44,7 @@ export default function ReactionButtons({ cid }: { cid: string }) {
                   onClick={() =>
                     myReactions.length > 0
                       ? cancelReaction(myReactions)
-                      : createReaction(name)
+                      : reaction(name)
                   }
                   className={`flex items-center space-x-1 px-2 py-1 rounded-full text-sm transition-colors ${
                     myReactions.length > 0
