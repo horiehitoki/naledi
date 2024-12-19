@@ -6,32 +6,32 @@ export const custom = [
       {
         id: "igyo",
         name: "偉業",
-        skins: [{ src: "/public/emojis/general/igyo.png" }],
+        skins: [{ src: "/emojis/general/igyo.png" }],
       },
       {
         id: "kawaii",
         name: "かわいい",
-        skins: [{ src: "/public/emojis/general/kawaii.png" }],
+        skins: [{ src: "/emojis/general/kawaii.png" }],
       },
       {
         id: "grass",
         name: "草",
-        skins: [{ src: "/public/emojis/general/grass.png" }],
+        skins: [{ src: "/emojis/general/grass.png" }],
       },
       {
         id: "tiken",
         name: "知見",
-        skins: [{ src: "/public/emojis/general/tiken.png" }],
+        skins: [{ src: "/emojis/general/tiken.png" }],
       },
       {
         id: "ecchi",
         name: "えっち",
-        skins: [{ src: "/public/emojis/general/ecchi.png" }],
+        skins: [{ src: "/emojis/general/ecchi.png" }],
       },
       {
         id: "ohayou_karen",
         name: "おはようゴジャイマース",
-        skins: [{ src: "/public/emojis/general/ohayou_karen.png" }],
+        skins: [{ src: "/emojis/general/ohayou_karen.png" }],
       },
     ],
   },
@@ -42,12 +42,12 @@ export const custom = [
       {
         id: "github",
         name: "GitHub",
-        skins: [{ src: "/public/emojis/tech/github.png" }],
+        skins: [{ src: "/emojis/tech/github.png" }],
       },
       {
         id: "bluesky",
         name: "Bluesky",
-        skins: [{ src: "/public/emojis/tech/bluesky.png" }],
+        skins: [{ src: "/emojis/tech/bluesky.png" }],
       },
     ],
   },
@@ -58,7 +58,7 @@ export const custom = [
       {
         id: "fast_meow_party",
         name: "Meow Party",
-        skins: [{ src: "/public/emojis/gif/fast_meow_party.gif" }],
+        skins: [{ src: "/emojis/gif/fast_meow_party.gif" }],
       },
     ],
   },
