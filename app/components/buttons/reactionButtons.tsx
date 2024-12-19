@@ -46,14 +46,14 @@ export default function ReactionButtons({ cid }: { cid: string }) {
                       ? cancelReaction(myReactions)
                       : reaction(name)
                   }
-                  className={`flex items-center space-x-1 px-2 py-1 rounded-full text-sm transition-colors ${
+                  className={`relative flex items-center space-x-2 px-2 py-1 rounded-lg text-sm font-medium transition-all ${
                     myReactions.length > 0
-                      ? "bg-pink-300 hover:bg-gray-200"
-                      : "bg-gray-100 dark:bg-gray-700 hover:bg-gray-200"
+                      ? "bg-purple-900 text-white border-2 border-purple-400"
+                      : "bg-gray-800 text-gray-300 hover:bg-gray-700"
                   }`}
                 >
-                  <em-emoji shortcodes={name} size={22}></em-emoji>
-                  <p>{group[name]}</p>
+                  <em-emoji shortcodes={name} size={20}></em-emoji>
+                  <p className="text-lg font-semibold">{group[name]}</p>
                 </button>
               </TooltipTrigger>
               <TooltipContent>
