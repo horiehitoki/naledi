@@ -7,6 +7,7 @@ import {
 } from "~/state/emojiPicker";
 import data from "@emoji-mart/data";
 import { useEffect } from "react";
+import { custom } from "~/constants/emoji";
 
 export function EmojiPicker() {
   const { handleEmojiClick } = useEmojiPicker();
@@ -18,7 +19,7 @@ export function EmojiPicker() {
   //dynamic import
   useEffect(() => {
     import("emoji-mart").then((emojiMart) => {
-      emojiMart.init({ data });
+      emojiMart.init({ data, custom });
     });
   }, []);
 
@@ -35,6 +36,7 @@ export function EmojiPicker() {
         <Picker
           onClickOutside={() => setIsOpen(false)}
           onEmojiSelect={handleEmojiClick}
+          custom={custom}
         />
       ) : (
         ""

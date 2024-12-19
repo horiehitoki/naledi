@@ -1,5 +1,5 @@
 import { atom, useRecoilValue, useSetRecoilState } from "recoil";
-import { usePost, useReaction, useSetPost } from "./post";
+import { usePost, useReaction } from "./post";
 import { useProfile } from "./profile";
 
 export const isEmojiPickerOpenState = atom<boolean>({

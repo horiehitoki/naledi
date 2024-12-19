@@ -15,9 +15,6 @@ export const loader: LoaderFunction = async ({ request }) => {
   if (!uri) {
     return new Response("URI is required", { status: 400 });
   }
-  if (!cid) {
-    return new Response("CID is required", { status: 400 });
-  }
 
   const reactions: Reaction[] = await prisma.reaction.findMany({
     where: { uri: uri, cid: cid },

@@ -48,7 +48,7 @@ export default function ReactionButtons({ cid }: { cid: string }) {
                   }
                   className={`flex items-center space-x-1 px-2 py-1 rounded-full text-sm transition-colors ${
                     myReactions.length > 0
-                      ? "bg-pink-400 hover:bg-gray-200"
+                      ? "bg-pink-300 hover:bg-gray-200"
                       : "bg-gray-100 dark:bg-gray-700 hover:bg-gray-200"
                   }`}
                 >
