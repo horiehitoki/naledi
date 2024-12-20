@@ -60,7 +60,7 @@ export const useEmojiPicker = () => {
 
     const myReactions = post.reactions.filter(
       (reaction) =>
-        reaction.authorDid === profile?.did &&
+        reaction.actor.data.did === profile?.did &&
         reaction.emoji === emoji.shortcodes
     );
 

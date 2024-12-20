@@ -1,6 +1,6 @@
-import { Reaction } from "@prisma/client";
 import { atomFamily, useRecoilValue, useSetRecoilState } from "recoil";
 import { useProfile } from "./profile";
+import { Reaction } from "~/generated/api/types/app/netlify/stellarbsky/getReaction";
 
 export const postState = atomFamily<
   {
@@ -142,11 +142,11 @@ export const useReaction = (postId: string) => {
       reactions: [
         ...prev.reactions,
         {
-          id: tempId,
-          uri: post.uri,
-          cid: post.cid,
+          rkey: tempId,
+          subject: { uri: post.uri, cid: post.cid },
           emoji,
-          authorDid: profile!.did,
+          actor: { data: { did: profile!.did } },
+          createdAt: Date.now().toString(),
         },
       ],
     }));
@@ -165,7 +165,7 @@ export const useReaction = (postId: string) => {
     setState((prev) => ({
       ...prev,
       reactions: prev.reactions.map((r) =>
-        r.id === tempId ? { ...r, id: json.rkey } : r
+        r.id === tempId ? { ...r, rkey: json.rkey } : r
       ),
     }));
   }
@@ -174,13 +174,15 @@ export const useReaction = (postId: string) => {
     reactions.map(async (r) => {
       setState((prev) => ({
         ...prev,
-        reactions: prev.reactions.filter((reaction) => reaction.id !== r.id),
+        reactions: prev.reactions.filter(
+          (reaction) => reaction.rkey !== r.rkey
+        ),
       }));
 
       await fetch("/api/reaction/", {
         method: "DELETE",
         body: JSON.stringify({
-          rkey: r.id,
+          rkey: r.rkey,
         }),
       });
     });

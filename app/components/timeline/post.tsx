@@ -20,8 +20,8 @@ import { RepostButton } from "../buttons/repostButton";
 import { LikeButton } from "../buttons/likeButton";
 import { Button } from "../ui/button";
 import { useEmojiPicker } from "~/state/emojiPicker";
-import { Reaction } from "@prisma/client";
 import ReactionButtons from "../buttons/reactionButtons";
+import { Reaction } from "~/generated/api/types/app/netlify/stellarbsky/getReaction";
 
 export default function Post({
   post,

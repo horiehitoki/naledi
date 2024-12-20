@@ -7,6 +7,7 @@ import { isObj, hasProp } from '../../../../util'
 import { lexicons } from '../../../../lexicons'
 import { CID } from 'multiformats/cid'
 import * as ComAtprotoRepoStrongRef from '../../../com/atproto/repo/strongRef'
+import * as AppBskyActorDefs from '../../bsky/actor/defs'
 
 export interface QueryParams {
   /** AT-URI of the subject (eg, a post record). */
@@ -43,10 +44,11 @@ export function toKnownErr(e: any) {
 }
 
 export interface Reaction {
+  rkey: string
   subject: ComAtprotoRepoStrongRef.Main
   createdAt: string
   emoji: string
-  authorDid: string
+  actor: AppBskyActorDefs.ProfileView
   [k: string]: unknown
 }
 

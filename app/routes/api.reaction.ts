@@ -6,7 +6,6 @@ import {
   isRecord,
   validateRecord,
 } from "~/generated/api/types/app/netlify/stellarbsky/reaction";
-import { prisma } from "~/lib/db/prisma";
 
 export const action: ActionFunction = async ({ request }) => {
   const agent: Agent | null = await getSessionAgent(request);
@@ -17,17 +16,6 @@ export const action: ActionFunction = async ({ request }) => {
       const body = await request.json();
 
       const rkey = TID.nextStr();
-
-      //楽観的更新
-      await prisma.reaction.create({
-        data: {
-          id: rkey,
-          uri: body.subject.uri,
-          cid: body.subject.cid,
-          emoji: body.emoji,
-          authorDid: agent.assertDid,
-        },
-      });
 
       const record = {
         subject: {
@@ -59,7 +47,6 @@ export const action: ActionFunction = async ({ request }) => {
         repo: agent.assertDid,
         rkey: body.rkey,
       });
-
       return { ok: true };
     }
   }

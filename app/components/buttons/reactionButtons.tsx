@@ -34,7 +34,8 @@ export default function ReactionButtons({ cid }: { cid: string }) {
         {Object.keys(group).map((name) => {
           const myReactions = post.reactions.filter(
             (reaction) =>
-              reaction.authorDid === profile?.did && reaction.emoji === name
+              reaction.actor.data.did === profile?.did &&
+              reaction.emoji === name
           );
 
           return (

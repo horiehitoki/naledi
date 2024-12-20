@@ -1,9 +1,8 @@
 import { Agent } from "@atproto/api";
 import { FeedViewPost } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
-import { Reaction } from "@prisma/client";
 import { LoaderFunction } from "@remix-run/node";
+import { Reaction } from "~/generated/api/types/app/netlify/stellarbsky/getReaction";
 import { getSessionAgent } from "~/lib/auth/session";
-import { prisma } from "~/lib/db/prisma";
 import { getParams } from "~/utils/getParams";
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -21,15 +20,18 @@ export const loader: LoaderFunction = async ({ request }) => {
       limit: 20,
     });
 
+    //リアクションデータを取得
     const feedWithReactions = await Promise.all(
       timeline.data.feed.map(async (post: FeedViewPost) => {
-        const reactions: Reaction[] = await prisma.reaction.findMany({
-          where: { uri: post.post.uri, cid: post.post.cid },
-        });
+        const res = await fetch(
+          `http://localhost:3000/xrpc/app.netlify.stellarbsky.getReaction?uri=${post.post.uri}&cid=${post.post.cid}&limit=50`
+        );
+
+        const json: { reactions: Reaction[] } = await res.json();
 
         return {
           ...post,
-          reactions: reactions,
+          reactions: json.reactions,
         };
       })
     );
@@ -45,15 +47,18 @@ export const loader: LoaderFunction = async ({ request }) => {
       limit: 20,
     });
 
+    //リアクションデータを取得
     const feedWithReactions = await Promise.all(
       timeline.data.feed.map(async (post: FeedViewPost) => {
-        const reactions: Reaction[] = await prisma.reaction.findMany({
-          where: { uri: post.post.uri, cid: post.post.cid },
-        });
+        const res = await fetch(
+          `http://localhost:3000/xrpc/app.netlify.stellarbsky.getReaction?uri=${post.post.uri}&cid=${post.post.cid}&limit=50`
+        );
+
+        const json: { reactions: Reaction[] } = await res.json();
 
         return {
           ...post,
-          reactions: reactions,
+          reactions: json.reactions,
         };
       })
     );
