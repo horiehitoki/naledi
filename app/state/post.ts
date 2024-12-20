@@ -165,7 +165,7 @@ export const useReaction = (postId: string) => {
     setState((prev) => ({
       ...prev,
       reactions: prev.reactions.map((r) =>
-        r.id === tempId ? { ...r, rkey: json.rkey } : r
+        r.id === tempId ? { ...r, rkey: json.rkey, actor: json.actor } : r
       ),
     }));
   }
