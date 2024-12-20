@@ -1,3 +1,4 @@
+import { ProfileView } from "@atproto/api/dist/client/types/app/bsky/actor/defs";
 import {
   Tooltip,
   TooltipContent,
@@ -38,6 +39,10 @@ export default function ReactionButtons({ cid }: { cid: string }) {
               reaction.emoji === name
           );
 
+          const users = post.reactions
+            .filter((reaction) => reaction.emoji === name)
+            .map((reaction) => reaction.actor.data);
+
           return (
             <Tooltip key={name}>
               <TooltipTrigger>
@@ -58,7 +63,20 @@ export default function ReactionButtons({ cid }: { cid: string }) {
                 </button>
               </TooltipTrigger>
               <TooltipContent>
-                <div className="text-center">{name}</div>
+                <div className="text-center">
+                  {name}
+                  {users.map((actor: ProfileView) => (
+                    <div key={actor.did} className="flex space-x-1 space-y-2">
+                      <img
+                        src={actor.avatar}
+                        alt="avatar"
+                        className="w-8 h-8 rounded-full"
+                      ></img>
+
+                      <p>{actor.displayName}がリアクション</p>
+                    </div>
+                  ))}
+                </div>
               </TooltipContent>
             </Tooltip>
           );

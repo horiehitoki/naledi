@@ -27,7 +27,7 @@ export default function Timeline(options: options) {
       dataLength={posts.length}
       next={() => fetchNextPage()}
       hasMore={hasNextPage}
-      loader={<div></div>}
+      loader={<div>loading...</div>}
     >
       <div className="space-y-8">
         {posts.map((post: Post) => {
