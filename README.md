@@ -15,6 +15,8 @@ PRIVATE_KEY_ES256_B64=
 Run the app.
 
 ```
+bunx prisma db push
+
 bun install
 
 bun run dev
