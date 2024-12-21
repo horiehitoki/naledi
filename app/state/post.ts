@@ -145,7 +145,7 @@ export const useReaction = (postId: string) => {
           rkey: tempId,
           subject: { uri: post.uri, cid: post.cid },
           emoji,
-          actor: { data: { did: profile!.did } },
+          actor: { data: { did: profile!.did, avatar: profile?.avatar } },
           createdAt: Date.now().toString(),
         },
       ],
