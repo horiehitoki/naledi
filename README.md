@@ -1,40 +1,23 @@
-# Welcome to Remix!
+# Stellar
 
-- 📖 [Remix docs](https://remix.run/docs)
+Stellar is an AT Protocol web client with emoji reactions.
 
-## Development
+# Develop
 
-Run the dev server:
+Write the required environment variables.
 
-```shellscript
-npm run dev
+```
+DATABASE_URL=
+SESSION_SECRET=
+PRIVATE_KEY_ES256_B64=
 ```
 
-## Deployment
+Run the app.
 
-First, build your app for production:
+```
+bun install
 
-```sh
-npm run build
+bun run dev
 ```
 
-Then run the app in production mode:
-
-```sh
-npm start
-```
-
-Now you'll need to pick a host to deploy it to.
-
-### DIY
-
-If you're familiar with deploying Node applications, the built-in Remix app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-- `build/server`
-- `build/client`
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever css framework you prefer. See the [Vite docs on css](https://vitejs.dev/guide/features.html#css) for more information.
+After that, open http://localhost:5173 in your browser.
