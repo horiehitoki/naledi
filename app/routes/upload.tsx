@@ -1,12 +1,12 @@
 import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node";
 import { Form } from "@remix-run/react";
 import { Upload } from "lucide-react";
-import { uploadBluemoji } from "packages/bluemoji/api/src/util/uploadBluemoji";
 import Main from "~/components/layout/main";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { getSessionAgent } from "~/lib/auth/session";
+import { uploadBluemoji } from "~/lib/bluemoji/upload";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const agent = await getSessionAgent(request);
@@ -40,7 +40,12 @@ export const action: ActionFunction = async ({ request }) => {
 
     const arrayBuffer = await file.arrayBuffer();
 
-    await uploadBluemoji({ agent, arrayBuffer, alt, name });
+    await uploadBluemoji({
+      agent,
+      emoji: arrayBuffer,
+      alttext: alt,
+      emojiName: name,
+    });
 
     return { success: true };
   } catch (error) {
