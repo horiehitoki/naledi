@@ -10,7 +10,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   if (!agent) return new Response(null, { status: 400 });
 
   const { handle } = params;
-  if (!handle) return null;
+  if (!handle) return new Response(null, { status: 404 });
 
   const did = await agent.com.atproto.identity.resolveHandle({ handle });
   const profile = await agent.getProfile({ actor: did.data.did });

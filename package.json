@@ -26,6 +26,7 @@
     "@remix-run/node": "^2.15.1",
     "@remix-run/react": "^2.15.1",
     "@remix-run/serve": "^2.15.1",
+    "@skyware/jetstream": "^0.2.1",
     "@tanstack/react-query": "^5.62.7",
     "@types/ws": "^8.5.13",
     "class-variance-authority": "^0.7.1",

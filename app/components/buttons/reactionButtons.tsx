@@ -1,3 +1,4 @@
+/*
 import { ProfileView } from "@atproto/api/dist/client/types/app/bsky/actor/defs";
 import {
   Tooltip,
@@ -85,3 +86,4 @@ export default function ReactionButtons({ cid }: { cid: string }) {
     </TooltipProvider>
   );
 }
+*/

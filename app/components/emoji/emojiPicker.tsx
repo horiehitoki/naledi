@@ -6,22 +6,16 @@ import {
   useSetIsEmojiPickerOpen,
 } from "~/state/emojiPicker";
 import data from "@emoji-mart/data";
-import { useEffect } from "react";
-import { custom } from "~/constants/emoji";
 
 export function EmojiPicker() {
   const { handleEmojiClick } = useEmojiPicker();
 
   const isOpen = useIsEmojiPickerOpen();
   const setIsOpen = useSetIsEmojiPickerOpen();
+
   const emojiPicker = usePickerState();
 
-  //dynamic import
-  useEffect(() => {
-    import("emoji-mart").then((emojiMart) => {
-      emojiMart.init({ data, custom });
-    });
-  }, []);
+  if (!isOpen) return null;
 
   return (
     <div
@@ -32,15 +26,11 @@ export function EmojiPicker() {
         zIndex: 50,
       }}
     >
-      {isOpen ? (
-        <Picker
-          onClickOutside={() => setIsOpen(false)}
-          onEmojiSelect={handleEmojiClick}
-          custom={custom}
-        />
-      ) : (
-        ""
-      )}
+      <Picker
+        data={data}
+        onClickOutside={() => setIsOpen(false)}
+        onEmojiSelect={handleEmojiClick}
+      />
     </div>
   );
 }

@@ -20,7 +20,6 @@ import { RepostButton } from "../buttons/repostButton";
 import { LikeButton } from "../buttons/likeButton";
 import { Button } from "../ui/button";
 import { useEmojiPicker } from "~/state/emojiPicker";
-import ReactionButtons from "../buttons/reactionButtons";
 import { Reaction } from "~/generated/api/types/app/netlify/stellarbsky/getReaction";
 
 export default function Post({
@@ -163,8 +162,6 @@ export default function Post({
           </div>
 
           <div className="flex flex-wrap items-center gap-4 mt-2">
-            <ReactionButtons cid={post.cid} />
-
             <button
               onClick={() =>
                 toggleEmojiPicker(post.uri, post.cid, cardRef.current!)

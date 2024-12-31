@@ -24,7 +24,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     const feedWithReactions = await Promise.all(
       timeline.data.feed.map(async (post: FeedViewPost) => {
         const res = await fetch(
-          `http://localhost:3000/xrpc/app.netlify.stellarbsky.getReaction?uri=${post.post.uri}&cid=${post.post.cid}&limit=50`
+          `http://localhost:5173/xrpc/app.netlify.stellarbsky.getReaction?uri=${post.post.uri}&cid=${post.post.cid}&limit=50`
         );
 
         const json: { reactions: Reaction[] } = await res.json();
@@ -51,7 +51,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     const feedWithReactions = await Promise.all(
       timeline.data.feed.map(async (post: FeedViewPost) => {
         const res = await fetch(
-          `http://localhost:3000/xrpc/app.netlify.stellarbsky.getReaction?uri=${post.post.uri}&cid=${post.post.cid}&limit=50`
+          `http://localhost:5173/xrpc/app.netlify.stellarbsky.getReaction?uri=${post.post.uri}&cid=${post.post.cid}&limit=50`
         );
 
         const json: { reactions: Reaction[] } = await res.json();
