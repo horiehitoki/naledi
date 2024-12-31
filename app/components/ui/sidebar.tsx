@@ -1,5 +1,6 @@
 import { Home, Bell, User } from "lucide-react";
 import { useProfile } from "~/state/profile";
+import PostButton from "../buttons/postButton";
 
 export default function SideBar() {
   const profile = useProfile();
@@ -26,6 +27,9 @@ export default function SideBar() {
             <User size={24} />
             <span className="text-lg font-medium">Profile</span>
           </a>
+          <div className="flex items-center space-x-4 hover:bg-gray-800 p-2 rounded-lg cursor-pointer">
+            <PostButton />
+          </div>
         </div>
       ) : (
         ""

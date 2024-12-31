@@ -23,7 +23,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const replies = threads.data.thread.replies as ThreadViewPost[];
 
   const res = await fetch(
-    `http://localhost:5173/xrpc/app.netlify.stellarbsky.getReaction?uri=${post.uri}&cid=${post.cid}&limit=50`
+    `${process.env.APPVIEW_URL}/xrpc/app.netlify.stellarbsky.getReaction?uri=${post.uri}&cid=${post.cid}&limit=50`
   );
   const json: { reactions: Reaction[] } = await res.json();
   const postWithReactions = {
@@ -34,7 +34,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const repliesWithReactions = await Promise.all(
     replies.map(async (reply) => {
       const res = await fetch(
-        `http://localhost:5173/xrpc/app.netlify.stellarbsky.getReaction?uri=${reply.post.uri}&cid=${reply.post.cid}&limit=50`
+        `${process.env.APPVIEW_URL}/xrpc/app.netlify.stellarbsky.getReaction?uri=${reply.post.uri}&cid=${reply.post.cid}&limit=50`
       );
       const json: { reactions: Reaction[] } = await res.json();
       return {
