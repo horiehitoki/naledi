@@ -82,7 +82,8 @@ export const schemaDict = {
             format: 'datetime',
           },
           emoji: {
-            type: 'string',
+            type: 'ref',
+            ref: 'lex:blue.moji.collection.item#itemView',
           },
           actor: {
             type: 'ref',

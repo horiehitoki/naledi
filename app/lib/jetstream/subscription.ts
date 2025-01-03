@@ -75,6 +75,7 @@ async function updateEmoji(
     BlueMojiCollectionItem.validateRecord(record)
   ) {
     await prisma.emoji.upsert({
+      //一つのユーザーリポジトリで絵文字名がユニークになる(はず)(多分)
       where: {
         rkey_repo: {
           rkey: event.commit.rkey,

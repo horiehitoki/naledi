@@ -27,6 +27,7 @@ export const loader: LoaderFunction = async ({ request }) => {
       );
     }
 
+    //ページネーション(Claudeが書いた)
     const where: {
       post_uri: string;
       post_cid?: string;
@@ -39,6 +40,7 @@ export const loader: LoaderFunction = async ({ request }) => {
       where.post_cid = cid;
     }
 
+    //次のレコードがあるか確認するために +1
     const take = limit + 1;
 
     if (cursor) {
@@ -53,6 +55,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
     const hasMore = reactions.length > limit;
 
+    //余分な1件を削除
     if (hasMore) {
       reactions.pop();
     }
@@ -68,7 +71,7 @@ export const loader: LoaderFunction = async ({ request }) => {
           subject: { uri: reaction.post_uri, cid: reaction.post_cid },
           createdAt:
             reaction.createdAt?.toISOString() ?? new Date().toISOString(),
-          emoji: reaction.emoji,
+          emoji: JSON.parse(reaction.emoji),
           actor,
         };
       })

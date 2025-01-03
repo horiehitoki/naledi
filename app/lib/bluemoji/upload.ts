@@ -1,4 +1,4 @@
-import * as BlueMojiCollectionItem from "../../../packages/bluemoji/api/src/client/types/blue/moji/collection/item.ts";
+import * as BlueMojiCollectionItem from "../../../packages/bluemoji/api/src/client/types/blue/moji/collection/item";
 import UPNG from "upng-js";
 import { createCanvas, ImageData } from "canvas";
 import { Agent } from "@atproto/api";
@@ -12,6 +12,7 @@ interface UploadBluemojiParams {
   originalEncoding?: string;
 }
 
+//Bluemojiのサンプルコードをサーバーサイドで動くようにした(ChatGPT)
 async function resizePngToUintArray(arrayBuffer: ArrayBuffer, size: number) {
   const img = UPNG.decode(arrayBuffer);
   const rgba = UPNG.toRGBA8(img);

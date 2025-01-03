@@ -17,26 +17,24 @@ export default function ReactionButtons({ cid }: { cid: string }) {
   return (
     <TooltipProvider>
       <div className="flex flex-wrap gap-2">
-        {post.reactions.map((reaction) => {
-          const emoji: BlueMojiCollectionItem.ItemView = JSON.parse(
-            reaction.emoji
-          );
+        {post.reactions.map((r) => {
+          const emoji: BlueMojiCollectionItem.ItemView = r.emoji;
 
           return (
-            <Tooltip key={reaction.rkey}>
+            <Tooltip key={r.rkey}>
               <TooltipTrigger>
                 <button
                   onClick={() =>
-                    reaction.actor.data.did == profile!.did
-                      ? cancelReaction(reaction)
-                      : () => {}
+                    r.actor.data.did == profile!.did
+                      ? cancelReaction(r)
+                      : reaction(emoji)
                   }
                   className="relative flex items-center space-x-2 px-2 py-1 rounded-lg text-sm font-medium transition-all bg-gray-800 text-gray-300 hover:bg-gray-700"
                 >
                   <p className="text-lg font-semibold">
                     <img
                       src={`https://cdn.bsky.app/img/feed_thumbnail/plain/${
-                        reaction.actor.data.did
+                        r.actor.data.did
                       }/${emoji.formats.png_128!.ref.$link}@jpeg`}
                       alt={emoji.alt}
                       className="w-6 h-6"

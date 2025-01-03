@@ -40,6 +40,7 @@ export const useLike = (postId: string) => {
 
   async function like() {
     if (!state.likeUri) {
+      //楽観的UI
       setState((prev) => ({
         ...prev,
         isLiked: true,
@@ -53,6 +54,7 @@ export const useLike = (postId: string) => {
 
       const json = await res.json();
 
+      //あとからuriをSet
       setState((prev) => ({
         ...prev,
         likeUri: json.uri,
@@ -88,6 +90,7 @@ export const useRepost = (postId: string) => {
 
   async function repost() {
     if (!state.repostUri) {
+      //楽観的UI
       setState((prev) => ({
         ...prev,
         isReposted: true,
@@ -100,6 +103,7 @@ export const useRepost = (postId: string) => {
       });
       const json = await res.json();
 
+      //あとからuriをSet
       setState((prev) => ({
         ...prev,
         repostUri: json.uri,
@@ -146,7 +150,7 @@ export const useReaction = (postId: string) => {
           rkey: tempId,
           emoji,
           subject: { uri: post.uri, cid: post.cid },
-          actor: { data: { did: profile!.did, avatar: profile?.avatar } },
+          actor: { data: { did: profile!.did, avatar: profile!.avatar! } },
           createdAt: Date.now().toString(),
         },
       ],
@@ -162,16 +166,21 @@ export const useReaction = (postId: string) => {
 
     const json = await res.json();
 
-    //IDを更新
+    //あとからIDとActor情報をSet
     setState((prev) => ({
       ...prev,
       reactions: prev.reactions.map((r) =>
-        r.id === tempId ? { ...r, rkey: json.rkey, actor: json.actor } : r
+        r.rkey === tempId ? { ...r, rkey: json.rkey, actor: json.actor } : r
       ),
     }));
   }
 
   async function cancelReaction(reaction: Reaction) {
+    setState((prev) => ({
+      ...prev,
+      reactions: prev.reactions.filter((r) => r.rkey !== reaction.rkey),
+    }));
+
     await fetch("/api/reaction/", {
       method: "DELETE",
       body: JSON.stringify({

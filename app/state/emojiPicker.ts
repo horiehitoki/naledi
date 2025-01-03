@@ -20,6 +20,7 @@ export const useIsEmojiPickerOpen = () =>
 export const useSetIsEmojiPickerOpen = () =>
   useSetRecoilState(isEmojiPickerOpenState);
 
+//絵文字ピッカー操作用
 export const useEmojiPicker = () => {
   const picker = usePickerState();
 
@@ -29,6 +30,7 @@ export const useEmojiPicker = () => {
   const isOpen = useIsEmojiPickerOpen();
   const setIsOpen = useSetIsEmojiPickerOpen();
 
+  //リアクションボタンの下にpickerを出すための位置取得
   const calculatePickerPosition = (element: HTMLDivElement) => {
     const rect = element.getBoundingClientRect();
     const scrollY = window.scrollY || document.documentElement.scrollTop;
@@ -49,6 +51,7 @@ export const useEmojiPicker = () => {
 
     setIsOpen(!isOpen);
 
+    //リアクションをつける投稿とポジションをSet
     setPicker({ uri, cid, position });
   };
 

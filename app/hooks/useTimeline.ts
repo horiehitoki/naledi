@@ -23,7 +23,6 @@ export const useTimeline = (options: options) => {
       const res = await fetch(endpoint);
 
       const feedView = await res.json();
-      console.log(feedView);
 
       return feedView;
     },
