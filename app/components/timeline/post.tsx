@@ -21,6 +21,7 @@ import { LikeButton } from "../buttons/likeButton";
 import { Button } from "../ui/button";
 import { useEmojiPicker } from "~/state/emojiPicker";
 import { Reaction } from "~/generated/api/types/app/netlify/stellarbsky/getReaction";
+import ReactionButtons from "../buttons/reactionButtons";
 
 export default function Post({
   post,
@@ -166,10 +167,12 @@ export default function Post({
               onClick={() =>
                 toggleEmojiPicker(post.uri, post.cid, cardRef.current!)
               }
+              id="pickerOpen"
               className="flex items-center space-x-1 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-2 py-1 rounded-full text-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
             >
-              <Smile className="w-4 h-4" />
+              <Smile className="w-4 h-4" id="pickerOpen" />
             </button>
+            <ReactionButtons cid={post.cid} />
           </div>
         </CardFooter>
       </Card>

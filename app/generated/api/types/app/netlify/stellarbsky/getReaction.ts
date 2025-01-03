@@ -7,7 +7,6 @@ import { isObj, hasProp } from '../../../../util'
 import { lexicons } from '../../../../lexicons'
 import { CID } from 'multiformats/cid'
 import * as ComAtprotoRepoStrongRef from '../../../com/atproto/repo/strongRef'
-import * as BlueMojiCollectionItem from '../../../blue/moji/collection/item'
 import * as AppBskyActorDefs from '../../bsky/actor/defs'
 
 export interface QueryParams {
@@ -48,7 +47,7 @@ export interface Reaction {
   rkey: string
   subject: ComAtprotoRepoStrongRef.Main
   createdAt: string
-  emoji: BlueMojiCollectionItem.ItemView
+  emoji: string
   actor: AppBskyActorDefs.ProfileView
   [k: string]: unknown
 }

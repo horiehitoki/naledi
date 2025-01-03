@@ -68,7 +68,7 @@ export const loader: LoaderFunction = async ({ request }) => {
           subject: { uri: reaction.post_uri, cid: reaction.post_cid },
           createdAt:
             reaction.createdAt?.toISOString() ?? new Date().toISOString(),
-          record: reaction.record,
+          emoji: reaction.emoji,
           actor,
         };
       })

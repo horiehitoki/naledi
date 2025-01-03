@@ -13,15 +13,24 @@ model AuthSession {
 }
 
 model AuthState {
-  key   String @id
-  state String
+  key     String @id
+  state   String
+}
+
+model Emoji {
+  record      String
+  rkey        String
+  repo        String
+  createdAt   DateTime @default(now())
+
+  @@unique(fields: [rkey, repo], name: "rkey_repo")
 }
 
 model Reaction {
   rkey        String   @id
   post_uri    String
   post_cid    String
-  record      String
+  emoji       String
   authorDid   String
   createdAt   DateTime @default(now())
 }

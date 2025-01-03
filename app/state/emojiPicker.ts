@@ -1,6 +1,6 @@
 import { atom, useRecoilValue, useSetRecoilState } from "recoil";
-import { usePost, useReaction } from "./post";
-import { useProfile } from "./profile";
+import { useReaction } from "./post";
+import { BlueMojiCollectionItem } from "~/generated/api";
 
 export const isEmojiPickerOpenState = atom<boolean>({
   key: "isEmojiPickerOpen",
@@ -22,13 +22,11 @@ export const useSetIsEmojiPickerOpen = () =>
 
 export const useEmojiPicker = () => {
   const picker = usePickerState();
-  const post = usePost(picker.cid);
 
   const { reaction } = useReaction(picker.cid);
 
-  const profile = useProfile();
-
   const setPicker = useSetPickerState();
+  const isOpen = useIsEmojiPickerOpen();
   const setIsOpen = useSetIsEmojiPickerOpen();
 
   const calculatePickerPosition = (element: HTMLDivElement) => {
@@ -49,24 +47,16 @@ export const useEmojiPicker = () => {
   ) => {
     const position = calculatePickerPosition(element);
 
-    setIsOpen(true);
+    setIsOpen(!isOpen);
 
     setPicker({ uri, cid, position });
   };
 
-  const handleEmojiClick = async (emoji: { shortcodes: string }) => {
+  const handleEmojiClick = async (emoji: BlueMojiCollectionItem.ItemView) => {
     // 絵文字ピッカーを閉じる
     setIsOpen(false);
 
-    const myReactions = post.reactions.filter(
-      (reaction) =>
-        reaction.actor.data.did === profile?.did &&
-        reaction.emoji === emoji.shortcodes
-    );
-
-    if (myReactions.length <= 0) {
-      reaction(emoji.shortcodes);
-    }
+    reaction(emoji);
   };
 
   return {

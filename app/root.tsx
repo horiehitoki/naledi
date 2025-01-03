@@ -16,6 +16,8 @@ import { getSessionAgent } from "./lib/auth/session";
 import { useSetProfile } from "./state/profile";
 import NotFound from "./components/ui/404";
 import ErrorPage from "./components/ui/errorPage";
+import { EmojiPicker } from "./components/emoji/emojiPicker";
+import { prisma } from "./lib/db/prisma";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -36,7 +38,13 @@ export const loader: LoaderFunction = async ({ request }) => {
 
   const profile = await agent.getProfile({ actor: agent.assertDid });
 
-  return { profile, agent };
+  const data = await prisma.emoji.findMany();
+
+  const emojis = data.map((emoji) => {
+    return { data: JSON.parse(emoji.record), repo: emoji.repo };
+  });
+
+  return { profile, agent, emojis };
 };
 
 const queryClient: QueryClient = new QueryClient({
@@ -48,6 +56,8 @@ const queryClient: QueryClient = new QueryClient({
 });
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const data = useLoaderData<typeof loader>();
+
   return (
     <RecoilRoot>
       <QueryClientProvider client={queryClient}>
@@ -62,6 +72,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <Links />
           </head>
           <body>
+            <EmojiPicker emojis={data?.emojis ?? []} />
             {children}
             <ScrollRestoration />
             <Scripts />

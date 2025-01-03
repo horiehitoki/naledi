@@ -52,10 +52,7 @@
         "rkey": { "type": "string" },
         "subject": { "type": "ref", "ref": "com.atproto.repo.strongRef" },
         "createdAt": { "type": "string", "format": "datetime" },
-        "emoji": {
-          "type": "ref",
-          "ref": "blue.moji.collection.item#itemView"
-        },
+        "emoji": { "type": "string" },
         "actor": { "type": "ref", "ref": "app.bsky.actor.defs#profileView" }
       }
     }

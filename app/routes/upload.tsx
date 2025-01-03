@@ -28,15 +28,13 @@ export const action: ActionFunction = async ({ request }) => {
       return { error: "絵文字名を入力してください" };
     }
 
-    if (!name.match(/^:[a-zA-Z0-9_]+:$/)) {
+    if (!name.match(/:((?!.*--)[A-Za-z0-9-]{4,20}(?<!-)):/gim)) {
       return { error: "無効な絵文字名です" };
     }
 
     if (file.type !== "image/png") {
       return { error: "PNGファイルのみアップロード可能です" };
     }
-
-    console.log("𝓱𝓪𝓹𝓹𝔂 𝓷𝓮𝔀 𝔂𝓮𝓪𝓻....");
 
     const arrayBuffer = await file.arrayBuffer();
 
@@ -69,7 +67,13 @@ export default function UploadEmoji() {
 
         <div>
           <Label htmlFor="name">絵文字名</Label>
-          <Input id="name" name="name" required />
+          <Input
+            id="name"
+            name="name"
+            pattern="^:[a-zA-Z0-9_]+:$"
+            title="絵文字名は :name: の形式である必要があります。"
+            required
+          />
         </div>
 
         <div>

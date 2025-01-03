@@ -12,10 +12,7 @@ interface UploadBluemojiParams {
   originalEncoding?: string;
 }
 
-export async function resizePngToUintArray(
-  arrayBuffer: ArrayBuffer,
-  size: number
-) {
+async function resizePngToUintArray(arrayBuffer: ArrayBuffer, size: number) {
   const img = UPNG.decode(arrayBuffer);
   const rgba = UPNG.toRGBA8(img);
 

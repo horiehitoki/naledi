@@ -2,10 +2,7 @@ import { Agent } from "@atproto/api";
 import type { ActionFunction } from "@remix-run/node";
 import { getSessionAgent } from "~/lib/auth/session";
 import { TID } from "@atproto/common";
-import {
-  isRecord,
-  validateRecord,
-} from "~/generated/api/types/app/netlify/stellarbsky/reaction";
+import { AppNetlifyStellarbskyReaction } from "~/generated/api";
 
 export const action: ActionFunction = async ({ request }) => {
   const agent: Agent | null = await getSessionAgent(request);
@@ -26,7 +23,10 @@ export const action: ActionFunction = async ({ request }) => {
         authorDid: agent.assertDid,
       };
 
-      if (!isRecord(record) && !validateRecord(record))
+      if (
+        !AppNetlifyStellarbskyReaction.isRecord(record) &&
+        !AppNetlifyStellarbskyReaction.validateRecord(record)
+      )
         return new Response(null, { status: 400 });
 
       await agent.com.atproto.repo.putRecord({

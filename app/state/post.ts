@@ -1,6 +1,7 @@
 import { atomFamily, useRecoilValue, useSetRecoilState } from "recoil";
 import { useProfile } from "./profile";
 import { Reaction } from "~/generated/api/types/app/netlify/stellarbsky/getReaction";
+import { BlueMojiCollectionItem } from "~/generated/api";
 
 export const postState = atomFamily<
   {
@@ -133,7 +134,7 @@ export const useReaction = (postId: string) => {
   const setState = useSetPost(postId);
   const profile = useProfile();
 
-  async function reaction(emoji: string) {
+  async function reaction(emoji: BlueMojiCollectionItem.ItemView) {
     const tempId = `temp-${Date.now()}`;
 
     //楽観的UI
@@ -143,8 +144,8 @@ export const useReaction = (postId: string) => {
         ...prev.reactions,
         {
           rkey: tempId,
-          subject: { uri: post.uri, cid: post.cid },
           emoji,
+          subject: { uri: post.uri, cid: post.cid },
           actor: { data: { did: profile!.did, avatar: profile?.avatar } },
           createdAt: Date.now().toString(),
         },
@@ -170,23 +171,13 @@ export const useReaction = (postId: string) => {
     }));
   }
 
-  async function cancelReaction(reactions: Reaction[]) {
-    reactions.map(async (r) => {
-      setState((prev) => ({
-        ...prev,
-        reactions: prev.reactions.filter(
-          (reaction) => reaction.rkey !== r.rkey
-        ),
-      }));
-
-      await fetch("/api/reaction/", {
-        method: "DELETE",
-        body: JSON.stringify({
-          rkey: r.rkey,
-        }),
-      });
+  async function cancelReaction(reaction: Reaction) {
+    await fetch("/api/reaction/", {
+      method: "DELETE",
+      body: JSON.stringify({
+        rkey: reaction.rkey,
+      }),
     });
   }
-
   return { reaction, cancelReaction };
 };
