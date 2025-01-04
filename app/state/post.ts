@@ -1,5 +1,4 @@
 import { atomFamily, useRecoilValue, useSetRecoilState } from "recoil";
-import { useProfile } from "./profile";
 import { Reaction } from "~/generated/api/types/app/netlify/stellarbsky/getReaction";
 
 export const postState = atomFamily<
@@ -147,11 +146,16 @@ export const useReaction = (postId: string) => {
     });
   }
 
-  async function cancelReaction(reaction: Reaction) {
+  async function cancelReaction(r: Reaction) {
+    setState((prev) => ({
+      ...prev,
+      reactions: prev.reactions.filter((reaction) => reaction.rkey !== r.rkey),
+    }));
+
     await fetch("/api/reaction/", {
       method: "DELETE",
       body: JSON.stringify({
-        rkey: reaction.rkey,
+        rkey: r.rkey,
       }),
     });
   }

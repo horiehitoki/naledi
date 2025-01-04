@@ -47,6 +47,7 @@ export const action: ActionFunction = async ({ request }) => {
         repo: agent.assertDid,
         rkey: body.rkey,
       });
+
       return { ok: true };
     }
   }
