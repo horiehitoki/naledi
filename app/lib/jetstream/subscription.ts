@@ -9,6 +9,7 @@ import {
   AppNetlifyStellarbskyReaction,
   BlueMojiCollectionItem,
 } from "~/generated/api/index.js";
+import { getEmojiFromPDS } from "../bluemoji/getEmoji.js";
 
 export const jetstream = new Jetstream({
   ws: WebSocket,
@@ -41,6 +42,9 @@ async function updateReaction(
     AppNetlifyStellarbskyReaction.isRecord(record) &&
     AppNetlifyStellarbskyReaction.validateRecord(record)
   ) {
+    //絵文字のレコードを取得する
+    const emoji = await getEmojiFromPDS(record.emoji.rkey, record.emoji.repo);
+
     await prisma.reaction.upsert({
       where: {
         rkey: event.commit.rkey,
@@ -48,14 +52,16 @@ async function updateReaction(
       update: {
         post_uri: record.subject.uri,
         post_cid: record.subject.cid,
-        emoji: JSON.stringify(record.emoji),
+        record: JSON.stringify(record),
+        emoji: JSON.stringify(emoji),
         authorDid: record.authorDid,
       },
       create: {
         rkey: event.commit.rkey,
         post_uri: record.subject.uri,
         post_cid: record.subject.cid,
-        emoji: JSON.stringify(record.emoji),
+        record: JSON.stringify(record),
+        emoji: JSON.stringify(emoji),
         authorDid: record.authorDid,
       },
     });

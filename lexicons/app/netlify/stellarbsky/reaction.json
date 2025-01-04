@@ -11,12 +11,17 @@
         "required": ["subject", "emoji", "authorDid"],
         "properties": {
           "subject": { "type": "ref", "ref": "com.atproto.repo.strongRef" },
-          "emoji": {
-            "type": "ref",
-            "ref": "blue.moji.collection.item#itemView"
-          },
+          "emoji": { "type": "ref", "ref": "#emojiRef" },
           "authorDid": { "type": "string", "format": "at-identifier" }
         }
+      }
+    },
+    "emojiRef": {
+      "type": "object",
+      "required": ["rkey", "repo"],
+      "properties": {
+        "rkey": { "type": "string" },
+        "repo": { "type": "string", "format": "did" }
       }
     }
   }

@@ -1,7 +1,6 @@
 import { atomFamily, useRecoilValue, useSetRecoilState } from "recoil";
 import { useProfile } from "./profile";
 import { Reaction } from "~/generated/api/types/app/netlify/stellarbsky/getReaction";
-import { BlueMojiCollectionItem } from "~/generated/api";
 
 export const postState = atomFamily<
   {
@@ -136,51 +135,19 @@ export const useRepost = (postId: string) => {
 export const useReaction = (postId: string) => {
   const post = usePost(postId);
   const setState = useSetPost(postId);
-  const profile = useProfile();
 
-  async function reaction(emoji: BlueMojiCollectionItem.ItemView) {
-    const tempId = `temp-${Date.now()}`;
-
-    //楽観的UI
-    setState((prev) => ({
-      ...prev,
-      reactions: [
-        ...prev.reactions,
-        {
-          rkey: tempId,
-          emoji,
-          subject: { uri: post.uri, cid: post.cid },
-          actor: { data: { did: profile!.did, avatar: profile!.avatar! } },
-          createdAt: Date.now().toString(),
-        },
-      ],
-    }));
-
-    const res = await fetch("/api/reaction/", {
+  async function reaction(rkey: string, repo: string) {
+    await fetch("/api/reaction/", {
       method: "POST",
       body: JSON.stringify({
         subject: { uri: post.uri, cid: post.cid },
-        emoji: emoji,
+        rkey,
+        repo,
       }),
     });
-
-    const json = await res.json();
-
-    //あとからIDとActor情報をSet
-    setState((prev) => ({
-      ...prev,
-      reactions: prev.reactions.map((r) =>
-        r.rkey === tempId ? { ...r, rkey: json.rkey, actor: json.actor } : r
-      ),
-    }));
   }
 
   async function cancelReaction(reaction: Reaction) {
-    setState((prev) => ({
-      ...prev,
-      reactions: prev.reactions.filter((r) => r.rkey !== reaction.rkey),
-    }));
-
     await fetch("/api/reaction/", {
       method: "DELETE",
       body: JSON.stringify({

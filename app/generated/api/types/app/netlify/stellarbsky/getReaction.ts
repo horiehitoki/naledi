@@ -7,6 +7,7 @@ import { isObj, hasProp } from '../../../../util'
 import { lexicons } from '../../../../lexicons'
 import { CID } from 'multiformats/cid'
 import * as ComAtprotoRepoStrongRef from '../../../com/atproto/repo/strongRef'
+import * as AppNetlifyStellarbskyReaction from './reaction'
 import * as BlueMojiCollectionItem from '../../../blue/moji/collection/item'
 import * as AppBskyActorDefs from '../../bsky/actor/defs'
 
@@ -48,6 +49,7 @@ export interface Reaction {
   rkey: string
   subject: ComAtprotoRepoStrongRef.Main
   createdAt: string
+  emojiRef?: AppNetlifyStellarbskyReaction.EmojiRef
   emoji: BlueMojiCollectionItem.ItemView
   actor: AppBskyActorDefs.ProfileView
   [k: string]: unknown

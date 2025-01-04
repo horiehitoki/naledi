@@ -1,17 +1,14 @@
 import { useEffect, useRef } from "react";
-import { BlueMojiCollectionItem } from "~/generated/api";
 import {
   useEmojiPicker,
   usePickerState,
   useIsEmojiPickerOpen,
   useSetIsEmojiPickerOpen,
 } from "~/state/emojiPicker";
+import EmojiRender from "./emojiRender";
+import { Emoji } from "@prisma/client";
 
-export function EmojiPicker({
-  emojis,
-}: {
-  emojis: { data: BlueMojiCollectionItem.ItemView; repo: string }[];
-}) {
+export function EmojiPicker({ emojis }: { emojis: Emoji[] }) {
   const { handleEmojiClick } = useEmojiPicker();
   const isOpen = useIsEmojiPickerOpen();
   const setIsOpen = useSetIsEmojiPickerOpen();
@@ -55,20 +52,19 @@ export function EmojiPicker({
       <div className="w-[348px] bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
         <div className="h-[270px] overflow-y-auto p-4">
           <div className="grid grid-cols-8 gap-1">
-            {emojis.map((emoji) => (
-              <button
-                className="text-2xl p-1 hover:bg-gray-100 rounded"
-                key={emoji.data.name}
-                onClick={() => handleEmojiClick(emoji.data)}
-              >
-                <img
-                  src={`https://cdn.bsky.app/img/feed_thumbnail/plain/${
-                    emoji.repo
-                  }/${emoji.data.formats.png_128!.ref.$link}@jpeg`}
-                  alt={emoji.data.alt}
-                />
-              </button>
-            ))}
+            {emojis.map((emoji) => {
+              const data = JSON.parse(emoji.record);
+
+              return (
+                <button
+                  className="text-2xl p-1 hover:bg-gray-100 rounded"
+                  key={data.name}
+                  onClick={() => handleEmojiClick(emoji.rkey, emoji.repo)}
+                >
+                  <EmojiRender record={data} repo={emoji.repo} />
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>

@@ -13,10 +13,10 @@
   "dependencies": {
     "@atproto/api": "^0.13.20",
     "@atproto/common": "^0.4.5",
+    "@atproto/identity": "^0.4.3",
     "@atproto/lex-cli": "^0.5.3",
     "@atproto/oauth-client-node": "^0.2.4",
-    "@emoji-mart/data": "^1.2.1",
-    "@emoji-mart/react": "^1.1.1",
+    "@lottiefiles/dotlottie-web": "^0.39.0",
     "@netlify/remix-adapter": "^2.6.0",
     "@prisma/client": "^6.0.1",
     "@radix-ui/react-avatar": "^1.1.2",

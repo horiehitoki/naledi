@@ -1,6 +1,5 @@
 import { atom, useRecoilValue, useSetRecoilState } from "recoil";
 import { useReaction } from "./post";
-import { BlueMojiCollectionItem } from "~/generated/api";
 
 export const isEmojiPickerOpenState = atom<boolean>({
   key: "isEmojiPickerOpen",
@@ -55,11 +54,11 @@ export const useEmojiPicker = () => {
     setPicker({ uri, cid, position });
   };
 
-  const handleEmojiClick = async (emoji: BlueMojiCollectionItem.ItemView) => {
+  const handleEmojiClick = async (rkey: string, repo: string) => {
     // 絵文字ピッカーを閉じる
     setIsOpen(false);
 
-    reaction(emoji);
+    reaction(rkey, repo);
   };
 
   return {

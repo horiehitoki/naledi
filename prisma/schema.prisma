@@ -30,6 +30,7 @@ model Reaction {
   rkey        String   @id
   post_uri    String
   post_cid    String
+  record      String
   emoji       String
   authorDid   String
   createdAt   DateTime @default(now())

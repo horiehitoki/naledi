@@ -14,17 +14,32 @@ import { useState } from "react";
 interface PostDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: () => void;
 }
 
-function PostDialog({ open, onOpenChange, onSubmit }: PostDialogProps) {
+function PostDialog({ open, onOpenChange }: PostDialogProps) {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+    const content = formData.get("content");
+
+    await fetch("/api/post", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ text: content }),
+    });
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle className="font-bold text-2xl">投稿する</DialogTitle>
         </DialogHeader>
-        <Form method="post">
+
+        <Form method="post" onSubmit={handleSubmit}>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
               <Textarea name="content" id="content" className="w-80 h-64" />
@@ -32,9 +47,7 @@ function PostDialog({ open, onOpenChange, onSubmit }: PostDialogProps) {
           </div>
 
           <DialogFooter>
-            <Button type="submit" onClick={onSubmit}>
-              投稿
-            </Button>
+            <Button type="submit">投稿</Button>
           </DialogFooter>
         </Form>
       </DialogContent>
@@ -47,11 +60,7 @@ export default function PostButton() {
 
   return (
     <div>
-      <PostDialog
-        open={postOpen}
-        onOpenChange={setPostOpen}
-        onSubmit={() => {}}
-      />
+      <PostDialog open={postOpen} onOpenChange={setPostOpen} />
       <button
         onClick={() => {
           setPostOpen(!postOpen);

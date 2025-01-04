@@ -81,6 +81,10 @@ export const schemaDict = {
             type: 'string',
             format: 'datetime',
           },
+          emojiRef: {
+            type: 'ref',
+            ref: 'lex:app.netlify.stellarbsky.reaction#emojiRef',
+          },
           emoji: {
             type: 'ref',
             ref: 'lex:blue.moji.collection.item#itemView',
@@ -111,12 +115,25 @@ export const schemaDict = {
             },
             emoji: {
               type: 'ref',
-              ref: 'lex:blue.moji.collection.item#itemView',
+              ref: 'lex:app.netlify.stellarbsky.reaction#emojiRef',
             },
             authorDid: {
               type: 'string',
               format: 'at-identifier',
             },
+          },
+        },
+      },
+      emojiRef: {
+        type: 'object',
+        required: ['rkey', 'repo'],
+        properties: {
+          rkey: {
+            type: 'string',
+          },
+          repo: {
+            type: 'string',
+            format: 'did',
           },
         },
       },

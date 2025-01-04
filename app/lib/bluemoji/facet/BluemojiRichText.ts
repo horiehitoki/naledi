@@ -9,8 +9,8 @@ import {
   RichTextProps,
   RichTextOpts,
 } from "@atproto/api";
-import * as BlueMojiRichtextFacet from "../client/types/blue/moji/richtext/facet";
-import * as BlueMojiCollectionItem from "../client/types/blue/moji/collection/item";
+import * as BlueMojiRichtextFacet from "~/generated/api/types/blue/moji/richtext/facet";
+import * as BlueMojiCollectionItem from "~/generated/api/types/blue/moji/collection/item";
 import { detectFacets } from "./detect-facets";
 
 export const BLUEMOJI_REGEX = new RegExp(

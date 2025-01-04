@@ -1,4 +1,4 @@
-import * as BlueMojiCollectionItem from "../../../packages/bluemoji/api/src/client/types/blue/moji/collection/item";
+import * as BlueMojiCollectionItem from "~/generated/api/types/blue/moji/collection/item";
 import UPNG from "upng-js";
 import { createCanvas, ImageData } from "canvas";
 import { Agent } from "@atproto/api";

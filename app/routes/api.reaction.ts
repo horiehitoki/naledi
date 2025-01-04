@@ -1,8 +1,8 @@
 import { Agent } from "@atproto/api";
 import type { ActionFunction } from "@remix-run/node";
 import { getSessionAgent } from "~/lib/auth/session";
-import { TID } from "@atproto/common";
 import { AppNetlifyStellarbskyReaction } from "~/generated/api";
+import { TID } from "@atproto/common";
 
 export const action: ActionFunction = async ({ request }) => {
   const agent: Agent | null = await getSessionAgent(request);
@@ -12,14 +12,12 @@ export const action: ActionFunction = async ({ request }) => {
     case "POST": {
       const body = await request.json();
 
-      const rkey = TID.nextStr();
-
-      const record = {
+      const record: AppNetlifyStellarbskyReaction.Record = {
         subject: {
           uri: body.subject.uri,
           cid: body.subject.cid,
         },
-        emoji: body.emoji,
+        emoji: { rkey: body.rkey, repo: body.repo },
         authorDid: agent.assertDid,
       };
 
@@ -28,6 +26,8 @@ export const action: ActionFunction = async ({ request }) => {
         !AppNetlifyStellarbskyReaction.validateRecord(record)
       )
         return new Response(null, { status: 400 });
+
+      const rkey = TID.nextStr();
 
       await agent.com.atproto.repo.putRecord({
         collection: "app.netlify.stellarbsky.reaction",
