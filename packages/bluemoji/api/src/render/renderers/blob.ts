@@ -9,7 +9,7 @@ interface RenderBlobParams {
 export enum BlobTypeEnum {
   PNG = "png",
   GIF = "gif",
-  WEBP = "webp",
+  WEBP = "webp"
 }
 
 type BlobInfo = {
@@ -24,7 +24,7 @@ export const renderBlobAsImg = (
   params: RenderBlobParams = {
     width: 128,
     height: 128,
-    cdnBase: "https://cdn.bsky.app/img/avatar_thumbnail/plain/",
+    cdnBase: "https://cdn.bsky.app/img/avatar_thumbnail/plain/"
   }
 ) => {
   try {

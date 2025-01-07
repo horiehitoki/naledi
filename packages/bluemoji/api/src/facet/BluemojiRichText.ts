@@ -1,5 +1,4 @@
-import {
-  Agent,
+import AtpAgent, {
   RichTextSegment,
   RichText,
   Facet,
@@ -7,7 +6,7 @@ import {
   UnicodeString,
   Entity,
   RichTextProps,
-  RichTextOpts,
+  RichTextOpts
 } from "@atproto/api";
 import * as BlueMojiRichtextFacet from "../client/types/blue/moji/richtext/facet";
 import * as BlueMojiCollectionItem from "../client/types/blue/moji/collection/item";
@@ -49,7 +48,7 @@ export class BluemojiRichText extends RichText {
   clone() {
     return new BluemojiRichText({
       text: this.unicodeText.utf16,
-      facets: cloneDeep(this.facets),
+      facets: cloneDeep(this.facets)
     });
   }
 
@@ -94,13 +93,13 @@ export class BluemojiRichText extends RichText {
     }
   }
 
-  async detectFacets(agent: Agent): Promise<void> {
+  async detectFacets(agent: AtpAgent): Promise<void> {
     this.facets = detectFacets(this.unicodeText);
     if (this.facets) {
       for (const facet of this.facets) {
         for (const feature of facet.features) {
           if (BlueMojiRichtextFacet.isMain(feature)) {
-            const { did: repo } = agent?.did ? { did: agent?.did } : {};
+            const { did: repo } = agent?.session || {};
 
             if (!repo) {
               console.error("Bluemoji facet DID is unknown");
@@ -110,14 +109,14 @@ export class BluemojiRichText extends RichText {
             const { data: record } = await agent.com.atproto.repo.getRecord({
               repo,
               rkey: feature.name.replace(/:/g, ""),
-              collection: "blue.moji.collection.item",
+              collection: "blue.moji.collection.item"
             });
 
             if (BlueMojiCollectionItem.isRecord(record.value)) {
               feature.alt = record.value.alt;
               feature.did = repo;
               feature.formats = {
-                $type: "blue.moji.richtext.facet#formats_v0",
+                $type: "blue.moji.richtext.facet#formats_v0"
               };
               if (BlueMojiCollectionItem.isFormats_v0(record.value.formats)) {
                 if (record.value.formats.png_128) {
@@ -137,7 +136,7 @@ export class BluemojiRichText extends RichText {
           } else if (AppBskyRichtextFacet.isMention(feature)) {
             const did = await agent
               .resolveHandle({ handle: feature.did })
-              .catch(() => undefined)
+              .catch((_) => undefined)
               .then((res) => res?.data.did);
             feature.did = did || "";
           }
@@ -162,27 +161,25 @@ function entitiesToFacets(text: UnicodeString, entities: Entity[]): Facet[] {
         $type: "app.bsky.richtext.facet",
         index: {
           byteStart: text.utf16IndexToUtf8Index(ent.index.start),
-          byteEnd: text.utf16IndexToUtf8Index(ent.index.end),
+          byteEnd: text.utf16IndexToUtf8Index(ent.index.end)
         },
-        features: [{ $type: "app.bsky.richtext.facet#link", uri: ent.value }],
+        features: [{ $type: "app.bsky.richtext.facet#link", uri: ent.value }]
       });
     } else if (ent.type === "mention") {
       facets.push({
         $type: "app.bsky.richtext.facet",
         index: {
           byteStart: text.utf16IndexToUtf8Index(ent.index.start),
-          byteEnd: text.utf16IndexToUtf8Index(ent.index.end),
+          byteEnd: text.utf16IndexToUtf8Index(ent.index.end)
         },
-        features: [
-          { $type: "app.bsky.richtext.facet#mention", did: ent.value },
-        ],
+        features: [{ $type: "app.bsky.richtext.facet#mention", did: ent.value }]
       });
     } else if (ent.type === "bluemoji") {
       facets.push({
         $type: "app.bsky.richtext.facet",
         index: {
           byteStart: text.utf16IndexToUtf8Index(ent.index.start),
-          byteEnd: text.utf16IndexToUtf8Index(ent.index.end),
+          byteEnd: text.utf16IndexToUtf8Index(ent.index.end)
         },
         features: [
           {
@@ -190,9 +187,9 @@ function entitiesToFacets(text: UnicodeString, entities: Entity[]): Facet[] {
             did: ent.did,
             name: ent.name,
             alt: ent.alt,
-            formats: ent.formats,
-          },
-        ],
+            formats: ent.formats
+          }
+        ]
       });
     }
   }

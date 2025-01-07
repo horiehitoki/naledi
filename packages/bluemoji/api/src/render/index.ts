@@ -12,16 +12,16 @@ import * as BlueMojiCollectionItem from "../client/types/blue/moji/collection/it
 import { renderLottie } from "./renderers/lottie";
 import { renderApngAsImg } from "./renderers/apng";
 import { renderBlobAsImg, BlobTypeEnum } from "./renderers/blob";
-import { Agent } from "@atproto/api";
+import { AtpAgent } from "@atproto/api";
 
 export async function render(
-  agent: Agent,
+  agent: AtpAgent,
   facet: BlueMojiRichTextFacet.Main,
   params: { raw: boolean; player: boolean; width: 128; height: 128 } = {
     raw: false,
     player: false,
     width: 128,
-    height: 128,
+    height: 128
   }
 ) {
   try {
@@ -31,7 +31,7 @@ export async function render(
         const { data } = await agent.com.atproto.repo.getRecord({
           repo: facet.did,
           collection: "blue.moji.collection.item",
-          rkey: facet.name.replace(/:/g, ""),
+          rkey: facet.name.replace(/:/g, "")
         });
 
         const { value: record } = data;
