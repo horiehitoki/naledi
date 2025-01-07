@@ -1,8 +1,6 @@
 import * as BlueMojiCollectionItem from "~/generated/api/types/blue/moji/collection/item";
-import UPNG from "upng-js";
-import { createCanvas, ImageData } from "canvas";
 import { Agent } from "@atproto/api";
-
+import sharp from "sharp";
 interface UploadBluemojiParams {
   agent: Agent;
   emoji: ArrayBuffer;
@@ -12,41 +10,16 @@ interface UploadBluemojiParams {
   originalEncoding?: string;
 }
 
-//Bluemojiのサンプルコードをサーバーサイドで動くようにした(ChatGPT)
-async function resizePngToUintArray(arrayBuffer: ArrayBuffer, size: number) {
-  const img = UPNG.decode(arrayBuffer);
-  const rgba = UPNG.toRGBA8(img);
+async function resizePngToUintArray(
+  arrayBuffer: ArrayBuffer,
+  size: number
+): Promise<Uint8Array> {
+  const inputBuffer = Buffer.from(arrayBuffer);
+  const image = sharp(inputBuffer);
 
-  const resized = await Promise.all(
-    rgba.map(async (buf) => {
-      const imageData = new ImageData(
-        new Uint8ClampedArray(buf),
-        img.width,
-        img.height
-      );
+  const resizedBuffer = await image.resize(size, size).toBuffer();
 
-      const canvas = createCanvas(size, size);
-      const ctx = canvas.getContext("2d");
-
-      const tempCanvas = createCanvas(img.width, img.height);
-      const tempCtx = tempCanvas.getContext("2d");
-      tempCtx.putImageData(imageData, 0, 0);
-
-      ctx.drawImage(tempCanvas, 0, 0, size, size);
-      const resizedImageData = ctx.getImageData(0, 0, size, size);
-
-      return resizedImageData.data.buffer;
-    })
-  );
-
-  const apng = UPNG.encode(
-    resized,
-    size,
-    size,
-    img.depth,
-    img.frames.map((f) => f.delay)
-  );
-  return new Uint8Array(apng);
+  return new Uint8Array(resizedBuffer);
 }
 
 export async function uploadBluemoji({
