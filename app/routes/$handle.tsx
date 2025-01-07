@@ -1,3 +1,4 @@
+import { isDid } from "@atproto/api";
 import { LoaderFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import Main from "~/components/layout/main";
@@ -11,6 +12,12 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   const { handle } = params;
   if (!handle) return new Response(null, { status: 404 });
+
+  if (isDid(handle)) {
+    const profile = await agent.getProfile({ actor: handle });
+
+    return { profile, did: handle };
+  }
 
   const did = await agent.com.atproto.identity.resolveHandle({ handle });
   const profile = await agent.getProfile({ actor: did.data.did });

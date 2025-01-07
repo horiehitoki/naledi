@@ -15,14 +15,14 @@ export function detectFacets(text: any /*UnicodeString*/): Facet[] | undefined {
         $type: "app.bsky.richtext.facet",
         index: {
           byteStart: text.utf16IndexToUtf8Index(start),
-          byteEnd: text.utf16IndexToUtf8Index(start + match[0].length + 1)
+          byteEnd: text.utf16IndexToUtf8Index(start + match[0].length + 1),
         },
         features: [
           {
             $type: "blue.moji.richtext.facet",
-            name: match[0]
-          }
-        ]
+            name: match[0],
+          },
+        ],
       });
     }
   }

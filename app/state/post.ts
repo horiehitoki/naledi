@@ -1,4 +1,6 @@
+import { ProfileView } from "@atproto/api/dist/client/types/app/bsky/actor/defs";
 import { atomFamily, useRecoilValue, useSetRecoilState } from "recoil";
+import { BlueMojiCollectionItem } from "~/generated/api";
 import { Reaction } from "~/generated/api/types/app/netlify/stellarbsky/getReaction";
 
 export const postState = atomFamily<
@@ -135,8 +137,37 @@ export const useReaction = (postId: string) => {
   const post = usePost(postId);
   const setState = useSetPost(postId);
 
-  async function reaction(rkey: string, repo: string) {
-    await fetch("/api/reaction/", {
+  async function reaction(
+    rkey: string,
+    repo: string,
+    emoji: BlueMojiCollectionItem.ItemView,
+    actor: ProfileView
+  ) {
+    const tempId = `temp-${Date.now()}`;
+
+    //楽観的UI
+    setState((prev) => ({
+      ...prev,
+      reactions: [
+        ...prev.reactions,
+        {
+          rkey: tempId,
+          subject: {
+            uri: post.uri,
+            cid: post.cid,
+          },
+          createdAt: new Date().toISOString(),
+          emojiRef: {
+            rkey,
+            repo,
+          },
+          emoji,
+          actor,
+        },
+      ],
+    }));
+
+    const res = await fetch("/api/reaction/", {
       method: "POST",
       body: JSON.stringify({
         subject: { uri: post.uri, cid: post.cid },
@@ -144,6 +175,16 @@ export const useReaction = (postId: string) => {
         repo,
       }),
     });
+
+    const json = await res.json();
+
+    //IDを更新
+    setState((prev) => ({
+      ...prev,
+      reactions: prev.reactions.map((r) =>
+        r.id === tempId ? { ...r, rkey: json.rkey } : r
+      ),
+    }));
   }
 
   async function cancelReaction(r: Reaction) {

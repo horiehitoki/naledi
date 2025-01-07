@@ -73,7 +73,7 @@ export const loader: LoaderFunction = async ({ request }) => {
             reaction.createdAt?.toISOString() ?? new Date().toISOString(),
           emojiRef: JSON.parse(reaction.record).emoji,
           emoji: JSON.parse(reaction.emoji),
-          actor,
+          actor: actor.data,
         };
       })
     );

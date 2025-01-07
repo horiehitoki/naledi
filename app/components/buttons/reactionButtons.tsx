@@ -7,7 +7,7 @@ import {
 import { BlueMojiCollectionItem } from "~/generated/api";
 import { usePost, useReaction } from "~/state/post";
 import { useProfile } from "~/state/profile";
-import EmojiRender from "../emoji/emojiRender";
+import EmojiRender from "../render/emojiRender";
 import { Reaction } from "~/generated/api/types/app/netlify/stellarbsky/getReaction";
 
 export default function ReactionButtons({ cid }: { cid: string }) {
@@ -21,33 +21,36 @@ export default function ReactionButtons({ cid }: { cid: string }) {
     const key = r.emojiRef!.rkey + ":" + r.emojiRef!.repo;
 
     if (!groupedReactions.has(key)) {
-      groupedReactions.set(key, { count: 0, reactions: [] });
+      groupedReactions.set(key, { count: 0, group: [] });
     }
 
     groupedReactions.get(key).count++;
-    groupedReactions.get(key).reactions.push(r);
+    groupedReactions.get(key).group.push(r);
   });
 
   return (
     <TooltipProvider>
       <div className="flex flex-wrap gap-2">
-        {[...groupedReactions.values()].map(({ count, reactions }) => {
-          const emoji: BlueMojiCollectionItem.ItemView = reactions[0].emoji;
+        {[...groupedReactions.values()].map(({ count, group }) => {
+          const emoji: BlueMojiCollectionItem.ItemView = group[0].emoji;
 
-          const myReactions = reactions.filter(
-            (r: Reaction) => r.actor?.data?.did === profile?.did
+          //自分のしたリアクションをフィルター
+          const myReactions = group.filter(
+            (r: Reaction) => r.actor.did === profile?.did
           );
 
           return (
-            <Tooltip key={reactions[0].rkey}>
+            <Tooltip key={group[0].rkey}>
               <TooltipTrigger>
                 <button
                   onClick={() =>
                     myReactions.length > 0
                       ? cancelReaction(myReactions[0])
                       : reaction(
-                          reactions[0].emojiRef!.rkey,
-                          reactions[0].emojiRef!.repo
+                          group[0].emojiRef!.rkey,
+                          group[0].emojiRef!.repo,
+                          group[0].emoji,
+                          profile!
                         )
                   }
                   className={`relative flex items-center space-x-2 px-2 py-1 rounded-lg text-sm font-medium transition-all ${
@@ -58,8 +61,9 @@ export default function ReactionButtons({ cid }: { cid: string }) {
                 >
                   <p>
                     <EmojiRender
-                      record={reactions[0].emoji}
-                      repo={reactions[0].emojiRef!.repo}
+                      cid={group[0].emoji.formats.png_128.ref.$link}
+                      repo={group[0].emojiRef!.repo}
+                      alt={group[0].emoji.alt}
                     />
                   </p>
                   <span className="ml-1">{count}</span>

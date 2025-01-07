@@ -1,10 +1,12 @@
 import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node";
-import { Form } from "@remix-run/react";
-import { Upload } from "lucide-react";
-import Main from "~/components/layout/main";
+import { Form, useActionData, useNavigation } from "@remix-run/react";
+import { Loader2, UploadIcon } from "lucide-react";
+import { useEffect } from "react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import { Toaster } from "~/components/ui/toaster";
+import { useToast } from "~/hooks/use-toast";
 import { getSessionAgent } from "~/lib/auth/session";
 import { uploadBluemoji } from "~/lib/bluemoji/upload";
 
@@ -28,7 +30,9 @@ export const action: ActionFunction = async ({ request }) => {
       return { error: "絵文字名を入力してください" };
     }
 
-    if (!name.match(/:((?!.*--)[A-Za-z0-9-]{4,20}(?<!-)):/gim)) {
+    const matches = name.match(/:((?!.*--)[A-Za-z0-9-]{4,20}(?<!-)):/);
+
+    if (!matches || matches[0] !== name) {
       return { error: "無効な絵文字名です" };
     }
 
@@ -45,7 +49,7 @@ export const action: ActionFunction = async ({ request }) => {
       emojiName: name,
     });
 
-    return { success: true };
+    return { message: "絵文字のアップロードに成功しました。" };
   } catch (error) {
     console.error("Emoji upload error:", error);
     return { error: "アップロード中にエラーが発生しました" };
@@ -53,16 +57,38 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export default function UploadEmoji() {
+  const { toast } = useToast();
+  const actionData = useActionData<typeof action>();
+  const navigation = useNavigation();
+  const isLoading = navigation.state === "submitting";
+
+  useEffect(() => {
+    if (actionData?.message) {
+      toast({
+        title: actionData.message,
+      });
+    }
+
+    if (actionData?.error) {
+      toast({
+        title: "Error",
+        description: actionData.error,
+        variant: "destructive",
+      });
+    }
+  }, [actionData, toast]);
+
   return (
-    <Main>
+    <div>
+      <Toaster />
       <Form
         method="post"
         encType="multipart/form-data"
-        action="/upload"
+        action="/emoji/upload"
         className="p-6 space-y-6"
       >
         <h2 className="text-2xl text-center font-bold">
-          カスタム絵文字をアップロード
+          Bluemojiをアップロード
         </h2>
 
         <div>
@@ -70,45 +96,49 @@ export default function UploadEmoji() {
           <Input
             id="name"
             name="name"
-            pattern="^:[a-zA-Z0-9_]+:$"
+            pattern=":((?!.*--)[A-Za-z0-9-]{4,20}(?<!-)):"
             title="絵文字名は :name: の形式である必要があります。"
             required
+            disabled={isLoading}
           />
         </div>
 
         <div>
           <Label htmlFor="alt">Alt</Label>
-          <Input id="alt" name="alt" required />
+          <Input id="alt" name="alt" required disabled={isLoading} />
         </div>
 
         <div>
           <Label htmlFor="file">画像ファイル</Label>
-          <div className="p-4 border border-dashed border-gray-600 rounded text-center">
-            <Upload className="w-12 h-12 mx-auto text-gray-400" />
-            <div className="mt-2 text-gray-400">
-              <Label className="text-green-500 hover:text-green-400 cursor-pointer">
-                <span>ファイルを選択</span>
-                <Input
-                  id="file"
-                  name="file"
-                  type="file"
-                  accept="image/png"
-                  required
-                  className="hidden"
-                />
-              </Label>
-              <p className="mt-2 text-sm">PNG</p>
-            </div>
-          </div>
+
+          <Input
+            id="file"
+            name="file"
+            type="file"
+            accept="image/png"
+            required
+            disabled={isLoading}
+          />
         </div>
 
         <Button
           type="submit"
           className="w-full bg-green-600 hover:bg-green-700"
+          disabled={isLoading}
         >
-          アップロード
+          {isLoading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              アップロード中....
+            </>
+          ) : (
+            <>
+              <UploadIcon className="mr-2 h-4 w-4" />
+              アップロード
+            </>
+          )}
         </Button>
       </Form>
-    </Main>
+    </div>
   );
 }

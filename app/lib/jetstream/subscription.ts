@@ -36,35 +36,39 @@ async function updateReaction(
     | CommitCreateEvent<"app.netlify.stellarbsky.reaction">
     | CommitUpdateEvent<"app.netlify.stellarbsky.reaction">
 ) {
-  const record = event.commit.record;
+  try {
+    const record = event.commit.record;
 
-  if (
-    AppNetlifyStellarbskyReaction.isRecord(record) &&
-    AppNetlifyStellarbskyReaction.validateRecord(record)
-  ) {
-    //絵文字のレコードを取得する
-    const emoji = await getEmojiFromPDS(record.emoji.rkey, record.emoji.repo);
+    if (
+      AppNetlifyStellarbskyReaction.isRecord(record) &&
+      AppNetlifyStellarbskyReaction.validateRecord(record)
+    ) {
+      //絵文字のレコードを取得する
+      const emoji = await getEmojiFromPDS(record.emoji.rkey, record.emoji.repo);
 
-    await prisma.reaction.upsert({
-      where: {
-        rkey: event.commit.rkey,
-      },
-      update: {
-        post_uri: record.subject.uri,
-        post_cid: record.subject.cid,
-        record: JSON.stringify(record),
-        emoji: JSON.stringify(emoji),
-        authorDid: record.authorDid,
-      },
-      create: {
-        rkey: event.commit.rkey,
-        post_uri: record.subject.uri,
-        post_cid: record.subject.cid,
-        record: JSON.stringify(record),
-        emoji: JSON.stringify(emoji),
-        authorDid: record.authorDid,
-      },
-    });
+      await prisma.reaction.upsert({
+        where: {
+          rkey: event.commit.rkey,
+        },
+        update: {
+          post_uri: record.subject.uri,
+          post_cid: record.subject.cid,
+          record: JSON.stringify(record),
+          emoji: JSON.stringify(emoji),
+          authorDid: record.authorDid,
+        },
+        create: {
+          rkey: event.commit.rkey,
+          post_uri: record.subject.uri,
+          post_cid: record.subject.cid,
+          record: JSON.stringify(record),
+          emoji: JSON.stringify(emoji),
+          authorDid: record.authorDid,
+        },
+      });
+    }
+  } catch (e) {
+    console.log(e);
   }
 }
 
@@ -73,30 +77,34 @@ async function updateEmoji(
     | CommitCreateEvent<"blue.moji.collection.item">
     | CommitUpdateEvent<"blue.moji.collection.item">
 ) {
-  const record = event.commit.record;
-  const author = event.did;
+  try {
+    const record = event.commit.record;
+    const author = event.did;
 
-  if (
-    BlueMojiCollectionItem.isRecord(record) &&
-    BlueMojiCollectionItem.validateRecord(record)
-  ) {
-    await prisma.emoji.upsert({
-      //一つのユーザーリポジトリで絵文字名がユニークになる(はず)(多分)
-      where: {
-        rkey_repo: {
+    if (
+      BlueMojiCollectionItem.isRecord(record) &&
+      BlueMojiCollectionItem.validateRecord(record)
+    ) {
+      await prisma.emoji.upsert({
+        //一つのユーザーリポジトリで絵文字名がユニークになる(はず)(多分)
+        where: {
+          rkey_repo: {
+            rkey: event.commit.rkey,
+            repo: author,
+          },
+        },
+        update: {
+          record: JSON.stringify(record),
+        },
+        create: {
+          record: JSON.stringify(record),
           rkey: event.commit.rkey,
           repo: author,
         },
-      },
-      update: {
-        record: JSON.stringify(record),
-      },
-      create: {
-        record: JSON.stringify(record),
-        rkey: event.commit.rkey,
-        repo: author,
-      },
-    });
+      });
+    }
+  } catch (e) {
+    console.log(e);
   }
 }
 
@@ -115,9 +123,13 @@ jetstream.onUpdate("app.netlify.stellarbsky.reaction", async (event) => {
 jetstream.onDelete("app.netlify.stellarbsky.reaction", async (event) => {
   console.log(`Deleted Reaction: ${event.commit.rkey}`);
 
-  await prisma.reaction.delete({
-    where: { rkey: event.commit.rkey },
-  });
+  try {
+    await prisma.reaction.delete({
+      where: { rkey: event.commit.rkey },
+    });
+  } catch (e) {
+    console.log(e);
+  }
 });
 
 jetstream.onCreate("blue.moji.collection.item", async (event) => {
@@ -135,12 +147,16 @@ jetstream.onUpdate("blue.moji.collection.item", async (event) => {
 jetstream.onDelete("blue.moji.collection.item", async (event) => {
   console.log(`Deleted Reaction: ${event.commit.rkey}`);
 
-  await prisma.emoji.delete({
-    where: {
-      rkey_repo: {
-        rkey: event.commit.rkey,
-        repo: event.did,
+  try {
+    await prisma.emoji.delete({
+      where: {
+        rkey_repo: {
+          rkey: event.commit.rkey,
+          repo: event.did,
+        },
       },
-    },
-  });
+    });
+  } catch (e) {
+    console.log(e);
+  }
 });
