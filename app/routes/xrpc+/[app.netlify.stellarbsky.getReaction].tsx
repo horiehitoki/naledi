@@ -85,7 +85,7 @@ export const loader: LoaderFunction = async ({ request }) => {
       reactions: transformedReactions,
     };
 
-    return response;
+    return Response.json(response);
   } catch (error) {
     console.error("Err:", error);
     return new Response(JSON.stringify({ error: "Internal server error" }), {

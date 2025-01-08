@@ -7,6 +7,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { options, useTimeline } from "~/hooks/useTimeline";
 import Post from "./post";
 import { Reaction } from "~/generated/api/types/app/netlify/stellarbsky/getReaction";
+import { Toaster } from "../ui/toaster";
 
 type Post = {
   post: PostView;
@@ -23,24 +24,27 @@ export default function Timeline(options: options) {
   const posts = data?.pages.flatMap((page) => page.feed) ?? [];
 
   return (
-    <InfiniteScroll
-      dataLength={posts.length}
-      next={() => fetchNextPage()}
-      hasMore={hasNextPage}
-      loader={<div>loading...</div>}
-    >
-      <div className="space-y-8">
-        {posts.map((post: Post) => {
-          return (
-            <Post
-              post={post.post}
-              reason={post.reason}
-              reactions={post.reactions}
-              key={post.post.cid}
-            />
-          );
-        })}
-      </div>
-    </InfiniteScroll>
+    <div>
+      <Toaster />
+      <InfiniteScroll
+        dataLength={posts.length}
+        next={() => fetchNextPage()}
+        hasMore={hasNextPage}
+        loader={<div>loading...</div>}
+      >
+        <div className="space-y-8">
+          {posts.map((post: Post) => {
+            return (
+              <Post
+                post={post.post}
+                reason={post.reason}
+                reactions={post.reactions}
+                key={post.post.cid}
+              />
+            );
+          })}
+        </div>
+      </InfiniteScroll>
+    </div>
   );
 }

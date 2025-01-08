@@ -10,7 +10,12 @@ export function detectFacets(text: any /*UnicodeString*/): Facet[] | undefined {
   {
     const re = BLUEMOJI_REGEX;
     while ((match = re.exec(text.utf16))) {
-      const start = text.utf16.indexOf(match[0], match.index) - 1;
+      console.log(match);
+      const start =
+        match.index > 0
+          ? text.utf16.indexOf(match[0], match.index) - 1
+          : match.index;
+
       facets.push({
         $type: "app.bsky.richtext.facet",
         index: {

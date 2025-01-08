@@ -22,7 +22,7 @@ import { Button } from "../ui/button";
 import { useEmojiPicker } from "~/state/emojiPicker";
 import { Reaction } from "~/generated/api/types/app/netlify/stellarbsky/getReaction";
 import ReactionButtons from "../buttons/reactionButtons";
-import FacetRenderer from "../render/facetRender";
+import FacetRender from "../render/facetRender";
 
 export default function Post({
   post,
@@ -107,7 +107,7 @@ export default function Post({
         </CardHeader>
 
         <CardContent className="space-y-4">
-          <FacetRenderer text={record.text as string} facets={record.facets} />
+          <FacetRender text={record.text as string} facets={record.facets} />
 
           {images && (
             <div className="relative">
@@ -165,17 +165,16 @@ export default function Post({
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-4 mt-2">
+          <div className="flex flex-wrap items-center gap-4 mt-2 pickerOpen">
             <ReactionButtons cid={post.cid} />
 
             <button
               onClick={() =>
                 toggleEmojiPicker(post.uri, post.cid, cardRef.current!)
               }
-              id="pickerOpen"
               className="flex items-center space-x-1 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-2 py-1 rounded-full text-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
             >
-              <Smile className="w-4 h-4" id="pickerOpen" />
+              <Smile className="w-4 h-4" />
             </button>
           </div>
         </CardFooter>

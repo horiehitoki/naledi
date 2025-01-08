@@ -34,7 +34,7 @@ export default function SideBar() {
             <Smile size={24} />
             <span className="text-lg font-medium">Bluemoji設定</span>
           </a>
-          <div className="flex items-center space-x-4 hover:bg-gray-800 p-2 rounded-lg cursor-pointer">
+          <div>
             <PostButton />
           </div>
         </div>

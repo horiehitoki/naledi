@@ -2,7 +2,7 @@ import { Facet, RichText, RichTextSegment } from "@atproto/api";
 import { BlueMojiRichtextFacet } from "~/generated/api";
 import EmojiRender from "./emojiRender";
 
-export default function FacetRenderer({
+export default function FacetRender({
   text,
   facets,
 }: {

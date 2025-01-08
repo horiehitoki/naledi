@@ -2,6 +2,7 @@ import { ProfileView } from "@atproto/api/dist/client/types/app/bsky/actor/defs"
 import { atomFamily, useRecoilValue, useSetRecoilState } from "recoil";
 import { BlueMojiCollectionItem } from "~/generated/api";
 import { Reaction } from "~/generated/api/types/app/netlify/stellarbsky/getReaction";
+import { useToast } from "~/hooks/use-toast";
 
 export const postState = atomFamily<
   {
@@ -37,6 +38,7 @@ export const useSetPost = (id: string) => useSetRecoilState(postState(id));
 export const useLike = (postId: string) => {
   const state = usePost(postId);
   const setState = useSetPost(postId);
+  const { toast } = useToast();
 
   async function like() {
     if (!state.likeUri) {
@@ -53,6 +55,14 @@ export const useLike = (postId: string) => {
       });
 
       const json = await res.json();
+
+      if (json.error) {
+        toast({
+          title: "Error",
+          description: json.error,
+          variant: "destructive",
+        });
+      }
 
       //あとからuriをSet
       setState((prev) => ({
@@ -77,6 +87,16 @@ export const useLike = (postId: string) => {
         body: JSON.stringify({ likeUri: state.likeUri }),
       });
 
+      const json = await res.json();
+
+      if (json.error) {
+        toast({
+          title: "Error",
+          description: json.error,
+          variant: "destructive",
+        });
+      }
+
       return res;
     }
   }
@@ -87,6 +107,7 @@ export const useLike = (postId: string) => {
 export const useRepost = (postId: string) => {
   const state = usePost(postId);
   const setState = useSetPost(postId);
+  const { toast } = useToast();
 
   async function repost() {
     if (!state.repostUri) {
@@ -103,12 +124,29 @@ export const useRepost = (postId: string) => {
       });
       const json = await res.json();
 
+      if (json.error) {
+        toast({
+          title: "Error",
+          description: json.error,
+          variant: "destructive",
+        });
+      }
+
       //あとからuriをSet
       setState((prev) => ({
         ...prev,
         repostUri: json.uri,
       }));
-      return res;
+
+      toast({
+        title: "Error",
+        description: json.error,
+        variant: "destructive",
+      });
+
+      toast({
+        title: "リポストしました。",
+      });
     }
   }
 
@@ -126,7 +164,19 @@ export const useRepost = (postId: string) => {
         body: JSON.stringify({ repostUri: state.repostUri }),
       });
 
-      return res;
+      const json = await res.json();
+
+      if (json.error) {
+        toast({
+          title: "Error",
+          description: json.error,
+          variant: "destructive",
+        });
+      }
+
+      toast({
+        title: "リポストを取り消しました。",
+      });
     }
   }
 
@@ -136,6 +186,7 @@ export const useRepost = (postId: string) => {
 export const useReaction = (postId: string) => {
   const post = usePost(postId);
   const setState = useSetPost(postId);
+  const { toast } = useToast();
 
   async function reaction(
     rkey: string,
@@ -178,6 +229,14 @@ export const useReaction = (postId: string) => {
 
     const json = await res.json();
 
+    if (json.error) {
+      toast({
+        title: "Error",
+        description: json.error,
+        variant: "destructive",
+      });
+    }
+
     //IDを更新
     setState((prev) => ({
       ...prev,
@@ -193,12 +252,22 @@ export const useReaction = (postId: string) => {
       reactions: prev.reactions.filter((reaction) => reaction.rkey !== r.rkey),
     }));
 
-    await fetch("/api/reaction/", {
+    const res = await fetch("/api/reaction/", {
       method: "DELETE",
       body: JSON.stringify({
         rkey: r.rkey,
       }),
     });
+
+    const json = await res.json();
+
+    if (json.error) {
+      toast({
+        title: "Error",
+        description: json.error,
+        variant: "destructive",
+      });
+    }
   }
   return { reaction, cancelReaction };
 };

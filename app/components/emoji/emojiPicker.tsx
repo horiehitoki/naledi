@@ -23,12 +23,11 @@ export function EmojiPicker({ emojis }: { emojis: Emoji[] }) {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Node;
-      const element = event.target as Element;
 
       if (
         pickerRef.current &&
         !pickerRef.current.contains(target) &&
-        element.id !== "pickerOpen"
+        !(target instanceof Element && target.closest(".pickerOpen"))
       ) {
         setIsOpen(false);
       }
@@ -40,6 +39,8 @@ export function EmojiPicker({ emojis }: { emojis: Emoji[] }) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [setIsOpen]);
+
+  if (!isOpen) return null;
 
   if (!isOpen) return null;
 
