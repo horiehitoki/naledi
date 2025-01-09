@@ -17,7 +17,7 @@ export default function FooterMenu() {
               <HomeIcon className="w-6 h-6" />
             </a>
             <a
-              href="/"
+              href="/search"
               className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground"
             >
               <SearchIcon className="w-6 h-6" />

@@ -1,4 +1,4 @@
-import { Home, Bell, Smile } from "lucide-react";
+import { Home, Bell, Smile, SearchIcon } from "lucide-react";
 import { useProfile } from "~/state/profile";
 import PostButton from "../buttons/postButton";
 
@@ -22,6 +22,13 @@ export default function SideBar() {
           >
             <Home size={24} />
             <span className="text-lg font-medium">Home</span>
+          </a>
+          <a
+            href={`/search`}
+            className="flex items-center space-x-4 hover:bg-gray-800 p-2 rounded-lg cursor-pointer"
+          >
+            <SearchIcon size={24} />
+            <span className="text-lg font-medium">Search</span>
           </a>
           <div className="flex items-center space-x-4 hover:bg-gray-800 p-2 rounded-lg cursor-pointer">
             <Bell size={24} />

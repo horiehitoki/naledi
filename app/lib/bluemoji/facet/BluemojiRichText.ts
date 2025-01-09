@@ -108,6 +108,7 @@ export class BluemojiRichText extends RichText {
               continue;
             }
 
+            //TODO 別々のリポジトリで絵文字名が被っている場合の対応
             const data = await prisma.emoji.findFirst({
               where: { rkey: feature.name.replace(/:/g, "") },
             });
