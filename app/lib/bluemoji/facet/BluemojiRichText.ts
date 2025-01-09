@@ -12,6 +12,7 @@ import {
 import * as BlueMojiRichtextFacet from "~/generated/api/types/blue/moji/richtext/facet";
 import * as BlueMojiCollectionItem from "~/generated/api/types/blue/moji/collection/item";
 import { detectFacets } from "./detect-facets";
+import { prisma } from "~/lib/db/prisma";
 
 export const BLUEMOJI_REGEX = new RegExp(
   ":((?!.*--)[A-Za-z0-9-]{4,20}(?<!-)):",
@@ -107,22 +108,24 @@ export class BluemojiRichText extends RichText {
               continue;
             }
 
-            const { data: record } = await agent.com.atproto.repo.getRecord({
-              repo,
-              rkey: feature.name.replace(/:/g, ""),
-              collection: "blue.moji.collection.item",
+            const data = await prisma.emoji.findFirst({
+              where: { rkey: feature.name.replace(/:/g, "") },
             });
+
+            const record: { value: BlueMojiCollectionItem.ItemView } = {
+              value: JSON.parse(data!.record),
+            };
 
             if (BlueMojiCollectionItem.isRecord(record.value)) {
               feature.alt = record.value.alt;
-              feature.did = repo;
+              feature.did = data!.repo;
               feature.formats = {
                 $type: "blue.moji.richtext.facet#formats_v0",
               };
               if (BlueMojiCollectionItem.isFormats_v0(record.value.formats)) {
                 if (record.value.formats.png_128) {
                   feature.formats.png_128 =
-                    record.value.formats.png_128.ref.toString();
+                    record.value.formats.png_128.ref.$link.toString();
                 }
 
                 if (record.value.formats.apng_128) {

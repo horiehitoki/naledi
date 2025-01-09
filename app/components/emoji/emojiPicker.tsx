@@ -9,12 +9,14 @@ import EmojiRender from "../render/emojiRender";
 import { Emoji } from "@prisma/client";
 import { useProfile } from "~/state/profile";
 import { BlueMojiCollectionItem } from "~/generated/api";
+import { useEmojis } from "~/state/allEmoji";
 
-export function EmojiPicker({ emojis }: { emojis: Emoji[] }) {
+export function EmojiPicker() {
   const { handleEmojiClick } = useEmojiPicker();
   const isOpen = useIsEmojiPickerOpen();
   const setIsOpen = useSetIsEmojiPickerOpen();
   const emojiPicker = usePickerState();
+  const emojis: Emoji[] = useEmojis()!;
 
   const profile = useProfile();
 

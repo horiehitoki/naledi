@@ -1,4 +1,4 @@
-import { Home, Bell, User, Smile } from "lucide-react";
+import { Home, Bell, Smile } from "lucide-react";
 import { useProfile } from "~/state/profile";
 import PostButton from "../buttons/postButton";
 
@@ -6,9 +6,16 @@ export default function SideBar() {
   const profile = useProfile();
 
   return (
-    <div className="min-h-screen w-64 pt-12">
+    <div className="min-h-screen w-40 pt-12 fixed">
       {profile ? (
         <div className="space-y-6">
+          <a href={`/user/${profile.handle}`}>
+            <img
+              src={profile.avatar}
+              alt="icon"
+              className="rounded-full w-24 h-24"
+            />
+          </a>
           <a
             href={`/`}
             className="flex items-center space-x-4 hover:bg-gray-800 p-2 rounded-lg cursor-pointer"
@@ -21,18 +28,11 @@ export default function SideBar() {
             <span className="text-lg font-medium">Notifications</span>
           </div>
           <a
-            href={`/${profile.handle}`}
-            className="flex items-center space-x-4 hover:bg-gray-800 p-2 rounded-lg cursor-pointer"
-          >
-            <User size={24} />
-            <span className="text-lg font-medium">Profile</span>
-          </a>
-          <a
             href={`/emoji/list`}
             className="flex items-center space-x-4 hover:bg-gray-800 p-2 rounded-lg cursor-pointer"
           >
             <Smile size={24} />
-            <span className="text-lg font-medium">Bluemoji設定</span>
+            <span className="text-lg font-medium">Bluemoji</span>
           </a>
           <div>
             <PostButton />

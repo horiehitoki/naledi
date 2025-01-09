@@ -1,11 +1,6 @@
-import {
-  BellIcon,
-  HomeIcon,
-  PlusIcon,
-  SearchIcon,
-  UserIcon,
-} from "lucide-react";
+import { BellIcon, HomeIcon, SearchIcon, UserIcon } from "lucide-react";
 import { useProfile } from "~/state/profile";
+import PostButton from "../buttons/postButton";
 
 export default function FooterMenu() {
   const profile = useProfile();
@@ -27,9 +22,7 @@ export default function FooterMenu() {
             >
               <SearchIcon className="w-6 h-6" />
             </a>
-            <button className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground">
-              <PlusIcon className="w-6 h-6" />
-            </button>
+            <PostButton />
             <a
               href="/"
               className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground"
@@ -37,7 +30,7 @@ export default function FooterMenu() {
               <BellIcon className="w-6 h-6" />
             </a>
             <a
-              href={`/${profile.handle}`}
+              href={`/user/${profile.handle}`}
               className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground"
             >
               <UserIcon className="w-6 h-6" />

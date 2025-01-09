@@ -32,7 +32,7 @@ export default function Timeline(options: options) {
         hasMore={hasNextPage}
         loader={<div>loading...</div>}
       >
-        <div className="space-y-8">
+        <div>
           {posts.map((post: Post) => {
             return (
               <Post

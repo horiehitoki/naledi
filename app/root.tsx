@@ -18,6 +18,7 @@ import NotFound from "./components/ui/404";
 import ErrorPage from "./components/ui/errorPage";
 import { EmojiPicker } from "./components/emoji/emojiPicker";
 import { prisma } from "./lib/db/prisma";
+import { useSetEmojis } from "./state/allEmoji";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -53,8 +54,6 @@ const queryClient: QueryClient = new QueryClient({
 });
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const data = useLoaderData<typeof loader>();
-
   return (
     <RecoilRoot>
       <QueryClientProvider client={queryClient}>
@@ -69,7 +68,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <Links />
           </head>
           <body>
-            <EmojiPicker emojis={data?.emojis ?? []} />
+            <EmojiPicker />
             {children}
             <ScrollRestoration />
             <Scripts />
@@ -84,36 +83,32 @@ export default function App() {
   const data = useLoaderData<typeof loader>();
 
   const setProfile = useSetProfile();
+  const setEmojis = useSetEmojis();
 
   if (data?.profile) {
     setProfile(data?.profile?.data);
   }
+
+  if (data?.emojis) {
+    setEmojis(data?.emojis);
+  }
+
   return <Outlet />;
 }
 
 export function ErrorBoundary() {
   const error = useRouteError();
   return (
-    <html lang="jp" className="dark">
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <Meta />
-        <Links />
-      </head>
-      <body>
-        {isRouteErrorResponse(error) ? (
-          error.status === 404 ? (
-            <NotFound />
-          ) : (
-            <ErrorPage />
-          )
+    <div>
+      {isRouteErrorResponse(error) ? (
+        error.status === 404 ? (
+          <NotFound />
         ) : (
           <ErrorPage />
-        )}
-        <ScrollRestoration />
-        <Scripts />
-      </body>
-    </html>
+        )
+      ) : (
+        <ErrorPage />
+      )}
+    </div>
   );
 }

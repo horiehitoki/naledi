@@ -69,19 +69,19 @@ export default function Post({
 
   return (
     <div>
-      {reason?.by ? (
-        <h1 className="font-bold flex">
-          <Repeat2 className="mx-3" />
-          <h1>{reason.by.displayName + "がリポスト"}</h1>
-        </h1>
-      ) : (
-        ""
-      )}
-
-      <Card ref={cardRef}>
+      <Card ref={cardRef} className="rounded-none border-stone-700">
         <CardHeader>
+          {reason?.by ? (
+            <h1 className="font-bold flex">
+              <Repeat2 className="mx-3" />
+              <h1>{reason.by.displayName + "がリポスト"}</h1>
+            </h1>
+          ) : (
+            ""
+          )}
+
           <a
-            href={`/${post.author.handle}`}
+            href={`/user/${post.author.handle}`}
             className="hover:opacity-80 transition-opacity"
           >
             <div className="flex items-center space-x-4">
