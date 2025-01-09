@@ -30,7 +30,7 @@ export default function FooterMenu() {
               <BellIcon className="w-6 h-6" />
             </a>
             <a
-              href={`/user/${profile.handle}`}
+              href={`/user/${profile.handle}/posts`}
               className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground"
             >
               <UserIcon className="w-6 h-6" />

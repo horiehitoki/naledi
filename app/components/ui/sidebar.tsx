@@ -6,10 +6,10 @@ export default function SideBar() {
   const profile = useProfile();
 
   return (
-    <div className="min-h-screen w-40 pt-12 fixed">
+    <div className="min-h-screen w-64 pt-12 fixed">
       {profile ? (
         <div className="space-y-6">
-          <a href={`/user/${profile.handle}`}>
+          <a href={`/user/${profile.handle}/posts`}>
             <img
               src={profile.avatar}
               alt="icon"

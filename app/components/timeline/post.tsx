@@ -81,7 +81,7 @@ export default function Post({
           )}
 
           <a
-            href={`/user/${post.author.handle}`}
+            href={`/user/${post.author.handle}/posts`}
             className="hover:opacity-80 transition-opacity"
           >
             <div className="flex items-center space-x-4">

@@ -1,5 +1,4 @@
 import { ProfileView } from "@atproto/api/dist/client/types/app/bsky/actor/defs";
-import { UserCircle, Users } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Card, CardContent } from "~/components/ui/card";
 import { Badge } from "../ui/badge";
@@ -48,26 +47,24 @@ export default function Profile({ profile }: { profile: ProfileView }) {
 
         <div className="flex space-x-6 pt-2">
           <div className="flex items-center space-x-2">
-            <Users className="w-4 h-4 text-muted-foreground" />
-            <div>
+            <a href={`/user/${profile.did}/follow`}>
               <span className="font-semibold">
                 {profile.followsCount as string}
               </span>
               <span className="text-sm text-muted-foreground ml-1">
                 フォロー
               </span>
-            </div>
+            </a>
           </div>
           <div className="flex items-center space-x-2">
-            <UserCircle className="w-4 h-4 text-muted-foreground" />
-            <div>
+            <a href={`/user/${profile.did}/follower`}>
               <span className="font-semibold">
                 {profile.followersCount as string}
               </span>
               <span className="text-sm text-muted-foreground ml-1">
                 フォロワー
               </span>
-            </div>
+            </a>
           </div>
         </div>
       </CardContent>

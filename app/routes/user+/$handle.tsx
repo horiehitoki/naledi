@@ -1,0 +1,71 @@
+import { LoaderFunction } from "@remix-run/node";
+import { Outlet, useLoaderData, useLocation } from "@remix-run/react";
+import Main from "~/components/layout/main";
+import Profile from "~/components/profile/profile";
+import Alert from "~/components/ui/alert";
+import { resolveHandleOrDid } from "~/lib/actor/resolveHandleOrDid";
+import { getSessionAgent } from "~/lib/auth/session";
+
+export const loader: LoaderFunction = async ({ request, params }) => {
+  const agent = await getSessionAgent(request);
+  if (!agent) return new Response(null, { status: 400 });
+
+  const { handle } = params;
+  if (!handle) return new Response(null, { status: 404 });
+
+  const { profile, did, error } = await resolveHandleOrDid(handle, agent);
+
+  return { profile, did, error };
+};
+
+export default function Threads() {
+  const { profile, did, error } = useLoaderData<typeof loader>();
+  const location = useLocation();
+
+  const tabs = [
+    {
+      path: `posts`,
+      label: "Posts",
+    },
+    {
+      path: `follow`,
+      label: "Follow",
+    },
+    {
+      path: `follower`,
+      label: "Follower",
+    },
+  ];
+
+  if (!error)
+    return (
+      <Main>
+        <Profile profile={profile.data} />
+        <div className="flex space-x-2 mb-6">
+          {tabs.map(({ path, label }) => (
+            <a
+              key={path}
+              href={path}
+              className={`
+                flex items-center px-4 py-2 rounded-lg flex-1 
+                justify-center transition-colors
+                ${
+                  location.pathname.slice(
+                    location.pathname.lastIndexOf("/") + 1,
+                    location.pathname.length
+                  ) === path
+                    ? "bg-blue-600 text-white hover:bg-blue-700"
+                    : ""
+                }
+              `}
+            >
+              {label}
+            </a>
+          ))}
+        </div>
+        <Outlet context={{ profile, did, error }} />
+      </Main>
+    );
+
+  return <Alert message="ユーザーが見つかりませんでした。" />;
+}

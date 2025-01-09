@@ -30,7 +30,7 @@ export default function FacetRender({
       content.push(
         <a
           key={`mention-${index}`}
-          href={`/user/${mention!.did}`}
+          href={`/user/${mention!.did}/posts`}
           target="_blank"
           rel="noopener noreferrer"
           className="text-blue-500 hover:underline"

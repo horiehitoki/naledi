@@ -1,4 +1,4 @@
-import { Outlet, Link, useLocation } from "@remix-run/react";
+import { Outlet, useLocation } from "@remix-run/react";
 import { ListIcon, UploadIcon } from "lucide-react";
 import Main from "~/components/layout/main";
 
@@ -25,9 +25,9 @@ export default function EmojiSettings() {
 
         <div className="flex space-x-2 mb-6">
           {tabs.map(({ path, label, icon: Icon }) => (
-            <Link
+            <a
               key={path}
-              to={path}
+              href={path}
               className={`
                 flex items-center px-4 py-2 rounded-lg flex-1 
                 justify-center transition-colors
@@ -40,7 +40,7 @@ export default function EmojiSettings() {
             >
               <Icon className="w-4 h-4 mr-2" />
               {label}
-            </Link>
+            </a>
           ))}
         </div>
 
