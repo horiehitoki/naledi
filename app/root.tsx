@@ -19,6 +19,7 @@ import ErrorPage from "./components/ui/errorPage";
 import { EmojiPicker } from "./components/emoji/emojiPicker";
 import { prisma } from "./lib/db/prisma";
 import { useSetEmojis } from "./state/allEmoji";
+import { Toaster } from "./components/ui/toaster";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -68,6 +69,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <Links />
           </head>
           <body>
+            <Toaster />
             <EmojiPicker />
             {children}
             <ScrollRestoration />

@@ -5,7 +5,6 @@ import { useEffect } from "react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import { Toaster } from "~/components/ui/toaster";
 import { useToast } from "~/hooks/use-toast";
 import { getSessionAgent } from "~/lib/auth/session";
 import { uploadBluemoji } from "~/lib/bluemoji/upload";
@@ -80,7 +79,6 @@ export default function UploadEmoji() {
 
   return (
     <div>
-      <Toaster />
       <Form
         method="post"
         encType="multipart/form-data"

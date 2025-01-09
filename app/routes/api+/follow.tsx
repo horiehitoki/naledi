@@ -39,14 +39,14 @@ export const action: ActionFunction = async ({ request }) => {
       try {
         const body = await request.json();
 
-        const res = await agent.like(body.uri, body.cid);
+        const res = await agent.follow(body.did);
 
         return Response.json({ uri: res.uri });
       } catch (e) {
         console.log(e);
 
         return new Response(
-          JSON.stringify({ error: "いいねに失敗しました。" }),
+          JSON.stringify({ error: "フォローに失敗しました。" }),
           {
             status: 500,
           }
@@ -58,14 +58,14 @@ export const action: ActionFunction = async ({ request }) => {
       try {
         const body = await request.json();
 
-        await agent.deleteLike(body.likeUri);
+        await agent.deleteFollow(body.followUri);
 
         return Response.json({ ok: true });
       } catch (e) {
         console.log(e);
 
         return new Response(
-          JSON.stringify({ error: "いいねの取り消しに失敗しました。" }),
+          JSON.stringify({ error: "フォローの取り消しに失敗しました。" }),
           {
             status: 500,
           }

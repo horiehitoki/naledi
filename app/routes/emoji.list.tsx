@@ -9,7 +9,6 @@ import { Card, CardContent } from "~/components/ui/card";
 import { BlueMojiCollectionItem } from "~/generated/api";
 import Alert from "~/components/ui/alert";
 import { useToast } from "~/hooks/use-toast";
-import { Toaster } from "~/components/ui/toaster";
 
 export const loader: LoaderFunction = async ({ request }) => {
   try {
@@ -82,7 +81,6 @@ export default function EmojiList() {
   if (!error)
     return (
       <Card>
-        <Toaster />
         <CardContent className="p-6 shadow-md rounded-lg">
           <h1 className="text-2xl font-bold mb-6 text-center">
             アップロードしたBluemoji

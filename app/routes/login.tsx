@@ -11,7 +11,6 @@ import { createClient } from "~/lib/auth/client";
 import { Form, useActionData, useNavigation } from "@remix-run/react";
 import { Input } from "~/components/ui/input";
 import { LogIn, Loader2 } from "lucide-react";
-import { Toaster } from "~/components/ui/toaster";
 import { useToast } from "~/hooks/use-toast";
 import { useEffect } from "react";
 
@@ -55,7 +54,6 @@ export default function Index() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
-      <Toaster />
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <CardTitle className="text-3xl font-bold py-4 text-center">

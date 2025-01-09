@@ -44,8 +44,6 @@ export function EmojiPicker() {
 
   if (!isOpen) return null;
 
-  if (!isOpen) return null;
-
   return (
     <div
       ref={pickerRef}

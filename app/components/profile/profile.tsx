@@ -2,8 +2,75 @@ import { ProfileView } from "@atproto/api/dist/client/types/app/bsky/actor/defs"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Card, CardContent } from "~/components/ui/card";
 import { Badge } from "../ui/badge";
+import FacetRender from "../render/facetRender";
+import { RichText } from "@atproto/api";
+import { useState } from "react";
+import { useProfile } from "~/state/profile";
+import { Button } from "../ui/button";
+import { Delete, Plus } from "lucide-react";
+import { useToast } from "~/hooks/use-toast";
 
 export default function Profile({ profile }: { profile: ProfileView }) {
+  const [followed, setFollowed] = useState<boolean>(
+    profile.viewer?.following ? true : false
+  );
+  const [followUri, setFollowUri] = useState<string>(
+    profile.viewer?.following ?? ""
+  );
+
+  const myProfile = useProfile();
+  const { toast } = useToast();
+
+  //ProfileのFacetを検出
+  const rt = new RichText({ text: profile.description! });
+  rt.detectFacetsWithoutResolution();
+
+  async function follow() {
+    setFollowed(true);
+
+    const res = await fetch("/api/follow/", {
+      method: "POST",
+      body: JSON.stringify({ did: profile.did }),
+    });
+
+    const json = await res.json();
+
+    if (json.error) {
+      toast({
+        title: "Error",
+        description: "フォローに失敗しました。",
+        variant: "destructive",
+      });
+
+      return;
+    }
+
+    setFollowUri(json.uri);
+  }
+
+  async function deleteFollow() {
+    setFollowed(false);
+
+    const res = await fetch("/api/follow/", {
+      method: "DELETE",
+      body: JSON.stringify({ followUri: followUri }),
+    });
+
+    const json = await res.json();
+
+    if (json.error) {
+      toast({
+        title: "Error",
+        description: "フォローの解除に失敗しました。",
+        variant: "destructive",
+      });
+
+      return;
+    }
+
+    setFollowUri("");
+  }
+
   return (
     <Card>
       <div>
@@ -27,9 +94,28 @@ export default function Profile({ profile }: { profile: ProfileView }) {
 
       <CardContent className="space-y-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">
-            {profile.displayName}
-          </h1>
+          <div className="flex justify-between items-center">
+            <h1 className="text-2xl font-bold tracking-tight">
+              {profile.displayName}
+            </h1>
+            {profile.did !== myProfile!.did && (
+              <div>
+                {followed ? (
+                  <div>
+                    <Button onClick={deleteFollow}>
+                      <Delete /> フォロー解除
+                    </Button>
+                  </div>
+                ) : (
+                  <div>
+                    <Button onClick={follow}>
+                      <Plus /> フォロー
+                    </Button>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
 
           <div className="items-center space-x-2 text-muted-foreground mt-1">
             <span>@{profile.handle}</span>
@@ -41,7 +127,7 @@ export default function Profile({ profile }: { profile: ProfileView }) {
 
         {profile.description && (
           <p className="text-sm text-muted-foreground whitespace-pre-wrap leading-relaxed">
-            {profile.description}
+            <FacetRender text={profile.description} facets={rt.facets} />
           </p>
         )}
 

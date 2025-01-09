@@ -9,7 +9,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { Lightbox } from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
-import { MessageCircle, Repeat2, Smile } from "lucide-react";
+import { Ellipsis, MessageCircle, Repeat2, Smile } from "lucide-react";
 import {
   PostView,
   ReasonPin,
@@ -23,6 +23,24 @@ import { useEmojiPicker } from "~/state/emojiPicker";
 import { Reaction } from "~/generated/api/types/app/netlify/stellarbsky/getReaction";
 import ReactionButtons from "../buttons/reactionButtons";
 import FacetRender from "../render/facetRender";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "~/components/ui/dialog";
+import { useProfile } from "~/state/profile";
+import { useToast } from "~/hooks/use-toast";
 
 export default function Post({
   post,
@@ -39,7 +57,9 @@ export default function Post({
 }) {
   const setState = useSetPost(post.cid);
 
+  const myProfile = useProfile();
   const cardRef = useRef<HTMLDivElement>(null);
+  const { toast } = useToast();
 
   useEffect(() => {
     setState({
@@ -67,6 +87,25 @@ export default function Post({
 
   const record = post.record as PostView;
 
+  async function deletePost() {
+    const res = await fetch("/api/post/", {
+      method: "DELETE",
+      body: JSON.stringify({ postUri: post.uri }),
+    });
+
+    const json = await res.json();
+
+    if (json.error) {
+      toast({
+        title: "Error",
+        description: "投稿の削除に失敗しました。",
+        variant: "destructive",
+      });
+
+      return;
+    }
+  }
+
   return (
     <div>
       <Card ref={cardRef} className="rounded-none border-stone-700">
@@ -80,30 +119,68 @@ export default function Post({
             ""
           )}
 
-          <a
-            href={`/user/${post.author.handle}/posts`}
-            className="hover:opacity-80 transition-opacity"
-          >
-            <div className="flex items-center space-x-4">
-              <Avatar className="h-10 w-10">
-                <AvatarImage
-                  src={post.author.avatar}
-                  alt={post.author.displayName}
-                />
-                <AvatarFallback>
-                  {post.author.displayName?.[0]?.toUpperCase() || "?"}
-                </AvatarFallback>
-              </Avatar>
-              <div>
-                <p className="font-semibold text-sm">
-                  {post.author.displayName}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  @{post.author.handle}
-                </p>
+          <div className="flex justify-between">
+            <a
+              href={`/user/${post.author.handle}/posts`}
+              className="hover:opacity-80 transition-opacity"
+            >
+              <div className="flex items-center space-x-4">
+                <Avatar className="h-10 w-10">
+                  <AvatarImage
+                    src={post.author.avatar}
+                    alt={post.author.displayName}
+                  />
+                  <AvatarFallback>
+                    {post.author.displayName?.[0]?.toUpperCase() || "?"}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <p className="font-semibold text-sm">
+                    {post.author.displayName}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    @{post.author.handle}
+                  </p>
+                </div>
               </div>
+            </a>
+            <div>
+              {post.author.did === myProfile!.did ? (
+                <Dialog>
+                  <DialogTrigger>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger>
+                        <Ellipsis />
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        <DropdownMenuItem>投稿を削除する</DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>本当に削除しますか?</DialogTitle>
+                      <DialogDescription>
+                        この操作を取り消すことはできません。
+                      </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter className="sm:justify-start">
+                      <DialogClose>
+                        <Button
+                          className="bg-red-500 text-white"
+                          onClick={deletePost}
+                        >
+                          削除
+                        </Button>
+                      </DialogClose>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              ) : (
+                ""
+              )}
             </div>
-          </a>
+          </div>
         </CardHeader>
 
         <CardContent className="space-y-4">

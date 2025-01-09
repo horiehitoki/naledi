@@ -9,7 +9,6 @@ import { Button } from "~/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "~/hooks/use-toast";
-import { Toaster } from "../ui/toaster";
 import EmojiAutocompleteInput from "../emoji/emojiAutoComplete";
 
 export default function PostButton() {
@@ -50,8 +49,6 @@ export default function PostButton() {
 
   return (
     <div>
-      <Toaster />
-
       <Dialog open={postOpen} onOpenChange={setPostOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>

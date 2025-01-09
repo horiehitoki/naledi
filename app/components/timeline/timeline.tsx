@@ -7,7 +7,6 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { options, useTimeline } from "~/hooks/useTimeline";
 import Post from "./post";
 import { Reaction } from "~/generated/api/types/app/netlify/stellarbsky/getReaction";
-import { Toaster } from "../ui/toaster";
 
 type Post = {
   post: PostView;
@@ -25,7 +24,6 @@ export default function Timeline(options: options) {
 
   return (
     <div>
-      <Toaster />
       <InfiniteScroll
         dataLength={posts.length}
         next={() => fetchNextPage()}
