@@ -10,12 +10,12 @@ import { Reaction } from "~/generated/api/types/app/netlify/stellarbsky/getReact
 
 type Post = {
   post: PostView;
-  reason:
+  reason?:
     | ReasonRepost
     | ReasonPin
     | { [k: string]: unknown; $type: string }
     | undefined;
-  reactions: Reaction[];
+  reactions: Reaction[] | undefined;
 };
 
 export default function Timeline(options: options) {

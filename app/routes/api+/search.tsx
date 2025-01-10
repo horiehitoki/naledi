@@ -10,37 +10,33 @@ export const loader: LoaderFunction = async ({ request }) => {
 
   try {
     const cursor: string = getParams(request, "cursor");
-    const did: string = getParams(request, "did");
+    const query: string = getParams(request, "query");
 
-    let timeline;
-
-    if (did) {
-      // 特定ユーザーの投稿を取得
-      timeline = await agent.getAuthorFeed({
-        actor: did,
-        cursor: cursor,
-        limit: 20,
-      });
-    } else {
-      // ホームタイムラインを取得
-      timeline = await agent.getTimeline({
-        cursor: cursor,
-        limit: 20,
-      });
+    if (!query) {
+      return new Response(
+        JSON.stringify({ error: "検索クエリが指定されていません。" }),
+        { status: 400 }
+      );
     }
 
-    //リアクションデータを取得
-    const feed = await feedWithReaction(timeline.data.feed);
+    // 検索結果の投稿を取得
+    const timeline = await agent.app.bsky.feed.searchPosts({
+      q: query,
+      cursor: cursor ?? undefined,
+    });
+
+    // リアクションデータを取得
+    const postsWithReactions = await feedWithReaction(timeline.data.posts);
 
     return Response.json({
       ...timeline.data,
-      feed,
+      posts: postsWithReactions,
     });
   } catch (e) {
     console.log(e);
 
     return new Response(
-      JSON.stringify({ error: "タイムラインの取得に失敗しました。" }),
+      JSON.stringify({ error: "投稿の検索に失敗しました。" }),
       {
         status: 500,
       }

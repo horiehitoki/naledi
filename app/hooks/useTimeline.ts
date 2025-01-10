@@ -1,6 +1,9 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-export type options = { type: string; did: string | null };
+export type options = {
+  type: string;
+  did: string | null;
+};
 
 export const useTimeline = (options: options) => {
   const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
@@ -8,16 +11,19 @@ export const useTimeline = (options: options) => {
     queryFn: async ({ pageParam }) => {
       let endpoint;
 
-      if (pageParam) {
-        endpoint =
-          options.type === "home"
+      switch (options.type) {
+        case "home":
+          endpoint = pageParam
             ? `/api/timeline?cursor=${pageParam}`
-            : `/api/timeline?cursor=${pageParam}&did=${options.did}`;
-      } else {
-        endpoint =
-          options.type === "home"
-            ? `/api/timeline`
+            : "/api/timeline";
+          break;
+        case "user":
+          endpoint = pageParam
+            ? `/api/timeline?cursor=${pageParam}&did=${options.did}`
             : `/api/timeline?did=${options.did}`;
+          break;
+        default:
+          return;
       }
 
       const res = await fetch(endpoint);
