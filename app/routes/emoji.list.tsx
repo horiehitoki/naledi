@@ -9,6 +9,18 @@ import { Card, CardContent } from "~/components/ui/card";
 import { BlueMojiCollectionItem } from "~/generated/api";
 import Alert from "~/components/ui/alert";
 import { useToast } from "~/hooks/use-toast";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "~/components/ui/dialog";
+import { Button } from "~/components/ui/button";
+import { Delete } from "lucide-react";
 
 export const loader: LoaderFunction = async ({ request }) => {
   try {
@@ -108,12 +120,32 @@ export default function EmojiList() {
                       alt={data.alt!}
                     />
                     <p className="text-center text-sm mt-2">{emoji.rkey}</p>
-                    <button
-                      onClick={() => handleDelete(emoji.rkey)}
-                      className="mt-4 px-4 py-2 text-sm bg-red-500 rounded hover:bg-red-600"
-                    >
-                      削除
-                    </button>
+
+                    <Dialog>
+                      <DialogTrigger>
+                        <Button className="bg-red-500 text-white my-6">
+                          <Delete />
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>本当に削除しますか?</DialogTitle>
+                          <DialogDescription>
+                            この操作を取り消すことはできません。
+                          </DialogDescription>
+                        </DialogHeader>
+                        <DialogFooter className="sm:justify-start">
+                          <DialogClose>
+                            <Button
+                              className="bg-red-500 text-white"
+                              onClick={() => handleDelete(emoji.rkey)}
+                            >
+                              削除
+                            </Button>
+                          </DialogClose>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
                   </div>
                 );
               })}
