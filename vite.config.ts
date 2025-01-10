@@ -1,7 +1,6 @@
 import { vitePlugin as remix } from "@remix-run/dev";
 import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
-import { netlifyPlugin } from "@netlify/remix-adapter/plugin";
 import { flatRoutes } from "remix-flat-routes";
 declare module "@remix-run/node" {
   interface Future {
@@ -26,6 +25,5 @@ export default defineConfig({
       routes: async (defineRoutes) => flatRoutes("routes", defineRoutes),
     }),
     tsconfigPaths(),
-    netlifyPlugin(),
   ],
 });
