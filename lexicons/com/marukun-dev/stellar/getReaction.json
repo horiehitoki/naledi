@@ -1,6 +1,6 @@
 {
   "lexicon": 1,
-  "id": "app.netlify.stellarbsky.getReaction",
+  "id": "com.marukun-dev.stellar.getReaction",
   "defs": {
     "main": {
       "type": "query",
@@ -54,7 +54,7 @@
         "createdAt": { "type": "string", "format": "datetime" },
         "emojiRef": {
           "type": "ref",
-          "ref": "app.netlify.stellarbsky.reaction#emojiRef"
+          "ref": "com.marukun-dev.stellar.reaction#emojiRef"
         },
         "emoji": {
           "type": "ref",

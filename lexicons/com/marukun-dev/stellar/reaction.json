@@ -1,6 +1,6 @@
 {
   "lexicon": 1,
-  "id": "app.netlify.stellarbsky.reaction",
+  "id": "com.marukun-dev.stellar.reaction",
   "defs": {
     "main": {
       "type": "record",

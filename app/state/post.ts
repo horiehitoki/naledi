@@ -1,7 +1,7 @@
 import { ProfileView } from "@atproto/api/dist/client/types/app/bsky/actor/defs";
 import { atomFamily, useRecoilValue, useSetRecoilState } from "recoil";
 import { BlueMojiCollectionItem } from "~/generated/api";
-import { Reaction } from "~/generated/api/types/app/netlify/stellarbsky/getReaction";
+import { Reaction } from "~/generated/api/types/com/marukun-dev/stellar/getReaction";
 import { useToast } from "~/hooks/use-toast";
 
 export const postState = atomFamily<

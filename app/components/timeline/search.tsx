@@ -2,7 +2,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { options, useSearch } from "~/hooks/useSearch";
 import Post from "./post";
 import { PostView } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
-import { Reaction } from "~/generated/api/types/app/netlify/stellarbsky/getReaction";
+import { Reaction } from "~/generated/api/types/com/marukun-dev/stellar/getReaction";
 
 export default function Search(options: options) {
   const { data, fetchNextPage, hasNextPage } = useSearch(options);

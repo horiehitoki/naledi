@@ -6,7 +6,7 @@ import {
 import { prisma } from "../db/prisma.js";
 import WebSocket from "ws";
 import {
-  AppNetlifyStellarbskyReaction,
+  ComMarukunDevStellarReaction,
   BlueMojiCollectionItem,
 } from "~/generated/api/index.js";
 import { getEmojiFromPDS } from "../bluemoji/getEmoji.js";
@@ -14,7 +14,7 @@ import { getEmojiFromPDS } from "../bluemoji/getEmoji.js";
 export const jetstream = new Jetstream({
   ws: WebSocket,
   wantedCollections: [
-    "app.netlify.stellarbsky.reaction",
+    "com.marukun-dev.stellar.reaction",
     "blue.moji.collection.item",
   ],
 });
@@ -33,15 +33,15 @@ jetstream.on("error", (error) => {
 
 async function updateReaction(
   event:
-    | CommitCreateEvent<"app.netlify.stellarbsky.reaction">
-    | CommitUpdateEvent<"app.netlify.stellarbsky.reaction">
+    | CommitCreateEvent<"com.marukun-dev.stellar.reaction">
+    | CommitUpdateEvent<"com.marukun-dev.stellar.reaction">
 ) {
   try {
     const record = event.commit.record;
 
     if (
-      AppNetlifyStellarbskyReaction.isRecord(record) &&
-      AppNetlifyStellarbskyReaction.validateRecord(record)
+      ComMarukunDevStellarReaction.isRecord(record) &&
+      ComMarukunDevStellarReaction.validateRecord(record)
     ) {
       //絵文字のレコードを取得する
       const emoji = await getEmojiFromPDS(record.emoji.rkey, record.emoji.repo);
@@ -108,19 +108,19 @@ async function updateEmoji(
   }
 }
 
-jetstream.onCreate("app.netlify.stellarbsky.reaction", async (event) => {
+jetstream.onCreate("com.marukun-dev.stellar.reaction", async (event) => {
   console.log(`New Reaction: ${event.commit.rkey}`);
 
   await updateReaction(event);
 });
 
-jetstream.onUpdate("app.netlify.stellarbsky.reaction", async (event) => {
+jetstream.onUpdate("com.marukun-dev.stellar.reaction", async (event) => {
   console.log(`Updated Reaction: ${event.commit.rkey}`);
 
   await updateReaction(event);
 });
 
-jetstream.onDelete("app.netlify.stellarbsky.reaction", async (event) => {
+jetstream.onDelete("com.marukun-dev.stellar.reaction", async (event) => {
   console.log(`Deleted Reaction: ${event.commit.rkey}`);
 
   try {

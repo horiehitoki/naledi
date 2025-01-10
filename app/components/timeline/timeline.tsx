@@ -6,7 +6,7 @@ import {
 import InfiniteScroll from "react-infinite-scroll-component";
 import { options, useTimeline } from "~/hooks/useTimeline";
 import Post from "./post";
-import { Reaction } from "~/generated/api/types/app/netlify/stellarbsky/getReaction";
+import { Reaction } from "~/generated/api/types/com/marukun-dev/stellar/getReaction";
 
 type Post = {
   post: PostView;

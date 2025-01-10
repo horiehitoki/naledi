@@ -6,10 +6,10 @@ import { ValidationResult, BlobRef } from '@atproto/lexicon'
 import { isObj, hasProp } from '../../../../util'
 import { lexicons } from '../../../../lexicons'
 import { CID } from 'multiformats/cid'
-import * as ComAtprotoRepoStrongRef from '../../../com/atproto/repo/strongRef'
-import * as AppNetlifyStellarbskyReaction from './reaction'
+import * as ComAtprotoRepoStrongRef from '../../atproto/repo/strongRef'
+import * as ComMarukunDevStellarReaction from './reaction'
 import * as BlueMojiCollectionItem from '../../../blue/moji/collection/item'
-import * as AppBskyActorDefs from '../../bsky/actor/defs'
+import * as AppBskyActorDefs from '../../../app/bsky/actor/defs'
 
 export interface QueryParams {
   /** AT-URI of the subject (eg, a post record). */
@@ -49,7 +49,7 @@ export interface Reaction {
   rkey: string
   subject: ComAtprotoRepoStrongRef.Main
   createdAt: string
-  emojiRef?: AppNetlifyStellarbskyReaction.EmojiRef
+  emojiRef?: ComMarukunDevStellarReaction.EmojiRef
   emoji: BlueMojiCollectionItem.ItemView
   actor: AppBskyActorDefs.ProfileView
   [k: string]: unknown
@@ -59,10 +59,10 @@ export function isReaction(v: unknown): v is Reaction {
   return (
     isObj(v) &&
     hasProp(v, '$type') &&
-    v.$type === 'app.netlify.stellarbsky.getReaction#reaction'
+    v.$type === 'com.marukun-dev.stellar.getReaction#reaction'
   )
 }
 
 export function validateReaction(v: unknown): ValidationResult {
-  return lexicons.validate('app.netlify.stellarbsky.getReaction#reaction', v)
+  return lexicons.validate('com.marukun-dev.stellar.getReaction#reaction', v)
 }

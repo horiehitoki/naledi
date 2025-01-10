@@ -2,7 +2,7 @@ import {
   FeedViewPost,
   PostView,
 } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
-import { Reaction } from "~/generated/api/types/app/netlify/stellarbsky/getReaction";
+import { Reaction } from "~/generated/api/types/com/marukun-dev/stellar/getReaction";
 
 export default async function feedWithReaction(
   feed: FeedViewPost[] | PostView[]
@@ -13,7 +13,7 @@ export default async function feedWithReaction(
         const post = item as FeedViewPost;
 
         const res = await fetch(
-          `${process.env.APPVIEW_URL}/xrpc/app.netlify.stellarbsky.getReaction?uri=${post.post.uri}&cid=${post.post.cid}&limit=50`
+          `${process.env.APPVIEW_URL}/xrpc/com.marukun-dev.stellar.getReaction?uri=${post.post.uri}&cid=${post.post.cid}&limit=50`
         );
 
         const json: { reactions: Reaction[] } = await res.json();
@@ -26,7 +26,7 @@ export default async function feedWithReaction(
         const post = item as PostView;
 
         const res = await fetch(
-          `${process.env.APPVIEW_URL}/xrpc/app.netlify.stellarbsky.getReaction?uri=${post.uri}&cid=${post.cid}&limit=50`
+          `${process.env.APPVIEW_URL}/xrpc/com.marukun-dev.stellar.getReaction?uri=${post.uri}&cid=${post.cid}&limit=50`
         );
 
         const json: { reactions: Reaction[] } = await res.json();

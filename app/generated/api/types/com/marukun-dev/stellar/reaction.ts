@@ -5,7 +5,7 @@ import { ValidationResult, BlobRef } from '@atproto/lexicon'
 import { isObj, hasProp } from '../../../../util'
 import { lexicons } from '../../../../lexicons'
 import { CID } from 'multiformats/cid'
-import * as ComAtprotoRepoStrongRef from '../../../com/atproto/repo/strongRef'
+import * as ComAtprotoRepoStrongRef from '../../atproto/repo/strongRef'
 
 export interface Record {
   subject: ComAtprotoRepoStrongRef.Main
@@ -18,13 +18,13 @@ export function isRecord(v: unknown): v is Record {
   return (
     isObj(v) &&
     hasProp(v, '$type') &&
-    (v.$type === 'app.netlify.stellarbsky.reaction#main' ||
-      v.$type === 'app.netlify.stellarbsky.reaction')
+    (v.$type === 'com.marukun-dev.stellar.reaction#main' ||
+      v.$type === 'com.marukun-dev.stellar.reaction')
   )
 }
 
 export function validateRecord(v: unknown): ValidationResult {
-  return lexicons.validate('app.netlify.stellarbsky.reaction#main', v)
+  return lexicons.validate('com.marukun-dev.stellar.reaction#main', v)
 }
 
 export interface EmojiRef {
@@ -37,10 +37,10 @@ export function isEmojiRef(v: unknown): v is EmojiRef {
   return (
     isObj(v) &&
     hasProp(v, '$type') &&
-    v.$type === 'app.netlify.stellarbsky.reaction#emojiRef'
+    v.$type === 'com.marukun-dev.stellar.reaction#emojiRef'
   )
 }
 
 export function validateEmojiRef(v: unknown): ValidationResult {
-  return lexicons.validate('app.netlify.stellarbsky.reaction#emojiRef', v)
+  return lexicons.validate('com.marukun-dev.stellar.reaction#emojiRef', v)
 }
