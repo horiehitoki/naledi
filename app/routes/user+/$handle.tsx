@@ -10,7 +10,6 @@ import Main from "~/components/layout/main";
 import Profile from "~/components/profile/profile";
 import NotFound from "~/components/ui/404";
 import Alert from "~/components/ui/alert";
-import ErrorPage from "~/components/ui/errorPage";
 import { resolveHandleOrDid } from "~/lib/actor/resolveHandleOrDid";
 import { getSessionAgent } from "~/lib/auth/session";
 
