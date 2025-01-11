@@ -1,6 +1,14 @@
-import { Form, useNavigate, useSearchParams } from "@remix-run/react";
+import {
+  Form,
+  isRouteErrorResponse,
+  useNavigate,
+  useRouteError,
+  useSearchParams,
+} from "@remix-run/react";
 import Main from "~/components/layout/main";
 import Search from "~/components/timeline/search";
+import NotFound from "~/components/ui/404";
+import Alert from "~/components/ui/alert";
 import { Input } from "~/components/ui/input";
 
 export default function SearchPage() {
@@ -31,5 +39,22 @@ export default function SearchPage() {
 
       {currentQuery ? <Search query={currentQuery} /> : ""}
     </Main>
+  );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  return (
+    <div>
+      {isRouteErrorResponse(error) ? (
+        error.status === 404 ? (
+          <NotFound />
+        ) : (
+          <Alert message="検索に失敗しました。" />
+        )
+      ) : (
+        <Alert message="検索に失敗しました。" />
+      )}
+    </div>
   );
 }

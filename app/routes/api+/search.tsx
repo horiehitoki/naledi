@@ -26,7 +26,10 @@ export const loader: LoaderFunction = async ({ request }) => {
     });
 
     // リアクションデータを取得
-    const postsWithReactions = await feedWithReaction(timeline.data.posts);
+    const postsWithReactions = await feedWithReaction(
+      timeline.data.posts,
+      agent
+    );
 
     return Response.json({
       ...timeline.data,

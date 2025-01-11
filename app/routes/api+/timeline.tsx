@@ -30,7 +30,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     }
 
     //リアクションデータを取得
-    const feed = await feedWithReaction(timeline.data.feed);
+    const feed = await feedWithReaction(timeline.data.feed, agent);
 
     return Response.json({
       ...timeline.data,

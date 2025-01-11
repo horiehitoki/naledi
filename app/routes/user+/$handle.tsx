@@ -1,8 +1,16 @@
 import { LoaderFunction } from "@remix-run/node";
-import { Outlet, useLoaderData, useLocation } from "@remix-run/react";
+import {
+  isRouteErrorResponse,
+  Outlet,
+  useLoaderData,
+  useLocation,
+  useRouteError,
+} from "@remix-run/react";
 import Main from "~/components/layout/main";
 import Profile from "~/components/profile/profile";
+import NotFound from "~/components/ui/404";
 import Alert from "~/components/ui/alert";
+import ErrorPage from "~/components/ui/errorPage";
 import { resolveHandleOrDid } from "~/lib/actor/resolveHandleOrDid";
 import { getSessionAgent } from "~/lib/auth/session";
 
@@ -68,4 +76,21 @@ export default function Threads() {
     );
 
   return <Alert message="ユーザーが見つかりませんでした。" />;
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  return (
+    <div>
+      {isRouteErrorResponse(error) ? (
+        error.status === 404 ? (
+          <NotFound />
+        ) : (
+          <Alert message="ユーザーデータの取得に失敗しました。" />
+        )
+      ) : (
+        <Alert message="ユーザーデータの取得に失敗しました。" />
+      )}
+    </div>
+  );
 }

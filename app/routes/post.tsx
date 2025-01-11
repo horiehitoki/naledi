@@ -4,10 +4,16 @@ import {
   ReasonRepost,
 } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
 import { LoaderFunction } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import {
+  isRouteErrorResponse,
+  useLoaderData,
+  useRouteError,
+} from "@remix-run/react";
 import Main from "~/components/layout/main";
 import Post from "~/components/timeline/post";
+import NotFound from "~/components/ui/404";
 import Alert from "~/components/ui/alert";
+import ErrorPage from "~/components/ui/errorPage";
 import { Reaction } from "~/generated/api/types/com/marukun-dev/stellar/getReaction";
 import { getSessionAgent } from "~/lib/auth/session";
 import { getParams } from "~/utils/getParams";
@@ -79,4 +85,21 @@ export default function Threads() {
     );
 
   return <Alert message="投稿が見つかりませんでした。" />;
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  return (
+    <div>
+      {isRouteErrorResponse(error) ? (
+        error.status === 404 ? (
+          <NotFound />
+        ) : (
+          <ErrorPage />
+        )
+      ) : (
+        <ErrorPage />
+      )}
+    </div>
+  );
 }

@@ -7,6 +7,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { options, useTimeline } from "~/hooks/useTimeline";
 import Post from "./post";
 import { Reaction } from "~/generated/api/types/com/marukun-dev/stellar/getReaction";
+import Alert from "../ui/alert";
 
 type Post = {
   post: PostView;
@@ -19,8 +20,17 @@ type Post = {
 };
 
 export default function Timeline(options: options) {
-  const { data, fetchNextPage, hasNextPage } = useTimeline(options);
+  const { data, fetchNextPage, hasNextPage, isLoading, isError } =
+    useTimeline(options);
   const posts = data?.pages.flatMap((page) => page.feed) ?? [];
+
+  if (isLoading) {
+    <h1>loading...</h1>;
+  }
+
+  if (isError) {
+    <Alert message="タイムラインの取得に失敗しました。" />;
+  }
 
   return (
     <div>

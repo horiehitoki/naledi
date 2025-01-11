@@ -1,6 +1,9 @@
 import { LoaderFunction, redirect } from "@remix-run/node";
+import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 import Main from "~/components/layout/main";
 import Timeline from "~/components/timeline/timeline";
+import NotFound from "~/components/ui/404";
+import Alert from "~/components/ui/alert";
 import { getSessionAgent } from "~/lib/auth/session";
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -15,5 +18,22 @@ export default function Index() {
     <Main>
       <Timeline type="home" did={null} />
     </Main>
+  );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  return (
+    <div>
+      {isRouteErrorResponse(error) ? (
+        error.status === 404 ? (
+          <NotFound />
+        ) : (
+          <Alert message="タイムラインの取得に失敗しました。" />
+        )
+      ) : (
+        <Alert message="タイムラインの取得に失敗しました。" />
+      )}
+    </div>
   );
 }

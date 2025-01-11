@@ -1,6 +1,13 @@
-import { Outlet, useLocation } from "@remix-run/react";
+import {
+  isRouteErrorResponse,
+  Outlet,
+  useLocation,
+  useRouteError,
+} from "@remix-run/react";
 import { ListIcon, UploadIcon } from "lucide-react";
 import Main from "~/components/layout/main";
+import NotFound from "~/components/ui/404";
+import Alert from "~/components/ui/alert";
 
 export default function EmojiSettings() {
   const location = useLocation();
@@ -49,5 +56,22 @@ export default function EmojiSettings() {
         </div>
       </div>
     </Main>
+  );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  return (
+    <div>
+      {isRouteErrorResponse(error) ? (
+        error.status === 404 ? (
+          <NotFound />
+        ) : (
+          <Alert message="絵文字リストの取得に失敗しました。" />
+        )
+      ) : (
+        <Alert message="絵文字リストの取得に失敗しました。" />
+      )}
+    </div>
   );
 }

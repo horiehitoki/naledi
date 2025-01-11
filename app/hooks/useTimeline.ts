@@ -6,35 +6,36 @@ export type options = {
 };
 
 export const useTimeline = (options: options) => {
-  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
-    queryKey: ["timeline"],
-    queryFn: async ({ pageParam }) => {
-      let endpoint;
+  const { data, fetchNextPage, hasNextPage, isLoading, isError } =
+    useInfiniteQuery({
+      queryKey: ["timeline"],
+      queryFn: async ({ pageParam }) => {
+        let endpoint;
 
-      switch (options.type) {
-        case "home":
-          endpoint = pageParam
-            ? `/api/timeline?cursor=${pageParam}`
-            : "/api/timeline";
-          break;
-        case "user":
-          endpoint = pageParam
-            ? `/api/timeline?cursor=${pageParam}&did=${options.did}`
-            : `/api/timeline?did=${options.did}`;
-          break;
-        default:
-          return;
-      }
+        switch (options.type) {
+          case "home":
+            endpoint = pageParam
+              ? `/api/timeline?cursor=${pageParam}`
+              : "/api/timeline";
+            break;
+          case "user":
+            endpoint = pageParam
+              ? `/api/timeline?cursor=${pageParam}&did=${options.did}`
+              : `/api/timeline?did=${options.did}`;
+            break;
+          default:
+            return;
+        }
 
-      const res = await fetch(endpoint);
+        const res = await fetch(endpoint);
 
-      const feedView = await res.json();
+        const feedView = await res.json();
 
-      return feedView;
-    },
-    initialPageParam: null,
-    getNextPageParam: (lastPage) => lastPage.cursor,
-  });
+        return feedView;
+      },
+      initialPageParam: null,
+      getNextPageParam: (lastPage) => lastPage.cursor,
+    });
 
-  return { data, fetchNextPage, hasNextPage };
+  return { data, fetchNextPage, hasNextPage, isLoading, isError };
 };

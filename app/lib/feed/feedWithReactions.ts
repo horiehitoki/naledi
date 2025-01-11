@@ -1,41 +1,44 @@
+import { Agent } from "@atproto/api";
 import {
   FeedViewPost,
   PostView,
 } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
-import { Reaction } from "~/generated/api/types/com/marukun-dev/stellar/getReaction";
+import { ReactionAgent } from "../agent/reactionAgent";
 
 export default async function feedWithReaction(
-  feed: FeedViewPost[] | PostView[]
+  feed: FeedViewPost[] | PostView[],
+  agent: Agent
 ) {
-  return await Promise.all(
+  const data = await Promise.all(
     feed.map(async (item: FeedViewPost | PostView) => {
+      const reactionAgent = new ReactionAgent(agent);
       if (item.post) {
         const post = item as FeedViewPost;
 
-        const res = await fetch(
-          `${process.env.APPVIEW_URL}/xrpc/com.marukun-dev.stellar.getReaction?uri=${post.post.uri}&cid=${post.post.cid}&limit=50`
+        const reactions = await reactionAgent.get(
+          post.post.uri,
+          post.post.cid,
+          50
         );
 
-        const json: { reactions: Reaction[] } = await res.json();
+        if (!reactions) return null;
 
         return {
           ...post,
-          reactions: json.reactions,
+          reactions: reactions.data.reactions,
         };
       } else {
         const post = item as PostView;
+        const reactions = await reactionAgent.get(post.uri, post.cid, 50);
 
-        const res = await fetch(
-          `${process.env.APPVIEW_URL}/xrpc/com.marukun-dev.stellar.getReaction?uri=${post.uri}&cid=${post.cid}&limit=50`
-        );
-
-        const json: { reactions: Reaction[] } = await res.json();
+        if (!reactions) return null;
 
         return {
           ...post,
-          reactions: json.reactions,
+          reactions: reactions.data.reactions,
         };
       }
     })
   );
+  return data;
 }

@@ -4,13 +4,24 @@ import {
   ComMarukunDevStellarNS,
   ComMarukunDevStellarReaction,
 } from "~/generated/api";
+import { XrpcClient } from "@atproto/xrpc";
+import { schemaDict } from "~/generated/api/lexicons";
+import { schemaDict as atpDict } from "@atproto/api/dist/client/lexicons";
 
 export class ReactionAgent extends Agent {
   agent: ComMarukunDevStellarNS;
+  stellarXrpc: XrpcClient;
 
   constructor(options: ConstructorParameters<typeof Agent>[0]) {
     super(options);
     this.agent = new ComMarukunDevStellarNS(this);
+
+    this.stellarXrpc = new XrpcClient("https://stellar.marukun-dev.com", [
+      schemaDict.ComAtprotoRepoStrongRef,
+      schemaDict["ComMarukun-devStellarReaction"],
+      schemaDict.BlueMojiCollectionItem,
+      atpDict.AppBskyActorDefs,
+    ]);
   }
 
   static credential(serviceUrl: string = "https://public.api.bsky.app") {
@@ -18,51 +29,38 @@ export class ReactionAgent extends Agent {
     return new ReactionAgent(session);
   }
 
-  //なぜか LexiconDefNotFoundError: Lexicon not found: com.marukun-dev.stellar.getReaction になる
   async get(uri: string, cid: string, limit: number) {
-    try {
-      return this.agent.getReaction({ uri, cid, limit });
-    } catch (e) {
-      console.log(e);
-      throw new Error("絵文字リアクションの取得に失敗しました。");
-    }
+    return await this.stellarXrpc.call("com.marukun-dev.stellar.getReaction", {
+      uri,
+      cid,
+      limit,
+    });
   }
 
   async put(record: ComMarukunDevStellarReaction.Record) {
-    try {
-      if (
-        !ComMarukunDevStellarReaction.isRecord(record) &&
-        !ComMarukunDevStellarReaction.validateRecord(record)
-      )
-        return new Response(null, { status: 400 });
+    if (
+      !ComMarukunDevStellarReaction.isRecord(record) &&
+      !ComMarukunDevStellarReaction.validateRecord(record)
+    )
+      return new Response(null, { status: 400 });
 
-      const rkey = TID.nextStr();
+    const rkey = TID.nextStr();
 
-      await this.com.atproto.repo.putRecord({
-        collection: "com.marukun-dev.stellar.reaction",
-        repo: this.assertDid,
-        rkey: rkey,
-        record: record,
-      });
+    await this.com.atproto.repo.putRecord({
+      collection: "com.marukun-dev.stellar.reaction",
+      repo: this.assertDid,
+      rkey: rkey,
+      record: record,
+    });
 
-      return rkey;
-    } catch (e) {
-      console.error(e);
-
-      throw new Error("絵文字リアクションに失敗しました。");
-    }
+    return rkey;
   }
 
   async delete(rkey: string) {
-    try {
-      return await this.com.atproto.repo.deleteRecord({
-        collection: "com.marukun-dev.stellar.reaction",
-        repo: this.assertDid,
-        rkey: rkey,
-      });
-    } catch (e) {
-      console.error(e);
-      throw new Error("絵文字リアクションの解除に失敗しました。");
-    }
+    return await this.com.atproto.repo.deleteRecord({
+      collection: "com.marukun-dev.stellar.reaction",
+      repo: this.assertDid,
+      rkey: rkey,
+    });
   }
 }
