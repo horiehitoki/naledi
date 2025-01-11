@@ -4,6 +4,141 @@
 import { LexiconDoc, Lexicons } from '@atproto/lexicon'
 
 export const schemaDict = {
+  BlueMarilStellarGetReaction: {
+    lexicon: 1,
+    id: 'blue.maril.stellar.getReaction',
+    defs: {
+      main: {
+        type: 'query',
+        description:
+          'Get reaction records which reference a subject (by AT-URI and CID).',
+        parameters: {
+          type: 'params',
+          required: ['uri'],
+          properties: {
+            uri: {
+              type: 'string',
+              format: 'at-uri',
+              description: 'AT-URI of the subject (eg, a post record).',
+            },
+            cid: {
+              type: 'string',
+              format: 'cid',
+              description:
+                'CID of the subject record (aka, specific version of record), to filter reactions.',
+            },
+            limit: {
+              type: 'integer',
+              minimum: 1,
+              maximum: 100,
+              default: 50,
+            },
+            cursor: {
+              type: 'string',
+            },
+          },
+        },
+        output: {
+          encoding: 'application/json',
+          schema: {
+            type: 'object',
+            required: ['uri', 'reactions'],
+            properties: {
+              uri: {
+                type: 'string',
+                format: 'at-uri',
+              },
+              cid: {
+                type: 'string',
+                format: 'cid',
+              },
+              cursor: {
+                type: 'string',
+              },
+              reactions: {
+                type: 'array',
+                items: {
+                  type: 'ref',
+                  ref: 'lex:blue.maril.stellar.getReaction#reaction',
+                },
+              },
+            },
+          },
+        },
+      },
+      reaction: {
+        type: 'object',
+        required: ['rkey', 'subject', 'createdAt', 'emoji', 'actor'],
+        properties: {
+          rkey: {
+            type: 'string',
+          },
+          subject: {
+            type: 'ref',
+            ref: 'lex:com.atproto.repo.strongRef',
+          },
+          createdAt: {
+            type: 'string',
+            format: 'datetime',
+          },
+          emojiRef: {
+            type: 'ref',
+            ref: 'lex:blue.maril.stellar.reaction#emojiRef',
+          },
+          emoji: {
+            type: 'ref',
+            ref: 'lex:blue.moji.collection.item#itemView',
+          },
+          actor: {
+            type: 'ref',
+            ref: 'lex:app.bsky.actor.defs#profileView',
+          },
+        },
+      },
+    },
+  },
+  BlueMarilStellarReaction: {
+    lexicon: 1,
+    id: 'blue.maril.stellar.reaction',
+    defs: {
+      main: {
+        type: 'record',
+        description: 'Record declaring a emoji reaction of a subject content.',
+        key: 'tid',
+        record: {
+          type: 'object',
+          required: ['subject', 'emoji', 'authorDid'],
+          properties: {
+            subject: {
+              type: 'ref',
+              ref: 'lex:com.atproto.repo.strongRef',
+            },
+            emoji: {
+              type: 'ref',
+              ref: 'lex:blue.maril.stellar.reaction#emojiRef',
+            },
+            authorDid: {
+              type: 'string',
+              format: 'at-identifier',
+            },
+          },
+        },
+      },
+      emojiRef: {
+        type: 'object',
+        required: ['rkey', 'repo'],
+        properties: {
+          rkey: {
+            type: 'string',
+          },
+          repo: {
+            type: 'string',
+            format: 'did',
+          },
+        },
+      },
+    },
+  },
   BlueMojiCollectionItem: {
     lexicon: 1,
     id: 'blue.moji.collection.item',
@@ -834,141 +969,6 @@ export const schemaDict = {
       },
     },
   },
-  'ComMarukun-devStellarGetReaction': {
-    lexicon: 1,
-    id: 'com.marukun-dev.stellar.getReaction',
-    defs: {
-      main: {
-        type: 'query',
-        description:
-          'Get reaction records which reference a subject (by AT-URI and CID).',
-        parameters: {
-          type: 'params',
-          required: ['uri'],
-          properties: {
-            uri: {
-              type: 'string',
-              format: 'at-uri',
-              description: 'AT-URI of the subject (eg, a post record).',
-            },
-            cid: {
-              type: 'string',
-              format: 'cid',
-              description:
-                'CID of the subject record (aka, specific version of record), to filter reactions.',
-            },
-            limit: {
-              type: 'integer',
-              minimum: 1,
-              maximum: 100,
-              default: 50,
-            },
-            cursor: {
-              type: 'string',
-            },
-          },
-        },
-        output: {
-          encoding: 'application/json',
-          schema: {
-            type: 'object',
-            required: ['uri', 'reactions'],
-            properties: {
-              uri: {
-                type: 'string',
-                format: 'at-uri',
-              },
-              cid: {
-                type: 'string',
-                format: 'cid',
-              },
-              cursor: {
-                type: 'string',
-              },
-              reactions: {
-                type: 'array',
-                items: {
-                  type: 'ref',
-                  ref: 'lex:com.marukun-dev.stellar.getReaction#reaction',
-                },
-              },
-            },
-          },
-        },
-      },
-      reaction: {
-        type: 'object',
-        required: ['rkey', 'subject', 'createdAt', 'emoji', 'actor'],
-        properties: {
-          rkey: {
-            type: 'string',
-          },
-          subject: {
-            type: 'ref',
-            ref: 'lex:com.atproto.repo.strongRef',
-          },
-          createdAt: {
-            type: 'string',
-            format: 'datetime',
-          },
-          emojiRef: {
-            type: 'ref',
-            ref: 'lex:com.marukun-dev.stellar.reaction#emojiRef',
-          },
-          emoji: {
-            type: 'ref',
-            ref: 'lex:blue.moji.collection.item#itemView',
-          },
-          actor: {
-            type: 'ref',
-            ref: 'lex:app.bsky.actor.defs#profileView',
-          },
-        },
-      },
-    },
-  },
-  'ComMarukun-devStellarReaction': {
-    lexicon: 1,
-    id: 'com.marukun-dev.stellar.reaction',
-    defs: {
-      main: {
-        type: 'record',
-        description: 'Record declaring a emoji reaction of a subject content.',
-        key: 'tid',
-        record: {
-          type: 'object',
-          required: ['subject', 'emoji', 'authorDid'],
-          properties: {
-            subject: {
-              type: 'ref',
-              ref: 'lex:com.atproto.repo.strongRef',
-            },
-            emoji: {
-              type: 'ref',
-              ref: 'lex:com.marukun-dev.stellar.reaction#emojiRef',
-            },
-            authorDid: {
-              type: 'string',
-              format: 'at-identifier',
-            },
-          },
-        },
-      },
-      emojiRef: {
-        type: 'object',
-        required: ['rkey', 'repo'],
-        properties: {
-          rkey: {
-            type: 'string',
-          },
-          repo: {
-            type: 'string',
-            format: 'did',
-          },
-        },
-      },
-    },
-  },
   ComAtprotoRepoStrongRef: {
     lexicon: 1,
     id: 'com.atproto.repo.strongRef',
@@ -995,6 +995,8 @@ export const schemaDict = {
 export const schemas = Object.values(schemaDict)
 export const lexicons: Lexicons = new Lexicons(schemas)
 export const ids = {
+  BlueMarilStellarGetReaction: 'blue.maril.stellar.getReaction',
+  BlueMarilStellarReaction: 'blue.maril.stellar.reaction',
   BlueMojiCollectionItem: 'blue.moji.collection.item',
   BlueMojiCollectionListCollection: 'blue.moji.collection.listCollection',
   BlueMojiCollectionDefs: 'blue.moji.collection.defs',
@@ -1008,7 +1010,5 @@ export const ids = {
   BlueMojiPacksGetActorPacks: 'blue.moji.packs.getActorPacks',
   BlueMojiPacksGetPacks: 'blue.moji.packs.getPacks',
   BlueMojiRichtextFacet: 'blue.moji.richtext.facet',
-  'ComMarukun-devStellarGetReaction': 'com.marukun-dev.stellar.getReaction',
-  'ComMarukun-devStellarReaction': 'com.marukun-dev.stellar.reaction',
   ComAtprotoRepoStrongRef: 'com.atproto.repo.strongRef',
 }

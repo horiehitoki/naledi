@@ -1,6 +1,6 @@
 {
   "lexicon": 1,
-  "id": "com.marukun-dev.stellar.getReaction",
+  "id": "blue.maril.stellar.getReaction",
   "defs": {
     "main": {
       "type": "query",
@@ -54,7 +54,7 @@
         "createdAt": { "type": "string", "format": "datetime" },
         "emojiRef": {
           "type": "ref",
-          "ref": "com.marukun-dev.stellar.reaction#emojiRef"
+          "ref": "blue.maril.stellar.reaction#emojiRef"
         },
         "emoji": {
           "type": "ref",

@@ -20,7 +20,7 @@ import { RepostButton } from "../buttons/repostButton";
 import { LikeButton } from "../buttons/likeButton";
 import { Button } from "../ui/button";
 import { useEmojiPicker } from "~/state/emojiPicker";
-import { Reaction } from "~/generated/api/types/com/marukun-dev/stellar/getReaction";
+import { Reaction } from "~/generated/api/types/blue/maril/stellar/getReaction";
 import ReactionButtons from "../buttons/reactionButtons";
 import FacetRender from "../render/facetRender";
 import {

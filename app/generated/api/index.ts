@@ -4,6 +4,8 @@
 import { XrpcClient, FetchHandler, FetchHandlerOptions } from '@atproto/xrpc'
 import { schemas } from './lexicons'
 import { CID } from 'multiformats/cid'
+import * as BlueMarilStellarGetReaction from './types/blue/maril/stellar/getReaction'
+import * as BlueMarilStellarReaction from './types/blue/maril/stellar/reaction'
 import * as BlueMojiCollectionItem from './types/blue/moji/collection/item'
 import * as BlueMojiCollectionListCollection from './types/blue/moji/collection/listCollection'
 import * as BlueMojiCollectionDefs from './types/blue/moji/collection/defs'
@@ -17,10 +19,10 @@ import * as BlueMojiPacksGetPack from './types/blue/moji/packs/getPack'
 import * as BlueMojiPacksGetActorPacks from './types/blue/moji/packs/getActorPacks'
 import * as BlueMojiPacksGetPacks from './types/blue/moji/packs/getPacks'
 import * as BlueMojiRichtextFacet from './types/blue/moji/richtext/facet'
-import * as ComMarukunDevStellarGetReaction from './types/com/marukun-dev/stellar/getReaction'
-import * as ComMarukunDevStellarReaction from './types/com/marukun-dev/stellar/reaction'
 import * as ComAtprotoRepoStrongRef from './types/com/atproto/repo/strongRef'
 
+export * as BlueMarilStellarGetReaction from './types/blue/maril/stellar/getReaction'
+export * as BlueMarilStellarReaction from './types/blue/maril/stellar/reaction'
 export * as BlueMojiCollectionItem from './types/blue/moji/collection/item'
 export * as BlueMojiCollectionListCollection from './types/blue/moji/collection/listCollection'
 export * as BlueMojiCollectionDefs from './types/blue/moji/collection/defs'
@@ -34,8 +36,6 @@ export * as BlueMojiPacksGetPack from './types/blue/moji/packs/getPack'
 export * as BlueMojiPacksGetActorPacks from './types/blue/moji/packs/getActorPacks'
 export * as BlueMojiPacksGetPacks from './types/blue/moji/packs/getPacks'
 export * as BlueMojiRichtextFacet from './types/blue/moji/richtext/facet'
-export * as ComMarukunDevStellarGetReaction from './types/com/marukun-dev/stellar/getReaction'
-export * as ComMarukunDevStellarReaction from './types/com/marukun-dev/stellar/reaction'
 export * as ComAtprotoRepoStrongRef from './types/com/atproto/repo/strongRef'
 
 export class AtpBaseClient extends XrpcClient {
@@ -56,11 +56,110 @@ export class AtpBaseClient extends XrpcClient {
 
 export class BlueNS {
   _client: XrpcClient
+  maril: BlueMarilNS
   moji: BlueMojiNS
 
   constructor(client: XrpcClient) {
     this._client = client
+    this.maril = new BlueMarilNS(client)
     this.moji = new BlueMojiNS(client)
+  }
+}
+
+export class BlueMarilNS {
+  _client: XrpcClient
+  stellar: BlueMarilStellarNS
+
+  constructor(client: XrpcClient) {
+    this._client = client
+    this.stellar = new BlueMarilStellarNS(client)
+  }
+}
+
+export class BlueMarilStellarNS {
+  _client: XrpcClient
+  reaction: ReactionRecord
+
+  constructor(client: XrpcClient) {
+    this._client = client
+    this.reaction = new ReactionRecord(client)
+  }
+
+  getReaction(
+    params?: BlueMarilStellarGetReaction.QueryParams,
+    opts?: BlueMarilStellarGetReaction.CallOptions,
+  ): Promise<BlueMarilStellarGetReaction.Response> {
+    return this._client.call(
+      'blue.maril.stellar.getReaction',
+      params,
+      undefined,
+      opts,
+    )
+  }
+}
+
+export class ReactionRecord {
+  _client: XrpcClient
+
+  constructor(client: XrpcClient) {
+    this._client = client
+  }
+
+  async list(
+    params: Omit<ComAtprotoRepoListRecords.QueryParams, 'collection'>,
+  ): Promise<{
+    cursor?: string
+    records: { uri: string; value: BlueMarilStellarReaction.Record }[]
+  }> {
+    const res = await this._client.call('com.atproto.repo.listRecords', {
+      collection: 'blue.maril.stellar.reaction',
+      ...params,
+    })
+    return res.data
+  }
+
+  async get(
+    params: Omit<ComAtprotoRepoGetRecord.QueryParams, 'collection'>,
+  ): Promise<{
+    uri: string
+    cid: string
+    value: BlueMarilStellarReaction.Record
+  }> {
+    const res = await this._client.call('com.atproto.repo.getRecord', {
+      collection: 'blue.maril.stellar.reaction',
+      ...params,
+    })
+    return res.data
+  }
+
+  async create(
+    params: Omit<
+      ComAtprotoRepoCreateRecord.InputSchema,
+      'collection' | 'record'
+    >,
+    record: BlueMarilStellarReaction.Record,
+    headers?: Record<string, string>,
+  ): Promise<{ uri: string; cid: string }> {
+    record.$type = 'blue.maril.stellar.reaction'
+    const res = await this._client.call(
+      'com.atproto.repo.createRecord',
+      undefined,
+      { collection: 'blue.maril.stellar.reaction', ...params, record },
+      { encoding: 'application/json', headers },
+    )
+    return res.data
+  }
+
+  async delete(
+    params: Omit<ComAtprotoRepoDeleteRecord.InputSchema, 'collection'>,
+    headers?: Record<string, string>,
+  ): Promise<void> {
+    await this._client.call(
+      'com.atproto.repo.deleteRecord',
+      undefined,
+      { collection: 'blue.maril.stellar.reaction', ...params },
+      { headers },
+    )
   }
 }
 
@@ -379,110 +478,11 @@ export class BlueMojiRichtextNS {
 
 export class ComNS {
   _client: XrpcClient
-  marukunDev: ComMarukunDevNS
   atproto: ComAtprotoNS
 
   constructor(client: XrpcClient) {
     this._client = client
-    this.marukunDev = new ComMarukunDevNS(client)
     this.atproto = new ComAtprotoNS(client)
-  }
-}
-
-export class ComMarukunDevNS {
-  _client: XrpcClient
-  stellar: ComMarukunDevStellarNS
-
-  constructor(client: XrpcClient) {
-    this._client = client
-    this.stellar = new ComMarukunDevStellarNS(client)
-  }
-}
-
-export class ComMarukunDevStellarNS {
-  _client: XrpcClient
-  reaction: ReactionRecord
-
-  constructor(client: XrpcClient) {
-    this._client = client
-    this.reaction = new ReactionRecord(client)
-  }
-
-  getReaction(
-    params?: ComMarukunDevStellarGetReaction.QueryParams,
-    opts?: ComMarukunDevStellarGetReaction.CallOptions,
-  ): Promise<ComMarukunDevStellarGetReaction.Response> {
-    return this._client.call(
-      'com.marukun-dev.stellar.getReaction',
-      params,
-      undefined,
-      opts,
-    )
-  }
-}
-
-export class ReactionRecord {
-  _client: XrpcClient
-
-  constructor(client: XrpcClient) {
-    this._client = client
-  }
-
-  async list(
-    params: Omit<ComAtprotoRepoListRecords.QueryParams, 'collection'>,
-  ): Promise<{
-    cursor?: string
-    records: { uri: string; value: ComMarukunDevStellarReaction.Record }[]
-  }> {
-    const res = await this._client.call('com.atproto.repo.listRecords', {
-      collection: 'com.marukun-dev.stellar.reaction',
-      ...params,
-    })
-    return res.data
-  }
-
-  async get(
-    params: Omit<ComAtprotoRepoGetRecord.QueryParams, 'collection'>,
-  ): Promise<{
-    uri: string
-    cid: string
-    value: ComMarukunDevStellarReaction.Record
-  }> {
-    const res = await this._client.call('com.atproto.repo.getRecord', {
-      collection: 'com.marukun-dev.stellar.reaction',
-      ...params,
-    })
-    return res.data
-  }
-
-  async create(
-    params: Omit<
-      ComAtprotoRepoCreateRecord.InputSchema,
-      'collection' | 'record'
-    >,
-    record: ComMarukunDevStellarReaction.Record,
-    headers?: Record<string, string>,
-  ): Promise<{ uri: string; cid: string }> {
-    record.$type = 'com.marukun-dev.stellar.reaction'
-    const res = await this._client.call(
-      'com.atproto.repo.createRecord',
-      undefined,
-      { collection: 'com.marukun-dev.stellar.reaction', ...params, record },
-      { encoding: 'application/json', headers },
-    )
-    return res.data
-  }
-
-  async delete(
-    params: Omit<ComAtprotoRepoDeleteRecord.InputSchema, 'collection'>,
-    headers?: Record<string, string>,
-  ): Promise<void> {
-    await this._client.call(
-      'com.atproto.repo.deleteRecord',
-      undefined,
-      { collection: 'com.marukun-dev.stellar.reaction', ...params },
-      { headers },
-    )
   }
 }
 

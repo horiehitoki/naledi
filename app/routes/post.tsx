@@ -14,7 +14,7 @@ import Post from "~/components/timeline/post";
 import NotFound from "~/components/ui/404";
 import Alert from "~/components/ui/alert";
 import ErrorPage from "~/components/ui/errorPage";
-import { Reaction } from "~/generated/api/types/com/marukun-dev/stellar/getReaction";
+import { Reaction } from "~/generated/api/types/blue/maril/stellar/getReaction";
 import { getSessionAgent } from "~/lib/auth/session";
 import { getParams } from "~/utils/getParams";
 
@@ -31,7 +31,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     const replies = threads.data.thread.replies as ThreadViewPost[];
 
     const res = await fetch(
-      `${process.env.APPVIEW_URL}/xrpc/com.marukun-dev.stellar.getReaction?uri=${post.uri}&cid=${post.cid}&limit=50`
+      `${process.env.APPVIEW_URL}/xrpc/blue.maril.stellar.getReaction?uri=${post.uri}&cid=${post.cid}&limit=50`
     );
     const json: { reactions: Reaction[] } = await res.json();
     const postWithReactions = {
@@ -42,7 +42,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     const repliesWithReactions = await Promise.all(
       replies.map(async (reply) => {
         const res = await fetch(
-          `${process.env.APPVIEW_URL}/xrpc/com.marukun-dev.stellar.getReaction?uri=${reply.post.uri}&cid=${reply.post.cid}&limit=50`
+          `${process.env.APPVIEW_URL}/xrpc/blue.maril.stellar.getReaction?uri=${reply.post.uri}&cid=${reply.post.cid}&limit=50`
         );
         const json: { reactions: Reaction[] } = await res.json();
         return {

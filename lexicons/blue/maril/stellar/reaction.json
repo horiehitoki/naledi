@@ -1,6 +1,6 @@
 {
   "lexicon": 1,
-  "id": "com.marukun-dev.stellar.reaction",
+  "id": "blue.maril.stellar.reaction",
   "defs": {
     "main": {
       "type": "record",

@@ -1,24 +1,22 @@
 import { Agent, CredentialSession } from "@atproto/api";
 import { TID } from "@atproto/common";
-import {
-  ComMarukunDevStellarNS,
-  ComMarukunDevStellarReaction,
-} from "~/generated/api";
+import { BlueMarilStellarNS, BlueMarilStellarReaction } from "~/generated/api";
 import { XrpcClient } from "@atproto/xrpc";
 import { schemaDict } from "~/generated/api/lexicons";
 import { schemaDict as atpDict } from "@atproto/api/dist/client/lexicons";
 
 export class ReactionAgent extends Agent {
-  agent: ComMarukunDevStellarNS;
+  agent: BlueMarilStellarNS;
   stellarXrpc: XrpcClient;
 
   constructor(options: ConstructorParameters<typeof Agent>[0]) {
     super(options);
-    this.agent = new ComMarukunDevStellarNS(this);
+    this.agent = new BlueMarilStellarNS(this);
 
-    this.stellarXrpc = new XrpcClient("https://stellar.marukun-dev.com", [
+    this.stellarXrpc = new XrpcClient("https://stellar.maril.blue", [
+      schemaDict.BlueMarilStellarReaction,
       schemaDict.ComAtprotoRepoStrongRef,
-      schemaDict["ComMarukun-devStellarReaction"],
+      schemaDict.BlueMarilStellarGetReaction,
       schemaDict.BlueMojiCollectionItem,
       atpDict.AppBskyActorDefs,
     ]);
@@ -30,24 +28,24 @@ export class ReactionAgent extends Agent {
   }
 
   async get(uri: string, cid: string, limit: number) {
-    return await this.stellarXrpc.call("com.marukun-dev.stellar.getReaction", {
+    return await this.stellarXrpc.call("blue.maril.stellar.getReaction", {
       uri,
       cid,
       limit,
     });
   }
 
-  async put(record: ComMarukunDevStellarReaction.Record) {
+  async put(record: BlueMarilStellarReaction.Record) {
     if (
-      !ComMarukunDevStellarReaction.isRecord(record) &&
-      !ComMarukunDevStellarReaction.validateRecord(record)
+      !BlueMarilStellarReaction.isRecord(record) &&
+      !BlueMarilStellarReaction.validateRecord(record)
     )
       return new Response(null, { status: 400 });
 
     const rkey = TID.nextStr();
 
     await this.com.atproto.repo.putRecord({
-      collection: "com.marukun-dev.stellar.reaction",
+      collection: "blue.maril.stellar.reaction",
       repo: this.assertDid,
       rkey: rkey,
       record: record,
@@ -58,7 +56,7 @@ export class ReactionAgent extends Agent {
 
   async delete(rkey: string) {
     return await this.com.atproto.repo.deleteRecord({
-      collection: "com.marukun-dev.stellar.reaction",
+      collection: "blue.maril.stellar.reaction",
       repo: this.assertDid,
       rkey: rkey,
     });

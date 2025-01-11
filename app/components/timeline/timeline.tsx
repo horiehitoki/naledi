@@ -6,7 +6,7 @@ import {
 import InfiniteScroll from "react-infinite-scroll-component";
 import { options, useTimeline } from "~/hooks/useTimeline";
 import Post from "./post";
-import { Reaction } from "~/generated/api/types/com/marukun-dev/stellar/getReaction";
+import { Reaction } from "~/generated/api/types/blue/maril/stellar/getReaction";
 import Alert from "../ui/alert";
 
 type Post = {

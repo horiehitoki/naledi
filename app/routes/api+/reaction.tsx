@@ -1,7 +1,7 @@
 import { Agent } from "@atproto/api";
 import type { ActionFunction } from "@remix-run/node";
 import { getSessionAgent } from "~/lib/auth/session";
-import { ComMarukunDevStellarReaction } from "~/generated/api";
+import { BlueMarilStellarReaction } from "~/generated/api";
 import { ReactionAgent } from "~/lib/agent/reactionAgent";
 
 export const action: ActionFunction = async ({ request }) => {
@@ -14,7 +14,7 @@ export const action: ActionFunction = async ({ request }) => {
       try {
         const body = await request.json();
 
-        const record: ComMarukunDevStellarReaction.Record = {
+        const record: BlueMarilStellarReaction.Record = {
           subject: {
             uri: body.subject.uri,
             cid: body.subject.cid,
@@ -24,8 +24,8 @@ export const action: ActionFunction = async ({ request }) => {
         };
 
         if (
-          !ComMarukunDevStellarReaction.isRecord(record) &&
-          !ComMarukunDevStellarReaction.validateRecord(record)
+          !BlueMarilStellarReaction.isRecord(record) &&
+          !BlueMarilStellarReaction.validateRecord(record)
         )
           return new Response(null, { status: 400 });
 
