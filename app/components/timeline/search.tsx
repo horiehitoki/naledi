@@ -11,11 +11,19 @@ export default function Search(options: options) {
   const posts = data?.pages.flatMap((page) => page.posts) ?? [];
 
   if (isLoading) {
-    <h1>loading...</h1>;
+    return <h1>loading...</h1>;
   }
 
   if (isError) {
-    <Alert message="タイムラインの取得に失敗しました。" />;
+    return <Alert message="タイムラインの取得に失敗しました。" />;
+  }
+
+  if (posts.length <= 0) {
+    return (
+      <h1 className="text-2xl font-bold text-center my-12">
+        検索結果が見つかりませんでした。
+      </h1>
+    );
   }
 
   return (

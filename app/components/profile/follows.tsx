@@ -10,11 +10,11 @@ export default function Follows({ did }: { did: string }) {
   const follows = data?.pages.flatMap((page) => page.follows) ?? [];
 
   if (isLoading) {
-    <h1>loading...</h1>;
+    return <h1>loading...</h1>;
   }
 
   if (isError) {
-    <Alert message="ユーザー情報の取得に失敗しました。" />;
+    return <Alert message="ユーザー情報の取得に失敗しました。" />;
   }
 
   return (

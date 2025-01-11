@@ -67,10 +67,10 @@ export function ErrorBoundary() {
         error.status === 404 ? (
           <NotFound />
         ) : (
-          <Alert message="絵文字リストの取得に失敗しました。" />
+          <Alert message="エラーが発生しました。" />
         )
       ) : (
-        <Alert message="絵文字リストの取得に失敗しました。" />
+        <Alert message="エラーが発生しました。" />
       )}
     </div>
   );

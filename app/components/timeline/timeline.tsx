@@ -25,11 +25,19 @@ export default function Timeline(options: options) {
   const posts = data?.pages.flatMap((page) => page.feed) ?? [];
 
   if (isLoading) {
-    <h1>loading...</h1>;
+    return <h1>loading...</h1>;
   }
 
   if (isError) {
-    <Alert message="タイムラインの取得に失敗しました。" />;
+    return <Alert message="タイムラインの取得に失敗しました。" />;
+  }
+
+  if (posts.length <= 0) {
+    return (
+      <h1 className="text-2xl font-bold text-center my-12">
+        このフィードには投稿がありません。
+      </h1>
+    );
   }
 
   return (
