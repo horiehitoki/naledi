@@ -69,8 +69,22 @@ export default function ReactionButtons({ cid }: { cid: string }) {
                   <span className="ml-1">{count}</span>
                 </button>
               </TooltipTrigger>
-              <TooltipContent>
+              <TooltipContent className="space-y-2">
                 <div className="text-center">{emoji.name}</div>
+                {group.map((r: Reaction) => {
+                  return (
+                    <div className="text-center flex" key={r.rkey}>
+                      <a href={`/user/${r.actor.did}/posts`}>
+                        <img
+                          src={r.actor.avatar}
+                          className="w-6 h-6 rounded-full mx-1"
+                          alt="avatar"
+                        />
+                      </a>
+                      {r.actor.displayName}がリアクション
+                    </div>
+                  );
+                })}
               </TooltipContent>
             </Tooltip>
           );
