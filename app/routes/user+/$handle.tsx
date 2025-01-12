@@ -42,6 +42,10 @@ export default function Threads() {
       path: `follower`,
       label: "Follower",
     },
+    {
+      path: `reactions`,
+      label: "Reactions",
+    },
   ];
 
   if (!error)

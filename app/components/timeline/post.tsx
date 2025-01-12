@@ -53,7 +53,7 @@ export default function Post({
     | ReasonPin
     | { [k: string]: unknown; $type: string }
     | undefined;
-  reactions: Reaction[] | undefined;
+  reactions?: Reaction[] | undefined;
 }) {
   const setState = useSetPost(post.cid);
 
@@ -250,11 +250,7 @@ export default function Post({
             </div>
 
             <div className="flex flex-wrap items-center gap-4 mt-2 pickerOpen">
-              {reactions && reactions?.length > 0 ? (
-                <ReactionButtons cid={post.cid} />
-              ) : (
-                ""
-              )}
+              {reactions ? <ReactionButtons cid={post.cid} /> : ""}
 
               <button
                 onClick={() =>
