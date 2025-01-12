@@ -96,7 +96,7 @@ export function EmojiPicker() {
                     <EmojiRender
                       repo={emoji.repo}
                       cid={data.formats.png_128?.ref.$link}
-                      alt={data.alt || ""}
+                      name={data.name}
                     />
                   </div>
                   <div className="text-[10px] text-muted-foreground truncate w-full text-center">

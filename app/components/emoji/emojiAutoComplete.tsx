@@ -78,7 +78,7 @@ export default function EmojiAutocompleteInput() {
                 <EmojiRender
                   repo={emoji.repo}
                   cid={data.formats.png_128?.ref.$link}
-                  alt={data.alt || ""}
+                  name={data.name}
                 />
 
                 <span className="text-sm text-gray-600">:{emoji.rkey}:</span>

@@ -63,7 +63,7 @@ export default function ReactionButtons({ cid }: { cid: string }) {
                     <EmojiRender
                       cid={group[0].emoji.formats.png_128.ref.$link}
                       repo={group[0].emojiRef!.repo}
-                      alt={group[0].emoji.alt}
+                      name={group[0].emoji.name}
                     />
                   </p>
                   <span className="ml-1">{count}</span>

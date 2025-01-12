@@ -230,7 +230,7 @@ export default function Post({
               <div className="flex space-x-2">
                 <RepostButton post={post} />
 
-                <a href={`/post?uri=${post.uri}`}>
+                <a href={`/thread?uri=${post.uri}`}>
                   <Button
                     variant="ghost"
                     size="sm"
@@ -245,7 +245,7 @@ export default function Post({
               </div>
             </div>
 
-            {reactions ? (
+            {reactions && reactions?.length > 0 ? (
               <div className="flex flex-wrap items-center gap-4 mt-2 pickerOpen">
                 <ReactionButtons cid={post.cid} />
 

@@ -1,3 +1,4 @@
+import { LoaderFunction, redirect } from "@remix-run/node";
 import {
   Form,
   isRouteErrorResponse,
@@ -10,6 +11,14 @@ import Search from "~/components/timeline/search";
 import NotFound from "~/components/ui/404";
 import Alert from "~/components/ui/alert";
 import { Input } from "~/components/ui/input";
+import { getSessionAgent } from "~/lib/auth/session";
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const agent = await getSessionAgent(request);
+  if (agent == null) return redirect("/login");
+
+  return null;
+};
 
 export default function SearchPage() {
   const navigate = useNavigate();

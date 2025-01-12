@@ -10,23 +10,20 @@ export default function FacetRender({
   facets: Facet[];
 }) {
   if (!facets || facets.length === 0) {
-    return <span>{text}</span>;
+    return <span style={{ whiteSpace: "pre-wrap" }}>{text}</span>;
   }
 
   const richText = new RichText({
     text: text.toString(),
     facets: facets,
   });
-
   const segments = richText.segments();
   const content: JSX.Element[] = [];
-
   let index = 0;
 
   for (const segment of segments) {
     if (segment.isMention()) {
       const mention = segment.mention;
-
       content.push(
         <a
           key={`mention-${index}`}
@@ -34,6 +31,7 @@ export default function FacetRender({
           target="_blank"
           rel="noopener noreferrer"
           className="text-blue-500 hover:underline"
+          style={{ whiteSpace: "pre-wrap" }}
         >
           {segment.text}
         </a>
@@ -47,13 +45,13 @@ export default function FacetRender({
           target="_blank"
           rel="noopener noreferrer"
           className="text-blue-500 hover:underline"
+          style={{ whiteSpace: "pre-wrap" }}
         >
           {segment.text}
         </a>
       );
     } else if (segment.isTag()) {
       const tag = segment.tag;
-
       content.push(
         <a
           key={`tag-${index}`}
@@ -61,13 +59,13 @@ export default function FacetRender({
           target="_blank"
           rel="noopener noreferrer"
           className="text-blue-500 hover:underline"
+          style={{ whiteSpace: "pre-wrap" }}
         >
           {segment.text}
         </a>
       );
     } else if (isBluemojiSegment(segment)) {
       const bluemoji = getBluemojiFeature(segment.facet);
-
       if (bluemoji) {
         content.push(
           <span
@@ -80,19 +78,27 @@ export default function FacetRender({
                 <EmojiRender
                   repo={bluemoji.did}
                   cid={bluemoji.formats.png_128 as string}
-                  alt={bluemoji.alt as string}
+                  name={bluemoji.name as string}
                 />
               </div>
             ) : (
-              segment.text
+              <span style={{ whiteSpace: "pre-wrap" }}>{segment.text}</span>
             )}
           </span>
         );
       } else {
-        content.push(<span key={`text-${index}`}>{segment.text}</span>);
+        content.push(
+          <span key={`text-${index}`} style={{ whiteSpace: "pre-wrap" }}>
+            {segment.text}
+          </span>
+        );
       }
     } else {
-      content.push(<span key={`text-${index}`}>{segment.text}</span>);
+      content.push(
+        <span key={`text-${index}`} style={{ whiteSpace: "pre-wrap" }}>
+          {segment.text}
+        </span>
+      );
     }
     index++;
   }
@@ -108,14 +114,11 @@ function isBluemojiSegment(segment: RichTextSegment) {
 
 function getBluemojiFeature(facet) {
   if (!facet) return undefined;
-
   const feature = facet.features.find(
     (f) => f.$type === "blue.moji.richtext.facet"
   );
-
   if (feature && BlueMojiRichtextFacet.isMain(feature)) {
     return feature;
   }
-
   return undefined;
 }

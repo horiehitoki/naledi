@@ -1,3 +1,4 @@
+import { LoaderFunction, redirect } from "@remix-run/node";
 import {
   isRouteErrorResponse,
   Outlet,
@@ -8,6 +9,14 @@ import { ListIcon, UploadIcon } from "lucide-react";
 import Main from "~/components/layout/main";
 import NotFound from "~/components/ui/404";
 import Alert from "~/components/ui/alert";
+import { getSessionAgent } from "~/lib/auth/session";
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const agent = await getSessionAgent(request);
+  if (agent == null) return redirect("/login");
+
+  return null;
+};
 
 export default function EmojiSettings() {
   const location = useLocation();

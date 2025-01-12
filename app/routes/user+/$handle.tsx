@@ -1,4 +1,4 @@
-import { LoaderFunction } from "@remix-run/node";
+import { LoaderFunction, redirect } from "@remix-run/node";
 import {
   isRouteErrorResponse,
   Outlet,
@@ -15,7 +15,7 @@ import { getSessionAgent } from "~/lib/auth/session";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const agent = await getSessionAgent(request);
-  if (!agent) return new Response(null, { status: 400 });
+  if (!agent) return redirect("/login");
 
   const { handle } = params;
   if (!handle) return new Response(null, { status: 404 });

@@ -117,7 +117,7 @@ export default function EmojiList() {
                     <EmojiRender
                       cid={data.formats.png_128!.ref.$link}
                       repo={emoji.repo}
-                      alt={data.alt!}
+                      name={data.name}
                     />
                     <p className="text-center text-sm mt-2">{emoji.rkey}</p>
 
