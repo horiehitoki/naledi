@@ -59,7 +59,7 @@ function renderSegment(segment: RichTextSegment, index: number): JSX.Element {
     return (
       <a
         key={`tag-${index}`}
-        href={tag?.tag}
+        href={`/search?query=${encodeURIComponent(`#${tag?.tag}`)}`}
         className="text-blue-500 hover:underline whitespace-break-spaces"
       >
         {segment.text}

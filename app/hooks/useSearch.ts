@@ -10,8 +10,10 @@ export const useSearch = (options: options) => {
       queryKey: ["search"],
       queryFn: async ({ pageParam }) => {
         const endpoint = pageParam
-          ? `/api/search?cursor=${pageParam}&query=${options.query}`
-          : `/api/search?query=${options.query}`;
+          ? `/api/search?cursor=${pageParam}&query=${encodeURIComponent(
+              options.query
+            )}`
+          : `/api/search?query=${encodeURIComponent(options.query)}`;
 
         const res = await fetch(endpoint);
 
