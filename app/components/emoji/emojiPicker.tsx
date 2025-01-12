@@ -61,8 +61,8 @@ export function EmojiPicker() {
   return (
     <div
       ref={pickerRef}
-      className="fixed"
       style={{
+        position: "absolute",
         top: `${emojiPicker.position.top}px`,
         left: `${emojiPicker.position.left}px`,
         zIndex: 50,
