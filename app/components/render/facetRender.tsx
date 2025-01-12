@@ -10,7 +10,7 @@ export default function FacetRender({
   facets: Facet[];
 }) {
   if (!facets || facets.length === 0) {
-    return <span className="whitespace-pre-wrap">{text}</span>;
+    return <span className="whitespace-break-spaces">{text}</span>;
   }
 
   const richText = new RichText({
@@ -22,83 +22,77 @@ export default function FacetRender({
   let index = 0;
 
   for (const segment of segments) {
-    if (segment.isMention()) {
-      const mention = segment.mention;
-      content.push(
-        <a
-          key={`mention-${index}`}
-          href={`/user/${mention!.did}/posts`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-500 hover:underline whitespace-pre-wrap"
-        >
-          {segment.text}
-        </a>
-      );
-    } else if (segment.isLink()) {
-      const link = segment.link;
-      content.push(
-        <a
-          key={`link-${index}`}
-          href={link!.uri}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-500 hover:underline whitespace-pre-wrap"
-        >
-          {segment.text}
-        </a>
-      );
-    } else if (segment.isTag()) {
-      const tag = segment.tag;
-      content.push(
-        <a
-          key={`tag-${index}`}
-          href={tag?.tag}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-500 hover:underline whitespace-pre-wrap"
-        >
-          {segment.text}
-        </a>
-      );
-    } else if (isBluemojiSegment(segment)) {
-      const bluemoji = getBluemojiFeature(segment.facet);
-      if (bluemoji) {
-        content.push(
-          <span
-            key={`bluemoji-${index}`}
-            className="inline-flex items-center align-baseline"
-            title={bluemoji.alt || bluemoji.name}
-          >
-            {bluemoji.formats.png_128 ? (
-              <EmojiRender
-                repo={bluemoji.did}
-                cid={bluemoji.formats.png_128 as string}
-                name={bluemoji.name as string}
-              />
-            ) : (
-              <span className="whitespace-pre-wrap">{segment.text}</span>
-            )}
-          </span>
-        );
-      } else {
-        content.push(
-          <span key={`text-${index}`} className="whitespace-pre-wrap">
-            {segment.text}
-          </span>
-        );
-      }
-    } else {
-      content.push(
-        <span key={`text-${index}`} className="whitespace-pre-wrap">
-          {segment.text}
-        </span>
-      );
-    }
+    const segmentContent = renderSegment(segment, index);
+    content.push(segmentContent);
+
     index++;
   }
 
-  return <span className="inline-flex items-center">{content}</span>;
+  return <span>{content}</span>;
+}
+
+function renderSegment(segment: RichTextSegment, index: number): JSX.Element {
+  if (segment.isMention()) {
+    const mention = segment.mention;
+    return (
+      <a
+        key={`mention-${index}`}
+        href={`/user/${mention!.did}/posts`}
+        className="text-blue-500 hover:underline whitespace-break-spaces"
+      >
+        {segment.text}
+      </a>
+    );
+  } else if (segment.isLink()) {
+    const link = segment.link;
+    return (
+      <a
+        key={`link-${index}`}
+        href={link!.uri}
+        className="text-blue-500 hover:underline whitespace-break-spaces"
+      >
+        {segment.text}
+      </a>
+    );
+  } else if (segment.isTag()) {
+    const tag = segment.tag;
+    return (
+      <a
+        key={`tag-${index}`}
+        href={tag?.tag}
+        className="text-blue-500 hover:underline whitespace-break-spaces"
+      >
+        {segment.text}
+      </a>
+    );
+  } else if (isBluemojiSegment(segment)) {
+    const bluemoji = getBluemojiFeature(segment.facet);
+    if (bluemoji) {
+      return (
+        <span
+          key={`bluemoji-${index}`}
+          className="inline-flex items-center translate-y-1.5 whitespace-break-spaces"
+          title={bluemoji.alt || bluemoji.name}
+        >
+          {bluemoji.formats.png_128 ? (
+            <EmojiRender
+              repo={bluemoji.did}
+              cid={bluemoji.formats.png_128 as string}
+              name={bluemoji.name as string}
+            />
+          ) : (
+            <span className="whitespace-break-spaces">{segment.text}</span>
+          )}
+        </span>
+      );
+    }
+  }
+
+  return (
+    <span key={`text-${index}`} className="whitespace-break-spaces">
+      {segment.text}
+    </span>
+  );
 }
 
 function isBluemojiSegment(segment: RichTextSegment) {

@@ -100,13 +100,14 @@ export class BluemojiRichText extends RichText {
       for (const facet of this.facets) {
         for (const feature of facet.features) {
           if (BlueMojiRichtextFacet.isMain(feature)) {
-            const { did: repo } = agent?.did ? { did: agent?.did } : {};
+            const { did: repo } = agent.did ? { did: agent.assertDid } : {};
 
             if (!repo) {
               console.error("Bluemoji facet DID is unknown");
               continue;
             }
 
+            //TODO ほかのデータリポジトリと絵文字名がかぶってる時の対応
             const { data: record } = await agent.com.atproto.repo.getRecord({
               repo,
               rkey: feature.name.replace(/:/g, ""),
@@ -122,7 +123,7 @@ export class BluemojiRichText extends RichText {
               if (BlueMojiCollectionItem.isFormats_v0(record.value.formats)) {
                 if (record.value.formats.png_128) {
                   feature.formats.png_128 =
-                    record.value.formats.png_128.ref.$link.toString();
+                    record.value.formats.png_128.ref.toString();
                 }
 
                 if (record.value.formats.apng_128) {
@@ -137,7 +138,7 @@ export class BluemojiRichText extends RichText {
           } else if (AppBskyRichtextFacet.isMention(feature)) {
             const did = await agent
               .resolveHandle({ handle: feature.did })
-              .catch(() => undefined)
+              .catch((_) => undefined)
               .then((res) => res?.data.did);
             feature.did = did || "";
           }

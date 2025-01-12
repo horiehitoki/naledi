@@ -32,7 +32,7 @@ export default function SideBar() {
           </a>
           <div className="flex items-center space-x-4 hover:bg-gray-800 p-2 rounded-lg cursor-pointer">
             <Bell size={24} />
-            <span className="text-lg font-medium">Notifications</span>
+            <span className="text-lg font-medium">Notifications(TODO)</span>
           </div>
           <a
             href={`/emoji/list`}

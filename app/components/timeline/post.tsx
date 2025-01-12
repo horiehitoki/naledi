@@ -15,7 +15,7 @@ import {
   ReasonPin,
   ReasonRepost,
 } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
-import { useResetPost, useSetPost } from "~/state/post";
+import { useSetPost } from "~/state/post";
 import { RepostButton } from "../buttons/repostButton";
 import { LikeButton } from "../buttons/likeButton";
 import { Button } from "../ui/button";
