@@ -12,7 +12,6 @@ import {
 import * as BlueMojiRichtextFacet from "~/generated/api/types/blue/moji/richtext/facet";
 import * as BlueMojiCollectionItem from "~/generated/api/types/blue/moji/collection/item";
 import { detectFacets } from "./detect-facets";
-import { prisma } from "~/lib/db/prisma";
 
 export const BLUEMOJI_REGEX = new RegExp(
   ":((?!.*--)[A-Za-z0-9-]{4,20}(?<!-)):",
@@ -108,18 +107,15 @@ export class BluemojiRichText extends RichText {
               continue;
             }
 
-            //TODO 別々のリポジトリで絵文字名が被っている場合の対応
-            const data = await prisma.emoji.findFirst({
-              where: { rkey: feature.name.replace(/:/g, "") },
+            const { data: record } = await agent.com.atproto.repo.getRecord({
+              repo,
+              rkey: feature.name.replace(/:/g, ""),
+              collection: "blue.moji.collection.item",
             });
-
-            const record: { value: BlueMojiCollectionItem.ItemView } = {
-              value: JSON.parse(data!.record),
-            };
 
             if (BlueMojiCollectionItem.isRecord(record.value)) {
               feature.alt = record.value.alt;
-              feature.did = data!.repo;
+              feature.did = repo;
               feature.formats = {
                 $type: "blue.moji.richtext.facet#formats_v0",
               };

@@ -15,7 +15,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     const uri = getParams(request, "uri");
     if (!uri) return new Response(null, { status: 404 });
 
-    const threads = await agent.getPostThread({ uri: uri, depth: 10 });
+    const threads = await agent.getPostThread({ uri });
 
     const post = threads.data.thread.post as PostView;
     const replies = threads.data.thread.replies as ThreadViewPost[];

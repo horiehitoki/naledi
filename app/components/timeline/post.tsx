@@ -15,7 +15,7 @@ import {
   ReasonPin,
   ReasonRepost,
 } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
-import { useSetPost } from "~/state/post";
+import { useResetPost, useSetPost } from "~/state/post";
 import { RepostButton } from "../buttons/repostButton";
 import { LikeButton } from "../buttons/likeButton";
 import { Button } from "../ui/button";
@@ -104,6 +104,10 @@ export default function Post({
 
       return;
     }
+
+    toast({
+      title: "投稿を削除しました。",
+    });
   }
 
   if (post)

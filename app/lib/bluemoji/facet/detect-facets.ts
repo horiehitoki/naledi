@@ -10,10 +10,9 @@ export function detectFacets(text: any /*UnicodeString*/): Facet[] | undefined {
   {
     const re = BLUEMOJI_REGEX;
     while ((match = re.exec(text.utf16))) {
-      console.log(match);
       const start =
         match.index > 0
-          ? text.utf16.indexOf(match[0], match.index) - 1
+          ? text.utf16.indexOf(match[0], match.index)
           : match.index;
 
       facets.push({

@@ -10,7 +10,7 @@ export default function FacetRender({
   facets: Facet[];
 }) {
   if (!facets || facets.length === 0) {
-    return <span style={{ whiteSpace: "pre-wrap" }}>{text}</span>;
+    return <span className="whitespace-pre-wrap">{text}</span>;
   }
 
   const richText = new RichText({
@@ -30,8 +30,7 @@ export default function FacetRender({
           href={`/user/${mention!.did}/posts`}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-500 hover:underline"
-          style={{ whiteSpace: "pre-wrap" }}
+          className="text-blue-500 hover:underline whitespace-pre-wrap"
         >
           {segment.text}
         </a>
@@ -44,8 +43,7 @@ export default function FacetRender({
           href={link!.uri}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-500 hover:underline"
-          style={{ whiteSpace: "pre-wrap" }}
+          className="text-blue-500 hover:underline whitespace-pre-wrap"
         >
           {segment.text}
         </a>
@@ -58,8 +56,7 @@ export default function FacetRender({
           href={tag?.tag}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-500 hover:underline"
-          style={{ whiteSpace: "pre-wrap" }}
+          className="text-blue-500 hover:underline whitespace-pre-wrap"
         >
           {segment.text}
         </a>
@@ -70,32 +67,30 @@ export default function FacetRender({
         content.push(
           <span
             key={`bluemoji-${index}`}
-            className="inline-block align-middle"
+            className="inline-flex items-center align-baseline"
             title={bluemoji.alt || bluemoji.name}
           >
             {bluemoji.formats.png_128 ? (
-              <div className="transform translate-y-[-0.6em]">
-                <EmojiRender
-                  repo={bluemoji.did}
-                  cid={bluemoji.formats.png_128 as string}
-                  name={bluemoji.name as string}
-                />
-              </div>
+              <EmojiRender
+                repo={bluemoji.did}
+                cid={bluemoji.formats.png_128 as string}
+                name={bluemoji.name as string}
+              />
             ) : (
-              <span style={{ whiteSpace: "pre-wrap" }}>{segment.text}</span>
+              <span className="whitespace-pre-wrap">{segment.text}</span>
             )}
           </span>
         );
       } else {
         content.push(
-          <span key={`text-${index}`} style={{ whiteSpace: "pre-wrap" }}>
+          <span key={`text-${index}`} className="whitespace-pre-wrap">
             {segment.text}
           </span>
         );
       }
     } else {
       content.push(
-        <span key={`text-${index}`} style={{ whiteSpace: "pre-wrap" }}>
+        <span key={`text-${index}`} className="whitespace-pre-wrap">
           {segment.text}
         </span>
       );
@@ -103,7 +98,7 @@ export default function FacetRender({
     index++;
   }
 
-  return <>{content}</>;
+  return <span className="inline-flex items-center">{content}</span>;
 }
 
 function isBluemojiSegment(segment: RichTextSegment) {
