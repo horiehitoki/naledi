@@ -75,21 +75,22 @@ export default function EmojiAutocompleteInput() {
               emoji.record
             );
 
-            return (
-              <button
-                key={emoji.rkey}
-                onClick={() => insertEmoji(emoji)}
-                className="w-full px-3 py-2 text-left hover:bg-gray-100 flex items-center gap-2"
-              >
-                <EmojiRender
-                  repo={emoji.repo}
-                  cid={data.formats.png_128?.ref.$link}
-                  name={data.name}
-                />
+            if (emoji && data && data.formats.png_128)
+              return (
+                <button
+                  key={emoji.rkey}
+                  onClick={() => insertEmoji(emoji)}
+                  className="w-full px-3 py-2 text-left hover:bg-gray-100 flex items-center gap-2"
+                >
+                  <EmojiRender
+                    repo={emoji.repo}
+                    cid={data.formats.png_128.ref.$link}
+                    name={data.name}
+                  />
 
-                <span className="text-sm text-gray-600">:{emoji.rkey}:</span>
-              </button>
-            );
+                  <span className="text-sm text-gray-600">:{emoji.rkey}:</span>
+                </button>
+              );
           })}
         </div>
       )}

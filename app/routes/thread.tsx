@@ -40,13 +40,15 @@ export default function Threads() {
     <Main>
       <Post post={data.post} reactions={data.post.reactions} />
 
-      {data.replies.map((reply: any) => (
-        <Post
-          key={reply.post.uri}
-          post={reply.post}
-          reactions={reply.reactions}
-        />
-      ))}
+      {data.replies.map((reply: any) => {
+        return (
+          <Post
+            key={reply.post.uri}
+            post={reply.post}
+            reactions={reply.reactions}
+          />
+        );
+      })}
     </Main>
   );
 }

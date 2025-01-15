@@ -47,8 +47,8 @@ export default function ReactionButtons({ cid }: { cid: string }) {
                     myReactions.length > 0
                       ? cancelReaction(myReactions[0])
                       : reaction(
-                          group[0].emojiRef!.rkey,
-                          group[0].emojiRef!.repo,
+                          group[0].emojiRef.rkey,
+                          group[0].emojiRef.repo,
                           group[0].emoji,
                           profile!
                         )
@@ -62,7 +62,7 @@ export default function ReactionButtons({ cid }: { cid: string }) {
                   <p>
                     <EmojiRender
                       cid={group[0].emoji.formats.png_128.ref.$link}
-                      repo={group[0].emojiRef!.repo}
+                      repo={group[0].emojiRef.repo}
                       name={group[0].emoji.name}
                     />
                   </p>

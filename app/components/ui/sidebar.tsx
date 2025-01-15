@@ -1,9 +1,12 @@
 import { Home, Bell, Smile, SearchIcon } from "lucide-react";
 import { useProfile } from "~/state/profile";
 import PostButton from "../buttons/postButton";
+import { useUnread } from "~/state/unread";
+import { Badge } from "./badge";
 
 export default function SideBar() {
   const profile = useProfile();
+  const unreadCount = useUnread();
 
   return (
     <div className="min-h-screen w-64 pt-12 fixed">
@@ -30,10 +33,18 @@ export default function SideBar() {
             <SearchIcon size={24} />
             <span className="text-lg font-medium">Search</span>
           </a>
-          <div className="flex items-center space-x-4 hover:bg-gray-800 p-2 rounded-lg cursor-pointer">
+          <a
+            className="flex items-center space-x-4 hover:bg-gray-800 p-2 rounded-lg cursor-pointer"
+            href="/notifications"
+          >
             <Bell size={24} />
-            <span className="text-lg font-medium">Notifications(TODO)</span>
-          </div>
+            <span className="text-lg font-medium">Notifications</span>
+            {unreadCount > 0 && (
+              <Badge variant="destructive" className="ml-auto">
+                {unreadCount}
+              </Badge>
+            )}
+          </a>
           <a
             href={`/emoji/list`}
             className="flex items-center space-x-4 hover:bg-gray-800 p-2 rounded-lg cursor-pointer"

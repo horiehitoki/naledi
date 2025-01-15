@@ -83,27 +83,28 @@ export function EmojiPicker() {
                 emoji.record
               ) as BlueMojiCollectionItem.ItemView;
 
-              return (
-                <button
-                  key={emoji.rkey}
-                  onClick={() =>
-                    handleEmojiClick(emoji.rkey, emoji.repo, data, profile!)
-                  }
-                  className="flex flex-col items-center p-1 hover:bg-muted rounded-md transition-colors"
-                  title={`:${emoji.rkey}:`}
-                >
-                  <div className="w-8 h-8 flex items-center justify-center">
-                    <EmojiRender
-                      repo={emoji.repo}
-                      cid={data.formats.png_128?.ref.$link}
-                      name={data.name}
-                    />
-                  </div>
-                  <div className="text-[10px] text-muted-foreground truncate w-full text-center">
-                    {emoji.rkey}
-                  </div>
-                </button>
-              );
+              if (emoji && data && profile)
+                return (
+                  <button
+                    key={emoji.rkey}
+                    onClick={() =>
+                      handleEmojiClick(emoji.rkey, emoji.repo, data, profile)
+                    }
+                    className="flex flex-col items-center p-1 hover:bg-muted rounded-md transition-colors"
+                    title={`:${emoji.rkey}:`}
+                  >
+                    <div className="w-8 h-8 flex items-center justify-center">
+                      <EmojiRender
+                        repo={emoji.repo}
+                        cid={data.formats.png_128?.ref.$link}
+                        name={data.name}
+                      />
+                    </div>
+                    <div className="text-[10px] text-muted-foreground truncate w-full text-center">
+                      {emoji.rkey}
+                    </div>
+                  </button>
+                );
             })}
           </div>
         </div>

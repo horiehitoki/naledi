@@ -20,6 +20,8 @@ import { EmojiPicker } from "./components/emoji/emojiPicker";
 import { prisma } from "./lib/db/prisma";
 import { useSetEmojis } from "./state/allEmoji";
 import { Toaster } from "./components/ui/toaster";
+import { useUnreadNotifications } from "./hooks/useNotifications";
+import { useSetUnread } from "./state/unread";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -84,6 +86,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
   const data = useLoaderData<typeof loader>();
 
+  const { data: unread } = useUnreadNotifications();
+
+  const setUnread = useSetUnread();
+
   const setProfile = useSetProfile();
   const setEmojis = useSetEmojis();
 
@@ -93,6 +99,10 @@ export default function App() {
 
   if (data?.emojis) {
     setEmojis(data?.emojis);
+  }
+
+  if (unread) {
+    setUnread(unread.count);
   }
 
   return <Outlet />;

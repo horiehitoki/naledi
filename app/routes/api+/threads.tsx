@@ -29,29 +29,25 @@ export const loader: LoaderFunction = async ({ request }) => {
       reactions: reactions.data.reactions,
     };
 
-    if (replies.length > 0) {
-      const repliesWithReactions = await Promise.all(
-        replies.map(async (reply) => {
-          const reactions = await reactionAgent.get(
-            reply.post.uri,
-            reply.post.cid,
-            50
-          );
+    const repliesWithReactions = await Promise.all(
+      replies.map(async (reply) => {
+        const reactions = await reactionAgent.get(
+          reply.post.uri,
+          reply.post.cid,
+          50
+        );
 
-          return {
-            ...reply,
-            reactions: reactions.data,
-          };
-        })
-      );
+        return {
+          ...reply,
+          reactions: reactions.data.reactions,
+        };
+      })
+    );
 
-      return {
-        post: postWithReactions,
-        replies: repliesWithReactions,
-      };
-    }
-
-    return { post: postWithReactions, replies: [] };
+    return {
+      post: postWithReactions,
+      replies: repliesWithReactions,
+    };
   } catch (e) {
     console.error(e);
     return {
