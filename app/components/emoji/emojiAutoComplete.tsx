@@ -1,17 +1,15 @@
 import { Emoji } from "@prisma/client";
 import { useState, useRef, ChangeEvent } from "react";
-import { useEmojis } from "~/state/allEmoji";
+import { useEmojis } from "~/state/emoji";
 import EmojiRender from "../render/emojiRender";
 import { BlueMojiCollectionItem } from "~/generated/api";
 import { Textarea } from "../ui/textarea";
-import { useProfile } from "~/state/profile";
 
 export default function EmojiAutocompleteInput() {
   const [inputValue, setInputValue] = useState("");
   const [suggestions, setSuggestions] = useState<Emoji[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [cursorPosition, setCursorPosition] = useState(0);
-  const profile = useProfile();
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const emojis: Emoji[] = useEmojis()!;
@@ -24,11 +22,7 @@ export default function EmojiAutocompleteInput() {
     if (!searchTerm) return [];
 
     return emojis
-      .filter(
-        (emoji) =>
-          emoji.rkey.toLowerCase().includes(searchTerm) &&
-          emoji.repo == profile!.did
-      )
+      .filter((emoji) => emoji.rkey.toLowerCase().includes(searchTerm))
       .slice(0, 10);
   };
 

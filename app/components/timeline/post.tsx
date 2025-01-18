@@ -1,4 +1,3 @@
-import { AppBskyEmbedImages } from "@atproto/api";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import {
   Card,
@@ -6,8 +5,7 @@ import {
   CardFooter,
   CardHeader,
 } from "~/components/ui/card";
-import { useEffect, useRef, useState } from "react";
-import { Lightbox } from "yet-another-react-lightbox";
+import { useEffect, useRef } from "react";
 import "yet-another-react-lightbox/styles.css";
 import { Ellipsis, MessageCircle, Repeat2, Smile } from "lucide-react";
 import {
@@ -41,6 +39,7 @@ import {
 } from "~/components/ui/dialog";
 import { useProfile } from "~/state/profile";
 import { useToast } from "~/hooks/use-toast";
+import EmbedRender from "../render/embedRender";
 
 interface PostProps {
   post: PostView;
@@ -53,44 +52,26 @@ export default function Post({ post, reason, reactions }: PostProps) {
   const myProfile = useProfile();
   const cardRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+
+  console.log(post.embed);
 
   useEffect(() => {
-    try {
-      setState({
-        uri: post.uri,
-        cid: post.cid,
-        isReposted: post.viewer?.repost ? true : false,
-        isLiked: post.viewer?.like ? true : false,
-        repostCount: post.repostCount ?? 0,
-        likeCount: post.likeCount ?? 0,
-        reactions: reactions ?? [],
-        likeUri: post.viewer?.like ?? "",
-        repostUri: post.viewer?.repost ?? "",
-      });
-    } catch (err) {
-      console.error("Failed to set post state:", err);
-      setError("投稿の状態を更新できませんでした");
-    }
+    setState({
+      uri: post.uri,
+      cid: post.cid,
+      isReposted: post.viewer?.repost ? true : false,
+      isLiked: post.viewer?.like ? true : false,
+      repostCount: post.repostCount ?? 0,
+      likeCount: post.likeCount ?? 0,
+      reactions: reactions ?? [],
+      likeUri: post.viewer?.like ?? "",
+      repostUri: post.viewer?.repost ?? "",
+    });
   }, [post, setState, reactions]);
-
-  const images = (post.embed as AppBskyEmbedImages.View)?.images;
-  const slides = images?.map((image) => ({
-    src: image.fullsize,
-    width: 1664,
-    height: 936,
-  }));
 
   const { toggleEmojiPicker } = useEmojiPicker();
 
-  const record = post.record as PostView;
-
   async function deletePost() {
-    setIsLoading(true);
-    setError(null);
-
     try {
       const res = await fetch("/api/post/", {
         method: "DELETE",
@@ -115,30 +96,18 @@ export default function Post({ post, reason, reactions }: PostProps) {
         description: "投稿を削除しました。",
       });
     } catch (err) {
-      console.error("Failed to delete post:", err);
-      setError(err instanceof Error ? err.message : "投稿の削除に失敗しました");
       toast({
         title: "エラー",
         description: "投稿の削除に失敗しました。",
         variant: "destructive",
       });
-    } finally {
-      setIsLoading(false);
     }
-  }
-
-  if (error) {
-    return (
-      <Card className="rounded-none border-stone-700 p-4">
-        <p className="text-red-500">{error}</p>
-      </Card>
-    );
   }
 
   if (!post.record) {
     return (
       <Card className="rounded-none border-stone-700 p-4">
-        <p className="text-gray-500">投稿が見つかりません</p>
+        <p>投稿が見つかりません</p>
       </Card>
     );
   }
@@ -147,7 +116,7 @@ export default function Post({ post, reason, reactions }: PostProps) {
     <div>
       <Card ref={cardRef} className="rounded-none border-stone-700">
         <CardHeader>
-          {reason?.by ? (
+          {reason?.by && reason.by.displayName ? (
             <h1 className="font-bold flex">
               <Repeat2 className="mx-3" />
               <h1>{reason.by.displayName + "がリポスト"}</h1>
@@ -190,9 +159,7 @@ export default function Post({ post, reason, reactions }: PostProps) {
                         <Ellipsis />
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
-                        <DropdownMenuItem disabled={isLoading}>
-                          投稿を削除する
-                        </DropdownMenuItem>
+                        <DropdownMenuItem>投稿を削除する</DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </DialogTrigger>
@@ -208,9 +175,8 @@ export default function Post({ post, reason, reactions }: PostProps) {
                         <Button
                           className="bg-red-500 text-white"
                           onClick={deletePost}
-                          disabled={isLoading}
                         >
-                          {isLoading ? "削除中..." : "削除"}
+                          削除
                         </Button>
                       </DialogClose>
                     </DialogFooter>
@@ -222,40 +188,14 @@ export default function Post({ post, reason, reactions }: PostProps) {
         </CardHeader>
 
         <CardContent className="space-y-4">
-          <FacetRender text={record.text as string} facets={record.facets} />
+          <FacetRender
+            text={post.record.text as string}
+            facets={post.record.facets}
+          />
 
-          {images && (
-            <div className="relative">
-              <Lightbox
-                open={isLightboxOpen}
-                close={() => setIsLightboxOpen(false)}
-                slides={slides}
-              />
-              <div
-                className={`grid gap-4 ${
-                  images.length === 1
-                    ? "grid-cols-1"
-                    : images.length === 2
-                    ? "grid-cols-2"
-                    : "md:grid-cols-3 grid-cols-2"
-                }`}
-              >
-                {images.map((image, index) => (
-                  <button
-                    key={image.thumb}
-                    onClick={() => setIsLightboxOpen(true)}
-                    className={`overflow-hidden rounded-lg hover:opacity-90 transition-opacity duration-300 ${
-                      images.length === 3 && index === 2 ? "md:col-span-2" : ""
-                    }`}
-                  >
-                    <img
-                      src={image.thumb}
-                      alt="Thumbnail"
-                      className="w-full h-full object-cover aspect-square"
-                    />
-                  </button>
-                ))}
-              </div>
+          {post.embed && (
+            <div className="mt-2">
+              <EmbedRender content={post.embed} />
             </div>
           )}
         </CardContent>

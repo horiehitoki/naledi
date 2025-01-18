@@ -10,7 +10,7 @@ import {
 import { Emoji } from "@prisma/client";
 import { useProfile } from "~/state/profile";
 import { BlueMojiCollectionItem } from "~/generated/api";
-import { useEmojis } from "~/state/allEmoji";
+import { useEmojis } from "~/state/emoji";
 import EmojiRender from "../render/emojiRender";
 import { Input } from "~/components/ui/input";
 

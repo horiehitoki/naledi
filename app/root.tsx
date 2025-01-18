@@ -18,7 +18,7 @@ import NotFound from "./components/ui/404";
 import ErrorPage from "./components/ui/errorPage";
 import { EmojiPicker } from "./components/emoji/emojiPicker";
 import { prisma } from "./lib/db/prisma";
-import { useSetEmojis } from "./state/allEmoji";
+import { useSetEmojis } from "./state/emoji";
 import { Toaster } from "./components/ui/toaster";
 import { useUnreadNotifications } from "./hooks/useNotifications";
 import { useSetUnread } from "./state/unread";
@@ -43,7 +43,9 @@ export const loader: LoaderFunction = async ({ request }) => {
   const profile = await agent.getProfile({ actor: agent.assertDid });
 
   //カスタム絵文字をAppViewからすべて取得
-  const emojis = await prisma.emoji.findMany();
+  const emojis = await prisma.emoji.findMany({
+    where: { repo: agent.assertDid },
+  });
 
   return { profile, agent, emojis };
 };
