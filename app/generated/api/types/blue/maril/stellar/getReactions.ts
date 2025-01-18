@@ -59,10 +59,10 @@ export function isReaction(v: unknown): v is Reaction {
   return (
     isObj(v) &&
     hasProp(v, '$type') &&
-    v.$type === 'blue.maril.stellar.getReaction#reaction'
+    v.$type === 'blue.maril.stellar.getReactions#reaction'
   )
 }
 
 export function validateReaction(v: unknown): ValidationResult {
-  return lexicons.validate('blue.maril.stellar.getReaction#reaction', v)
+  return lexicons.validate('blue.maril.stellar.getReactions#reaction', v)
 }

@@ -3,6 +3,7 @@ import { useFollower } from "~/hooks/useFollow";
 import { UserCard } from "./userCard";
 import { ProfileView } from "@atproto/api/dist/client/types/app/bsky/actor/defs";
 import Alert from "../ui/alert";
+import Loading from "../ui/loading";
 
 export default function Followers({ did }: { did: string }) {
   const { data, fetchNextPage, hasNextPage, isLoading, isError } =
@@ -10,7 +11,7 @@ export default function Followers({ did }: { did: string }) {
   const followers = data?.pages.flatMap((page) => page.followers) ?? [];
 
   if (isLoading) {
-    return <h1>loading...</h1>;
+    return <Loading />;
   }
 
   if (isError) {
@@ -23,7 +24,7 @@ export default function Followers({ did }: { did: string }) {
         dataLength={followers.length}
         next={() => fetchNextPage()}
         hasMore={hasNextPage}
-        loader={<div>loading...</div>}
+        loader={<Loading />}
       >
         <div>
           {followers.map((follower: ProfileView) => {

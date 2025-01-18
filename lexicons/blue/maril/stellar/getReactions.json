@@ -1,6 +1,6 @@
 {
   "lexicon": 1,
-  "id": "blue.maril.stellar.getReaction",
+  "id": "blue.maril.stellar.getReactions",
   "defs": {
     "main": {
       "type": "query",

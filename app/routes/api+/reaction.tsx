@@ -2,7 +2,7 @@ import { Agent } from "@atproto/api";
 import type { ActionFunction } from "@remix-run/node";
 import { getSessionAgent } from "~/lib/auth/session";
 import { BlueMarilStellarReaction } from "~/generated/api";
-import { ReactionAgent } from "~/lib/agent/reactionAgent";
+import { ReactionAgent } from "~/lib/reaction/reactionAgent";
 
 export const action: ActionFunction = async ({ request }) => {
   const agent: Agent | null = await getSessionAgent(request);

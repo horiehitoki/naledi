@@ -44,8 +44,6 @@ function RecordEmbed({
 }: {
   record: AppBskyFeedDefs.PostView | { $type: string; [key: string]: any };
 }) {
-  console.log(record.value);
-
   if (AppBskyFeedDefs.isGeneratorView(record)) {
     return (
       <Card className="p-3">
@@ -124,9 +122,7 @@ function QuotedPost({ post }: { post: AppBskyFeedDefs.PostView }) {
               </AvatarFallback>
             </Avatar>
             <div>
-              <p className="font-semibold text-sm">
-                {post.author.displayName || "名前なし"}
-              </p>
+              <p className="font-semibold text-sm">{post.author.displayName}</p>
               <p className="text-xs text-muted-foreground">
                 @{post.author.handle}
               </p>

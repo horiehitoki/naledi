@@ -2,7 +2,6 @@ import { Reaction } from "@prisma/client";
 import { LoaderFunction } from "@remix-run/node";
 import { prisma } from "~/lib/db/prisma";
 import { getParams } from "~/utils/getParams";
-import { Agent } from "@atproto/api";
 
 export const loader: LoaderFunction = async ({ request }) => {
   try {
@@ -62,10 +61,6 @@ export const loader: LoaderFunction = async ({ request }) => {
 
     const transformedReactions = await Promise.all(
       reactions.map(async (reaction: Reaction) => {
-        const agent = new Agent("https://public.api.bsky.app");
-
-        const actor = await agent.getProfile({ actor: reaction.authorDid });
-
         return {
           rkey: reaction.rkey,
           subject: { uri: reaction.post_uri, cid: reaction.post_cid },
@@ -73,7 +68,7 @@ export const loader: LoaderFunction = async ({ request }) => {
             reaction.createdAt?.toISOString() ?? new Date().toISOString(),
           emojiRef: JSON.parse(reaction.record).emoji,
           emoji: JSON.parse(reaction.emoji),
-          actor: actor.data,
+          actor: JSON.parse(reaction.actor).data,
         };
       })
     );

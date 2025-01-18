@@ -8,6 +8,7 @@ import Main from "~/components/layout/main";
 import Post from "~/components/timeline/post";
 import NotFound from "~/components/ui/404";
 import Alert from "~/components/ui/alert";
+import Loading from "~/components/ui/loading";
 
 export default function Threads() {
   const [searchParams] = useSearchParams();
@@ -27,7 +28,7 @@ export default function Threads() {
   if (isLoading) {
     return (
       <Main>
-        <h1>loading...</h1>
+        <Loading />
       </Main>
     );
   }

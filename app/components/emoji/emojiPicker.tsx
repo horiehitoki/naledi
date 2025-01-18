@@ -14,7 +14,7 @@ import { useEmojis } from "~/state/emoji";
 import EmojiRender from "../render/emojiRender";
 import { Input } from "~/components/ui/input";
 
-export function EmojiPicker() {
+export default function EmojiPicker() {
   const { handleEmojiClick } = useEmojiPicker();
   const isOpen = useIsEmojiPickerOpen();
   const setIsOpen = useSetIsEmojiPickerOpen();

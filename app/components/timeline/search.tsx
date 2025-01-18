@@ -2,8 +2,9 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { options, useSearch } from "~/hooks/useSearch";
 import Post from "./post";
 import { PostView } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
-import { Reaction } from "~/generated/api/types/blue/maril/stellar/getReaction";
+import { Reaction } from "~/generated/api/types/blue/maril/stellar/getReactions";
 import Alert from "../ui/alert";
+import Loading from "../ui/loading";
 
 export default function Search(options: options) {
   const { data, fetchNextPage, hasNextPage, isLoading, isError } =
@@ -11,7 +12,7 @@ export default function Search(options: options) {
   const posts = data?.pages.flatMap((page) => page.posts) ?? [];
 
   if (isLoading) {
-    return <h1>loading...</h1>;
+    return <Loading />;
   }
 
   if (isError) {
@@ -32,7 +33,7 @@ export default function Search(options: options) {
         dataLength={posts.length}
         next={() => fetchNextPage()}
         hasMore={hasNextPage}
-        loader={<div>loading...</div>}
+        loader={<Loading />}
       >
         <div>
           {posts.map((post: PostView) => {

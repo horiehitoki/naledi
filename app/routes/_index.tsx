@@ -29,10 +29,10 @@ export function ErrorBoundary() {
         error.status === 404 ? (
           <NotFound />
         ) : (
-          <Alert message="タイムラインの取得に失敗しました。" />
+          <Alert message="タイムラインの取得中にエラーが発生しました。" />
         )
       ) : (
-        <Alert message="タイムラインの取得に失敗しました。" />
+        <Alert message="タイムラインの取得中にエラーが発生しました。" />
       )}
     </div>
   );

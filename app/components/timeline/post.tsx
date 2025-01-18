@@ -18,7 +18,7 @@ import { RepostButton } from "../buttons/repostButton";
 import { LikeButton } from "../buttons/likeButton";
 import { Button } from "../ui/button";
 import { useEmojiPicker } from "~/state/emojiPicker";
-import { Reaction } from "~/generated/api/types/blue/maril/stellar/getReaction";
+import { Reaction } from "~/generated/api/types/blue/maril/stellar/getReactions";
 import ReactionButtons from "../buttons/reactionButtons";
 import FacetRender from "../render/facetRender";
 import {
@@ -52,8 +52,6 @@ export default function Post({ post, reason, reactions }: PostProps) {
   const myProfile = useProfile();
   const cardRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
-
-  console.log(post.embed);
 
   useEffect(() => {
     setState({
@@ -142,7 +140,7 @@ export default function Post({ post, reason, reactions }: PostProps) {
                 </Avatar>
                 <div>
                   <p className="font-semibold text-sm">
-                    {post.author.displayName || "名前なし"}
+                    {post.author.displayName}
                   </p>
                   <p className="text-xs text-muted-foreground">
                     @{post.author.handle}

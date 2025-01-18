@@ -4,7 +4,9 @@
 import { XrpcClient, FetchHandler, FetchHandlerOptions } from '@atproto/xrpc'
 import { schemas } from './lexicons'
 import { CID } from 'multiformats/cid'
-import * as BlueMarilStellarGetReaction from './types/blue/maril/stellar/getReaction'
+import * as AppBskyFeedDefs from './types/app/bsky/feed/defs'
+import * as BlueMarilStellarGetActorReactions from './types/blue/maril/stellar/getActorReactions'
+import * as BlueMarilStellarGetReactions from './types/blue/maril/stellar/getReactions'
 import * as BlueMarilStellarReaction from './types/blue/maril/stellar/reaction'
 import * as BlueMojiCollectionItem from './types/blue/moji/collection/item'
 import * as BlueMojiCollectionListCollection from './types/blue/moji/collection/listCollection'
@@ -21,7 +23,9 @@ import * as BlueMojiPacksGetPacks from './types/blue/moji/packs/getPacks'
 import * as BlueMojiRichtextFacet from './types/blue/moji/richtext/facet'
 import * as ComAtprotoRepoStrongRef from './types/com/atproto/repo/strongRef'
 
-export * as BlueMarilStellarGetReaction from './types/blue/maril/stellar/getReaction'
+export * as AppBskyFeedDefs from './types/app/bsky/feed/defs'
+export * as BlueMarilStellarGetActorReactions from './types/blue/maril/stellar/getActorReactions'
+export * as BlueMarilStellarGetReactions from './types/blue/maril/stellar/getReactions'
 export * as BlueMarilStellarReaction from './types/blue/maril/stellar/reaction'
 export * as BlueMojiCollectionItem from './types/blue/moji/collection/item'
 export * as BlueMojiCollectionListCollection from './types/blue/moji/collection/listCollection'
@@ -37,6 +41,23 @@ export * as BlueMojiPacksGetActorPacks from './types/blue/moji/packs/getActorPac
 export * as BlueMojiPacksGetPacks from './types/blue/moji/packs/getPacks'
 export * as BlueMojiRichtextFacet from './types/blue/moji/richtext/facet'
 export * as ComAtprotoRepoStrongRef from './types/com/atproto/repo/strongRef'
+
+export const APP_BSKY_FEED = {
+  DefsRequestLess: 'app.bsky.feed.defs#requestLess',
+  DefsRequestMore: 'app.bsky.feed.defs#requestMore',
+  DefsClickthroughItem: 'app.bsky.feed.defs#clickthroughItem',
+  DefsClickthroughAuthor: 'app.bsky.feed.defs#clickthroughAuthor',
+  DefsClickthroughReposter: 'app.bsky.feed.defs#clickthroughReposter',
+  DefsClickthroughEmbed: 'app.bsky.feed.defs#clickthroughEmbed',
+  DefsContentModeUnspecified: 'app.bsky.feed.defs#contentModeUnspecified',
+  DefsContentModeVideo: 'app.bsky.feed.defs#contentModeVideo',
+  DefsInteractionSeen: 'app.bsky.feed.defs#interactionSeen',
+  DefsInteractionLike: 'app.bsky.feed.defs#interactionLike',
+  DefsInteractionRepost: 'app.bsky.feed.defs#interactionRepost',
+  DefsInteractionReply: 'app.bsky.feed.defs#interactionReply',
+  DefsInteractionQuote: 'app.bsky.feed.defs#interactionQuote',
+  DefsInteractionShare: 'app.bsky.feed.defs#interactionShare',
+}
 
 export class AtpBaseClient extends XrpcClient {
   blue: BlueNS
@@ -85,12 +106,24 @@ export class BlueMarilStellarNS {
     this.reaction = new ReactionRecord(client)
   }
 
-  getReaction(
-    params?: BlueMarilStellarGetReaction.QueryParams,
-    opts?: BlueMarilStellarGetReaction.CallOptions,
-  ): Promise<BlueMarilStellarGetReaction.Response> {
+  getActorReactions(
+    params?: BlueMarilStellarGetActorReactions.QueryParams,
+    opts?: BlueMarilStellarGetActorReactions.CallOptions,
+  ): Promise<BlueMarilStellarGetActorReactions.Response> {
     return this._client.call(
-      'blue.maril.stellar.getReaction',
+      'blue.maril.stellar.getActorReactions',
+      params,
+      undefined,
+      opts,
+    )
+  }
+
+  getReactions(
+    params?: BlueMarilStellarGetReactions.QueryParams,
+    opts?: BlueMarilStellarGetReactions.CallOptions,
+  ): Promise<BlueMarilStellarGetReactions.Response> {
+    return this._client.call(
+      'blue.maril.stellar.getReactions',
       params,
       undefined,
       opts,

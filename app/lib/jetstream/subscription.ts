@@ -10,6 +10,10 @@ import {
   BlueMojiCollectionItem,
 } from "~/generated/api/index.js";
 import { getEmojiFromPDS } from "../bluemoji/getEmoji.js";
+import { resolveHandleOrDid } from "../actor/resolveHandleOrDid.js";
+import { Agent } from "@atproto/api";
+
+const agent = new Agent("https://public.api.bsky.app");
 
 export const jetstream = new Jetstream({
   ws: WebSocket,
@@ -45,6 +49,7 @@ async function updateReaction(
     ) {
       //絵文字のレコードを取得する
       const emoji = await getEmojiFromPDS(record.emoji.rkey, record.emoji.repo);
+      const { profile } = await resolveHandleOrDid(record.authorDid, agent);
 
       await prisma.reaction.upsert({
         where: {
@@ -53,17 +58,19 @@ async function updateReaction(
         update: {
           post_uri: record.subject.uri,
           post_cid: record.subject.cid,
-          record: JSON.stringify(record),
-          emoji: JSON.stringify(emoji),
           authorDid: record.authorDid,
+          emoji: JSON.stringify(emoji),
+          actor: JSON.stringify(profile),
+          record: JSON.stringify(record),
         },
         create: {
           rkey: event.commit.rkey,
           post_uri: record.subject.uri,
           post_cid: record.subject.cid,
-          record: JSON.stringify(record),
-          emoji: JSON.stringify(emoji),
           authorDid: record.authorDid,
+          emoji: JSON.stringify(emoji),
+          actor: JSON.stringify(profile),
+          record: JSON.stringify(record),
         },
       });
     }

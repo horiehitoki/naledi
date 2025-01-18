@@ -1,4 +1,3 @@
-import { ReactionAgent } from "~/lib/agent/reactionAgent";
 import { getSessionAgent } from "~/lib/auth/session";
 import { getParams } from "~/utils/getParams";
 import {
@@ -6,6 +5,7 @@ import {
   ThreadViewPost,
 } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
 import { LoaderFunction } from "@remix-run/node";
+import { ReactionXrpc } from "~/lib/reaction/reactionXrpc";
 
 export const loader: LoaderFunction = async ({ request }) => {
   try {
@@ -20,9 +20,9 @@ export const loader: LoaderFunction = async ({ request }) => {
     const post = threads.data.thread.post as PostView;
     const replies = threads.data.thread.replies as ThreadViewPost[];
 
-    const reactionAgent = new ReactionAgent(agent);
+    const xrpc = new ReactionXrpc();
 
-    const reactions = (await reactionAgent.get(post.uri, post.cid, 50)) ?? [];
+    const reactions = await xrpc.getReactions(post.uri, post.cid, 50);
 
     const postWithReactions = {
       ...post,
@@ -31,7 +31,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
     const repliesWithReactions = await Promise.all(
       replies.map(async (reply) => {
-        const reactions = await reactionAgent.get(
+        const reactions = await xrpc.getReactions(
           reply.post.uri,
           reply.post.cid,
           50

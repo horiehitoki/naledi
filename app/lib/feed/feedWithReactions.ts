@@ -1,21 +1,20 @@
-import { Agent } from "@atproto/api";
 import {
   FeedViewPost,
   PostView,
 } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
-import { ReactionAgent } from "../agent/reactionAgent";
+import { ReactionXrpc } from "../reaction/reactionXrpc";
 
 export default async function feedWithReaction(
-  feed: FeedViewPost[] | PostView[],
-  agent: Agent
+  feed: FeedViewPost[] | PostView[]
 ) {
+  const xrpc = new ReactionXrpc();
+
   const data = await Promise.all(
     feed.map(async (item: FeedViewPost | PostView) => {
-      const reactionAgent = new ReactionAgent(agent);
       if (item.post) {
         const post = item as FeedViewPost;
 
-        const reactions = await reactionAgent.get(
+        const reactions = await xrpc.getReactions(
           post.post.uri,
           post.post.cid,
           50
@@ -29,7 +28,7 @@ export default async function feedWithReaction(
         };
       } else {
         const post = item as PostView;
-        const reactions = await reactionAgent.get(post.uri, post.cid, 50);
+        const reactions = await xrpc.getReactions(post.uri, post.cid, 50);
 
         if (!reactions) return null;
 

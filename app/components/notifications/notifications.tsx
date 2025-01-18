@@ -3,9 +3,10 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNotifications } from "~/hooks/useNotifications";
-import { NotificationCard } from "./notificationsCard";
+import NotificationCard from "./notificationsCard";
 import Alert from "~/components/ui/alert";
 import { useSetUnread } from "~/state/unread";
+import Loading from "../ui/loading";
 
 export default function NotificationList() {
   const queryClient = useQueryClient();
@@ -39,7 +40,7 @@ export default function NotificationList() {
   }, [unreadCount, notifications.length, queryClient, setUnread]);
 
   if (isLoading) {
-    return <h1>loading...</h1>;
+    return <Loading />;
   }
 
   if (isError) {
@@ -66,7 +67,7 @@ export default function NotificationList() {
         dataLength={notifications.length}
         next={() => fetchNextPage()}
         hasMore={!!hasNextPage}
-        loader={<div>loading...</div>}
+        loader={<Loading />}
       >
         <div>
           {notifications.map((notification: Notification) => (

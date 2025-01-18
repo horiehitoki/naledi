@@ -8,7 +8,7 @@ import { BlueMojiCollectionItem } from "~/generated/api";
 import { usePost, useReaction } from "~/state/post";
 import { useProfile } from "~/state/profile";
 import EmojiRender from "../render/emojiRender";
-import { Reaction } from "~/generated/api/types/blue/maril/stellar/getReaction";
+import { Reaction } from "~/generated/api/types/blue/maril/stellar/getReactions";
 
 export default function ReactionButtons({ cid }: { cid: string }) {
   const post = usePost(cid);

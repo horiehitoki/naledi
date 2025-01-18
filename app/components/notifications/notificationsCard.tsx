@@ -42,7 +42,9 @@ const getNotificationText = (notification: Notification) => {
   }
 };
 
-export function NotificationCard({ notification }: NotificationCardProps) {
+export default function NotificationCard({
+  notification,
+}: NotificationCardProps) {
   return (
     <Card className="rounded-none border-stone-700">
       <CardHeader className="flex flex-row items-center gap-4 space-y-0 p-4">

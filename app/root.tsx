@@ -16,7 +16,7 @@ import { getSessionAgent } from "./lib/auth/session";
 import { useSetProfile } from "./state/profile";
 import NotFound from "./components/ui/404";
 import ErrorPage from "./components/ui/errorPage";
-import { EmojiPicker } from "./components/emoji/emojiPicker";
+import EmojiPicker from "./components/emoji/emojiPicker";
 import { prisma } from "./lib/db/prisma";
 import { useSetEmojis } from "./state/emoji";
 import { Toaster } from "./components/ui/toaster";

@@ -4,9 +4,557 @@
 import { LexiconDoc, Lexicons } from '@atproto/lexicon'
 
 export const schemaDict = {
-  BlueMarilStellarGetReaction: {
+  AppBskyFeedDefs: {
     lexicon: 1,
-    id: 'blue.maril.stellar.getReaction',
+    id: 'app.bsky.feed.defs',
+    defs: {
+      postView: {
+        type: 'object',
+        required: ['uri', 'cid', 'author', 'record', 'indexedAt'],
+        properties: {
+          uri: {
+            type: 'string',
+            format: 'at-uri',
+          },
+          cid: {
+            type: 'string',
+            format: 'cid',
+          },
+          author: {
+            type: 'ref',
+            ref: 'lex:app.bsky.actor.defs#profileViewBasic',
+          },
+          record: {
+            type: 'unknown',
+          },
+          embed: {
+            type: 'union',
+            refs: [
+              'lex:app.bsky.embed.images#view',
+              'lex:app.bsky.embed.video#view',
+              'lex:app.bsky.embed.external#view',
+              'lex:app.bsky.embed.record#view',
+              'lex:app.bsky.embed.recordWithMedia#view',
+            ],
+          },
+          replyCount: {
+            type: 'integer',
+          },
+          repostCount: {
+            type: 'integer',
+          },
+          likeCount: {
+            type: 'integer',
+          },
+          quoteCount: {
+            type: 'integer',
+          },
+          indexedAt: {
+            type: 'string',
+            format: 'datetime',
+          },
+          viewer: {
+            type: 'ref',
+            ref: 'lex:app.bsky.feed.defs#viewerState',
+          },
+          labels: {
+            type: 'array',
+            items: {
+              type: 'ref',
+              ref: 'lex:com.atproto.label.defs#label',
+            },
+          },
+          threadgate: {
+            type: 'ref',
+            ref: 'lex:app.bsky.feed.defs#threadgateView',
+          },
+        },
+      },
+      viewerState: {
+        type: 'object',
+        description:
+          "Metadata about the requesting account's relationship with the subject content. Only has meaningful content for authed requests.",
+        properties: {
+          repost: {
+            type: 'string',
+            format: 'at-uri',
+          },
+          like: {
+            type: 'string',
+            format: 'at-uri',
+          },
+          threadMuted: {
+            type: 'boolean',
+          },
+          replyDisabled: {
+            type: 'boolean',
+          },
+          embeddingDisabled: {
+            type: 'boolean',
+          },
+          pinned: {
+            type: 'boolean',
+          },
+        },
+      },
+      feedViewPost: {
+        type: 'object',
+        required: ['post'],
+        properties: {
+          post: {
+            type: 'ref',
+            ref: 'lex:app.bsky.feed.defs#postView',
+          },
+          reply: {
+            type: 'ref',
+            ref: 'lex:app.bsky.feed.defs#replyRef',
+          },
+          reason: {
+            type: 'union',
+            refs: [
+              'lex:app.bsky.feed.defs#reasonRepost',
+              'lex:app.bsky.feed.defs#reasonPin',
+            ],
+          },
+          feedContext: {
+            type: 'string',
+            description:
+              'Context provided by feed generator that may be passed back alongside interactions.',
+            maxLength: 2000,
+          },
+        },
+      },
+      replyRef: {
+        type: 'object',
+        required: ['root', 'parent'],
+        properties: {
+          root: {
+            type: 'union',
+            refs: [
+              'lex:app.bsky.feed.defs#postView',
+              'lex:app.bsky.feed.defs#notFoundPost',
+              'lex:app.bsky.feed.defs#blockedPost',
+            ],
+          },
+          parent: {
+            type: 'union',
+            refs: [
+              'lex:app.bsky.feed.defs#postView',
+              'lex:app.bsky.feed.defs#notFoundPost',
+              'lex:app.bsky.feed.defs#blockedPost',
+            ],
+          },
+          grandparentAuthor: {
+            type: 'ref',
+            ref: 'lex:app.bsky.actor.defs#profileViewBasic',
+            description:
+              'When parent is a reply to another post, this is the author of that post.',
+          },
+        },
+      },
+      reasonRepost: {
+        type: 'object',
+        required: ['by', 'indexedAt'],
+        properties: {
+          by: {
+            type: 'ref',
+            ref: 'lex:app.bsky.actor.defs#profileViewBasic',
+          },
+          indexedAt: {
+            type: 'string',
+            format: 'datetime',
+          },
+        },
+      },
+      reasonPin: {
+        type: 'object',
+        properties: {},
+      },
+      threadViewPost: {
+        type: 'object',
+        required: ['post'],
+        properties: {
+          post: {
+            type: 'ref',
+            ref: 'lex:app.bsky.feed.defs#postView',
+          },
+          parent: {
+            type: 'union',
+            refs: [
+              'lex:app.bsky.feed.defs#threadViewPost',
+              'lex:app.bsky.feed.defs#notFoundPost',
+              'lex:app.bsky.feed.defs#blockedPost',
+            ],
+          },
+          replies: {
+            type: 'array',
+            items: {
+              type: 'union',
+              refs: [
+                'lex:app.bsky.feed.defs#threadViewPost',
+                'lex:app.bsky.feed.defs#notFoundPost',
+                'lex:app.bsky.feed.defs#blockedPost',
+              ],
+            },
+          },
+        },
+      },
+      notFoundPost: {
+        type: 'object',
+        required: ['uri', 'notFound'],
+        properties: {
+          uri: {
+            type: 'string',
+            format: 'at-uri',
+          },
+          notFound: {
+            type: 'boolean',
+            const: true,
+          },
+        },
+      },
+      blockedPost: {
+        type: 'object',
+        required: ['uri', 'blocked', 'author'],
+        properties: {
+          uri: {
+            type: 'string',
+            format: 'at-uri',
+          },
+          blocked: {
+            type: 'boolean',
+            const: true,
+          },
+          author: {
+            type: 'ref',
+            ref: 'lex:app.bsky.feed.defs#blockedAuthor',
+          },
+        },
+      },
+      blockedAuthor: {
+        type: 'object',
+        required: ['did'],
+        properties: {
+          did: {
+            type: 'string',
+            format: 'did',
+          },
+          viewer: {
+            type: 'ref',
+            ref: 'lex:app.bsky.actor.defs#viewerState',
+          },
+        },
+      },
+      generatorView: {
+        type: 'object',
+        required: ['uri', 'cid', 'did', 'creator', 'displayName', 'indexedAt'],
+        properties: {
+          uri: {
+            type: 'string',
+            format: 'at-uri',
+          },
+          cid: {
+            type: 'string',
+            format: 'cid',
+          },
+          did: {
+            type: 'string',
+            format: 'did',
+          },
+          creator: {
+            type: 'ref',
+            ref: 'lex:app.bsky.actor.defs#profileView',
+          },
+          displayName: {
+            type: 'string',
+          },
+          description: {
+            type: 'string',
+            maxGraphemes: 300,
+            maxLength: 3000,
+          },
+          descriptionFacets: {
+            type: 'array',
+            items: {
+              type: 'ref',
+              ref: 'lex:app.bsky.richtext.facet',
+            },
+          },
+          avatar: {
+            type: 'string',
+            format: 'uri',
+          },
+          likeCount: {
+            type: 'integer',
+            minimum: 0,
+          },
+          acceptsInteractions: {
+            type: 'boolean',
+          },
+          labels: {
+            type: 'array',
+            items: {
+              type: 'ref',
+              ref: 'lex:com.atproto.label.defs#label',
+            },
+          },
+          viewer: {
+            type: 'ref',
+            ref: 'lex:app.bsky.feed.defs#generatorViewerState',
+          },
+          contentMode: {
+            type: 'string',
+            knownValues: [
+              'app.bsky.feed.defs#contentModeUnspecified',
+              'app.bsky.feed.defs#contentModeVideo',
+            ],
+          },
+          indexedAt: {
+            type: 'string',
+            format: 'datetime',
+          },
+        },
+      },
+      generatorViewerState: {
+        type: 'object',
+        properties: {
+          like: {
+            type: 'string',
+            format: 'at-uri',
+          },
+        },
+      },
+      skeletonFeedPost: {
+        type: 'object',
+        required: ['post'],
+        properties: {
+          post: {
+            type: 'string',
+            format: 'at-uri',
+          },
+          reason: {
+            type: 'union',
+            refs: [
+              'lex:app.bsky.feed.defs#skeletonReasonRepost',
+              'lex:app.bsky.feed.defs#skeletonReasonPin',
+            ],
+          },
+          feedContext: {
+            type: 'string',
+            description:
+              'Context that will be passed through to client and may be passed to feed generator back alongside interactions.',
+            maxLength: 2000,
+          },
+        },
+      },
+      skeletonReasonRepost: {
+        type: 'object',
+        required: ['repost'],
+        properties: {
+          repost: {
+            type: 'string',
+            format: 'at-uri',
+          },
+        },
+      },
+      skeletonReasonPin: {
+        type: 'object',
+        properties: {},
+      },
+      threadgateView: {
+        type: 'object',
+        properties: {
+          uri: {
+            type: 'string',
+            format: 'at-uri',
+          },
+          cid: {
+            type: 'string',
+            format: 'cid',
+          },
+          record: {
+            type: 'unknown',
+          },
+          lists: {
+            type: 'array',
+            items: {
+              type: 'ref',
+              ref: 'lex:app.bsky.graph.defs#listViewBasic',
+            },
+          },
+        },
+      },
+      interaction: {
+        type: 'object',
+        properties: {
+          item: {
+            type: 'string',
+            format: 'at-uri',
+          },
+          event: {
+            type: 'string',
+            knownValues: [
+              'app.bsky.feed.defs#requestLess',
+              'app.bsky.feed.defs#requestMore',
+              'app.bsky.feed.defs#clickthroughItem',
+              'app.bsky.feed.defs#clickthroughAuthor',
+              'app.bsky.feed.defs#clickthroughReposter',
+              'app.bsky.feed.defs#clickthroughEmbed',
+              'app.bsky.feed.defs#interactionSeen',
+              'app.bsky.feed.defs#interactionLike',
+              'app.bsky.feed.defs#interactionRepost',
+              'app.bsky.feed.defs#interactionReply',
+              'app.bsky.feed.defs#interactionQuote',
+              'app.bsky.feed.defs#interactionShare',
+            ],
+          },
+          feedContext: {
+            type: 'string',
+            description:
+              'Context on a feed item that was originally supplied by the feed generator on getFeedSkeleton.',
+            maxLength: 2000,
+          },
+        },
+      },
+      requestLess: {
+        type: 'token',
+        description:
+          'Request that less content like the given feed item be shown in the feed',
+      },
+      requestMore: {
+        type: 'token',
+        description:
+          'Request that more content like the given feed item be shown in the feed',
+      },
+      clickthroughItem: {
+        type: 'token',
+        description: 'User clicked through to the feed item',
+      },
+      clickthroughAuthor: {
+        type: 'token',
+        description: 'User clicked through to the author of the feed item',
+      },
+      clickthroughReposter: {
+        type: 'token',
+        description: 'User clicked through to the reposter of the feed item',
+      },
+      clickthroughEmbed: {
+        type: 'token',
+        description:
+          'User clicked through to the embedded content of the feed item',
+      },
+      contentModeUnspecified: {
+        type: 'token',
+        description: 'Declares the feed generator returns any types of posts.',
+      },
+      contentModeVideo: {
+        type: 'token',
+        description:
+          'Declares the feed generator returns posts containing app.bsky.embed.video embeds.',
+      },
+      interactionSeen: {
+        type: 'token',
+        description: 'Feed item was seen by user',
+      },
+      interactionLike: {
+        type: 'token',
+        description: 'User liked the feed item',
+      },
+      interactionRepost: {
+        type: 'token',
+        description: 'User reposted the feed item',
+      },
+      interactionReply: {
+        type: 'token',
+        description: 'User replied to the feed item',
+      },
+      interactionQuote: {
+        type: 'token',
+        description: 'User quoted the feed item',
+      },
+      interactionShare: {
+        type: 'token',
+        description: 'User shared the feed item',
+      },
+    },
+  },
+  BlueMarilStellarGetActorReactions: {
+    lexicon: 1,
+    id: 'blue.maril.stellar.getActorReactions',
+    defs: {
+      main: {
+        type: 'query',
+        description:
+          'Get a list of posts reaction by an actor. Requires auth, actor must be the requesting account.',
+        parameters: {
+          type: 'params',
+          required: ['actor'],
+          properties: {
+            actor: {
+              type: 'string',
+              format: 'at-identifier',
+            },
+            limit: {
+              type: 'integer',
+              minimum: 1,
+              maximum: 100,
+              default: 50,
+            },
+            cursor: {
+              type: 'string',
+            },
+          },
+        },
+        output: {
+          encoding: 'application/json',
+          schema: {
+            type: 'object',
+            required: ['feed'],
+            properties: {
+              cursor: {
+                type: 'string',
+              },
+              feed: {
+                type: 'array',
+                items: {
+                  type: 'ref',
+                  ref: 'lex:blue.maril.stellar.getActorReactions#actorReaction',
+                },
+              },
+            },
+          },
+        },
+      },
+      actorReaction: {
+        type: 'object',
+        required: ['post'],
+        properties: {
+          post: {
+            type: 'ref',
+            ref: 'lex:app.bsky.feed.defs#postView',
+          },
+          reply: {
+            type: 'ref',
+            ref: 'lex:app.bsky.feed.defs#replyRef',
+          },
+          reason: {
+            type: 'union',
+            refs: [
+              'lex:app.bsky.feed.defs#reasonRepost',
+              'lex:app.bsky.feed.defs#reasonPin',
+            ],
+          },
+          reaction: {
+            type: 'ref',
+            ref: 'lex:blue.maril.stellar.getReactions#reaction',
+          },
+        },
+      },
+    },
+  },
+  BlueMarilStellarGetReactions: {
+    lexicon: 1,
+    id: 'blue.maril.stellar.getReactions',
     defs: {
       main: {
         type: 'query',
@@ -59,7 +607,7 @@ export const schemaDict = {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:blue.maril.stellar.getReaction#reaction',
+                  ref: 'lex:blue.maril.stellar.getReactions#reaction',
                 },
               },
             },
@@ -995,7 +1543,9 @@ export const schemaDict = {
 export const schemas = Object.values(schemaDict)
 export const lexicons: Lexicons = new Lexicons(schemas)
 export const ids = {
-  BlueMarilStellarGetReaction: 'blue.maril.stellar.getReaction',
+  AppBskyFeedDefs: 'app.bsky.feed.defs',
+  BlueMarilStellarGetActorReactions: 'blue.maril.stellar.getActorReactions',
+  BlueMarilStellarGetReactions: 'blue.maril.stellar.getReactions',
   BlueMarilStellarReaction: 'blue.maril.stellar.reaction',
   BlueMojiCollectionItem: 'blue.moji.collection.item',
   BlueMojiCollectionListCollection: 'blue.moji.collection.listCollection',
