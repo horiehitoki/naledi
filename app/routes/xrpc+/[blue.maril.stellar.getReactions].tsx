@@ -49,7 +49,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     const reactions = await prisma.reaction.findMany({
       where,
       take,
-      orderBy: { rkey: "asc" },
+      orderBy: { rkey: "desc" },
     });
 
     const hasMore = reactions.length > limit;
