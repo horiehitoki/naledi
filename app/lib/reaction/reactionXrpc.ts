@@ -1,20 +1,11 @@
 import { XrpcClient } from "@atproto/xrpc";
-import { schemaDict } from "~/generated/api/lexicons";
-import { schemaDict as atpDict } from "@atproto/api/dist/client/lexicons";
+import { lexicons } from "~/generated/api/lexicons";
 
 export class ReactionXrpc {
   stellarXrpc: XrpcClient;
 
   constructor() {
-    this.stellarXrpc = new XrpcClient("https://stellar.maril.blue", [
-      schemaDict.ComAtprotoRepoStrongRef,
-      schemaDict.BlueMojiCollectionItem,
-      schemaDict.BlueMarilStellarGetActorReactions,
-      schemaDict.BlueMarilStellarGetReactions,
-      schemaDict.BlueMarilStellarReaction,
-      atpDict.AppBskyActorDefs,
-      atpDict.AppBskyFeedDefs,
-    ]);
+    this.stellarXrpc = new XrpcClient("http://localhost:5173", lexicons);
   }
 
   async getReactions(
