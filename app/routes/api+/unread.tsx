@@ -6,6 +6,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const agent: Agent | null = await getSessionAgent(request);
   if (agent == null) return new Response(null, { status: 401 });
 
+  //未読の通知をカウント
   try {
     const res = await agent.countUnreadNotifications();
     return Response.json(res.data);

@@ -59,6 +59,7 @@ export const loader: LoaderFunction = async ({ request }) => {
       reactions.pop();
     }
 
+    //リアクションデータの整形
     const transformedReactions = await Promise.all(
       reactions.map(async (reaction: Reaction) => {
         return {
@@ -73,6 +74,7 @@ export const loader: LoaderFunction = async ({ request }) => {
       })
     );
 
+    //レスポンス
     const response = {
       uri,
       ...(cid && { cid }),

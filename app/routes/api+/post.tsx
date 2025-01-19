@@ -19,6 +19,7 @@ export const action: ActionFunction = async ({ request }) => {
       });
 
       try {
+        //絵文字の埋め込みを検出
         await rt.detectFacets(agent);
       } catch (e) {
         console.log(e);
@@ -52,6 +53,7 @@ export const action: ActionFunction = async ({ request }) => {
       }
     }
 
+    //投稿の削除
     case "DELETE": {
       try {
         const body = await request.json();

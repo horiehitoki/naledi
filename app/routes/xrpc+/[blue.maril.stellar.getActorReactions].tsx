@@ -23,6 +23,7 @@ export const loader: LoaderFunction = async ({ request }) => {
       );
     }
 
+    //ページネーション
     const where: {
       authorDid: string;
       rkey?: { gt: string };
@@ -47,6 +48,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
     const agent = new Agent("https://public.api.bsky.app");
 
+    //feedの整形
     const feed = await Promise.all(
       reactions.map(async (reaction) => {
         const post = await agent.app.bsky.feed.getPosts({

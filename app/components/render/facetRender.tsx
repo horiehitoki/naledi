@@ -21,6 +21,7 @@ export default function FacetRender({
   const content: JSX.Element[] = [];
   let index = 0;
 
+  //セグメントごとにfacetの種類を判定
   for (const segment of segments) {
     const segmentContent = renderSegment(segment, index);
     content.push(segmentContent);

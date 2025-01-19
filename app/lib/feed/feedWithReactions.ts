@@ -4,6 +4,7 @@ import {
 } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
 import { ReactionXrpc } from "../reaction/reactionXrpc";
 
+//feedにリアクションデータをつけて返す
 export default async function feedWithReaction(
   feed: FeedViewPost[] | PostView[]
 ) {

@@ -1,6 +1,7 @@
 import { Agent } from "@atproto/api";
 import { isDid } from "@atproto/oauth-client-node";
 
+//ハンドルならdidとプロフィールを返す、didならそのままdidとプロフィールを返す
 export async function resolveHandleOrDid(actor: string, agent: Agent) {
   try {
     if (isDid(actor)) {

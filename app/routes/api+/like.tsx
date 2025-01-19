@@ -35,6 +35,7 @@ export const action: ActionFunction = async ({ request }) => {
   if (agent == null) return new Response(null, { status: 401 });
 
   switch (request.method) {
+    //いいね
     case "POST": {
       try {
         const body = await request.json();
@@ -54,6 +55,7 @@ export const action: ActionFunction = async ({ request }) => {
       }
     }
 
+    //いいね解除
     case "DELETE": {
       try {
         const body = await request.json();

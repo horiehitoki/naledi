@@ -9,6 +9,7 @@ export const action: ActionFunction = async ({ request }) => {
   if (agent == null) return new Response(null, { status: 401 });
   const reactionAgent = new ReactionAgent(agent);
 
+  //リアクション
   switch (request.method) {
     case "POST": {
       try {
@@ -29,6 +30,7 @@ export const action: ActionFunction = async ({ request }) => {
         )
           return new Response(null, { status: 400 });
 
+        //リアクションレコードを作成
         const rkey = await reactionAgent.put(record);
 
         return Response.json({ rkey });
@@ -44,6 +46,7 @@ export const action: ActionFunction = async ({ request }) => {
       }
     }
 
+    //リアクションの削除
     case "DELETE": {
       try {
         const body = await request.json();

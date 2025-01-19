@@ -16,6 +16,7 @@ export default function ReactionButtons({ cid }: { cid: string }) {
 
   const { reaction, cancelReaction } = useReaction(cid);
 
+  //リアクションをグループ化して表示
   const groupedReactions = new Map();
   post.reactions.forEach((r: Reaction) => {
     const key = r.emojiRef!.rkey + ":" + r.emojiRef!.repo;

@@ -49,6 +49,8 @@ async function updateReaction(
     ) {
       //絵文字のレコードを取得する
       const emoji = await getEmojiFromPDS(record.emoji.rkey, record.emoji.repo);
+
+      //リアクションしたユーザーのプロフィールを取得
       const { profile } = await resolveHandleOrDid(record.authorDid, agent);
 
       await prisma.reaction.upsert({

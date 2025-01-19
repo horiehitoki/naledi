@@ -25,6 +25,7 @@ export default function SearchPage() {
   const [searchParams] = useSearchParams();
   const currentQuery = searchParams.get("query");
 
+  //検索時の処理
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);

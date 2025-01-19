@@ -88,6 +88,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
   const data = useLoaderData<typeof loader>();
 
+  //未読の通知を定期的にカウント
   const { data: unread } = useUnreadNotifications();
 
   const setUnread = useSetUnread();

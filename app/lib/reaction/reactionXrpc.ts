@@ -6,7 +6,7 @@ export class ReactionXrpc {
   stellarXrpc: XrpcClient;
 
   constructor() {
-    this.stellarXrpc = new XrpcClient("http://localhost:5173", [
+    this.stellarXrpc = new XrpcClient("https://stellar.maril.blue", [
       schemaDict.ComAtprotoRepoStrongRef,
       schemaDict.BlueMojiCollectionItem,
       schemaDict.BlueMarilStellarGetActorReactions,

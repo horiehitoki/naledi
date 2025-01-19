@@ -9,6 +9,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url);
   const cursor = url.searchParams.get("cursor");
 
+  //通知を取得
   try {
     const res = await agent.listNotifications({
       limit: 50,
@@ -30,6 +31,7 @@ export const action: ActionFunction = async ({ request }) => {
   const agent: Agent | null = await getSessionAgent(request);
   if (agent == null) return new Response(null, { status: 401 });
 
+  //すべての通知を既読にする
   try {
     await agent.updateSeenNotifications();
 

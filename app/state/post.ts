@@ -35,6 +35,7 @@ export const postState = atomFamily<
 export const usePost = (id: string) => useRecoilValue(postState(id));
 export const useSetPost = (id: string) => useSetRecoilState(postState(id));
 
+//投稿に対する各操作
 export const useLike = (postId: string) => {
   const state = usePost(postId);
   const setState = useSetPost(postId);

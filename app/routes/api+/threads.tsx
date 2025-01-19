@@ -15,6 +15,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     const uri = getParams(request, "uri");
     if (!uri) return new Response(null, { status: 404 });
 
+    //投稿とスレッドを取得
     const threads = await agent.getPostThread({ uri });
 
     const post = threads.data.thread.post as PostView;
@@ -22,6 +23,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
     const xrpc = new ReactionXrpc();
 
+    //メイン投稿についたリアクションを取得
     const reactions = await xrpc.getReactions(post.uri, post.cid, 50);
 
     const postWithReactions = {
@@ -29,6 +31,7 @@ export const loader: LoaderFunction = async ({ request }) => {
       reactions: reactions.data.reactions,
     };
 
+    //リプライについたリアクションをそれぞれ取得
     const repliesWithReactions = await Promise.all(
       replies.map(async (reply) => {
         const reactions = await xrpc.getReactions(

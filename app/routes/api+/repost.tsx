@@ -6,6 +6,7 @@ export const action: ActionFunction = async ({ request }) => {
   const agent: Agent | null = await getSessionAgent(request);
   if (agent == null) return new Response(null, { status: 401 });
 
+  //リポスト
   switch (request.method) {
     case "POST": {
       try {
@@ -26,6 +27,7 @@ export const action: ActionFunction = async ({ request }) => {
       }
     }
 
+    //リポスト解除
     case "DELETE": {
       try {
         const body = await request.json();

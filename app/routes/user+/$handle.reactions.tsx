@@ -1,37 +1,30 @@
-import { useLoaderData } from "@remix-run/react";
+import { useOutletContext } from "@remix-run/react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import InfiniteScroll from "react-infinite-scroll-component";
 import EmojiRender from "~/components/render/emojiRender";
 import Post from "~/components/timeline/post";
 import { ActorReaction } from "~/generated/api/types/blue/maril/stellar/getActorReactions";
-import { ReactionXrpc } from "~/lib/reaction/reactionXrpc";
 import Loading from "~/components/ui/loading";
-import { LoaderFunction, redirect } from "@remix-run/node";
-import { getSessionAgent } from "~/lib/auth/session";
-import { resolveHandleOrDid } from "~/lib/actor/resolveHandleOrDid";
-
-export const loader: LoaderFunction = async ({ request, params }) => {
-  const agent = await getSessionAgent(request);
-  if (!agent) return redirect("/login");
-
-  const { handle } = params;
-  if (!handle) return new Response(null, { status: 404 });
-
-  const { did, error } = await resolveHandleOrDid(handle, agent);
-
-  return { did, error };
-};
 
 export default function Reactions() {
-  const { did } = useLoaderData<typeof loader>();
+  const { did } = useOutletContext<{ did: string; error: string }>();
 
   const { data, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery({
     queryKey: ["actorReactions"],
     queryFn: async ({ pageParam }) => {
-      const xrpc = new ReactionXrpc();
-      const reactions = await xrpc.getActorReaction(did, 50, pageParam);
+      let endpoint;
 
-      return reactions.data;
+      if (pageParam) {
+        endpoint = `/api/actorReaction?cursor=${pageParam}&did=${did}`;
+      } else {
+        endpoint = `/api/actorReaction?did=${did}`;
+      }
+
+      const res = await fetch(endpoint);
+
+      const reactions = await res.json();
+
+      return reactions;
     },
     initialPageParam: null,
     getNextPageParam: (lastPage) => lastPage.cursor,
@@ -44,7 +37,9 @@ export default function Reactions() {
   }
 
   if (posts.length === 0) {
-    return <h1>リアクションが見つかりませんでした。</h1>;
+    return (
+      <h1 className="text-center">リアクションが見つかりませんでした。</h1>
+    );
   }
 
   return (
