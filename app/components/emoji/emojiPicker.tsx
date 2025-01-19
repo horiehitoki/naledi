@@ -77,36 +77,42 @@ export default function EmojiPicker() {
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full"
           />
-          <div className="grid grid-cols-8 gap-1 max-h-[320px] overflow-y-auto">
-            {filteredEmojis.map((emoji) => {
-              const data = JSON.parse(
-                emoji.record
-              ) as BlueMojiCollectionItem.ItemView;
+          {filteredEmojis.length > 0 ? (
+            <div className="grid grid-cols-8 gap-1 max-h-[320px] overflow-y-auto">
+              {filteredEmojis.map((emoji) => {
+                const data = JSON.parse(
+                  emoji.record
+                ) as BlueMojiCollectionItem.ItemView;
 
-              if (emoji && data && profile)
-                return (
-                  <button
-                    key={emoji.rkey}
-                    onClick={() =>
-                      handleEmojiClick(emoji.rkey, emoji.repo, data, profile)
-                    }
-                    className="flex flex-col items-center p-1 hover:bg-muted rounded-md transition-colors"
-                    title={`:${emoji.rkey}:`}
-                  >
-                    <div className="w-8 h-8 flex items-center justify-center">
-                      <EmojiRender
-                        repo={emoji.repo}
-                        cid={data.formats.png_128?.ref.$link}
-                        name={data.name}
-                      />
-                    </div>
-                    <div className="text-[10px] text-muted-foreground truncate w-full text-center">
-                      {emoji.rkey}
-                    </div>
-                  </button>
-                );
-            })}
-          </div>
+                if (emoji && data && profile)
+                  return (
+                    <button
+                      key={emoji.rkey}
+                      onClick={() =>
+                        handleEmojiClick(emoji.rkey, emoji.repo, data, profile)
+                      }
+                      className="flex flex-col items-center p-1 hover:bg-muted rounded-md transition-colors"
+                      title={`:${emoji.rkey}:`}
+                    >
+                      <div className="w-8 h-8 flex items-center justify-center">
+                        <EmojiRender
+                          repo={emoji.repo}
+                          cid={data.formats.png_128?.ref.$link}
+                          name={data.name}
+                        />
+                      </div>
+                      <div className="text-[10px] text-muted-foreground truncate w-full text-center">
+                        {emoji.rkey}
+                      </div>
+                    </button>
+                  );
+              })}
+            </div>
+          ) : (
+            <p className="py-6">
+              ユーザーリポジトリにアップロードされたBluemojiが見つかりません。
+            </p>
+          )}
         </div>
       </div>
     </div>

@@ -8,7 +8,11 @@ import {
   useLoaderData,
   useRouteError,
 } from "@remix-run/react";
-import type { LinksFunction, LoaderFunction } from "@remix-run/node";
+import type {
+  LinksFunction,
+  LoaderFunction,
+  MetaFunction,
+} from "@remix-run/node";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./tailwind.css";
 import { RecoilRoot } from "recoil";
@@ -35,6 +39,24 @@ export const links: LinksFunction = () => [
     href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
   },
 ];
+
+export const meta: MetaFunction = () => {
+  const fullTitle = `Stellar`;
+  const description =
+    "Stellar is an AT Protocol web client with emoji reactions.";
+
+  const metadata = [
+    { title: fullTitle },
+    { name: "description", content: description },
+
+    { property: "og:title", content: fullTitle },
+    { property: "og:description", content: description },
+    { property: "og:type", content: "website" },
+    { property: "og:site_name", content: "Stellar" },
+  ];
+
+  return metadata;
+};
 
 export const loader: LoaderFunction = async ({ request }) => {
   const agent = await getSessionAgent(request);
