@@ -62,13 +62,15 @@ export default function Reactions() {
               {posts.map((data: ActorReaction) => (
                 <div key={data.post.cid}>
                   {data.reaction?.emoji.formats.png_128?.ref.$link && (
-                    <div className="py-4">
-                      <EmojiRender
-                        cid={data.reaction.emoji.formats.png_128.ref.$link}
-                        repo={data.reaction.emojiRef!.repo}
-                        name={data.reaction.emoji.name}
-                      />
-                      <Post post={data.post} reactions={[]} />
+                    <div>
+                      <div className="py-4">
+                        <EmojiRender
+                          cid={data.reaction.emoji.formats.png_128.ref.$link}
+                          repo={data.reaction.emojiRef!.repo}
+                          name={data.reaction.emoji.name}
+                        />
+                      </div>
+                      <Post post={data.post} />
                     </div>
                   )}
                 </div>
