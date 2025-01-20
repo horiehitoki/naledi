@@ -25,6 +25,7 @@ export default function Reactions() {
         const res = await fetch(endpoint);
 
         const reactions = await res.json();
+        console.log(reactions);
 
         return reactions;
       },
@@ -59,22 +60,20 @@ export default function Reactions() {
         {posts.map((data: ActorReaction) => (
           <div key={data.post.cid}>
             <div className="space-y-4">
-              {posts.map((data: ActorReaction) => (
-                <div key={data.post.cid}>
-                  {data.reaction?.emoji.formats.png_128?.ref.$link && (
-                    <div>
-                      <div className="py-4">
-                        <EmojiRender
-                          cid={data.reaction.emoji.formats.png_128.ref.$link}
-                          repo={data.reaction.emojiRef!.repo}
-                          name={data.reaction.emoji.name}
-                        />
-                      </div>
-                      <Post post={data.post} />
+              <div key={data.post.cid}>
+                {data.reaction?.emoji.formats.png_128?.ref.$link && (
+                  <div>
+                    <div className="py-4">
+                      <EmojiRender
+                        cid={data.reaction.emoji.formats.png_128.ref.$link}
+                        repo={data.reaction.emojiRef!.repo}
+                        name={data.reaction.emoji.name}
+                      />
                     </div>
-                  )}
-                </div>
-              ))}
+                    <Post post={data.post} />
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         ))}

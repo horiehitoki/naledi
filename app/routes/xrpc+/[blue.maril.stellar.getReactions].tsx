@@ -26,7 +26,6 @@ export const loader: LoaderFunction = async ({ request }) => {
       );
     }
 
-    //ページネーション(Claudeが書いた)
     const where: {
       post_uri: string;
       post_cid?: string;
@@ -39,18 +38,23 @@ export const loader: LoaderFunction = async ({ request }) => {
       where.post_cid = cid;
     }
 
-    //次のレコードがあるか確認するために +1
-    const take = limit + 1;
+    let reactions: Reaction[];
 
     if (cursor) {
-      where.rkey = { gt: cursor };
+      reactions = await prisma.reaction.findMany({
+        where,
+        cursor: { rkey: cursor },
+        take: limit + 1,
+        skip: 1,
+        orderBy: { rkey: "desc" },
+      });
+    } else {
+      reactions = await prisma.reaction.findMany({
+        where,
+        take: limit + 1,
+        orderBy: { rkey: "desc" },
+      });
     }
-
-    const reactions = await prisma.reaction.findMany({
-      where,
-      take,
-      orderBy: { rkey: "desc" },
-    });
 
     const hasMore = reactions.length > limit;
 

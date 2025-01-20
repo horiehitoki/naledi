@@ -1,4 +1,5 @@
 import { Agent } from "@atproto/api";
+import { Reaction } from "@prisma/client";
 import { LoaderFunction } from "@remix-run/node";
 import { prisma } from "~/lib/db/prisma";
 import { getParams } from "~/utils/getParams";
@@ -23,23 +24,23 @@ export const loader: LoaderFunction = async ({ request }) => {
       );
     }
 
-    //ページネーション
-    const where: {
-      authorDid: string;
-      rkey?: { gt: string };
-    } = {
-      authorDid: actor,
-    };
+    let reactions: Reaction[];
 
     if (cursor) {
-      where.rkey = { gt: cursor };
+      reactions = await prisma.reaction.findMany({
+        where: { authorDid: actor },
+        cursor: { rkey: cursor },
+        take: limit + 1,
+        skip: 1,
+        orderBy: { rkey: "desc" },
+      });
+    } else {
+      reactions = await prisma.reaction.findMany({
+        where: { authorDid: actor },
+        take: limit + 1,
+        orderBy: { rkey: "desc" },
+      });
     }
-
-    const reactions = await prisma.reaction.findMany({
-      where,
-      take: limit + 1,
-      orderBy: { rkey: "desc" },
-    });
 
     const hasMore = reactions.length > limit;
     if (hasMore) {
