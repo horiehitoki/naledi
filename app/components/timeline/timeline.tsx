@@ -9,14 +9,14 @@ import Post from "./post";
 import { Reaction } from "~/generated/api/types/blue/maril/stellar/getReactions";
 import Alert from "../ui/alert";
 import Loading from "../ui/loading";
+import { ReplyRef } from "~/generated/api/types/app/bsky/feed/defs";
 
-type Post = {
+export type FeedViewPostWithReaction = {
   post: PostView;
-  reason?:
-    | ReasonRepost
-    | ReasonPin
-    | { [k: string]: unknown; $type: string }
-    | undefined;
+  reply?: ReplyRef;
+  reason?: ReasonRepost | ReasonPin | { $type: string; [k: string]: unknown };
+  feedContext?: string;
+  [k: string]: unknown;
   reactions: Reaction[] | undefined;
 };
 
@@ -50,13 +50,14 @@ export default function Timeline(options: options) {
         loader={<Loading />}
       >
         <div>
-          {posts.map((post: Post) => {
+          {posts.map((feed: FeedViewPostWithReaction) => {
             return (
               <Post
-                post={post.post}
-                reason={post.reason}
-                reactions={post.reactions}
-                key={post.post.cid}
+                post={feed.post}
+                reason={feed.reason}
+                reactions={feed.reactions}
+                reply={feed.reply}
+                key={feed.post.cid}
               />
             );
           })}

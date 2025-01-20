@@ -1,4 +1,5 @@
 import type { LoaderFunction } from "@remix-run/node";
+import { ActorReaction } from "~/generated/api/types/blue/maril/stellar/getActorReactions";
 import { ReactionXrpc } from "~/lib/reaction/reactionXrpc";
 import { getParams } from "~/utils/getParams";
 
@@ -10,7 +11,9 @@ export const loader: LoaderFunction = async ({ request }) => {
     const xrpc = new ReactionXrpc();
     const reactions = await xrpc.getActorReaction(did, 50, cursor);
 
-    return Response.json(reactions.data);
+    const result: ActorReaction = reactions.data;
+
+    return Response.json(result);
   } catch (e) {
     console.log(e);
 

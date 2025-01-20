@@ -8,17 +8,12 @@ import {
 import { useEffect, useRef } from "react";
 import "yet-another-react-lightbox/styles.css";
 import { Ellipsis, MessageCircle, Repeat2, Smile } from "lucide-react";
-import {
-  PostView,
-  ReasonPin,
-  ReasonRepost,
-} from "@atproto/api/dist/client/types/app/bsky/feed/defs";
+import { PostView } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
 import { useSetPost } from "~/state/post";
 import { RepostButton } from "../buttons/repostButton";
 import { LikeButton } from "../buttons/likeButton";
 import { Button } from "../ui/button";
 import { useEmojiPicker } from "~/state/emojiPicker";
-import { Reaction } from "~/generated/api/types/blue/maril/stellar/getReactions";
 import ReactionButtons from "../buttons/reactionButtons";
 import FacetRender from "../render/facetRender";
 import {
@@ -40,14 +35,52 @@ import {
 import { useProfile } from "~/state/profile";
 import { useToast } from "~/hooks/use-toast";
 import EmbedRender from "../render/embedRender";
+import { FeedViewPostWithReaction } from "./timeline";
 
-interface PostProps {
-  post: PostView;
-  reason?: ReasonRepost | ReasonPin | { [k: string]: unknown; $type: string };
-  reactions?: Reaction[];
-}
+const ReplyParent = ({ parent }: { parent: PostView }) => {
+  if (!parent || !parent.author) return null;
 
-export default function Post({ post, reason, reactions }: PostProps) {
+  return (
+    <a href={`/thread?uri=${parent.uri}`}>
+      <div className="pl-4 pb-4 border-l-2 border-stone-700">
+        <div className="flex items-start space-x-2">
+          <Avatar className="h-5 w-5">
+            <AvatarImage
+              src={parent.author.avatar}
+              alt={parent.author.displayName}
+            />
+            <AvatarFallback>
+              {parent.author.displayName?.[0]?.toUpperCase() || "?"}
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center space-x-1">
+              <span className="font-semibold text-sm truncate">
+                {parent.author.displayName}
+              </span>
+              <span className="text-xs text-muted-foreground">
+                @{parent.author.handle}
+              </span>
+            </div>
+            <div className="text-sm text-muted-foreground line-clamp-2">
+              <FacetRender
+                text={parent.record.text}
+                facets={parent.record.facets}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </a>
+  );
+};
+
+export default function Post({
+  post,
+  reason,
+  reply,
+  reactions,
+}: FeedViewPostWithReaction) {
   const setState = useSetPost(post.cid);
   const myProfile = useProfile();
   const cardRef = useRef<HTMLDivElement>(null);
@@ -123,6 +156,8 @@ export default function Post({ post, reason, reactions }: PostProps) {
             ""
           )}
 
+          {reply && <ReplyParent parent={reply.parent as PostView} />}
+
           <div className="flex justify-between">
             <a
               href={`/user/${post.author.handle}/posts`}
@@ -186,10 +221,7 @@ export default function Post({ post, reason, reactions }: PostProps) {
         </CardHeader>
 
         <CardContent className="space-y-4">
-          <FacetRender
-            text={post.record.text as string}
-            facets={post.record.facets}
-          />
+          <FacetRender text={post.record.text} facets={post.record.facets} />
 
           {post.embed && (
             <div className="mt-2">

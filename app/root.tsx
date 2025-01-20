@@ -64,7 +64,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
   const profile = await agent.getProfile({ actor: agent.assertDid });
 
-  //カスタム絵文字をAppViewからすべて取得
+  //自分の作ったカスタム絵文字をAppViewからすべて取得
   const emojis = await prisma.emoji.findMany({
     where: { repo: agent.assertDid },
   });

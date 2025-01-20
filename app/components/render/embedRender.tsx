@@ -7,14 +7,19 @@ import {
   AppBskyEmbedRecord,
   AppBskyGraphDefs,
 } from "@atproto/api";
-import { ExternalLinkIcon, PlayCircle, ListIcon, HashIcon } from "lucide-react";
+import { ExternalLinkIcon, ListIcon, HashIcon } from "lucide-react";
 import { Lightbox } from "yet-another-react-lightbox";
 import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import FacetRender from "./facetRender";
+import {
+  FeedViewPost,
+  PostView,
+} from "~/generated/api/types/app/bsky/feed/defs";
+import ReactPlayer from "react-player";
 
 interface PostEmbedProps {
-  content: AppBskyFeedDefs.FeedViewPost["post"]["embed"];
+  content: FeedViewPost["post"]["embed"];
 }
 
 export default function EmbedRender({ content }: PostEmbedProps) {
@@ -33,17 +38,15 @@ export default function EmbedRender({ content }: PostEmbedProps) {
   }
 
   if (AppBskyEmbedRecord.isView(content)) {
-    return <RecordEmbed record={content.record} />;
+    return <RecordEmbed content={content} />;
   }
 
   return null;
 }
 
-function RecordEmbed({
-  record,
-}: {
-  record: AppBskyFeedDefs.PostView | { $type: string; [key: string]: any };
-}) {
+function RecordEmbed({ content }: { content: AppBskyEmbedRecord.View }) {
+  const record = content.record;
+
   if (AppBskyFeedDefs.isGeneratorView(record)) {
     return (
       <Card className="p-3">
@@ -100,10 +103,10 @@ function RecordEmbed({
     );
   }
 
-  return <QuotedPost post={record} />;
+  return <QuotedPost post={record as unknown as PostView} />;
 }
 
-function QuotedPost({ post }: { post: AppBskyFeedDefs.PostView }) {
+function QuotedPost({ post }: { post: PostView }) {
   return (
     <Card>
       <CardHeader>
@@ -181,26 +184,14 @@ function ExternalLink({ content }: { content: AppBskyEmbedExternal.View }) {
 
 function VideoEmbed({ content }: { content: AppBskyEmbedVideo.View }) {
   return (
-    <div className="relative">
-      <div
-        className="relative aspect-video bg-gray-100 rounded-lg overflow-hidden"
-        style={{
-          aspectRatio:
-            content.aspectRatio?.width && content.aspectRatio?.height
-              ? `${content.aspectRatio.width}/${content.aspectRatio.height}`
-              : "16/9",
-        }}
-      >
-        <img
-          src={content.thumbnail}
-          alt={content.alt || "Video thumbnail"}
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-          <PlayCircle className="w-12 h-12 text-white" />
-        </div>
-      </div>
-    </div>
+    <ReactPlayer
+      url={content.playlist}
+      className="react-player"
+      controls={true}
+      width="100%"
+      height="100%"
+      playing={false}
+    />
   );
 }
 

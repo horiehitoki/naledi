@@ -6,6 +6,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import Main from "~/components/layout/main";
 import Post from "~/components/timeline/post";
+import { FeedViewPostWithReaction } from "~/components/timeline/timeline";
 import NotFound from "~/components/ui/404";
 import Alert from "~/components/ui/alert";
 import Loading from "~/components/ui/loading";
@@ -39,13 +40,19 @@ export default function Threads() {
 
   return (
     <Main>
-      <Post post={data.post} reactions={data.post.reactions} />
+      <Post
+        post={data.post.post}
+        reactions={data.post.reactions}
+        reason={data.reason}
+        reply={data.reply}
+      />
 
-      {data.replies.map((reply: any) => {
+      {data.replies.map((reply: FeedViewPostWithReaction) => {
         return (
           <Post
             key={reply.post.uri}
             post={reply.post}
+            reply={reply.reply}
             reactions={reply.reactions}
           />
         );

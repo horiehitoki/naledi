@@ -1,5 +1,6 @@
 import { Agent } from "@atproto/api";
 import { LoaderFunction } from "@remix-run/node";
+import { FeedViewPostWithReaction } from "~/components/timeline/timeline";
 import { getSessionAgent } from "~/lib/auth/session";
 import feedWithReaction from "~/lib/feed/feedWithReactions";
 import { getParams } from "~/utils/getParams";
@@ -30,7 +31,9 @@ export const loader: LoaderFunction = async ({ request }) => {
     }
 
     //リアクションデータを取得
-    const feed = await feedWithReaction(timeline.data.feed);
+    const feed: FeedViewPostWithReaction[] = await feedWithReaction(
+      timeline.data.feed
+    );
 
     return Response.json({
       ...timeline.data,

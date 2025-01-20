@@ -6,6 +6,7 @@ import {
 } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
 import { LoaderFunction } from "@remix-run/node";
 import { ReactionXrpc } from "~/lib/reaction/reactionXrpc";
+import { FeedViewPostWithReaction } from "~/components/timeline/timeline";
 
 export const loader: LoaderFunction = async ({ request }) => {
   try {
@@ -26,13 +27,13 @@ export const loader: LoaderFunction = async ({ request }) => {
     //メイン投稿についたリアクションを取得
     const reactions = await xrpc.getReactions(post.uri, post.cid, 50);
 
-    const postWithReactions = {
-      ...post,
+    const postWithReactions: FeedViewPostWithReaction = {
+      post,
       reactions: reactions.data.reactions,
     };
 
     //リプライについたリアクションをそれぞれ取得
-    const repliesWithReactions = await Promise.all(
+    const repliesWithReactions: FeedViewPostWithReaction[] = await Promise.all(
       replies.map(async (reply) => {
         const reactions = await xrpc.getReactions(
           reply.post.uri,
@@ -47,14 +48,14 @@ export const loader: LoaderFunction = async ({ request }) => {
       })
     );
 
-    return {
+    return Response.json({
       post: postWithReactions,
       replies: repliesWithReactions,
-    };
+    });
   } catch (e) {
     console.error(e);
-    return {
+    return Response.json({
       error: "投稿が見つかりませんでした。",
-    };
+    });
   }
 };

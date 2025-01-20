@@ -3,11 +3,12 @@ import {
   PostView,
 } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
 import { ReactionXrpc } from "../reaction/reactionXrpc";
+import { FeedViewPostWithReaction } from "~/components/timeline/timeline";
 
 //feedにリアクションデータをつけて返す
 export default async function feedWithReaction(
   feed: FeedViewPost[] | PostView[]
-) {
+): Promise<FeedViewPostWithReaction[]> {
   const xrpc = new ReactionXrpc();
 
   const data = await Promise.all(
@@ -21,24 +22,25 @@ export default async function feedWithReaction(
           50
         );
 
-        if (!reactions) return null;
-
-        return {
+        const result: FeedViewPostWithReaction = {
           ...post,
-          reactions: reactions.data.reactions,
+          reactions: reactions.data.reactions ?? [],
         };
+
+        return result;
       } else {
         const post = item as PostView;
         const reactions = await xrpc.getReactions(post.uri, post.cid, 50);
 
-        if (!reactions) return null;
-
-        return {
-          ...post,
-          reactions: reactions.data.reactions,
+        const result: FeedViewPostWithReaction = {
+          post: post,
+          reactions: reactions.data.reactions ?? [],
         };
+
+        return result;
       }
     })
   );
+
   return data;
 }

@@ -1,15 +1,14 @@
 import InfiniteScroll from "react-infinite-scroll-component";
 import { options, useSearch } from "~/hooks/useSearch";
 import Post from "./post";
-import { PostView } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
-import { Reaction } from "~/generated/api/types/blue/maril/stellar/getReactions";
 import Alert from "../ui/alert";
 import Loading from "../ui/loading";
+import { FeedViewPostWithReaction } from "./timeline";
 
 export default function Search(options: options) {
   const { data, fetchNextPage, hasNextPage, isLoading, isError } =
     useSearch(options);
-  const posts = data?.pages.flatMap((page) => page.posts) ?? [];
+  const posts = data?.pages.flatMap((page) => page.feed) ?? [];
 
   if (isLoading) {
     return <Loading />;
@@ -36,12 +35,13 @@ export default function Search(options: options) {
         loader={<Loading />}
       >
         <div>
-          {posts.map((post: PostView) => {
+          {posts.map((feed: FeedViewPostWithReaction) => {
             return (
               <Post
-                post={post}
-                reactions={post.reactions as Reaction[]}
-                key={post.cid}
+                post={feed.post}
+                reactions={feed.reactions}
+                reply={feed.reply}
+                key={feed.post.cid}
               />
             );
           })}
