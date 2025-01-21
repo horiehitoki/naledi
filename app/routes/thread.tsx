@@ -35,7 +35,9 @@ export default function Threads() {
   }
 
   if (isError) {
-    return <Alert message="スレッドを取得中にエラーが発生しました。" />;
+    return (
+      <h1 className="text-center">スレッドを取得中にエラーが発生しました。</h1>
+    );
   }
 
   return (

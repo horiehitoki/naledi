@@ -1,7 +1,6 @@
 import InfiniteScroll from "react-infinite-scroll-component";
 import { options, useSearch } from "~/hooks/useSearch";
 import Post from "./post";
-import Alert from "../ui/alert";
 import Loading from "../ui/loading";
 import { FeedViewPostWithReaction } from "./timeline";
 
@@ -15,7 +14,7 @@ export default function Search(options: options) {
   }
 
   if (isError) {
-    return <Alert message="タイムラインの取得に失敗しました。" />;
+    return <h1 className="text-center">検索に失敗しました。</h1>;
   }
 
   if (posts.length <= 0) {

@@ -9,12 +9,20 @@ import { usePost, useReaction } from "~/state/post";
 import { useProfile } from "~/state/profile";
 import EmojiRender from "../render/emojiRender";
 import { Reaction } from "~/generated/api/types/blue/maril/stellar/getReactions";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from "~/components/ui/context-menu";
+import { useToast } from "~/hooks/use-toast";
 
 export default function ReactionButtons({ cid }: { cid: string }) {
   const post = usePost(cid);
   const profile = useProfile();
 
   const { reaction, cancelReaction } = useReaction(cid);
+  const { toast } = useToast();
 
   //リアクションをグループ化して表示
   const groupedReactions = new Map();
@@ -28,6 +36,32 @@ export default function ReactionButtons({ cid }: { cid: string }) {
     groupedReactions.get(key).count++;
     groupedReactions.get(key).group.push(r);
   });
+
+  async function copyBluemojiToPDS(rkey: string, repo: string) {
+    const res = await fetch("/api/copyEmoji", {
+      method: "POST",
+      body: JSON.stringify({
+        rkey,
+        repo,
+      }),
+    });
+
+    const json = await res.json();
+
+    if (json.error) {
+      toast({
+        title: "Error",
+        description: json.error,
+        variant: "destructive",
+      });
+    } else {
+      {
+        toast({
+          title: "絵文字のコピーに成功しました。",
+        });
+      }
+    }
+  }
 
   return (
     <TooltipProvider>
@@ -43,32 +77,54 @@ export default function ReactionButtons({ cid }: { cid: string }) {
           return (
             <Tooltip key={group[0].rkey}>
               <TooltipTrigger>
-                <button
-                  onClick={() =>
-                    myReactions.length > 0
-                      ? cancelReaction(myReactions[0])
-                      : reaction(
-                          group[0].emojiRef.rkey,
-                          group[0].emojiRef.repo,
-                          group[0].emoji,
-                          profile!
-                        )
-                  }
-                  className={`relative flex items-center space-x-2 px-2 py-1 rounded-lg text-sm font-medium transition-all ${
-                    myReactions.length > 0
-                      ? "bg-purple-800 text-white border-2 border-purple-400"
-                      : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-                  }`}
-                >
-                  <p>
-                    <EmojiRender
-                      cid={group[0].emoji.formats.png_128.ref.$link}
-                      repo={group[0].emojiRef.repo}
-                      name={group[0].emoji.name}
-                    />
-                  </p>
-                  <span className="ml-1">{count}</span>
-                </button>
+                <ContextMenu>
+                  <ContextMenuTrigger>
+                    <button
+                      onClick={() =>
+                        myReactions.length > 0
+                          ? cancelReaction(myReactions[0])
+                          : reaction(
+                              group[0].emojiRef.rkey,
+                              group[0].emojiRef.repo,
+                              group[0].emoji,
+                              profile!
+                            )
+                      }
+                      className={`relative flex items-center space-x-2 px-2 py-1 rounded-lg text-sm font-medium transition-all ${
+                        myReactions.length > 0
+                          ? "bg-purple-800 text-white border-2 border-purple-400"
+                          : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                      }`}
+                    >
+                      <p>
+                        <EmojiRender
+                          cid={group[0].emoji.formats.png_128.ref.$link}
+                          repo={group[0].emojiRef.repo}
+                          name={group[0].emoji.name}
+                        />
+                      </p>
+                      <span className="ml-1">{count}</span>
+                    </button>
+                  </ContextMenuTrigger>
+                  <ContextMenuContent>
+                    <ContextMenuItem>
+                      {group[0].emojiRef.repo !== profile?.did ? (
+                        <button
+                          onClick={() =>
+                            copyBluemojiToPDS(
+                              group[0].emojiRef.rkey,
+                              group[0].emojiRef.repo
+                            )
+                          }
+                        >
+                          絵文字をPDSにコピー
+                        </button>
+                      ) : (
+                        ""
+                      )}
+                    </ContextMenuItem>
+                  </ContextMenuContent>
+                </ContextMenu>
               </TooltipTrigger>
               <TooltipContent className="space-y-2">
                 <div className="text-center">{emoji.name}</div>

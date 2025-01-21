@@ -7,7 +7,6 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { options, useTimeline } from "~/hooks/useTimeline";
 import Post from "./post";
 import { Reaction } from "~/generated/api/types/blue/maril/stellar/getReactions";
-import Alert from "../ui/alert";
 import Loading from "../ui/loading";
 import { ReplyRef } from "~/generated/api/types/app/bsky/feed/defs";
 
@@ -30,7 +29,7 @@ export default function Timeline(options: options) {
   }
 
   if (isError) {
-    return <Alert message="タイムラインの取得に失敗しました。" />;
+    return <h1 className="text-center">タイムラインの取得に失敗しました。</h1>;
   }
 
   if (posts.length <= 0) {

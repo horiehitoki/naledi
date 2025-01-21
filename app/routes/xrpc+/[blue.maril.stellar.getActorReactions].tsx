@@ -1,6 +1,7 @@
 import { Agent } from "@atproto/api";
 import { Reaction } from "@prisma/client";
 import { LoaderFunction } from "@remix-run/node";
+import { BlueMarilStellarGetActorReactions } from "~/generated/api";
 import { prisma } from "~/lib/db/prisma";
 import { getParams } from "~/utils/getParams";
 
@@ -74,7 +75,7 @@ export const loader: LoaderFunction = async ({ request }) => {
       })
     );
 
-    const response = {
+    const response: BlueMarilStellarGetActorReactions.OutputSchema = {
       feed,
       ...(hasMore && { cursor: reactions[reactions.length - 1].rkey }),
     };

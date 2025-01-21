@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNotifications } from "~/hooks/useNotifications";
 import NotificationCard from "./notificationsCard";
-import Alert from "~/components/ui/alert";
 import { useSetUnread } from "~/state/unread";
 import Loading from "../ui/loading";
 
@@ -44,7 +43,7 @@ export default function NotificationList() {
   }
 
   if (isError) {
-    return <Alert message="通知の取得に失敗しました。" />;
+    return <h1 className="text-center">通知の取得に失敗しました。</h1>;
   }
 
   if (notifications.length <= 0) {

@@ -82,7 +82,7 @@ function renderSegment(segment: RichTextSegment, index: number): JSX.Element {
               name={bluemoji.name as string}
             />
           ) : (
-            <span className="whitespace-break-spaces">{segment.text}</span>
+            <span>{segment.text}</span>
           )}
         </span>
       );

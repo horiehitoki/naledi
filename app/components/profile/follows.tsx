@@ -2,7 +2,6 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { useFollow } from "~/hooks/useFollow";
 import { UserCard } from "./userCard";
 import { ProfileView } from "@atproto/api/dist/client/types/app/bsky/actor/defs";
-import Alert from "../ui/alert";
 import Loading from "../ui/loading";
 
 export default function Follows({ did }: { did: string }) {
@@ -15,7 +14,7 @@ export default function Follows({ did }: { did: string }) {
   }
 
   if (isError) {
-    return <Alert message="ユーザー情報の取得に失敗しました。" />;
+    return <h1 className="text-center">ユーザー情報の取得に失敗しました。</h1>;
   }
 
   return (

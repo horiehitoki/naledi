@@ -1,5 +1,6 @@
 import { Reaction } from "@prisma/client";
 import { LoaderFunction } from "@remix-run/node";
+import { BlueMarilStellarGetReactions } from "~/generated/api";
 import { prisma } from "~/lib/db/prisma";
 import { getParams } from "~/utils/getParams";
 
@@ -64,22 +65,23 @@ export const loader: LoaderFunction = async ({ request }) => {
     }
 
     //リアクションデータの整形
-    const transformedReactions = await Promise.all(
-      reactions.map(async (reaction: Reaction) => {
-        return {
-          rkey: reaction.rkey,
-          subject: { uri: reaction.post_uri, cid: reaction.post_cid },
-          createdAt:
-            reaction.createdAt?.toISOString() ?? new Date().toISOString(),
-          emojiRef: JSON.parse(reaction.record).emoji,
-          emoji: JSON.parse(reaction.emoji),
-          actor: JSON.parse(reaction.actor).data,
-        };
-      })
-    );
+    const transformedReactions: BlueMarilStellarGetReactions.Reaction[] =
+      await Promise.all(
+        reactions.map(async (reaction: Reaction) => {
+          return {
+            rkey: reaction.rkey,
+            subject: { uri: reaction.post_uri, cid: reaction.post_cid },
+            createdAt:
+              reaction.createdAt?.toISOString() ?? new Date().toISOString(),
+            emojiRef: JSON.parse(reaction.record).emoji,
+            emoji: JSON.parse(reaction.emoji),
+            actor: JSON.parse(reaction.actor).data,
+          };
+        })
+      );
 
     //レスポンス
-    const response = {
+    const response: BlueMarilStellarGetReactions.OutputSchema = {
       uri,
       ...(cid && { cid }),
       ...(hasMore && { cursor: reactions[reactions.length - 1].rkey }),

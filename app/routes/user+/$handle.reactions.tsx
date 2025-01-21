@@ -5,7 +5,6 @@ import EmojiRender from "~/components/render/emojiRender";
 import Post from "~/components/timeline/post";
 import { ActorReaction } from "~/generated/api/types/blue/maril/stellar/getActorReactions";
 import Loading from "~/components/ui/loading";
-import Alert from "~/components/ui/alert";
 
 export default function Reactions() {
   const { did } = useOutletContext<{ did: string; error: string }>();
@@ -17,15 +16,14 @@ export default function Reactions() {
         let endpoint;
 
         if (pageParam) {
-          endpoint = `/api/actorReaction?cursor=${pageParam}&did=${did}`;
+          endpoint = `/api/actorReactions?cursor=${pageParam}&did=${did}`;
         } else {
-          endpoint = `/api/actorReaction?did=${did}`;
+          endpoint = `/api/actorReactions?did=${did}`;
         }
 
         const res = await fetch(endpoint);
 
         const reactions = await res.json();
-        console.log(reactions);
 
         return reactions;
       },
@@ -40,7 +38,11 @@ export default function Reactions() {
   }
 
   if (isError) {
-    return <Alert message="リアクション一覧を取得中にエラーが発生しました。" />;
+    return (
+      <h1 className="text-center">
+        リアクションを取得中にエラーが発生しました。
+      </h1>
+    );
   }
 
   if (posts.length === 0) {
