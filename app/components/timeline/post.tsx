@@ -145,6 +145,9 @@ export default function Post({
     );
   }
 
+  const indexedAt = new Date(post.indexedAt);
+
+  const indexedText = indexedAt.toLocaleString();
   return (
     <div>
       <Card ref={cardRef} className="rounded-none border-stone-700">
@@ -185,7 +188,9 @@ export default function Post({
                 </div>
               </div>
             </a>
-            <div>
+            <div className="flex items-center space-x-4">
+              <p className="text-xs">{indexedText}</p>
+
               {post.author.did === myProfile?.did && (
                 <Dialog>
                   <DialogTrigger>

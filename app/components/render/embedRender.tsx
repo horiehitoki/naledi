@@ -107,6 +107,8 @@ function RecordEmbed({ content }: { content: AppBskyEmbedRecord.View }) {
 }
 
 function QuotedPost({ post }: { post: PostView }) {
+  if (!post.value) return null;
+
   return (
     <Card>
       <CardHeader>
