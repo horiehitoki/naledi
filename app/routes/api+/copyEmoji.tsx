@@ -62,21 +62,30 @@ export const action: ActionFunction = async ({ request }) => {
         });
 
         const record: BlueMojiCollectionItem.Record = {
-          ...originalRecord,
+          $type: "blue.moji.collection.item",
+          name: originalRecord.name,
+          alt: originalRecord.alt,
           formats: {
-            ...originalRecord.formats,
-            png_128: {
-              ...originalRecord.formats.png_128!,
-              ...data.blob,
-            },
+            $type: "blue.moji.collection.item#formats_v0",
+            png_128: data.blob,
           },
-          original: { ...data.blob },
           copyOf: originalData.uri,
+          createdAt: new Date().toISOString(),
         };
 
-        console.log(record);
+        if (
+          !BlueMojiCollectionItem.isRecord(record) &&
+          !BlueMojiCollectionItem.validateRecord(record)
+        ) {
+          return new Response(
+            JSON.stringify({ error: "絵文字のレコードが不正です。" }),
+            {
+              status: 500,
+            }
+          );
+        }
 
-        await agent.com.atproto.repo.createRecord({
+        await agent.com.atproto.repo.putRecord({
           repo: agent.assertDid,
           collection: "blue.moji.collection.item",
           rkey: body.rkey,

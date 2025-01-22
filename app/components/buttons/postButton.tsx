@@ -42,6 +42,8 @@ export default function PostButton() {
       toast({
         title: "ポストが投稿されました！",
       });
+
+      window.location.reload();
     }
 
     setPostOpen(false);

@@ -59,6 +59,8 @@ export default function ReactionButtons({ cid }: { cid: string }) {
         toast({
           title: "絵文字のコピーに成功しました。",
         });
+
+        window.location.reload();
       }
     }
   }
@@ -106,9 +108,10 @@ export default function ReactionButtons({ cid }: { cid: string }) {
                       <span className="ml-1">{count}</span>
                     </button>
                   </ContextMenuTrigger>
-                  <ContextMenuContent>
-                    <ContextMenuItem>
-                      {group[0].emojiRef.repo !== profile?.did ? (
+
+                  {group[0].emojiRef.repo !== profile?.did ? (
+                    <ContextMenuContent>
+                      <ContextMenuItem>
                         <button
                           onClick={() =>
                             copyBluemojiToPDS(
@@ -119,11 +122,11 @@ export default function ReactionButtons({ cid }: { cid: string }) {
                         >
                           絵文字をPDSにコピー
                         </button>
-                      ) : (
-                        ""
-                      )}
-                    </ContextMenuItem>
-                  </ContextMenuContent>
+                      </ContextMenuItem>
+                    </ContextMenuContent>
+                  ) : (
+                    ""
+                  )}
                 </ContextMenu>
               </TooltipTrigger>
               <TooltipContent className="space-y-2">

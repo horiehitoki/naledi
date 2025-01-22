@@ -120,12 +120,14 @@ export default function Post({
 
       if (json.error) {
         throw new Error(json.error);
-      }
+      } else {
+        toast({
+          title: "成功",
+          description: "投稿を削除しました。",
+        });
 
-      toast({
-        title: "成功",
-        description: "投稿を削除しました。",
-      });
+        window.location.reload();
+      }
     } catch (err) {
       toast({
         title: "エラー",
