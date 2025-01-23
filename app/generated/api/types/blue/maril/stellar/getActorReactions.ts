@@ -6,7 +6,7 @@ import { ValidationResult, BlobRef } from '@atproto/lexicon'
 import { isObj, hasProp } from '../../../../util'
 import { lexicons } from '../../../../lexicons'
 import { CID } from 'multiformats/cid'
-import * as AppBskyFeedDefs from '../../../app/bsky/feed/defs'
+import * as ComAtprotoRepoStrongRef from '../../../com/atproto/repo/strongRef'
 import * as BlueMarilStellarGetReactions from './getReactions'
 
 export interface QueryParams {
@@ -39,13 +39,8 @@ export function toKnownErr(e: any) {
 }
 
 export interface ActorReaction {
-  post: AppBskyFeedDefs.PostView
-  reply?: AppBskyFeedDefs.ReplyRef
-  reason?:
-    | AppBskyFeedDefs.ReasonRepost
-    | AppBskyFeedDefs.ReasonPin
-    | { $type: string; [k: string]: unknown }
-  reaction?: BlueMarilStellarGetReactions.Reaction
+  subject: ComAtprotoRepoStrongRef.Main
+  reaction: BlueMarilStellarGetReactions.Reaction
   [k: string]: unknown
 }
 

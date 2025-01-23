@@ -11,18 +11,32 @@ import NotFound from "~/components/ui/404";
 import Alert from "~/components/ui/alert";
 import Loading from "~/components/ui/loading";
 
+const PostWithReplies = ({
+  post,
+  level = 0,
+}: {
+  post: FeedViewPostWithReaction;
+  level?: number;
+}) => {
+  return (
+    <div style={{ marginLeft: level > 0 ? `${level * 16}px` : 0 }}>
+      <Post post={post.post} reactions={post.reactions} reply={post.reply} />
+      {post.replies?.map((reply: FeedViewPostWithReaction) => (
+        <PostWithReplies key={reply.post.uri} post={reply} level={level + 1} />
+      ))}
+    </div>
+  );
+};
+
 export default function Threads() {
   const [searchParams] = useSearchParams();
   const uri = searchParams.get("uri");
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["thread"],
+    queryKey: ["thread", uri],
     queryFn: async () => {
       const res = await fetch(`/api/threads?uri=${encodeURIComponent(uri!)}`);
-
-      const data = await res.json();
-
-      return data;
+      return res.json();
     },
   });
 
@@ -42,23 +56,17 @@ export default function Threads() {
 
   return (
     <Main>
-      <Post
-        post={data.post.post}
-        reactions={data.post.reactions}
-        reason={data.reason}
-        reply={data.reply}
-      />
-
-      {data.replies.map((reply: FeedViewPostWithReaction) => {
-        return (
-          <Post
-            key={reply.post.uri}
-            post={reply.post}
-            reply={reply.reply}
-            reactions={reply.reactions}
-          />
-        );
-      })}
+      {data.parents?.map((parent: FeedViewPostWithReaction) => (
+        <Post
+          key={parent.post.uri}
+          post={parent.post}
+          reactions={parent.reactions}
+        />
+      ))}
+      <Post post={data.post.post} reactions={data.post.reactions} />
+      {data.replies?.map((reply: FeedViewPostWithReaction) => (
+        <PostWithReplies key={reply.post.uri} post={reply} />
+      ))}
     </Main>
   );
 }

@@ -1,4 +1,3 @@
-import { Agent } from "@atproto/api";
 import { Reaction } from "@prisma/client";
 import { LoaderFunction } from "@remix-run/node";
 import { BlueMarilStellarGetActorReactions } from "~/generated/api";
@@ -48,17 +47,11 @@ export const loader: LoaderFunction = async ({ request }) => {
       reactions.pop();
     }
 
-    const agent = new Agent("https://public.api.bsky.app");
-
     //feedの整形
     const feed = await Promise.all(
       reactions.map(async (reaction) => {
-        const post = await agent.app.bsky.feed.getPosts({
-          uris: [reaction.post_uri],
-        });
-
         return {
-          post: post.data.posts[0],
+          subject: { uri: reaction.post_uri, cid: reaction.post_cid },
           reaction: {
             rkey: reaction.rkey,
             subject: {

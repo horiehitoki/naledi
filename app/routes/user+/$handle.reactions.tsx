@@ -3,8 +3,10 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import InfiniteScroll from "react-infinite-scroll-component";
 import EmojiRender from "~/components/render/emojiRender";
 import Post from "~/components/timeline/post";
-import { ActorReaction } from "~/generated/api/types/blue/maril/stellar/getActorReactions";
 import Loading from "~/components/ui/loading";
+import { ComAtprotoRepoStrongRef } from "@atproto/api";
+import { Reaction } from "~/generated/api/types/blue/maril/stellar/getReactions";
+import { FeedViewPostWithReaction } from "~/components/timeline/timeline";
 
 export default function Reactions() {
   const { did } = useOutletContext<{ did: string; error: string }>();
@@ -16,9 +18,9 @@ export default function Reactions() {
         let endpoint;
 
         if (pageParam) {
-          endpoint = `/api/actorReactions?cursor=${pageParam}&did=${did}`;
+          endpoint = `/api/getActorReactions?cursor=${pageParam}&did=${did}`;
         } else {
-          endpoint = `/api/actorReactions?did=${did}`;
+          endpoint = `/api/getActorReactions?did=${did}`;
         }
 
         const res = await fetch(endpoint);
@@ -59,26 +61,35 @@ export default function Reactions() {
       loader={<Loading />}
     >
       <div className="space-y-4">
-        {posts.map((data: ActorReaction) => (
-          <div key={data.post.cid}>
-            <div className="space-y-4">
-              <div key={data.post.cid}>
-                {data.reaction?.emoji.formats.png_128?.ref.$link && (
-                  <div>
-                    <div className="py-4">
-                      <EmojiRender
-                        cid={data.reaction.emoji.formats.png_128.ref.$link}
-                        repo={data.reaction.emojiRef!.repo}
-                        name={data.reaction.emoji.name}
+        {posts.map(
+          (data: {
+            post: FeedViewPostWithReaction;
+            subject: ComAtprotoRepoStrongRef.Main;
+            reaction: Reaction;
+          }) => (
+            <div key={data.post.post.cid}>
+              <div className="space-y-4">
+                <div key={data.post.post.cid}>
+                  {data.reaction?.emoji.formats.png_128?.ref.$link && (
+                    <div>
+                      <div className="py-4">
+                        <EmojiRender
+                          cid={data.reaction.emoji.formats.png_128.ref.$link}
+                          repo={data.reaction.emojiRef!.repo}
+                          name={data.reaction.emoji.name}
+                        />
+                      </div>
+                      <Post
+                        post={data.post.post}
+                        reactions={data.post.reactions}
                       />
                     </div>
-                    <Post post={data.post} />
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          )
+        )}
       </div>
     </InfiniteScroll>
   );

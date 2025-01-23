@@ -39,17 +39,9 @@
     },
     "actorReaction": {
       "type": "object",
-      "required": ["post"],
+      "required": ["subject", "reaction"],
       "properties": {
-        "post": { "type": "ref", "ref": "app.bsky.feed.defs#postView" },
-        "reply": { "type": "ref", "ref": "app.bsky.feed.defs#replyRef" },
-        "reason": {
-          "type": "union",
-          "refs": [
-            "app.bsky.feed.defs#reasonRepost",
-            "app.bsky.feed.defs#reasonPin"
-          ]
-        },
+        "subject": { "type": "ref", "ref": "com.atproto.repo.strongRef" },
         "reaction": {
           "type": "ref",
           "ref": "blue.maril.stellar.getReactions#reaction"

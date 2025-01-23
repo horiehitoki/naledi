@@ -8,6 +8,7 @@ import { LoaderFunction } from "@remix-run/node";
 import { ReactionXrpc } from "~/lib/reaction/reactionXrpc";
 import { FeedViewPostWithReaction } from "~/components/timeline/timeline";
 
+//Claudeが書いた
 export const loader: LoaderFunction = async ({ request }) => {
   try {
     const agent = await getSessionAgent(request);
@@ -16,46 +17,89 @@ export const loader: LoaderFunction = async ({ request }) => {
     const uri = getParams(request, "uri");
     if (!uri) return new Response(null, { status: 404 });
 
-    //投稿とスレッドを取得
     const threads = await agent.getPostThread({ uri });
-
-    const post = threads.data.thread.post as PostView;
-    const replies = threads.data.thread.replies as ThreadViewPost[];
-
     const xrpc = new ReactionXrpc();
 
-    //メイン投稿についたリアクションを取得
-    const reactions = await xrpc.getReactions(post.uri, post.cid, 50);
+    // メイン投稿
+    const post = threads.data.thread.post as PostView;
+    const postReactions = await xrpc.getReactions(post.uri, post.cid, 50);
 
-    const postWithReactions: FeedViewPostWithReaction = {
-      post,
-      reactions: reactions.data.reactions,
+    const parents: FeedViewPostWithReaction[] = [];
+    const MAX_PARENTS = 20;
+
+    const getParents = async (thread: ThreadViewPost) => {
+      if (!thread.parent) return;
+
+      const parent = thread.parent as ThreadViewPost;
+
+      const reactions = await xrpc.getReactions(
+        parent.post.uri,
+        parent.post.cid,
+        50
+      );
+
+      parents.push({
+        post: parent.post,
+        reactions: reactions.data.reactions,
+      });
+
+      if (parents.length < MAX_PARENTS && parent.parent) {
+        await getParents(parent);
+      }
     };
 
-    //リプライについたリアクションをそれぞれ取得
-    const repliesWithReactions: FeedViewPostWithReaction[] = await Promise.all(
-      replies.map(async (reply) => {
-        const reactions = await xrpc.getReactions(
-          reply.post.uri,
-          reply.post.cid,
-          50
-        );
+    await getParents(threads.data.thread as ThreadViewPost);
+    parents.reverse();
 
-        return {
-          ...reply,
-          reactions: reactions.data.reactions,
-        };
-      })
-    );
+    const getReplies = async (
+      thread: ThreadViewPost,
+      depth: number
+    ): Promise<FeedViewPostWithReaction[]> => {
+      if (!thread.replies || depth >= 5) return [];
+
+      const result: FeedViewPostWithReaction[] = await Promise.all(
+        (thread.replies as ThreadViewPost[]).map(
+          async (reply: ThreadViewPost) => {
+            const replyReactions = await xrpc.getReactions(
+              reply.post.uri,
+              reply.post.cid,
+              50
+            );
+
+            const replyWithReaction = {
+              post: reply.post,
+              reactions: replyReactions.data.reactions,
+              replies: [] as FeedViewPostWithReaction[],
+            };
+
+            const childReplies = await getReplies(reply, depth + 1);
+
+            if (childReplies.length > 0) {
+              replyWithReaction.replies = childReplies;
+            }
+
+            return replyWithReaction;
+          }
+        )
+      );
+
+      return result;
+    };
+
+    const replies = await getReplies(threads.data.thread as ThreadViewPost, 0);
 
     return Response.json({
-      post: postWithReactions,
-      replies: repliesWithReactions,
+      parents,
+      post: {
+        post,
+        reactions: postReactions.data.reactions,
+      },
+      replies,
     });
   } catch (e) {
     console.error(e);
     return Response.json({
-      error: "投稿が見つかりませんでした。",
+      error: "スレッドの取得中にエラーが発生しました。",
     });
   }
 };

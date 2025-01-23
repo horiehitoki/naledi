@@ -5793,22 +5793,11 @@ export const schemaDict = {
       },
       actorReaction: {
         type: 'object',
-        required: ['post'],
+        required: ['subject', 'reaction'],
         properties: {
-          post: {
+          subject: {
             type: 'ref',
-            ref: 'lex:app.bsky.feed.defs#postView',
-          },
-          reply: {
-            type: 'ref',
-            ref: 'lex:app.bsky.feed.defs#replyRef',
-          },
-          reason: {
-            type: 'union',
-            refs: [
-              'lex:app.bsky.feed.defs#reasonRepost',
-              'lex:app.bsky.feed.defs#reasonPin',
-            ],
+            ref: 'lex:com.atproto.repo.strongRef',
           },
           reaction: {
             type: 'ref',
