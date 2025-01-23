@@ -1,3 +1,4 @@
+import { LoaderFunction, redirect } from "@remix-run/node";
 import {
   isRouteErrorResponse,
   useRouteError,
@@ -10,6 +11,14 @@ import { FeedViewPostWithReaction } from "~/components/timeline/timeline";
 import NotFound from "~/components/ui/404";
 import Alert from "~/components/ui/alert";
 import Loading from "~/components/ui/loading";
+import { getSessionAgent } from "~/lib/auth/session";
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const agent = await getSessionAgent(request);
+  if (agent == null) return redirect("/login");
+
+  return null;
+};
 
 const PostWithReplies = ({
   post,
