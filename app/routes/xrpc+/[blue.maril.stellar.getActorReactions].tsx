@@ -1,8 +1,10 @@
-import { Reaction } from "@prisma/client";
+import { Emoji, Reaction } from "@prisma/client";
 import { LoaderFunction } from "@remix-run/node";
 import { BlueMarilStellarGetActorReactions } from "~/generated/api";
 import { prisma } from "~/lib/db/prisma";
 import { getParams } from "~/utils/getParams";
+
+export type ReactionWithEmoji = Reaction & { emoji: Emoji };
 
 export const loader: LoaderFunction = async ({ request }) => {
   try {
@@ -24,7 +26,7 @@ export const loader: LoaderFunction = async ({ request }) => {
       );
     }
 
-    let reactions: Reaction[];
+    let reactions: ReactionWithEmoji[];
 
     if (cursor) {
       reactions = await prisma.reaction.findMany({
@@ -33,12 +35,14 @@ export const loader: LoaderFunction = async ({ request }) => {
         take: limit + 1,
         skip: 1,
         orderBy: { rkey: "desc" },
+        include: { emoji: true },
       });
     } else {
       reactions = await prisma.reaction.findMany({
         where: { authorDid: actor },
         take: limit + 1,
         orderBy: { rkey: "desc" },
+        include: { emoji: true },
       });
     }
 
@@ -61,7 +65,7 @@ export const loader: LoaderFunction = async ({ request }) => {
             createdAt:
               reaction.createdAt?.toISOString() ?? new Date().toISOString(),
             emojiRef: JSON.parse(reaction.record).emoji,
-            emoji: JSON.parse(reaction.emoji),
+            emoji: JSON.parse(reaction.emoji.record),
             actor: JSON.parse(reaction.actor).data,
           },
         };

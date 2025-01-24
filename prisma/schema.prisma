@@ -13,28 +13,30 @@ model AuthSession {
 }
 
 model AuthState {
-  key     String @id
-  state   String
+  key   String @id
+  state String
 }
 
 model Emoji {
-  id          String   @default(uuid())
-  record      String
-  rkey        String
-  repo        String
-  createdAt   DateTime @default(now())
+  id        String     @id @default(uuid())
+  record    String
+  rkey      String
+  repo      String
+  createdAt DateTime   @default(now())
+  Reaction  Reaction[]
 
   @@unique(fields: [rkey, repo], name: "rkey_repo")
 }
 
 model Reaction {
-  rkey        String   @id
-  post_uri    String
-  post_cid    String
-  authorDid   String
-  emoji       String
-  actor       String
-  record      String
-  createdAt   DateTime @default(now())
+  rkey       String   @id
+  post_uri   String
+  post_cid   String
+  authorDid  String
+  emoji_rkey String
+  emoji_repo String
+  emoji      Emoji    @relation(fields: [emoji_rkey, emoji_repo], references: [rkey, repo])
+  actor      String
+  record     String
+  createdAt  DateTime @default(now())
 }
-

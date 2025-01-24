@@ -9,7 +9,6 @@ import {
   BlueMarilStellarReaction,
   BlueMojiCollectionItem,
 } from "~/generated/api/index.js";
-import { getEmojiFromPDS } from "../bluemoji/getEmoji.js";
 import { resolveHandleOrDid } from "../actor/resolveHandleOrDid.js";
 import { Agent } from "@atproto/api";
 
@@ -47,9 +46,6 @@ async function updateReaction(
       BlueMarilStellarReaction.isRecord(record) &&
       BlueMarilStellarReaction.validateRecord(record)
     ) {
-      //絵文字のレコードを取得する
-      const emoji = await getEmojiFromPDS(record.emoji.rkey, record.emoji.repo);
-
       //リアクションしたユーザーのプロフィールを取得
       const { profile } = await resolveHandleOrDid(record.authorDid, agent);
 
@@ -61,7 +57,8 @@ async function updateReaction(
           post_uri: record.subject.uri,
           post_cid: record.subject.cid,
           authorDid: record.authorDid,
-          emoji: JSON.stringify(emoji),
+          emoji_repo: record.emoji.repo,
+          emoji_rkey: record.emoji.rkey,
           actor: JSON.stringify(profile),
           record: JSON.stringify(record),
         },
@@ -70,7 +67,8 @@ async function updateReaction(
           post_uri: record.subject.uri,
           post_cid: record.subject.cid,
           authorDid: record.authorDid,
-          emoji: JSON.stringify(emoji),
+          emoji_repo: record.emoji.repo,
+          emoji_rkey: record.emoji.rkey,
           actor: JSON.stringify(profile),
           record: JSON.stringify(record),
         },
