@@ -87,7 +87,7 @@ export default function Reactions() {
         hasMore={!!hasNextPage}
         loader={<Loading />}
       >
-        <div className="space-y-4">
+        <div>
           {posts.map((data: FeedViewPostWithReaction) => (
             <div key={data.post.cid}>
               <Post post={data.post} reactions={data.reactions} />
