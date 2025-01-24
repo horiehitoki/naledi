@@ -24,7 +24,7 @@ const PostWithReplies = ({
   post,
   level = 0,
 }: {
-  post: FeedViewPostWithReaction;
+  post: any;
   level?: number;
 }) => {
   return (
@@ -59,7 +59,11 @@ export default function Threads() {
 
   if (isError) {
     return (
-      <h1 className="text-center">スレッドを取得中にエラーが発生しました。</h1>
+      <Main>
+        <h1 className="text-center">
+          スレッドを取得中にエラーが発生しました。
+        </h1>
+      </Main>
     );
   }
 

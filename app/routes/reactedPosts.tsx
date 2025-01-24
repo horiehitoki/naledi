@@ -1,27 +1,23 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import InfiniteScroll from "react-infinite-scroll-component";
-import EmojiRender from "~/components/render/emojiRender";
+import Post from "~/components/timeline/post";
 import Loading from "~/components/ui/loading";
-import { Reaction } from "~/generated/api/types/blue/maril/stellar/getReactions";
-import { useSearchParams } from "@remix-run/react";
-import { UserCard } from "~/components/profile/userCard";
+import { FeedViewPostWithReaction } from "~/components/timeline/timeline";
 import Main from "~/components/layout/main";
+import { HomeIcon, Smile } from "lucide-react";
+import UriTabs from "~/components/ui/uriTabs";
 
 export default function Reactions() {
-  const [searchParams] = useSearchParams();
-  const uri = searchParams.get("uri");
-  const cid = searchParams.get("cid");
-
   const { data, fetchNextPage, hasNextPage, isLoading, isError } =
     useInfiniteQuery({
-      queryKey: ["postReactions"],
+      queryKey: ["reactedPosts"],
       queryFn: async ({ pageParam }) => {
         let endpoint;
 
         if (pageParam) {
-          endpoint = `/api/reaction?cursor=${pageParam}&uri=${uri}&cid=${cid}`;
+          endpoint = `/api/getReactedPosts?cursor=${pageParam}`;
         } else {
-          endpoint = `/api/reaction?uri=${uri}&cid=${cid}`;
+          endpoint = `/api/getReactedPosts`;
         }
 
         const res = await fetch(endpoint);
@@ -34,11 +30,26 @@ export default function Reactions() {
       getNextPageParam: (lastPage) => lastPage.cursor,
     });
 
-  const reactions = data?.pages.flatMap((page) => page.feed) ?? [];
+  const posts = data?.pages.flatMap((page) => page.feed) ?? [];
+
+  const tabs = [
+    {
+      path: "/",
+      label: "ホーム",
+      icon: HomeIcon,
+    },
+    {
+      path: "/reactedPosts",
+      label: "リアクション付き",
+      icon: Smile,
+    },
+  ];
 
   if (isLoading) {
     return (
       <Main>
+        <UriTabs tabs={tabs} />
+
         <Loading />
       </Main>
     );
@@ -47,6 +58,8 @@ export default function Reactions() {
   if (isError) {
     return (
       <Main>
+        <UriTabs tabs={tabs} />
+
         <h1 className="text-center">
           リアクションを取得中にエラーが発生しました。
         </h1>
@@ -54,9 +67,11 @@ export default function Reactions() {
     );
   }
 
-  if (reactions.length === 0) {
+  if (posts.length === 0) {
     return (
       <Main>
+        <UriTabs tabs={tabs} />
+
         <h1 className="text-center">リアクションが見つかりませんでした。</h1>
       </Main>
     );
@@ -64,24 +79,18 @@ export default function Reactions() {
 
   return (
     <Main>
-      <h1 className="text-2xl text-center font-bold py-6">
-        この投稿にリアクションしたユーザー
-      </h1>
+      <UriTabs tabs={tabs} />
+
       <InfiniteScroll
-        dataLength={reactions.length}
+        dataLength={posts.length}
         next={() => fetchNextPage()}
         hasMore={!!hasNextPage}
         loader={<Loading />}
       >
         <div className="space-y-4">
-          {reactions.map((data: Reaction) => (
-            <div key={data.actor.did}>
-              <EmojiRender
-                repo={data.emojiRef!.repo}
-                cid={data.emoji.formats.png_128!.ref.$link}
-                name={data.emoji.name}
-              />
-              <UserCard data={data.actor} />
+          {posts.map((data: FeedViewPostWithReaction) => (
+            <div key={data.post.cid}>
+              <Post post={data.post} reactions={data.reactions} />
             </div>
           ))}
         </div>

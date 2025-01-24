@@ -1,9 +1,11 @@
 import { LoaderFunction, redirect } from "@remix-run/node";
 import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
+import { HomeIcon, Smile } from "lucide-react";
 import Main from "~/components/layout/main";
 import Timeline from "~/components/timeline/timeline";
 import NotFound from "~/components/ui/404";
 import Alert from "~/components/ui/alert";
+import UriTabs from "~/components/ui/uriTabs";
 import { getSessionAgent } from "~/lib/auth/session";
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -14,8 +16,23 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export default function Index() {
+  const tabs = [
+    {
+      path: "/",
+      label: "ホーム",
+      icon: HomeIcon,
+    },
+    {
+      path: "/reactedPosts",
+      label: "リアクション付き",
+      icon: Smile,
+    },
+  ];
+
   return (
     <Main>
+      <UriTabs tabs={tabs} />
+
       <Timeline type="home" did={null} />
     </Main>
   );
