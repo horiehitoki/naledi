@@ -110,44 +110,48 @@ function QuotedPost({ post }: { post: PostView }) {
   if (!post.value) return null;
 
   return (
-    <Card>
-      <CardHeader>
-        <a
-          href={`/user/${post.author.handle}/posts`}
-          className="hover:opacity-80 transition-opacity"
-        >
-          <div className="flex items-center space-x-4">
-            <Avatar className="h-10 w-10">
-              <AvatarImage
-                src={post.author.avatar}
-                alt={post.author.displayName}
-              />
-              <AvatarFallback>
-                {post.author.displayName?.[0]?.toUpperCase() || "?"}
-              </AvatarFallback>
-            </Avatar>
-            <div>
-              <p className="font-semibold text-sm">{post.author.displayName}</p>
-              <p className="text-xs text-muted-foreground">
-                @{post.author.handle}
-              </p>
+    <a href={`/thread?uri=${post.uri}`}>
+      <Card>
+        <CardHeader>
+          <a
+            href={`/user/${post.author.handle}/posts`}
+            className="hover:opacity-80 transition-opacity"
+          >
+            <div className="flex items-center space-x-4">
+              <Avatar className="h-10 w-10">
+                <AvatarImage
+                  src={post.author.avatar}
+                  alt={post.author.displayName}
+                />
+                <AvatarFallback>
+                  {post.author.displayName?.[0]?.toUpperCase() || "?"}
+                </AvatarFallback>
+              </Avatar>
+              <div>
+                <p className="font-semibold text-sm">
+                  {post.author.displayName}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  @{post.author.handle}
+                </p>
+              </div>
             </div>
-          </div>
-        </a>
-      </CardHeader>
+          </a>
+        </CardHeader>
 
-      <CardContent>
-        <FacetRender
-          text={post.value.text as string}
-          facets={post.value.facets}
-        />
-        {post.embed && (
-          <div className="mt-2">
-            <EmbedRender content={post.value.embed} />
-          </div>
-        )}
-      </CardContent>
-    </Card>
+        <CardContent>
+          <FacetRender
+            text={post.value.text as string}
+            facets={post.value.facets}
+          />
+          {post.embed && (
+            <div className="mt-2">
+              <EmbedRender content={post.value.embed} />
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </a>
   );
 }
 

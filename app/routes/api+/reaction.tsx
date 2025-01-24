@@ -1,8 +1,44 @@
 import { Agent } from "@atproto/api";
-import type { ActionFunction } from "@remix-run/node";
+import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { getSessionAgent } from "~/lib/auth/session";
-import { BlueMarilStellarReaction } from "~/generated/api";
+import {
+  BlueMarilStellarGetReactions,
+  BlueMarilStellarReaction,
+} from "~/generated/api";
 import { ReactionAgent } from "~/lib/reaction/reactionAgent";
+import { getParams } from "~/utils/getParams";
+import { ReactionXrpc } from "~/lib/reaction/reactionXrpc";
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const agent: Agent | null = await getSessionAgent(request);
+  if (agent == null) return new Response(null, { status: 401 });
+
+  try {
+    const cursor = getParams(request, "cursor");
+    const uri = getParams(request, "uri");
+    const cid = getParams(request, "cid");
+
+    const xrpc = new ReactionXrpc();
+    const reactions = await xrpc.getReactions(uri, cid, 50, cursor);
+
+    const data: BlueMarilStellarGetReactions.OutputSchema = reactions.data;
+
+    if (data.cursor) {
+      return Response.json({ feed: data.reactions, cursor: data.cursor });
+    }
+
+    return Response.json({ feed: data.reactions });
+  } catch (e) {
+    console.log(e);
+
+    return new Response(
+      JSON.stringify({ error: "リアクションの取得に失敗しました。" }),
+      {
+        status: 500,
+      }
+    );
+  }
+};
 
 export const action: ActionFunction = async ({ request }) => {
   const agent: Agent | null = await getSessionAgent(request);

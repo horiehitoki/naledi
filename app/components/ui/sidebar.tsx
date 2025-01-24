@@ -1,4 +1,4 @@
-import { Home, Bell, Smile, SearchIcon } from "lucide-react";
+import { Home, Bell, Smile, SearchIcon, LogOut } from "lucide-react";
 import { useProfile } from "~/state/profile";
 import PostButton from "../buttons/postButton";
 import { useUnread } from "~/state/unread";
@@ -9,9 +9,9 @@ export default function SideBar() {
   const unreadCount = useUnread();
 
   return (
-    <div className="min-h-screen w-64 pt-12 fixed">
+    <div className="min-h-screen w-64 pt-12 fixed flex flex-col">
       {profile ? (
-        <div className="space-y-6">
+        <div className="flex-grow space-y-6">
           <a href={`/user/${profile.handle}/posts`}>
             <img
               src={profile.avatar}
@@ -58,6 +58,18 @@ export default function SideBar() {
         </div>
       ) : (
         ""
+      )}
+
+      {profile && (
+        <div className="mt-auto mb-24">
+          <a
+            href={`/logout`}
+            className="flex items-center space-x-4 bg-red-500 p-2 rounded-lg cursor-pointer w-32"
+          >
+            <LogOut size={24} />
+            <span className="text-lg font-medium">Logout</span>
+          </a>
+        </div>
       )}
     </div>
   );

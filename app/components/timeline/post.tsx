@@ -190,39 +190,45 @@ export default function Post({
             </a>
             <div className="flex items-center space-x-4">
               <p className="text-xs">{indexedText}</p>
-
-              {post.author.did === myProfile?.did && (
-                <Dialog>
-                  <DialogTrigger>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger>
-                        <Ellipsis />
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent>
-                        <DropdownMenuItem>投稿を削除する</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>本当に削除しますか?</DialogTitle>
-                      <DialogDescription>
-                        この操作を取り消すことはできません。
-                      </DialogDescription>
-                    </DialogHeader>
-                    <DialogFooter className="sm:justify-start">
-                      <DialogClose>
-                        <Button
-                          className="bg-red-500 text-white"
-                          onClick={deletePost}
-                        >
-                          削除
-                        </Button>
-                      </DialogClose>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
-              )}
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <Ellipsis />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <a href={`/reactions?uri=${post.uri}&cid=${post.cid}`}>
+                    <DropdownMenuItem>
+                      この投稿についたリアクション一覧
+                    </DropdownMenuItem>
+                  </a>
+                  {post.author.did === myProfile?.did && (
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                          投稿を削除する
+                        </DropdownMenuItem>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>本当に削除しますか?</DialogTitle>
+                          <DialogDescription>
+                            この操作を取り消すことはできません。
+                          </DialogDescription>
+                        </DialogHeader>
+                        <DialogFooter className="sm:justify-start">
+                          <DialogClose>
+                            <Button
+                              className="bg-red-500 text-white"
+                              onClick={deletePost}
+                            >
+                              削除
+                            </Button>
+                          </DialogClose>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         </CardHeader>

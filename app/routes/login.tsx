@@ -47,19 +47,17 @@ export default function Index() {
   }, [actionData?.error, toast]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-800 to-indigo-900 flex items-center justify-center p-4 overflow-hidden relative">
-      <div className="absolute inset-0 bg-gradient-to-br animate-gradient-xy"></div>
-
-      <div className="w-full max-w-6xl flex flex-col lg:flex-row items-center justify-between gap-12 z-10">
-        <div className="lg:w-1/2 space-y-6">
-          <h1 className="text-5xl font-extrabold mb-6 animate-fade-in-up">
+    <div className="min-h-screen bg-gradient-to-r from-blue-800 to-indigo-900 flex flex-col items-center justify-center p-4">
+      <div className="w-full max-w-6xl grid lg:grid-cols-2 gap-12 mb-12">
+        <div className="flex flex-col justify-center space-y-6">
+          <h1 className="text-5xl font-extrabold text-white mb-6">
             Stellar
-            <Sparkles className="inline-block ml-3 text-yellow-400 animate-pulse" />
+            <Sparkles className="inline-block ml-3 text-yellow-400" />
           </h1>
-          <p className="text-xl mb-8 animate-fade-in-up animation-delay-200 font-light">
+          <p className="text-xl text-white/80 mb-8">
             絵文字リアクションで会話を彩る、AT Protocolウェブクライアント
           </p>
-          <div className="space-y-6 animate-fade-in-up animation-delay-400">
+          <div className="space-y-6">
             <FeatureItem
               icon={<MessageSquare className="w-6 h-6" />}
               title="豊かな表現力"
@@ -72,55 +70,51 @@ export default function Index() {
             />
           </div>
         </div>
-
-        <div className="lg:w-1/2 flex flex-col items-center">
-          <Card className="w-full max-w-md bg-white/10 backdrop-blur-md border-gray-200/20 shadow-2xl">
-            <CardHeader className="text-center">
-              <CardTitle className="text-3xl font-bold mb-2">
-                ログイン
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Form method="post" className="space-y-4">
-                <Input
-                  type="text"
-                  name="handle"
-                  id="handle"
-                  placeholder="ハンドルを入力..."
-                  required
-                  disabled={isLoading}
-                  className="bg-white/20 border-gray-200/30 placeholder-gray-400 focus:ring-2 focus:ring-blue-400 focus:border-transparent"
-                  aria-label="AT Protocolハンドル"
-                />
-                <Button
-                  type="submit"
-                  className="w-full rounded-md transition-all duration-300 transform hover:scale-105"
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      リダイレクト中...
-                    </>
-                  ) : (
-                    <>
-                      <LogIn className="mr-2 h-4 w-4" />
-                      ログイン
-                    </>
-                  )}
-                </Button>
-              </Form>
-            </CardContent>
-          </Card>
-          <div className="mt-8 w-full">
-            <img
-              src="/img/top.png"
-              alt="Stellarアプリケーションのデモ画面"
-              className="rounded-xl shadow-2xl border-4 border-white/20 transition-all duration-300 hover:scale-105 hover:border-white/40"
-            />
-          </div>
+        <div className="flex items-center justify-center">
+          <img
+            src="/img/top.png"
+            alt="Stellarアプリケーションのデモ画面"
+            className="rounded-xl shadow-2xl"
+          />
         </div>
       </div>
+      <Card className="w-full max-w-md bg-white/10 backdrop-blur-md border-gray-200/20 shadow-2xl">
+        <CardHeader className="text-center">
+          <CardTitle className="text-3xl font-bold mb-2 text-white">
+            Login
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Form method="post" className="space-y-4">
+            <Input
+              type="text"
+              name="handle"
+              id="handle"
+              placeholder="ハンドルを入力..."
+              required
+              disabled={isLoading}
+              className="w-full px-4 py-2 bg-white/20 border-gray-200/30 rounded text-white placeholder-gray-400"
+            />
+            <Button
+              type="submit"
+              className="w-full py-2 bg-blue-600 text-white rounded"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin inline" />
+                  リダイレクト中...
+                </>
+              ) : (
+                <>
+                  <LogIn className="mr-2 h-4 w-4 inline" />
+                  Login
+                </>
+              )}
+            </Button>
+          </Form>
+        </CardContent>
+      </Card>
     </div>
   );
 }
