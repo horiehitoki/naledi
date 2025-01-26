@@ -17,25 +17,27 @@ export const loader: LoaderFunction = async ({ request }) => {
   try {
     const cursor = getParams(request, "cursor");
 
+    const limit = 50;
+
     let reactions: ReactionWithEmoji[];
 
     if (cursor) {
       reactions = await prisma.reaction.findMany({
         cursor: { rkey: cursor },
-        take: 50,
+        take: limit + 1,
         skip: 1,
         orderBy: { rkey: "desc" },
         include: { emoji: true },
       });
     } else {
       reactions = await prisma.reaction.findMany({
-        take: 50,
+        take: limit + 1,
         orderBy: { rkey: "desc" },
         include: { emoji: true },
       });
     }
 
-    const hasMore = reactions.length > 50;
+    const hasMore = reactions.length > limit;
     if (hasMore) {
       reactions.pop();
     }

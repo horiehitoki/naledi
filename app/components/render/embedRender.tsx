@@ -74,12 +74,6 @@ function RecordEmbed({ content }: { content: AppBskyEmbedRecord.View }) {
   }
 
   if (AppBskyGraphDefs.isListView(record)) {
-    const purpose =
-      record.purpose === "app.bsky.graph.defs#modlist"
-        ? "モデレーションリスト"
-        : record.purpose === "app.bsky.graph.defs#curatelist"
-        ? "キュレーションリスト"
-        : "リスト";
     return (
       <Card className="p-3">
         <div className="flex items-center gap-3">
@@ -95,7 +89,7 @@ function RecordEmbed({ content }: { content: AppBskyEmbedRecord.View }) {
               {record.description}
             </span>
             <span className="text-xs text-gray-500 mt-1">
-              {purpose} by @{record.creator.handle}
+              by @{record.creator.handle}
             </span>
           </div>
         </div>
@@ -140,10 +134,7 @@ function QuotedPost({ post }: { post: PostView }) {
         </CardHeader>
 
         <CardContent>
-          <FacetRender
-            text={post.value.text as string}
-            facets={post.value.facets}
-          />
+          <FacetRender text={post.value.text} facets={post.value.facets} />
           {post.embed && (
             <div className="mt-2">
               <EmbedRender content={post.value.embed} />
