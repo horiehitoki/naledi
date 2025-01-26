@@ -7,6 +7,14 @@ import { Input } from "~/components/ui/input";
 import { LogIn, Loader2, Sparkles, MessageSquare, Users } from "lucide-react";
 import { useToast } from "~/hooks/use-toast";
 import { useEffect } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "~/components/ui/dialog";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const client = await createClient();
@@ -113,6 +121,36 @@ export default function Index() {
               )}
             </Button>
           </Form>
+          <div className="flex justify-center">
+            <Dialog>
+              <DialogTrigger>
+                <h1 className="text-center pt-6 underline text-blue-500">
+                  使用上の注意
+                </h1>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>使用上の注意</DialogTitle>
+                  <DialogDescription>
+                    このサービスは、
+                    <span>
+                      <a
+                        href="https://bsky.app/profile/maril445.bsky.social"
+                        className="underline text-blue-500"
+                      >
+                        maril
+                      </a>
+                    </span>
+                    が趣味で開発しているものです。運用コストなどの問題から、予告なくサービスを停止する可能性があります。{" "}
+                    <br className="mb-4" />
+                    だたし、ユーザーのPDSに保存されているデータは、サービスが停止しても削除されません。
+                    <br className="mb-4" />
+                    このサービスを利用するうえで生じた不利益について、開発者は一切の責任を負いません。
+                  </DialogDescription>
+                </DialogHeader>
+              </DialogContent>
+            </Dialog>
+          </div>
         </CardContent>
       </Card>
     </div>
