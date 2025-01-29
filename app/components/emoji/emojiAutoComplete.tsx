@@ -4,6 +4,7 @@ import { useEmojis } from "~/state/emoji";
 import EmojiRender from "../render/emojiRender";
 import { BlueMojiCollectionItem } from "~/generated/api";
 import { Textarea } from "../ui/textarea";
+import { useProfile } from "~/state/profile";
 
 export default function EmojiAutocompleteInput() {
   const [inputValue, setInputValue] = useState("");
@@ -13,6 +14,7 @@ export default function EmojiAutocompleteInput() {
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const emojis: Emoji[] = useEmojis()!;
+  const profile = useProfile();
 
   const findEmojiMatches = (text: string) => {
     const colonIndex = text.lastIndexOf(":");
@@ -22,7 +24,11 @@ export default function EmojiAutocompleteInput() {
     if (!searchTerm) return [];
 
     return emojis
-      .filter((emoji) => emoji.rkey.toLowerCase().includes(searchTerm))
+      .filter(
+        (emoji) =>
+          emoji.rkey.toLowerCase().includes(searchTerm) &&
+          emoji.repo === profile!.did
+      )
       .slice(0, 10);
   };
 

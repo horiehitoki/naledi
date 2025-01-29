@@ -5910,7 +5910,7 @@ export const schemaDict = {
         key: 'tid',
         record: {
           type: 'object',
-          required: ['subject', 'emoji', 'authorDid'],
+          required: ['subject', 'emoji'],
           properties: {
             subject: {
               type: 'ref',
@@ -5919,10 +5919,6 @@ export const schemaDict = {
             emoji: {
               type: 'ref',
               ref: 'lex:blue.maril.stellar.reaction#emojiRef',
-            },
-            authorDid: {
-              type: 'string',
-              format: 'at-identifier',
             },
           },
         },

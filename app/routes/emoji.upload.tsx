@@ -21,18 +21,25 @@ export const action: ActionFunction = async ({ request }) => {
     if (!agent) return redirect("/login");
 
     const formData = await request.formData();
-    const name = formData.get("name") as string;
     const alt = formData.get("alt") as string;
     const file = formData.get("file") as File;
+
+    let name = formData.get("name") as string;
 
     if (!name?.trim()) {
       return { error: "絵文字名を入力してください" };
     }
 
+    const cleanValue = name.replace(/:/g, "");
+    name = `:${cleanValue}:`;
+
     const matches = name.match(/:((?!.*--)[A-Za-z0-9-]{4,20}(?<!-)):/);
 
     if (!matches || matches[0] !== name) {
-      return { error: "無効な絵文字名です" };
+      return {
+        error:
+          "無効な絵文字名です。絵文字名はコロンで囲われた形式である必要があります。",
+      };
     }
 
     if (file.type !== "image/png") {
@@ -91,14 +98,7 @@ export default function UploadEmoji() {
 
         <div>
           <Label htmlFor="name">絵文字名</Label>
-          <Input
-            id="name"
-            name="name"
-            pattern=":((?!.*--)[A-Za-z0-9-]{4,20}(?<!-)):"
-            title="絵文字名は :name: の形式である必要があります。"
-            required
-            disabled={isLoading}
-          />
+          <Input id="name" name="name" required disabled={isLoading} />
         </div>
 
         <div>

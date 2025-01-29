@@ -36,7 +36,6 @@ model Reaction {
   emoji_rkey String
   emoji_repo String
   emoji      Emoji    @relation(fields: [emoji_rkey, emoji_repo], references: [rkey, repo])
-  actor      String
   record     String
   createdAt  DateTime @default(now())
 }

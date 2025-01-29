@@ -9,10 +9,6 @@ import {
   BlueMarilStellarReaction,
   BlueMojiCollectionItem,
 } from "~/generated/api/index.js";
-import { resolveHandleOrDid } from "../actor/resolveHandleOrDid.js";
-import { Agent } from "@atproto/api";
-
-const agent = new Agent("https://public.api.bsky.app");
 
 export const jetstream = new Jetstream({
   ws: WebSocket,
@@ -46,9 +42,6 @@ async function updateReaction(
       BlueMarilStellarReaction.isRecord(record) &&
       BlueMarilStellarReaction.validateRecord(record)
     ) {
-      //リアクションしたユーザーのプロフィールを取得
-      const { profile } = await resolveHandleOrDid(record.authorDid, agent);
-
       await prisma.reaction.upsert({
         where: {
           rkey: event.commit.rkey,
@@ -56,20 +49,18 @@ async function updateReaction(
         update: {
           post_uri: record.subject.uri,
           post_cid: record.subject.cid,
-          authorDid: record.authorDid,
+          authorDid: event.did,
           emoji_repo: record.emoji.repo,
           emoji_rkey: record.emoji.rkey,
-          actor: JSON.stringify(profile),
           record: JSON.stringify(record),
         },
         create: {
           rkey: event.commit.rkey,
           post_uri: record.subject.uri,
           post_cid: record.subject.cid,
-          authorDid: record.authorDid,
+          authorDid: event.did,
           emoji_repo: record.emoji.repo,
           emoji_rkey: record.emoji.rkey,
-          actor: JSON.stringify(profile),
           record: JSON.stringify(record),
         },
       });
