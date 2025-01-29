@@ -194,7 +194,7 @@ function VideoEmbed({ content }: { content: AppBskyEmbedVideo.View }) {
 
 function ImageEmbed({ content }: { content: AppBskyEmbedImages.View }) {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
-
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const images = content.images;
 
   const slides = images?.map((image) => ({
@@ -211,6 +211,7 @@ function ImageEmbed({ content }: { content: AppBskyEmbedImages.View }) {
             open={isLightboxOpen}
             close={() => setIsLightboxOpen(false)}
             slides={slides}
+            index={currentImageIndex}
           />
           <div
             className={`grid gap-4 ${
@@ -224,7 +225,10 @@ function ImageEmbed({ content }: { content: AppBskyEmbedImages.View }) {
             {images.map((image, index) => (
               <button
                 key={image.thumb}
-                onClick={() => setIsLightboxOpen(true)}
+                onClick={() => {
+                  setIsLightboxOpen(true);
+                  setCurrentImageIndex(index);
+                }}
                 className={`overflow-hidden rounded-lg hover:opacity-90 transition-opacity duration-300 ${
                   images.length === 3 && index === 2 ? "md:col-span-2" : ""
                 }`}
