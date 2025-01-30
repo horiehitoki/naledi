@@ -5,9 +5,15 @@ import {
   CardFooter,
   CardHeader,
 } from "~/components/ui/card";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import "yet-another-react-lightbox/styles.css";
-import { Ellipsis, MessageCircle, Repeat2, Smile } from "lucide-react";
+import {
+  AlertCircle,
+  Ellipsis,
+  MessageCircle,
+  Repeat2,
+  Smile,
+} from "lucide-react";
 import { PostView } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
 import { useSetPost } from "~/state/post";
 import { RepostButton } from "../buttons/repostButton";
@@ -85,6 +91,7 @@ export default function Post({
   const myProfile = useProfile();
   const cardRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+  const [showHideContent, setShowHideContent] = useState(false);
 
   useEffect(() => {
     setState({
@@ -234,11 +241,58 @@ export default function Post({
         </CardHeader>
 
         <CardContent className="space-y-4">
-          <FacetRender text={post.record.text} facets={post.record.facets} />
+          {/*TODO ラベラー実装をちゃんとする*/}
+          {post.labels && post.labels.length > 0 ? (
+            <div>
+              <div className="space-y-2">
+                {post.labels.map((label, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center p-2 bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 rounded"
+                  >
+                    <AlertCircle className="h-4 w-4 mr-2" />
+                    <div>
+                      <span>{label.val}</span>
+                    </div>
+                    <Button
+                      onClick={() => setShowHideContent(!showHideContent)}
+                      className="mx-4"
+                    >
+                      {showHideContent ? "隠す" : "表示する"}
+                    </Button>
+                  </div>
+                ))}
+              </div>
 
-          {post.embed && (
-            <div className="mt-2">
-              <EmbedRender content={post.embed} />
+              {showHideContent ? (
+                <div>
+                  <FacetRender
+                    text={post.record.text}
+                    facets={post.record.facets}
+                  />
+
+                  {post.embed && (
+                    <div className="mt-2">
+                      <EmbedRender content={post.embed} />
+                    </div>
+                  )}
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
+          ) : (
+            <div>
+              <FacetRender
+                text={post.record.text}
+                facets={post.record.facets}
+              />
+
+              {post.embed && (
+                <div className="mt-2">
+                  <EmbedRender content={post.embed} />
+                </div>
+              )}
             </div>
           )}
         </CardContent>
