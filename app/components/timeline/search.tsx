@@ -7,7 +7,7 @@ import { FeedViewPostWithReaction } from "./timeline";
 export default function Search(options: options) {
   const { data, fetchNextPage, hasNextPage, isLoading, isError } =
     useSearch(options);
-  const posts = data?.pages.flatMap((page) => page.feed) ?? [];
+  const posts = data ? data.pages.flatMap((page) => page.feed ?? []) : [];
 
   if (isLoading) {
     return <Loading />;

@@ -14,36 +14,51 @@ export class ReactionXrpc {
     limit: number,
     cursor?: string | null
   ) {
-    const params: { uri: string; cid: string; limit: number; cursor?: string } =
-      {
+    try {
+      const params: {
+        uri: string;
+        cid: string;
+        limit: number;
+        cursor?: string;
+      } = {
         uri,
         cid,
         limit,
       };
 
-    if (cursor !== null && cursor !== undefined) {
-      params.cursor = cursor;
-    }
+      if (cursor !== null && cursor !== undefined) {
+        params.cursor = cursor;
+      }
 
-    return await this.stellarXrpc.call(
-      "blue.maril.stellar.getReactions",
-      params
-    );
+      return await this.stellarXrpc.call(
+        "blue.maril.stellar.getReactions",
+        params
+      );
+    } catch (e) {
+      console.log(e);
+      return { data: [] };
+    }
   }
 
   async getActorReaction(actor: string, limit: number, cursor?: string | null) {
-    const params: { actor: string; limit: number; cursor?: string } = {
-      actor,
-      limit,
-    };
+    try {
+      const params: { actor: string; limit: number; cursor?: string } = {
+        actor,
+        limit,
+      };
 
-    if (cursor !== null && cursor !== undefined) {
-      params.cursor = cursor;
+      if (cursor !== null && cursor !== undefined) {
+        params.cursor = cursor;
+      }
+
+      return await this.stellarXrpc.call(
+        "blue.maril.stellar.getActorReactions",
+        params
+      );
+    } catch (e) {
+      console.log(e);
+
+      return { data: [] };
     }
-
-    return await this.stellarXrpc.call(
-      "blue.maril.stellar.getActorReactions",
-      params
-    );
   }
 }

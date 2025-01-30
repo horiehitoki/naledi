@@ -35,7 +35,7 @@ model Reaction {
   authorDid  String
   emoji_rkey String
   emoji_repo String
-  emoji      Emoji    @relation(fields: [emoji_rkey, emoji_repo], references: [rkey, repo])
+  emoji      Emoji    @relation(fields: [emoji_rkey, emoji_repo], references: [rkey, repo], onDelete: Cascade)
   record     String
   createdAt  DateTime @default(now())
 }

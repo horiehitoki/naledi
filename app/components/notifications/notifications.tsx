@@ -14,7 +14,9 @@ export default function NotificationList() {
 
   const setUnread = useSetUnread();
 
-  const notifications = data?.pages.flatMap((page) => page.notifications) ?? [];
+  const notifications = data
+    ? data.pages.flatMap((page) => page.notifications ?? [])
+    : [];
   const unreadCount = notifications.filter(
     (notification: Notification) => !notification.isRead
   ).length;

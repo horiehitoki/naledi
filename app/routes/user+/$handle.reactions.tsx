@@ -33,7 +33,7 @@ export default function Reactions() {
       getNextPageParam: (lastPage) => lastPage.cursor,
     });
 
-  const posts = data?.pages.flatMap((page) => page.feed) ?? [];
+  const posts = data ? data.pages.flatMap((page) => page.feed ?? []) : [];
 
   if (isLoading) {
     return <Loading />;

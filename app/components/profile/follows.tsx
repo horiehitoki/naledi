@@ -7,7 +7,7 @@ import Loading from "../ui/loading";
 export default function Follows({ did }: { did: string }) {
   const { data, fetchNextPage, hasNextPage, isLoading, isError } =
     useFollow(did);
-  const follows = data?.pages.flatMap((page) => page.follows) ?? [];
+  const follows = data ? data.pages.flatMap((page) => page.follows ?? []) : [];
 
   if (isLoading) {
     return <Loading />;

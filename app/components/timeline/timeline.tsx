@@ -22,7 +22,7 @@ export type FeedViewPostWithReaction = {
 export default function Timeline(options: options) {
   const { data, fetchNextPage, hasNextPage, isLoading, isError } =
     useTimeline(options);
-  const posts = data?.pages.flatMap((page) => page.feed) ?? [];
+  const posts = data ? data.pages.flatMap((page) => page.feed ?? []) : [];
 
   if (isLoading) {
     return <Loading />;

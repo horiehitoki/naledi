@@ -6,6 +6,9 @@ import { FeedViewPostWithReaction } from "~/components/timeline/timeline";
 import Main from "~/components/layout/main";
 import { HomeIcon, Smile } from "lucide-react";
 import UriTabs from "~/components/ui/uriTabs";
+import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
+import NotFound from "~/components/ui/404";
+import Alert from "~/components/ui/alert";
 
 export default function Reactions() {
   const { data, fetchNextPage, hasNextPage, isLoading, isError } =
@@ -30,7 +33,7 @@ export default function Reactions() {
       getNextPageParam: (lastPage) => lastPage.cursor,
     });
 
-  const posts = data?.pages.flatMap((page) => page.feed) ?? [];
+  const posts = data ? data.pages.flatMap((page) => page.feed ?? []) : [];
 
   const tabs = [
     {
@@ -77,6 +80,8 @@ export default function Reactions() {
     );
   }
 
+  console.log(posts);
+
   return (
     <Main>
       <UriTabs tabs={tabs} />
@@ -96,5 +101,22 @@ export default function Reactions() {
         </div>
       </InfiniteScroll>
     </Main>
+  );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  return (
+    <div>
+      {isRouteErrorResponse(error) ? (
+        error.status === 404 ? (
+          <NotFound />
+        ) : (
+          <Alert message="リアクション一覧を取得中にエラーが発生しました。" />
+        )
+      ) : (
+        <Alert message="リアクション一覧を取得中にエラーが発生しました。" />
+      )}
+    </div>
   );
 }

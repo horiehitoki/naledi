@@ -3,9 +3,15 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import EmojiRender from "~/components/render/emojiRender";
 import Loading from "~/components/ui/loading";
 import { Reaction } from "~/generated/api/types/blue/maril/stellar/getReactions";
-import { useSearchParams } from "@remix-run/react";
+import {
+  isRouteErrorResponse,
+  useRouteError,
+  useSearchParams,
+} from "@remix-run/react";
 import { UserCard } from "~/components/profile/userCard";
 import Main from "~/components/layout/main";
+import NotFound from "~/components/ui/404";
+import Alert from "~/components/ui/alert";
 
 export default function Reactions() {
   const [searchParams] = useSearchParams();
@@ -87,5 +93,22 @@ export default function Reactions() {
         </div>
       </InfiniteScroll>
     </Main>
+  );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  return (
+    <div>
+      {isRouteErrorResponse(error) ? (
+        error.status === 404 ? (
+          <NotFound />
+        ) : (
+          <Alert message="リアクション一覧を取得中にエラーが発生しました。" />
+        )
+      ) : (
+        <Alert message="リアクション一覧を取得中にエラーが発生しました。" />
+      )}
+    </div>
   );
 }
