@@ -23,10 +23,11 @@ export default function ReactionButtons({ cid }: { cid: string }) {
   const post = usePost(cid);
   const profile = useProfile();
 
-  const { reaction, cancelReaction } = useReaction(cid);
+  const { reaction, cancelReaction, isLoading } = useReaction(cid);
   const { toast } = useToast();
 
-  const [isLoading, setIsLoading] = useState(false);
+  //楽観的更新用のState
+  const [isReacted, setIsReacted] = useState(false);
 
   //リアクションをグループ化して表示
   const groupedReactions = new Map();
@@ -88,15 +89,14 @@ export default function ReactionButtons({ cid }: { cid: string }) {
           ) => {
             if (isLoading) return;
 
-            setIsLoading(true);
-
             if (myReactions.length > 0) {
+              //UIの楽観的更新
+              setIsReacted(false);
               await cancelReaction(myReactions[0].rkey);
             } else {
+              setIsReacted(true);
               await reaction(rkey, repo, emoji, profile);
             }
-
-            setIsLoading(false);
           };
 
           return (
@@ -114,7 +114,7 @@ export default function ReactionButtons({ cid }: { cid: string }) {
                         )
                       }
                       className={`relative flex items-center space-x-2 px-2 py-1 rounded-lg text-sm font-medium transition-all ${
-                        myReactions.length > 0
+                        myReactions.length > 0 || isReacted
                           ? "bg-purple-800 text-white border-2 border-purple-400"
                           : "bg-gray-800 text-gray-300 hover:bg-gray-700"
                       }`}
@@ -127,7 +127,9 @@ export default function ReactionButtons({ cid }: { cid: string }) {
                           name={group[0].emoji.name}
                         />
                       </p>
-                      <span className="ml-1">{count}</span>
+                      <span className="ml-1">
+                        {isReacted ? count + 1 : count}
+                      </span>
                     </button>
                   </ContextMenuTrigger>
 

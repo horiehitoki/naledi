@@ -1,4 +1,5 @@
 import { ProfileView } from "@atproto/api/dist/client/types/app/bsky/actor/defs";
+import { useState } from "react";
 import { atomFamily, useRecoilValue, useSetRecoilState } from "recoil";
 import { BlueMojiCollectionItem } from "~/generated/api";
 import { Reaction } from "~/generated/api/types/blue/maril/stellar/getReactions";
@@ -188,6 +189,7 @@ export const useReaction = (postId: string) => {
   const post = usePost(postId);
   const setState = useSetPost(postId);
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
 
   async function reaction(
     rkey: string,
@@ -195,69 +197,81 @@ export const useReaction = (postId: string) => {
     emoji: BlueMojiCollectionItem.ItemView,
     actor: ProfileView
   ) {
-    const res = await fetch("/api/reaction/", {
-      method: "POST",
-      body: JSON.stringify({
-        subject: { uri: post.uri, cid: post.cid },
-        rkey,
-        repo,
-      }),
-    });
+    if (!isLoading) {
+      setIsLoading(true);
 
-    const json = await res.json();
-
-    if (json.error) {
-      toast({
-        title: "Error",
-        description: json.error,
-        variant: "destructive",
+      const res = await fetch("/api/reaction/", {
+        method: "POST",
+        body: JSON.stringify({
+          subject: { uri: post.uri, cid: post.cid },
+          rkey,
+          repo,
+        }),
       });
-    }
 
-    setState((prev) => ({
-      ...prev,
-      reactions: [
-        ...prev.reactions,
-        {
-          rkey: json.rkey,
-          subject: {
-            uri: post.uri,
-            cid: post.cid,
+      const json = await res.json();
+
+      if (json.error) {
+        toast({
+          title: "Error",
+          description: json.error,
+          variant: "destructive",
+        });
+      }
+
+      setState((prev) => ({
+        ...prev,
+        reactions: [
+          ...prev.reactions,
+          {
+            rkey: json.rkey,
+            subject: {
+              uri: post.uri,
+              cid: post.cid,
+            },
+            createdAt: new Date().toISOString(),
+            emojiRef: {
+              rkey,
+              repo,
+            },
+            emoji,
+            actor,
           },
-          createdAt: new Date().toISOString(),
-          emojiRef: {
-            rkey,
-            repo,
-          },
-          emoji,
-          actor,
-        },
-      ],
-    }));
+        ],
+      }));
+
+      setIsLoading(false);
+    }
   }
 
   async function cancelReaction(rkey: string) {
-    setState((prev) => ({
-      ...prev,
-      reactions: prev.reactions.filter((reaction) => reaction.rkey !== rkey),
-    }));
+    if (!isLoading) {
+      setIsLoading(true);
 
-    const res = await fetch("/api/reaction/", {
-      method: "DELETE",
-      body: JSON.stringify({
-        rkey: rkey,
-      }),
-    });
+      setState((prev) => ({
+        ...prev,
+        reactions: prev.reactions.filter((reaction) => reaction.rkey !== rkey),
+      }));
 
-    const json = await res.json();
-
-    if (json.error) {
-      toast({
-        title: "Error",
-        description: json.error,
-        variant: "destructive",
+      const res = await fetch("/api/reaction/", {
+        method: "DELETE",
+        body: JSON.stringify({
+          rkey: rkey,
+        }),
       });
+
+      const json = await res.json();
+
+      if (json.error) {
+        toast({
+          title: "Error",
+          description: json.error,
+          variant: "destructive",
+        });
+      }
+
+      setIsLoading(false);
     }
   }
-  return { reaction, cancelReaction };
+  return { reaction, cancelReaction, isLoading };
 };

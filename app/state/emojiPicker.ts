@@ -25,7 +25,7 @@ export const useSetIsEmojiPickerOpen = () =>
 export const useEmojiPicker = () => {
   const picker = usePickerState();
 
-  const { reaction } = useReaction(picker.cid);
+  const { reaction, isLoading } = useReaction(picker.cid);
 
   const setPicker = useSetPickerState();
   const isOpen = useIsEmojiPickerOpen();
@@ -65,7 +65,7 @@ export const useEmojiPicker = () => {
     // 絵文字ピッカーを閉じる
     setIsOpen(false);
 
-    reaction(rkey, repo, emoji, actor);
+    if (!isLoading) reaction(rkey, repo, emoji, actor);
   };
 
   return {
