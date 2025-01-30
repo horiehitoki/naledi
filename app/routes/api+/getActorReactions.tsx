@@ -14,7 +14,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     const did = getParams(request, "did");
 
     const xrpc = new ReactionXrpc();
-    const reactions = await xrpc.getActorReaction(did, 50, cursor);
+    const reactions = await xrpc.getActorReaction(did, 10, cursor);
 
     const data: BlueMarilStellarGetActorReactions.OutputSchema = reactions.data;
 

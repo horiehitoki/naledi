@@ -317,20 +317,18 @@ export default function Post({
             </div>
           </div>
 
-          {reactions && (
-            <div className="flex flex-wrap items-center gap-4 mt-2 pickerOpen">
-              <ReactionButtons cid={post.cid} />
+          <div className="flex flex-wrap items-center gap-4 mt-2 pickerOpen">
+            <ReactionButtons cid={post.cid} />
 
-              <button
-                onClick={() =>
-                  toggleEmojiPicker(post.uri, post.cid, cardRef.current!)
-                }
-                className="flex items-center space-x-1 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-2 py-1 rounded-full text-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-              >
-                <Smile className="w-4 h-4" />
-              </button>
-            </div>
-          )}
+            <button
+              onClick={() =>
+                toggleEmojiPicker(post.uri, post.cid, cardRef.current!)
+              }
+              className="flex items-center space-x-1 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-2 py-1 rounded-full text-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+            >
+              <Smile className="w-4 h-4" />
+            </button>
+          </div>
         </CardFooter>
       </Card>
     </div>

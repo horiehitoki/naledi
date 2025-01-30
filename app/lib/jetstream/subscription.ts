@@ -131,19 +131,19 @@ jetstream.onDelete("blue.maril.stellar.reaction", async (event) => {
 });
 
 jetstream.onCreate("blue.moji.collection.item", async (event) => {
-  console.log(`New Reaction: ${event.commit.rkey}`);
+  console.log(`New Emoji: ${event.commit.rkey}`);
 
   await updateEmoji(event);
 });
 
 jetstream.onUpdate("blue.moji.collection.item", async (event) => {
-  console.log(`Updated Reaction: ${event.commit.rkey}`);
+  console.log(`Updated Emoji: ${event.commit.rkey}`);
 
   await updateEmoji(event);
 });
 
 jetstream.onDelete("blue.moji.collection.item", async (event) => {
-  console.log(`Deleted Reaction: ${event.commit.rkey}`);
+  console.log(`Deleted Emoji: ${event.commit.rkey}`);
 
   try {
     await prisma.emoji.delete({

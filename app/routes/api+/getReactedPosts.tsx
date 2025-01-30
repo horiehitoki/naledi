@@ -17,7 +17,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   try {
     const cursor = getParams(request, "cursor");
 
-    const limit = 50;
+    const limit = 5;
 
     let reactions: ReactionWithEmoji[];
 
