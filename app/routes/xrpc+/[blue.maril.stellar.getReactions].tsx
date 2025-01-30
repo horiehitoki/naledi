@@ -4,7 +4,6 @@ import { prisma } from "~/lib/db/prisma";
 import { getParams } from "~/utils/getParams";
 import { ReactionWithEmoji } from "./[blue.maril.stellar.getActorReactions]";
 import { Agent } from "@atproto/api";
-import { resolveHandleOrDid } from "~/lib/actor/resolveHandleOrDid";
 
 const agent = new Agent("https://public.api.bsky.app");
 
@@ -74,10 +73,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     const transformedReactions: BlueMarilStellarGetReactions.Reaction[] =
       await Promise.all(
         reactions.map(async (reaction) => {
-          const { profile } = await resolveHandleOrDid(
-            reaction.authorDid,
-            agent
-          );
+          const profile = await agent.getProfile({ actor: reaction.authorDid });
 
           return {
             rkey: reaction.rkey,
@@ -86,7 +82,7 @@ export const loader: LoaderFunction = async ({ request }) => {
               reaction.createdAt?.toISOString() ?? new Date().toISOString(),
             emojiRef: JSON.parse(reaction.record).emoji,
             emoji: JSON.parse(reaction.emoji.record),
-            actor: profile!.data,
+            actor: profile.data,
           };
         })
       );

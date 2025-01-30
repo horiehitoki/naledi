@@ -30,10 +30,24 @@ export class ReactionXrpc {
         params.cursor = cursor;
       }
 
+      const res = await fetch(
+        `http://localhost:5173/xrpc/blue.maril.stellar.getReactions?uri=${
+          params.uri
+        }&cid=${params.cid}&limit=${params.limit}${
+          params.cursor ? `&cursor=${params.cursor}` : ""
+        }`
+      );
+
+      const json = await res.json();
+
+      return { data: json };
+
+      /*
+      xrpc.callするとバリデーションエラーが出るのでいったん保留
       return await this.stellarXrpc.call(
         "blue.maril.stellar.getReactions",
         params
-      );
+      );*/
     } catch (e) {
       console.log(e);
       return { data: [] };
