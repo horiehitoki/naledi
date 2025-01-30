@@ -16,6 +16,8 @@ import {
   ContextMenuTrigger,
 } from "~/components/ui/context-menu";
 import { useToast } from "~/hooks/use-toast";
+import { useState } from "react";
+import { ProfileView } from "~/generated/api/types/app/bsky/actor/defs";
 
 export default function ReactionButtons({ cid }: { cid: string }) {
   const post = usePost(cid);
@@ -23,6 +25,8 @@ export default function ReactionButtons({ cid }: { cid: string }) {
 
   const { reaction, cancelReaction } = useReaction(cid);
   const { toast } = useToast();
+
+  const [isLoading, setIsLoading] = useState(false);
 
   //リアクションをグループ化して表示
   const groupedReactions = new Map();
@@ -76,6 +80,25 @@ export default function ReactionButtons({ cid }: { cid: string }) {
             (r: Reaction) => r.actor.did === profile?.did
           );
 
+          const handleReaction = async (
+            rkey: string,
+            repo: string,
+            emoji: BlueMojiCollectionItem.ItemView,
+            profile: ProfileView
+          ) => {
+            if (isLoading) return;
+
+            setIsLoading(true);
+
+            if (myReactions.length > 0) {
+              await cancelReaction(myReactions[0].rkey);
+            } else {
+              await reaction(rkey, repo, emoji, profile);
+            }
+
+            setIsLoading(false);
+          };
+
           return (
             <Tooltip key={group[0].rkey}>
               <TooltipTrigger>
@@ -83,20 +106,19 @@ export default function ReactionButtons({ cid }: { cid: string }) {
                   <ContextMenuTrigger>
                     <button
                       onClick={() =>
-                        myReactions.length > 0
-                          ? cancelReaction(myReactions[0])
-                          : reaction(
-                              group[0].emojiRef.rkey,
-                              group[0].emojiRef.repo,
-                              group[0].emoji,
-                              profile!
-                            )
+                        handleReaction(
+                          group[0].emojiRef.rkey,
+                          group[0].emojiRef.repo,
+                          group[0].emoji,
+                          profile!
+                        )
                       }
                       className={`relative flex items-center space-x-2 px-2 py-1 rounded-lg text-sm font-medium transition-all ${
                         myReactions.length > 0
                           ? "bg-purple-800 text-white border-2 border-purple-400"
                           : "bg-gray-800 text-gray-300 hover:bg-gray-700"
                       }`}
+                      disabled={isLoading}
                     >
                       <p>
                         <EmojiRender

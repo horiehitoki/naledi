@@ -195,30 +195,6 @@ export const useReaction = (postId: string) => {
     emoji: BlueMojiCollectionItem.ItemView,
     actor: ProfileView
   ) {
-    const tempId = `temp-${Date.now()}`;
-
-    //楽観的UI
-    setState((prev) => ({
-      ...prev,
-      reactions: [
-        ...prev.reactions,
-        {
-          rkey: tempId,
-          subject: {
-            uri: post.uri,
-            cid: post.cid,
-          },
-          createdAt: new Date().toISOString(),
-          emojiRef: {
-            rkey,
-            repo,
-          },
-          emoji,
-          actor,
-        },
-      ],
-    }));
-
     const res = await fetch("/api/reaction/", {
       method: "POST",
       body: JSON.stringify({
@@ -238,25 +214,38 @@ export const useReaction = (postId: string) => {
       });
     }
 
-    //IDを更新
     setState((prev) => ({
       ...prev,
-      reactions: prev.reactions.map((r) =>
-        r.id === tempId ? { ...r, rkey: json.rkey } : r
-      ),
+      reactions: [
+        ...prev.reactions,
+        {
+          rkey: json.rkey,
+          subject: {
+            uri: post.uri,
+            cid: post.cid,
+          },
+          createdAt: new Date().toISOString(),
+          emojiRef: {
+            rkey,
+            repo,
+          },
+          emoji,
+          actor,
+        },
+      ],
     }));
   }
 
-  async function cancelReaction(r: Reaction) {
+  async function cancelReaction(rkey: string) {
     setState((prev) => ({
       ...prev,
-      reactions: prev.reactions.filter((reaction) => reaction.rkey !== r.rkey),
+      reactions: prev.reactions.filter((reaction) => reaction.rkey !== rkey),
     }));
 
     const res = await fetch("/api/reaction/", {
       method: "DELETE",
       body: JSON.stringify({
-        rkey: r.rkey,
+        rkey: rkey,
       }),
     });
 
