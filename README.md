@@ -2,6 +2,8 @@
 
 Stellar is an AT Protocol web client with emoji reactions.
 
+![stellar](./public/img/ogp.png)
+
 # Develop
 
 Write the required environment variables.
