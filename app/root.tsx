@@ -51,6 +51,7 @@ export const meta: MetaFunction = () => {
 
     { property: "og:title", content: fullTitle },
     { property: "og:description", content: description },
+    { property: "og:image", content: "https://stellar.maril.blue/img/ogp.png" },
     { property: "og:type", content: "website" },
     { property: "og:site_name", content: "Stellar" },
   ];
