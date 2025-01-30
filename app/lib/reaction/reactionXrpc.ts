@@ -65,10 +65,23 @@ export class ReactionXrpc {
         params.cursor = cursor;
       }
 
+      const res = await fetch(
+        `http://localhost:5173/xrpc/blue.maril.stellar.getActorReactions?actor=${
+          params.actor
+        }&limit=${params.limit}${
+          params.cursor ? `&cursor=${params.cursor}` : ""
+        }`
+      );
+
+      const json = await res.json();
+
+      return { data: json };
+
+      /*
       return await this.stellarXrpc.call(
         "blue.maril.stellar.getActorReactions",
         params
-      );
+      );*/
     } catch (e) {
       console.log(e);
 
