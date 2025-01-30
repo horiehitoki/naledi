@@ -1,5 +1,4 @@
 import { ProfileView } from "@atproto/api/dist/client/types/app/bsky/actor/defs";
-import { TID } from "@atproto/common";
 import { useState } from "react";
 import { atomFamily, useRecoilValue, useSetRecoilState } from "recoil";
 import { BlueMojiCollectionItem } from "~/generated/api";
@@ -201,7 +200,9 @@ export const useReaction = (postId: string) => {
     if (!isLoading) {
       setIsLoading(true);
 
-      const record_rkey = TID.nextStr();
+      const tidRes = await fetch("/api/generateTID");
+      const tidJson = await tidRes.json();
+      const record_rkey = tidJson.tid;
 
       setState((prev) => ({
         ...prev,
