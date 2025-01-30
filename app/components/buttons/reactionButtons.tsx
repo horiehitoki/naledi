@@ -16,7 +16,6 @@ import {
   ContextMenuTrigger,
 } from "~/components/ui/context-menu";
 import { useToast } from "~/hooks/use-toast";
-import { useState } from "react";
 import { ProfileView } from "~/generated/api/types/app/bsky/actor/defs";
 
 export default function ReactionButtons({ cid }: { cid: string }) {
@@ -25,13 +24,6 @@ export default function ReactionButtons({ cid }: { cid: string }) {
 
   const { reaction, cancelReaction, isLoading } = useReaction(cid);
   const { toast } = useToast();
-
-  //楽観的更新用のState
-  const [isReacted, setIsReacted] = useState<{
-    isReacted: boolean;
-    rkey?: string;
-    repo?: string;
-  }>();
 
   //リアクションをグループ化して表示
   const groupedReactions = new Map();
@@ -94,11 +86,8 @@ export default function ReactionButtons({ cid }: { cid: string }) {
             if (isLoading) return;
 
             if (myReactions.length > 0) {
-              //UIの楽観的更新
-              setIsReacted({ isReacted: false });
               await cancelReaction(myReactions[0].rkey);
             } else {
-              setIsReacted({ isReacted: true, rkey, repo });
               await reaction(rkey, repo, emoji, profile);
             }
           };
@@ -118,10 +107,7 @@ export default function ReactionButtons({ cid }: { cid: string }) {
                         )
                       }
                       className={`relative flex items-center space-x-2 px-2 py-1 rounded-lg text-sm font-medium transition-all ${
-                        myReactions.length > 0 ||
-                        (isReacted?.isReacted &&
-                          isReacted.rkey === group[0].emojiRef.rkey &&
-                          isReacted.repo === group[0].emojiRef.repo)
+                        myReactions.length > 0
                           ? "bg-purple-800 text-white border-2 border-purple-400"
                           : "bg-gray-800 text-gray-300 hover:bg-gray-700"
                       }`}

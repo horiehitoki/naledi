@@ -1,5 +1,4 @@
 import { Agent, CredentialSession } from "@atproto/api";
-import { TID } from "@atproto/common";
 import { BlueMarilStellarNS, BlueMarilStellarReaction } from "~/generated/api";
 
 export class ReactionAgent extends Agent {
@@ -15,14 +14,12 @@ export class ReactionAgent extends Agent {
     return new ReactionAgent(session);
   }
 
-  async put(record: BlueMarilStellarReaction.Record) {
+  async put(record: BlueMarilStellarReaction.Record, rkey: string) {
     if (
       !BlueMarilStellarReaction.isRecord(record) &&
       !BlueMarilStellarReaction.validateRecord(record)
     )
       return new Response(null, { status: 400 });
-
-    const rkey = TID.nextStr();
 
     await this.com.atproto.repo.putRecord({
       collection: "blue.maril.stellar.reaction",

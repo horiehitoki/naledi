@@ -56,7 +56,7 @@ export const action: ActionFunction = async ({ request }) => {
             uri: body.subject.uri,
             cid: body.subject.cid,
           },
-          emoji: { rkey: body.rkey, repo: body.repo },
+          emoji: { rkey: body.emoji_rkey, repo: body.repo },
           authorDid: agent.assertDid,
         };
 
@@ -67,7 +67,7 @@ export const action: ActionFunction = async ({ request }) => {
           return new Response(null, { status: 400 });
 
         //リアクションレコードを作成
-        const rkey = await reactionAgent.put(record);
+        const rkey = await reactionAgent.put(record, body.rkey);
 
         return Response.json({ rkey });
       } catch (e) {

@@ -1,4 +1,5 @@
 import { ProfileView } from "@atproto/api/dist/client/types/app/bsky/actor/defs";
+import { TID } from "@atproto/common";
 import { useState } from "react";
 import { atomFamily, useRecoilValue, useSetRecoilState } from "recoil";
 import { BlueMojiCollectionItem } from "~/generated/api";
@@ -200,31 +201,14 @@ export const useReaction = (postId: string) => {
     if (!isLoading) {
       setIsLoading(true);
 
-      const res = await fetch("/api/reaction/", {
-        method: "POST",
-        body: JSON.stringify({
-          subject: { uri: post.uri, cid: post.cid },
-          rkey,
-          repo,
-        }),
-      });
-
-      const json = await res.json();
-
-      if (json.error) {
-        toast({
-          title: "Error",
-          description: json.error,
-          variant: "destructive",
-        });
-      }
+      const record_rkey = TID.nextStr();
 
       setState((prev) => ({
         ...prev,
         reactions: [
           ...prev.reactions,
           {
-            rkey: json.rkey,
+            rkey: record_rkey,
             subject: {
               uri: post.uri,
               cid: post.cid,
@@ -239,6 +223,26 @@ export const useReaction = (postId: string) => {
           },
         ],
       }));
+
+      const res = await fetch("/api/reaction/", {
+        method: "POST",
+        body: JSON.stringify({
+          subject: { uri: post.uri, cid: post.cid },
+          rkey: record_rkey,
+          emoji_rkey: rkey,
+          repo,
+        }),
+      });
+
+      const json = await res.json();
+
+      if (json.error) {
+        toast({
+          title: "Error",
+          description: json.error,
+          variant: "destructive",
+        });
+      }
 
       setIsLoading(false);
     }
