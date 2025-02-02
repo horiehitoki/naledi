@@ -22,7 +22,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
     // メイン投稿
     const post = threads.data.thread.post as PostView;
-    const postReactions = await xrpc.getReactions(post.uri, post.cid, 50);
+    const postReactions = await xrpc.getReactions(post.uri, post.cid, 20);
 
     const parents: FeedViewPostWithReaction[] = [];
     const MAX_PARENTS = 20;
@@ -35,7 +35,7 @@ export const loader: LoaderFunction = async ({ request }) => {
       const reactions = await xrpc.getReactions(
         parent.post.uri,
         parent.post.cid,
-        50
+        20
       );
 
       parents.push({
@@ -63,7 +63,7 @@ export const loader: LoaderFunction = async ({ request }) => {
             const replyReactions = await xrpc.getReactions(
               reply.post.uri,
               reply.post.cid,
-              50
+              20
             );
 
             const replyWithReaction = {

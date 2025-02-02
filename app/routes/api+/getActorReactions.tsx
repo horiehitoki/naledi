@@ -27,7 +27,7 @@ export const loader: LoaderFunction = async ({ request }) => {
         const reactions = await xrpc.getReactions(
           r.subject.uri,
           r.subject.cid,
-          50
+          20
         );
 
         return {

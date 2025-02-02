@@ -13,7 +13,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   try {
     const actor = getParams(request, "actor");
     const cursor = getParams(request, "cursor");
-    const limit = parseInt(getParams(request, "limit") ?? "50");
+    const limit = parseInt(getParams(request, "limit") ?? "20");
 
     if (!actor) {
       return new Response(

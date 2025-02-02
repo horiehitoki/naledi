@@ -12,7 +12,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     const uri: string = getParams(request, "uri");
     const cid: string = getParams(request, "cid");
     const cursor: string = getParams(request, "cursor");
-    const limit = parseInt(getParams(request, "limit") ?? "50");
+    const limit = parseInt(getParams(request, "limit") ?? "20");
 
     if (!uri) {
       return new Response(

@@ -59,7 +59,9 @@ export default function NotificationCard({
 
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
-            <span className="font-semibold">{notification.author.handle}</span>
+            <span className="font-semibold">
+              {notification.author.displayName}
+            </span>
             {getNotificationIcon(notification.reason)}
           </div>
           <CardDescription>{getNotificationText(notification)}</CardDescription>

@@ -54,7 +54,7 @@ export const loader: LoaderFunction = async ({ request }) => {
         const data = await xrpc.getReactions(
           reaction.post_uri,
           reaction.post_cid,
-          50
+          20
         );
 
         return {

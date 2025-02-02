@@ -19,7 +19,7 @@ export default async function feedWithReaction(
         const reactions = await xrpc.getReactions(
           post.post.uri,
           post.post.cid,
-          50
+          20
         );
 
         const result: FeedViewPostWithReaction = {
@@ -30,7 +30,7 @@ export default async function feedWithReaction(
         return result;
       } else {
         const post = item as PostView;
-        const reactions = await xrpc.getReactions(post.uri, post.cid, 50);
+        const reactions = await xrpc.getReactions(post.uri, post.cid, 20);
 
         const result: FeedViewPostWithReaction = {
           post: post,
