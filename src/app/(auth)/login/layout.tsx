@@ -18,7 +18,7 @@ export default async function InventoryLayout({
       </main>
       <Image
         src="/images/loginBackground.svg"
-        alt="Numerous ouranos logos"
+        alt="Numerous Stellar logos"
         width={1000}
         height={200}
         className="z-0 fixed bottom-0 w-screen h-[50svh] object-cover animate-fade-up animate-delay-0 animate-duration-[900ms]"

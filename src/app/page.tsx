@@ -8,14 +8,14 @@ export default function Home() {
         <div className="flex items-center gap-3">
           <Image
             src="/ouranos.svg"
-            alt="Ouranos logo"
+            alt="Stellar logo"
             width={40}
             height={40}
             className="block transition-transform duration-700 ease-in-out hover:rotate-180"
           />
           <Image
             src="/ouranosText.svg"
-            alt="Ouranos text"
+            alt="Stellar text"
             width={70}
             height={20}
           />
@@ -31,7 +31,7 @@ export default function Home() {
         <h1 className="text-skin-base max-w-lg text-4xl font-medium">
           Your friendly Bluesky client for the web
         </h1>
-        
+
         <ul className="text-skin-secondary mt-5 text-lg font-medium">
           <li>Designed for simplicity</li>
           <li>Enhanced features</li>
@@ -57,7 +57,7 @@ export default function Home() {
       <div className="animate-fade-up animate-delay-300 mx-auto mt-8 max-w-fit">
         <Image
           src="/images/screenshot.png"
-          alt="Ouranos desktop screenshot"
+          alt="Stellar desktop screenshot"
           width={1000}
           height={830}
           priority

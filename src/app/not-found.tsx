@@ -13,7 +13,7 @@ export default function NotFound() {
         <Image src="/ouranos.svg" alt="Ouranos logo" width={40} height={40} />
         <Image
           src="/ouranosText.svg"
-          alt="Ouranos text"
+          alt="Stellar text"
           width={70}
           height={20}
         />
