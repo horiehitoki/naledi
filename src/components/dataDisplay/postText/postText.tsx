@@ -1,13 +1,15 @@
 "use client";
 
 import { getHandle } from "@/lib/utils/text";
-import { RichText as RichTextHelper, AppBskyFeedPost } from "@atproto/api";
+import { RichText, AppBskyFeedPost, RichTextSegment } from "@atproto/api";
 import type { PostView } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
 import Link from "next/link";
 import { Fragment } from "react";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import { BiLinkExternal } from "react-icons/bi";
 import PostTag from "../postTag/PostTag";
+import { BlueMojiRichtextFacet } from "../../../../types/atmosphere";
+import { render } from "@/lib/api/bluemoji/render";
 
 interface Props {
   record: PostView["record"];
@@ -21,7 +23,7 @@ export default function PostText(props: Props) {
   const facet = AppBskyFeedPost.isRecord(record) && record.facets;
   const tags = AppBskyFeedPost.isRecord(record) && record.tags;
 
-  const richText = new RichTextHelper({
+  const richText = new RichText({
     text: text.toString(),
     facets: facet ? facet : [],
   });
@@ -103,6 +105,26 @@ export default function PostText(props: Props) {
           </Link>
         ),
       });
+    } else if (isBluemojiSegment(segment)) {
+      const bluemoji = getBluemojiFeature(segment.facet);
+      if (bluemoji) {
+        return (
+          <span
+            className="inline-flex items-center translate-y-1.5 whitespace-break-spaces"
+            title={bluemoji.alt || bluemoji.name}
+          >
+            {bluemoji.formats.png_128 ? (
+              <img
+                src={`https://cdn.bsky.app/img/feed_thumbnail/plain/${bluemoji.did}/${bluemoji.formats.png_128}@png`}
+                alt={bluemoji.name}
+                className="w-6 h-6"
+              />
+            ) : (
+              <span>{segment.text}</span>
+            )}
+          </span>
+        );
+      }
     } else {
       content.push({
         text: segment.text,
@@ -134,4 +156,21 @@ export default function PostText(props: Props) {
       )}
     </div>
   );
+}
+
+function isBluemojiSegment(segment: RichTextSegment) {
+  return segment.facet?.features.some(
+    (feature) => feature.$type === "blue.moji.richtext.facet"
+  );
+}
+
+function getBluemojiFeature(facet) {
+  if (!facet) return undefined;
+  const feature = facet.features.find(
+    (f) => f.$type === "blue.moji.richtext.facet"
+  );
+  if (feature && BlueMojiRichtextFacet.isMain(feature)) {
+    return feature;
+  }
+  return undefined;
 }

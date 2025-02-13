@@ -1,11 +1,17 @@
 import { AppBskyFeedDefs } from "@atproto/api";
 import { ProfileView } from "@atproto/api/dist/client/types/app/bsky/actor/defs";
-import { GeneratorView } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
+import {
+  FeedViewPost,
+  GeneratorView,
+} from "@atproto/api/dist/client/types/app/bsky/feed/defs";
 import { Notification } from "@atproto/api/dist/client/types/app/bsky/notification/listNotifications";
+import { Reaction } from "./atmosphere/types/blue/maril/stellar/getReactions";
 
 export type SavedFeed = GeneratorView & {
   pinned: boolean;
 };
+
+export type FeedViewPostWithReaction = FeedViewPost & { reactions: Reaction[] };
 
 export type FeedSearchResult = {
   tid: string;

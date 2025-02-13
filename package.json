@@ -9,6 +9,9 @@
     "lint": "next lint",
     "gen-api": "lex gen-api ./types/atmosphere $(find ./lexicons -name '*.json' -type f)"
   },
+  "workspaces": [
+    "packages/*"
+  ],
   "dependencies": {
     "@atproto/api": "^0.13.35",
     "@atproto/common": "^0.4.5",
