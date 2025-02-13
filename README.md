@@ -1,27 +1,34 @@
-# Stellar
+![logo](./public/logo.svg)
 
-Stellar is an AT Protocol web client with emoji reactions.
+# Ouranos
 
-![stellar](./public/img/ogp.png)
+Your friendly Bluesky client for the web. Made with Next.js.
 
-# Develop
+## Getting Started
 
-Write the required environment variables.
+Install NPM packages in the project directory.
 
-```
-DATABASE_URL=
-SESSION_SECRET=
-PRIVATE_KEY_ES256_B64=
+```bash
+npm install
 ```
 
-Run the app.
+Run `npm run dev` and open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-```
-bunx prisma db push
+The following environment variables are required:
 
-bun install
+- `NEXTAUTH_SECRET` (generate one using `openssl rand -base64 32` or visit [https://generate-secret.vercel.app/32](https://generate-secret.vercel.app/32)). You won't need to prefix it with `NEXT_PUBLIC` if you are deploying to Vercel.
+- `NEXTAUTH_URL` (`http://localhost:3000` while running locally. You won't need this variable in production if you're deploying to Vercel.)
 
-bun run dev
-```
+To make changes, you can create a new branch and merge with development, or push directly to development. When you are ready to deploy, you can merge into preview (staging) or main (production) branches, which will automatically build and deploy to Vercel.
 
-After that, open http://localhost:5173 in your browser.
+## Project Roadmap
+
+Latest changes and updates are added to `Ouranos Roadmap` under [Projects](https://github.com/users/pdelfan/projects/1).
+
+## FAQ
+
+Please visit [https://useouranos.app/about](https://useouranos.app/about).
+
+## License
+
+MIT License
