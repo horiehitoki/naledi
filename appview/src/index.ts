@@ -10,6 +10,7 @@ import {
   BlueMarilStellarGetActorReactions,
 } from "./generated/api/index.js";
 import { Agent } from "@atproto/api";
+import { cors } from "hono/cors";
 
 type ReactionWithEmoji = Reaction & { emoji: Emoji };
 
@@ -17,6 +18,8 @@ const agent = new Agent("https://public.api.bsky.app");
 
 const app = new Hono();
 jetstream.start();
+
+app.use("*", cors());
 
 app.get("/", (c) => {
   return c.text("This is a Stellar AppView Server.");

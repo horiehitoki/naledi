@@ -6,7 +6,10 @@ import PostEmbed from "@/components/dataDisplay/postEmbed/PostEmbed";
 import PostText from "@/components/dataDisplay/postText/postText";
 import Reason from "@/components/dataDisplay/reason/Reason";
 import { AppBskyFeedDefs } from "@atproto/api";
-import { ContentFilterResult } from "../../../../types/feed";
+import {
+  ContentFilterResult,
+  FeedViewPostWithReaction,
+} from "../../../../types/feed";
 import PostHider from "@/components/dataDisplay/postHider/PostHider";
 import Link from "next/link";
 import Threadline from "@/components/dataDisplay/threadLine/ThreadLine";
@@ -17,9 +20,10 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ProfileHoverCard from "../profileHoverCard/ProfileHoverCard";
 import NotFoundEmbed from "@/components/dataDisplay/postEmbed/NotFoundEmbed";
+import ReactionButtons from "@/components/dataDisplay/postActions/ReactionButtons";
 
 interface Props {
-  post: AppBskyFeedDefs.FeedViewPost;
+  post: FeedViewPostWithReaction;
   isParent?: boolean;
   isReply?: boolean;
   filter: ContentFilterResult;
@@ -79,8 +83,8 @@ export default function FeedPost(props: Props) {
         e.stopPropagation();
         router.push(
           `/dashboard/user/${post.post.author.handle}/post/${getPostId(
-            post.post.uri,
-          )}`,
+            post.post.uri
+          )}`
         );
       }}
       className="cursor-pointer hover:bg-skin-secondary p-3"
@@ -139,6 +143,9 @@ export default function FeedPost(props: Props) {
           )}
           <div className="mt-2">
             <PostActions post={post.post} />
+          </div>
+          <div className="mt-2">
+            <ReactionButtons reactions={post.reactions ?? []} />
           </div>
         </div>
       </div>

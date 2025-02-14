@@ -2,9 +2,8 @@ import {
   FeedViewPost,
   PostView,
 } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
-import { getReactions } from "./reactionXrpc";
-import { FeedViewPostWithReaction } from "../../../../types/feed";
-
+import { getReactions } from "../api/stellar/reaction/reactionXrpc";
+import { FeedViewPostWithReaction } from "../../../types/feed";
 //feedにリアクションデータをつけて返す
 export default async function feedWithReaction(
   feed: FeedViewPost[] | PostView[]

@@ -9,7 +9,6 @@ import * as Tooltip from "@radix-ui/react-tooltip";
 import { BiLinkExternal } from "react-icons/bi";
 import PostTag from "../postTag/PostTag";
 import { BlueMojiRichtextFacet } from "../../../../types/atmosphere";
-import { render } from "@/lib/api/bluemoji/render";
 
 interface Props {
   record: PostView["record"];
@@ -110,7 +109,7 @@ export default function PostText(props: Props) {
       if (bluemoji) {
         return (
           <span
-            className="inline-flex items-center translate-y-1.5 whitespace-break-spaces"
+            className="inline-flex items-center whitespace-break-spaces"
             title={bluemoji.alt || bluemoji.name}
           >
             {bluemoji.formats.png_128 ? (

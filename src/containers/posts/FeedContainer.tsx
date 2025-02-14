@@ -43,6 +43,8 @@ export default function FeedContainer(props: Props) {
     0
   );
 
+  console.log(feedData);
+
   const isEmpty =
     !isFetchingFeed && !isFetchingFeedNextPage && dataLength === 0;
 
