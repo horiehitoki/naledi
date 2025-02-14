@@ -9,6 +9,7 @@ import * as Tooltip from "@radix-ui/react-tooltip";
 import { BiLinkExternal } from "react-icons/bi";
 import PostTag from "../postTag/PostTag";
 import { BlueMojiRichtextFacet } from "../../../../types/atmosphere";
+import Image from "next/image";
 
 interface Props {
   record: PostView["record"];
@@ -113,10 +114,11 @@ export default function PostText(props: Props) {
             title={bluemoji.alt || bluemoji.name}
           >
             {bluemoji.formats.png_128 ? (
-              <img
+              <Image
                 src={`https://cdn.bsky.app/img/feed_thumbnail/plain/${bluemoji.did}/${bluemoji.formats.png_128}@png`}
                 alt={bluemoji.name}
-                className="w-6 h-6"
+                width={24}
+                height={24}
               />
             ) : (
               <span>{segment.text}</span>

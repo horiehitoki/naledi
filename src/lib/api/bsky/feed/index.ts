@@ -142,7 +142,15 @@ export const getUserPosts = async (
   });
 
   if (!posts.success) throw new Error("Could not fetch posts");
-  return posts;
+  const processedFeed = await feedWithReaction(posts.data.feed);
+
+  return {
+    ...posts,
+    data: {
+      cursor: posts.data.cursor,
+      feed: processedFeed,
+    },
+  };
 };
 
 export const getUserReplyPosts = async (

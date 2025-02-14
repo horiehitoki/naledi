@@ -41,7 +41,7 @@ export default function PostSearchContainer(props: Props) {
 
   const dataLength = posts?.pages.reduce(
     (acc, page) => acc + (page?.posts.length ?? 0),
-    0,
+    0
   );
 
   const isEmpty = !isFetching && !isFetchingNextPage && dataLength === 0;

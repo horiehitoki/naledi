@@ -6,6 +6,7 @@ import {
 } from "@radix-ui/react-tooltip";
 import { Reaction } from "../../../../types/atmosphere/types/blue/maril/stellar/getReactions";
 import { BlueMojiCollectionItem } from "../../../../types/atmosphere";
+import Image from "next/image";
 
 export default function ReactionButtons({
   reactions,
@@ -39,28 +40,31 @@ export default function ReactionButtons({
                     className={`relative flex items-center space-x-2 px-2 py-1 rounded-lg text-sm font-medium transition-all bg-gray-800 text-gray-300 hover:bg-gray-700`}
                   >
                     <p>
-                      <img
+                      <Image
                         src={`https://cdn.bsky.app/img/feed_thumbnail/plain/${group[0].emojiRef.repo}/${group[0].emoji.formats.png_128.ref.$link}@png`}
                         alt={group[0].emoji.name}
-                        className="w-6 h-6"
+                        width={24}
+                        height={24}
                       />
                     </p>
                     <span className="ml-1">{count}</span>
                   </button>
                 </TooltipTrigger>
-                <TooltipContent className="space-y-2">
+                <TooltipContent className="flex flex-col gap-1 bg-skin-base z-[60] p-3 border border-skin-base rounded-xl max-w-xs shadow-lg m-3">
                   <div className="text-center">{emoji.name}</div>
                   {group.map((r: Reaction) => {
                     return (
                       <div className="text-center flex" key={r.rkey}>
                         <a href={`/user/${r.actor.did}/posts`}>
-                          <img
+                          <Image
                             src={r.actor.avatar}
-                            className="w-6 h-6 rounded-full mx-1"
+                            className="rounded-full mx-1"
                             alt="avatar"
+                            width={24}
+                            height={24}
                           />
                         </a>
-                        {r.actor.displayName}がリアクション
+                        Reacted by {r.actor.displayName}
                       </div>
                     );
                   })}
