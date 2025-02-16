@@ -11,6 +11,7 @@ import {
 } from "./generated/api/index.js";
 import { Agent } from "@atproto/api";
 import { cors } from "hono/cors";
+import { BlueMarilStellarGetEmojis } from "./generated/api/index.js";
 
 type ReactionWithEmoji = Reaction & { emoji: Emoji };
 
@@ -204,6 +205,61 @@ app.get("xrpc" + ids.BlueMarilStellarGetActorReactions, async (c) => {
       }),
       { status: 500 }
     );
+  }
+});
+
+app.get("/xrpc/" + ids.BlueMarilStellarGetEmojis, async (c) => {
+  try {
+    const cursor = getParams(c, "cursor");
+    const limit = parseInt(getParams(c, "limit") ?? "50");
+
+    if (limit < 1 || limit > 100) {
+      return new Response(
+        JSON.stringify({ error: "Invalid limit: must be between 1 and 100" }),
+        { status: 400 }
+      );
+    }
+
+    let emojis: Emoji[];
+
+    if (cursor) {
+      emojis = await prisma.emoji.findMany({
+        where: {},
+        cursor: { id: cursor },
+        take: limit + 1,
+        skip: 1,
+        orderBy: { rkey: "desc" },
+      });
+    } else {
+      emojis = await prisma.emoji.findMany({
+        where: {},
+        take: limit + 1,
+        orderBy: { rkey: "desc" },
+      });
+    }
+
+    const hasMore = emojis.length > limit;
+
+    if (hasMore) {
+      emojis.pop();
+    }
+
+    const items = emojis.map((emoji) => ({
+      uri: `at://${emoji.repo}/app.bsky.feed.post/${emoji.rkey}`,
+      record: JSON.parse(emoji.record),
+    }));
+
+    const response: BlueMarilStellarGetEmojis.OutputSchema = {
+      items,
+      ...(hasMore && { cursor: emojis[emojis.length - 1].rkey }),
+    };
+
+    return Response.json(response);
+  } catch (error) {
+    console.error("Err:", error);
+    return new Response(JSON.stringify({ error: "Internal server error" }), {
+      status: 500,
+    });
   }
 });
 

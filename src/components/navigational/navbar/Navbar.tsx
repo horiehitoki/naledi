@@ -17,6 +17,7 @@ import { FaBell, FaRegBell } from "react-icons/fa6";
 import { getUnreadNotificationsCount } from "@/lib/api/bsky/notification";
 import { useQuery } from "@tanstack/react-query";
 import { useAgent } from "@/app/providers/agent";
+import { FaRegSmile, FaSmile } from "react-icons/fa";
 
 export default function Navbar() {
   const agent = useAgent();
@@ -71,6 +72,13 @@ export default function Navbar() {
         title="Notifications"
         isActive={pathname.includes("notifications")}
         badge={notificationsCount ?? 0}
+      />
+      <NavItem
+        href="/dashboard/bluemoji"
+        icon={<FaRegSmile className="text-2xl md:text-3xl" />}
+        activeIcon={<FaSmile className="text-2xl md:text-3xl" />}
+        title="Bluemoji"
+        isActive={pathname.includes("bluemoji")}
       />
       <NavItem
         href="/dashboard/settings"

@@ -1,26 +1,19 @@
 {
   "lexicon": 1,
-  "id": "app.bsky.actor.searchActors",
+  "id": "blue.maril.stellar.getEmojis",
   "defs": {
     "main": {
       "type": "query",
-      "description": "Find actors (profiles) matching search criteria. Does not require auth.",
+      "description": "Return all Bluemoji in the AppView.",
       "parameters": {
         "type": "params",
         "properties": {
-          "term": {
-            "type": "string",
-            "description": "DEPRECATED: use 'q' instead."
-          },
-          "q": {
-            "type": "string",
-            "description": "Search query string. Syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is recommended."
-          },
           "limit": {
             "type": "integer",
             "minimum": 1,
             "maximum": 100,
-            "default": 25
+            "default": 50,
+            "description": "The number of records to return."
           },
           "cursor": { "type": "string" }
         }
@@ -29,18 +22,26 @@
         "encoding": "application/json",
         "schema": {
           "type": "object",
-          "required": ["actors"],
+          "required": ["items"],
           "properties": {
             "cursor": { "type": "string" },
-            "actors": {
+            "items": {
               "type": "array",
               "items": {
                 "type": "ref",
-                "ref": "app.bsky.actor.defs#profileView"
+                "ref": "blue.moji.collection.item#itemView"
               }
             }
           }
         }
+      }
+    },
+    "itemView": {
+      "type": "object",
+      "required": ["uri", "record"],
+      "properties": {
+        "uri": { "type": "string", "format": "at-uri" },
+        "record": { "type": "ref", "ref": "blue.moji.collection.item#itemView" }
       }
     }
   }

@@ -6,14 +6,12 @@ import { ValidationResult, BlobRef } from '@atproto/lexicon'
 import { isObj, hasProp } from '../../../../util'
 import { lexicons } from '../../../../lexicons'
 import { CID } from 'multiformats/cid'
-import * as BlueMojiCollectionItem from './item'
+import * as BlueMojiCollectionItem from '../../moji/collection/item'
 
 export interface QueryParams {
   /** The number of records to return. */
   limit?: number
   cursor?: string
-  /** Flag to reverse the order of the returned records. */
-  reverse?: boolean
 }
 
 export type InputSchema = undefined
@@ -49,10 +47,10 @@ export function isItemView(v: unknown): v is ItemView {
   return (
     isObj(v) &&
     hasProp(v, '$type') &&
-    v.$type === 'blue.moji.collection.listCollection#itemView'
+    v.$type === 'blue.maril.stellar.getEmojis#itemView'
   )
 }
 
 export function validateItemView(v: unknown): ValidationResult {
-  return lexicons.validate('blue.moji.collection.listCollection#itemView', v)
+  return lexicons.validate('blue.maril.stellar.getEmojis#itemView', v)
 }

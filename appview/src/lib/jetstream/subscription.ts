@@ -37,7 +37,7 @@ async function updateReaction(
     | CommitUpdateEvent<"blue.maril.stellar.reaction">
 ) {
   try {
-    const record: BlueMarilStellarReaction = event.commit.record;
+    const record = event.commit.record;
 
     if (
       BlueMarilStellarReaction.isRecord(record) &&
@@ -49,6 +49,8 @@ async function updateReaction(
       });
 
       if (targetEmoji.length <= 0) {
+        console.log(`New Emoji: ${record.emoji.rkey}`);
+
         const emoji = await getEmojiFromPDS(
           record.emoji.rkey,
           record.emoji.repo

@@ -13,9 +13,12 @@ import PostHider from "@/components/dataDisplay/postHider/PostHider";
 import Link from "next/link";
 import { getThreadPostFilter } from "@/lib/utils/feed";
 import ProfileHoverCard from "../profileHoverCard/ProfileHoverCard";
+import { Reaction } from "../../../../types/atmosphere/types/blue/maril/stellar/getReactions";
+import ReactionButtons from "@/components/dataDisplay/postActions/ReactionButtons";
 
 interface Props {
   post: AppBskyFeedDefs.PostView;
+  reactions: Reaction[];
   filter: ContentFilterResult;
 }
 
@@ -87,6 +90,7 @@ export default function ThreadPost(props: Props) {
         </div>
       </div>
       <PostActions post={post} mode="thread" />
+      <ReactionButtons reactions={props.reactions ?? []} />
     </article>
   );
 }
