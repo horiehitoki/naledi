@@ -102,7 +102,7 @@ export const schemaDict = {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:blue.moji.collection.item#itemView',
+                  ref: 'lex:blue.maril.stellar.getEmojis#itemView',
                 },
               },
             },
@@ -111,11 +111,11 @@ export const schemaDict = {
       },
       itemView: {
         type: 'object',
-        required: ['uri', 'record'],
+        required: ['ref', 'record'],
         properties: {
-          uri: {
-            type: 'string',
-            format: 'at-uri',
+          ref: {
+            type: 'ref',
+            ref: 'lex:blue.maril.stellar.reaction#emojiRef',
           },
           record: {
             type: 'ref',

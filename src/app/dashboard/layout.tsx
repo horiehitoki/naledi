@@ -7,6 +7,7 @@ import Composer from "@/components/actions/composer/Composer";
 import { getProfile } from "@/lib/api/bsky/actor";
 import { getSessionFromServer } from "@/lib/api/auth/session";
 import { AgentProvider } from "../providers/agent";
+import BluemojiPicker from "@/components/actions/bluemoji/BluemojiPicker";
 
 export const metadata: Metadata = {
   title: { template: "%s — Stellar", default: "Stellar" },
@@ -27,6 +28,7 @@ export default async function DashboardLayout({
         {profile && <Composer author={profile} />}
         <SidePanel />
         <section className="w-full md:max-w-xl">
+          <BluemojiPicker />
           {profile && <TopBar profile={profile} />}
           {children}
         </section>

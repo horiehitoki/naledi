@@ -67,6 +67,64 @@ export const schemaDict = {
       },
     },
   },
+  BlueMarilStellarGetEmojis: {
+    lexicon: 1,
+    id: 'blue.maril.stellar.getEmojis',
+    defs: {
+      main: {
+        type: 'query',
+        description: 'Return all Bluemoji in the AppView.',
+        parameters: {
+          type: 'params',
+          properties: {
+            limit: {
+              type: 'integer',
+              minimum: 1,
+              maximum: 100,
+              default: 50,
+              description: 'The number of records to return.',
+            },
+            cursor: {
+              type: 'string',
+            },
+          },
+        },
+        output: {
+          encoding: 'application/json',
+          schema: {
+            type: 'object',
+            required: ['items'],
+            properties: {
+              cursor: {
+                type: 'string',
+              },
+              items: {
+                type: 'array',
+                items: {
+                  type: 'ref',
+                  ref: 'lex:blue.maril.stellar.getEmojis#itemView',
+                },
+              },
+            },
+          },
+        },
+      },
+      itemView: {
+        type: 'object',
+        required: ['ref', 'record'],
+        properties: {
+          ref: {
+            type: 'ref',
+            ref: 'lex:blue.maril.stellar.reaction#emojiRef',
+          },
+          record: {
+            type: 'ref',
+            ref: 'lex:blue.moji.collection.item#itemView',
+          },
+        },
+      },
+    },
+  },
   BlueMarilStellarGetReactions: {
     lexicon: 1,
     id: 'blue.maril.stellar.getReactions',
@@ -1228,6 +1286,7 @@ export const schemas = Object.values(schemaDict)
 export const lexicons: Lexicons = new Lexicons(schemas)
 export const ids = {
   BlueMarilStellarGetActorReactions: 'blue.maril.stellar.getActorReactions',
+  BlueMarilStellarGetEmojis: 'blue.maril.stellar.getEmojis',
   BlueMarilStellarGetReactions: 'blue.maril.stellar.getReactions',
   BlueMarilStellarReaction: 'blue.maril.stellar.reaction',
   BlueLinkatBoard: 'blue.linkat.board',

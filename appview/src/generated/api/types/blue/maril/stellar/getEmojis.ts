@@ -6,6 +6,7 @@ import { ValidationResult, BlobRef } from '@atproto/lexicon'
 import { isObj, hasProp } from '../../../../util'
 import { lexicons } from '../../../../lexicons'
 import { CID } from 'multiformats/cid'
+import * as BlueMarilStellarReaction from './reaction'
 import * as BlueMojiCollectionItem from '../../moji/collection/item'
 
 export interface QueryParams {
@@ -18,7 +19,7 @@ export type InputSchema = undefined
 
 export interface OutputSchema {
   cursor?: string
-  items: BlueMojiCollectionItem.ItemView[]
+  items: ItemView[]
   [k: string]: unknown
 }
 
@@ -38,7 +39,7 @@ export function toKnownErr(e: any) {
 }
 
 export interface ItemView {
-  uri: string
+  ref: BlueMarilStellarReaction.EmojiRef
   record: BlueMojiCollectionItem.ItemView
   [k: string]: unknown
 }

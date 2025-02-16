@@ -29,7 +29,7 @@
               "type": "array",
               "items": {
                 "type": "ref",
-                "ref": "blue.moji.collection.item#itemView"
+                "ref": "blue.maril.stellar.getEmojis#itemView"
               }
             }
           }
@@ -38,9 +38,9 @@
     },
     "itemView": {
       "type": "object",
-      "required": ["uri", "record"],
+      "required": ["ref", "record"],
       "properties": {
-        "uri": { "type": "string", "format": "at-uri" },
+        "ref": { "type": "ref", "ref": "blue.maril.stellar.reaction#emojiRef" },
         "record": { "type": "ref", "ref": "blue.moji.collection.item#itemView" }
       }
     }

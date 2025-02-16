@@ -245,7 +245,7 @@ app.get("/xrpc/" + ids.BlueMarilStellarGetEmojis, async (c) => {
     }
 
     const items = emojis.map((emoji) => ({
-      uri: `at://${emoji.repo}/app.bsky.feed.post/${emoji.rkey}`,
+      ref: { rkey: emoji.rkey, repo: emoji.repo },
       record: JSON.parse(emoji.record),
     }));
 

@@ -5,6 +5,7 @@ import { XrpcClient, FetchHandler, FetchHandlerOptions } from '@atproto/xrpc'
 import { schemas } from './lexicons'
 import { CID } from 'multiformats/cid'
 import * as BlueMarilStellarGetActorReactions from './types/blue/maril/stellar/getActorReactions'
+import * as BlueMarilStellarGetEmojis from './types/blue/maril/stellar/getEmojis'
 import * as BlueMarilStellarGetReactions from './types/blue/maril/stellar/getReactions'
 import * as BlueMarilStellarReaction from './types/blue/maril/stellar/reaction'
 import * as BlueLinkatBoard from './types/blue/linkat/board'
@@ -26,6 +27,7 @@ import * as BlueMojiPacksGetPacks from './types/blue/moji/packs/getPacks'
 import * as BlueMojiRichtextFacet from './types/blue/moji/richtext/facet'
 
 export * as BlueMarilStellarGetActorReactions from './types/blue/maril/stellar/getActorReactions'
+export * as BlueMarilStellarGetEmojis from './types/blue/maril/stellar/getEmojis'
 export * as BlueMarilStellarGetReactions from './types/blue/maril/stellar/getReactions'
 export * as BlueMarilStellarReaction from './types/blue/maril/stellar/reaction'
 export * as BlueLinkatBoard from './types/blue/linkat/board'
@@ -103,6 +105,18 @@ export class BlueMarilStellarNS {
   ): Promise<BlueMarilStellarGetActorReactions.Response> {
     return this._client.call(
       'blue.maril.stellar.getActorReactions',
+      params,
+      undefined,
+      opts,
+    )
+  }
+
+  getEmojis(
+    params?: BlueMarilStellarGetEmojis.QueryParams,
+    opts?: BlueMarilStellarGetEmojis.CallOptions,
+  ): Promise<BlueMarilStellarGetEmojis.Response> {
+    return this._client.call(
+      'blue.maril.stellar.getEmojis',
       params,
       undefined,
       opts,
