@@ -25,6 +25,7 @@ import * as BlueMojiPacksGetPack from './types/blue/moji/packs/getPack'
 import * as BlueMojiPacksGetActorPacks from './types/blue/moji/packs/getActorPacks'
 import * as BlueMojiPacksGetPacks from './types/blue/moji/packs/getPacks'
 import * as BlueMojiRichtextFacet from './types/blue/moji/richtext/facet'
+import * as ComAtprotoRepoStrongRef from './types/com/atproto/repo/strongRef'
 
 export * as BlueMarilStellarGetActorReactions from './types/blue/maril/stellar/getActorReactions'
 export * as BlueMarilStellarGetEmojis from './types/blue/maril/stellar/getEmojis'
@@ -47,6 +48,7 @@ export * as BlueMojiPacksGetPack from './types/blue/moji/packs/getPack'
 export * as BlueMojiPacksGetActorPacks from './types/blue/moji/packs/getActorPacks'
 export * as BlueMojiPacksGetPacks from './types/blue/moji/packs/getPacks'
 export * as BlueMojiRichtextFacet from './types/blue/moji/richtext/facet'
+export * as ComAtprotoRepoStrongRef from './types/com/atproto/repo/strongRef'
 
 export class AtpBaseClient extends XrpcClient {
   blue: BlueNS
@@ -683,10 +685,12 @@ export class PostRecord {
 export class ComNS {
   _client: XrpcClient
   whtwnd: ComWhtwndNS
+  atproto: ComAtprotoNS
 
   constructor(client: XrpcClient) {
     this._client = client
     this.whtwnd = new ComWhtwndNS(client)
+    this.atproto = new ComAtprotoNS(client)
   }
 }
 
@@ -768,5 +772,23 @@ export class EntryRecord {
       { collection: 'com.whtwnd.blog.entry', ...params },
       { headers },
     )
+  }
+}
+
+export class ComAtprotoNS {
+  _client: XrpcClient
+  repo: ComAtprotoRepoNS
+
+  constructor(client: XrpcClient) {
+    this._client = client
+    this.repo = new ComAtprotoRepoNS(client)
+  }
+}
+
+export class ComAtprotoRepoNS {
+  _client: XrpcClient
+
+  constructor(client: XrpcClient) {
+    this._client = client
   }
 }

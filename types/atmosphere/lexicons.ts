@@ -1280,6 +1280,27 @@ export const schemaDict = {
       },
     },
   },
+  ComAtprotoRepoStrongRef: {
+    lexicon: 1,
+    id: 'com.atproto.repo.strongRef',
+    description: 'A URI with a content-hash fingerprint.',
+    defs: {
+      main: {
+        type: 'object',
+        required: ['uri', 'cid'],
+        properties: {
+          uri: {
+            type: 'string',
+            format: 'at-uri',
+          },
+          cid: {
+            type: 'string',
+            format: 'cid',
+          },
+        },
+      },
+    },
+  },
 } as const satisfies Record<string, LexiconDoc>
 
 export const schemas = Object.values(schemaDict)
@@ -1306,4 +1327,5 @@ export const ids = {
   BlueMojiPacksGetActorPacks: 'blue.moji.packs.getActorPacks',
   BlueMojiPacksGetPacks: 'blue.moji.packs.getPacks',
   BlueMojiRichtextFacet: 'blue.moji.richtext.facet',
+  ComAtprotoRepoStrongRef: 'com.atproto.repo.strongRef',
 }

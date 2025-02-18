@@ -1,6 +1,6 @@
 ![logo](./public/logo.svg)
 
-# Ouranos
+# Stellar
 
 Your friendly Bluesky client for the web. Made with Next.js.
 

@@ -78,77 +78,83 @@ export default function FeedPost(props: Props) {
   }
 
   return (
-    <article
-      onClick={(e) => {
-        e.stopPropagation();
-        router.push(
-          `/dashboard/user/${post.post.author.handle}/post/${getPostId(
-            post.post.uri
-          )}`
-        );
-      }}
-      className="cursor-pointer hover:bg-skin-secondary p-3"
-    >
-      {reason && <Reason reason={reason} />}
+    <div>
+      <article
+        onClick={(e) => {
+          e.stopPropagation();
+          router.push(
+            `/dashboard/user/${post.post.author.handle}/post/${getPostId(
+              post.post.uri
+            )}`
+          );
+        }}
+        className="cursor-pointer hover:bg-skin-secondary p-3"
+      >
+        {reason && <Reason reason={reason} />}
 
-      <div className="relative flex items-start gap-3">
-        <div
-          onClick={(e) => {
-            e.stopPropagation();
-            router.push(`/dashboard/user/${author.handle}`);
-          }}
-          className="z-20 shrink-0 hover:brightness-90"
-        >
-          <ProfileHoverCard handle={author.handle}>
-            <Avatar
-              src={author.avatar?.replace("avatar", "avatar_thumbnail")}
-              size="md"
-            />
-          </ProfileHoverCard>
-        </div>
-        <div className={`flex grow flex-col ${isParent && "pb-6"}`}>
-          {isParent && !reason && <Threadline />}
-          <div className="flex">
-            <Link
-              href={`/dashboard/user/${author.handle}`}
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
-              className="flex gap-1"
-            >
-              <span className="text-skin-base hover:text-skin-secondary line-clamp-1 max-w-[90%] shrink-0 overflow-ellipsis break-all font-semibold">
-                {author.displayName || author.handle}{" "}
-              </span>
-              <span className="text-skin-tertiary line-clamp-1 min-w-[10%] shrink break-all font-medium">
-                @{author.handle}
-              </span>
-            </Link>
-            <span className="text-skin-tertiary whitespace-nowrap font-medium">
-              &nbsp;· {getRelativeTime(indexedAt)}
-            </span>
-          </div>
-          <PostText record={post.post.record} />
-          {showToggle && (
-            <div className="my-2">
-              <PostHider
-                message={message}
-                hidden={hidden}
-                onToggleVisibility={setHidden}
-                showToggle={shouldHide}
+        <div className="relative flex items-start gap-3">
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+              router.push(`/dashboard/user/${author.handle}`);
+            }}
+            className="z-20 shrink-0 hover:brightness-90"
+          >
+            <ProfileHoverCard handle={author.handle}>
+              <Avatar
+                src={author.avatar?.replace("avatar", "avatar_thumbnail")}
+                size="md"
               />
-            </div>
-          )}
-          {!hidden && post.post.embed && (
-            <PostEmbed content={post.post.embed} depth={0} />
-          )}
-          <div className="mt-2">
-            <PostActions post={post.post} />
+            </ProfileHoverCard>
           </div>
-          <div className="mt-2">
-            <ReactionButtons reactions={post.reactions ?? []} />
+          <div className={`flex grow flex-col ${isParent && "pb-6"}`}>
+            {isParent && !reason && <Threadline />}
+            <div className="flex">
+              <Link
+                href={`/dashboard/user/${author.handle}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+                className="flex gap-1"
+              >
+                <span className="text-skin-base hover:text-skin-secondary line-clamp-1 max-w-[90%] shrink-0 overflow-ellipsis break-all font-semibold">
+                  {author.displayName || author.handle}{" "}
+                </span>
+                <span className="text-skin-tertiary line-clamp-1 min-w-[10%] shrink break-all font-medium">
+                  @{author.handle}
+                </span>
+              </Link>
+              <span className="text-skin-tertiary whitespace-nowrap font-medium">
+                &nbsp;· {getRelativeTime(indexedAt)}
+              </span>
+            </div>
+            <PostText record={post.post.record} />
+            {showToggle && (
+              <div className="my-2">
+                <PostHider
+                  message={message}
+                  hidden={hidden}
+                  onToggleVisibility={setHidden}
+                  showToggle={shouldHide}
+                />
+              </div>
+            )}
+            {!hidden && post.post.embed && (
+              <PostEmbed content={post.post.embed} depth={0} />
+            )}
+            <div className="mt-2">
+              <PostActions post={post.post} />
+            </div>
           </div>
         </div>
+      </article>
+      <div className="flex justify-center m-2">
+        <ReactionButtons
+          uri={post.post.uri}
+          cid={post.post.cid}
+          reactions={post.reactions ?? []}
+        />
       </div>
-    </article>
+    </div>
   );
 }

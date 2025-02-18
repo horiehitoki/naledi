@@ -7,6 +7,7 @@ import Composer from "@/components/actions/composer/Composer";
 import { getProfile } from "@/lib/api/bsky/actor";
 import { getSessionFromServer } from "@/lib/api/auth/session";
 import { AgentProvider } from "../providers/agent";
+import { EmojiPickerProvider } from "../providers/BluemojiPickerProvider";
 import BluemojiPicker from "@/components/actions/bluemoji/BluemojiPicker";
 
 export const metadata: Metadata = {
@@ -24,17 +25,21 @@ export default async function DashboardLayout({
 
   return (
     <AgentProvider session={session}>
-      <main className="bg-skin-base flex justify-center gap-6 pb-20 md:mt-6 lg:gap-16 animate-fade">
-        {profile && <Composer author={profile} />}
-        <SidePanel />
-        <section className="w-full md:max-w-xl">
-          <BluemojiPicker />
-          {profile && <TopBar profile={profile} />}
-          {children}
-        </section>
-        {profile && <Aside avatar={profile?.avatar} handle={profile?.handle} />}
-        <AppBar />
-      </main>
+      <EmojiPickerProvider>
+        <BluemojiPicker />
+        <main className="bg-skin-base flex justify-center gap-6 pb-20 md:mt-6 lg:gap-16 animate-fade">
+          {profile && <Composer author={profile} />}
+          <SidePanel />
+          <section className="w-full md:max-w-xl">
+            {profile && <TopBar profile={profile} />}
+            {children}
+          </section>
+          {profile && (
+            <Aside avatar={profile?.avatar} handle={profile?.handle} />
+          )}
+          <AppBar />
+        </main>
+      </EmojiPickerProvider>
     </AgentProvider>
   );
 }

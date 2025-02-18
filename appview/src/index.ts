@@ -8,10 +8,11 @@ import { Emoji, Reaction } from "@prisma/client";
 import {
   BlueMarilStellarGetReactions,
   BlueMarilStellarGetActorReactions,
+  BlueMarilStellarGetEmojis,
 } from "./generated/api/index.js";
 import { Agent } from "@atproto/api";
 import { cors } from "hono/cors";
-import { BlueMarilStellarGetEmojis } from "./generated/api/index.js";
+import { TID } from "@atproto/common";
 
 type ReactionWithEmoji = Reaction & { emoji: Emoji };
 
@@ -261,6 +262,12 @@ app.get("/xrpc/" + ids.BlueMarilStellarGetEmojis, async (c) => {
       status: 500,
     });
   }
+});
+
+app.get("/tid/", async (c) => {
+  const tid = TID.nextStr();
+
+  return c.text(tid);
 });
 
 const port = 3000;
