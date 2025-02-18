@@ -5,87 +5,25 @@ import {
   TooltipTrigger,
 } from "@radix-ui/react-tooltip";
 import { Reaction } from "../../../../types/atmosphere/types/blue/maril/stellar/getReactions";
-import { BlueMojiCollectionItem } from "../../../../types/atmosphere";
 import Image from "next/image";
 import { FaSmile } from "react-icons/fa";
 import { useEmojiPicker } from "@/app/providers/BluemojiPickerProvider";
-import { Dispatch, SetStateAction, useRef, useState } from "react";
+import { useRef } from "react";
 import { useAgent } from "@/app/providers/agent";
-import { reaction, removeReaction } from "@/lib/api/stellar";
-import { useDebouncedCallback } from "use-debounce";
+import useReaction from "@/lib/hooks/useReaction";
 
 export default function ReactionButtons({
   uri,
   cid,
-  reactions,
-  setReactions,
 }: {
   uri: string;
   cid: string;
-  reactions: Reaction[];
-  setReactions: Dispatch<SetStateAction<Reaction[]>>;
 }) {
   const { toggleOpen } = useEmojiPicker();
   const ref = useRef<HTMLButtonElement>(null);
   const agent = useAgent();
 
-  const groupedReactions = new Map();
-  reactions.forEach((r: Reaction) => {
-    const key = r.emojiRef!.rkey + ":" + r.emojiRef!.repo;
-    if (!groupedReactions.has(key)) {
-      groupedReactions.set(key, { count: 0, group: [] });
-    }
-    groupedReactions.get(key).count++;
-    groupedReactions.get(key).group.push(r);
-  });
-
-  const handleReaction = useDebouncedCallback(
-    async (
-      myReactions: Reaction[],
-      rkey: string,
-      repo: string,
-      targetEmoji: BlueMojiCollectionItem.ItemView
-    ) => {
-      if (myReactions.length > 0) {
-        await removeReaction(agent, myReactions[0].rkey);
-
-        setReactions((prev) =>
-          prev.filter((reaction) => reaction.rkey !== myReactions[0].rkey)
-        );
-      } else {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_STELLAR_APPVIEW_URL}/tid/`
-        );
-
-        const tid = await res.text();
-
-        const actor = await agent.getProfile({
-          actor: agent.assertDid,
-        });
-
-        setReactions((prev) => [
-          ...prev,
-          {
-            rkey: tid,
-            subject: {
-              uri,
-              cid,
-            },
-            createdAt: new Date().toISOString(),
-            emojiRef: {
-              rkey,
-              repo,
-            },
-            emoji: targetEmoji,
-            actor: actor.data,
-          },
-        ]);
-
-        await reaction(agent, { uri, cid }, { rkey, repo }, tid);
-      }
-    },
-    500
-  );
+  const { groupedReactions, handleReaction } = useReaction({ uri, cid });
 
   return (
     <div>
@@ -103,7 +41,6 @@ export default function ReactionButtons({
                     <button
                       onClick={() =>
                         handleReaction(
-                          myReactions,
                           group[0].emojiRef.rkey,
                           group[0].emojiRef.repo,
                           group[0].emoji
@@ -124,6 +61,7 @@ export default function ReactionButtons({
                       <span>{count}</span>
                     </button>
                   </TooltipTrigger>
+
                   <TooltipContent className="flex flex-col gap-1 bg-skin-base z-[60] p-3 border border-skin-base rounded-xl max-w-xs shadow-lg m-3">
                     <div className="text-center text-sm">
                       {group[0].emoji.name}

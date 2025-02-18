@@ -8,9 +8,15 @@ import Image from "next/image";
 import * as Tabs from "@radix-ui/react-tabs";
 import { useAgent } from "@/app/providers/agent";
 import { useEmojiPicker } from "@/app/providers/BluemojiPickerProvider";
+import useReaction from "@/lib/hooks/useReaction";
 
 export default function BluemojiPicker() {
   const { isOpen, position, setIsOpen, target } = useEmojiPicker();
+
+  const { handleReaction } = useReaction({
+    uri: target.uri,
+    cid: target.cid,
+  });
 
   const pickerRef = useRef<HTMLDivElement>(null);
   const agent = useAgent();
@@ -63,7 +69,7 @@ export default function BluemojiPicker() {
         <div className="w-[348px] border rounded-lg shadow-lg overflow-hidden bg-skin-base dark:text-white text-black">
           <div className="p-4 space-y-4">
             {isLoading ? (
-              <p className="py-6 text-center">読み込み中...</p>
+              <p className="py-6 text-center">Loading...</p>
             ) : emojis.length > 0 ? (
               <div className="w-full">
                 <Tabs.Root defaultValue="local" className="w-full">
@@ -84,6 +90,13 @@ export default function BluemojiPicker() {
                             key={emoji.ref.rkey}
                             className="flex flex-col items-center p-1 hover:bg-muted rounded-md transition-colors"
                             title={`:${emoji.rkey}:`}
+                            onClick={() =>
+                              handleReaction(
+                                emoji.ref.rkey,
+                                emoji.ref.repo,
+                                emoji.record
+                              )
+                            }
                           >
                             <div className="w-8 h-8 flex items-center justify-center">
                               <Image
@@ -107,7 +120,13 @@ export default function BluemojiPicker() {
                           key={emoji.ref.rkey}
                           className="flex flex-col items-center p-1 hover:bg-muted rounded-md transition-colors"
                           title={`:${emoji.ref.rkey}:`}
-                          onClick={() => {}}
+                          onClick={() =>
+                            handleReaction(
+                              emoji.ref.rkey,
+                              emoji.ref.repo,
+                              emoji.record
+                            )
+                          }
                         >
                           <div className="w-8 h-8 flex items-center justify-center">
                             <Image
@@ -136,7 +155,7 @@ export default function BluemojiPicker() {
                 disabled={isFetchingNextPage}
                 className="w-full py-2 text-center text-sm text-blue-500 hover:text-blue-700 disabled:text-gray-400"
               >
-                {isFetchingNextPage ? "読み込み中..." : "もっと見る"}
+                {isFetchingNextPage ? "Loading..." : "Load more"}
               </button>
             )}
           </div>

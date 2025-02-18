@@ -5,7 +5,6 @@ import PostActions from "@/components/dataDisplay/postActions/PostActions";
 import PostEmbed from "@/components/dataDisplay/postEmbed/PostEmbed";
 import PostText from "@/components/dataDisplay/postText/postText";
 import Reason from "@/components/dataDisplay/reason/Reason";
-import { AppBskyFeedDefs } from "@atproto/api";
 import {
   ContentFilterResult,
   FeedViewPostWithReaction,
@@ -16,12 +15,12 @@ import Threadline from "@/components/dataDisplay/threadLine/ThreadLine";
 import { getPostId } from "@/lib/utils/link";
 import { getRelativeTime } from "@/lib/utils/time";
 import { getPostFilter } from "@/lib/utils/feed";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ProfileHoverCard from "../profileHoverCard/ProfileHoverCard";
 import NotFoundEmbed from "@/components/dataDisplay/postEmbed/NotFoundEmbed";
 import ReactionButtons from "@/components/dataDisplay/postActions/ReactionButtons";
-import { Reaction } from "../../../../types/atmosphere/types/blue/maril/stellar/getReactions";
+import { useSetReactionState } from "@/state/reactions";
 
 interface Props {
   post: FeedViewPostWithReaction;
@@ -40,7 +39,13 @@ export default function FeedPost(props: Props) {
   const notFound = post.post.viewer === undefined;
   const isAuthorMuted = !notFound && post.post.author?.viewer?.muted;
   const [showPost, setShowPost] = useState(!isAuthorMuted);
-  const [reactions, setReactions] = useState<Reaction[]>(post.reactions);
+  const setReactions = useSetReactionState(post.post.cid);
+
+  setReactions({
+    uri: post.post.uri,
+    cid: post.post.cid,
+    reactions: post.reactions,
+  });
 
   if (notFound) {
     return (
@@ -151,12 +156,7 @@ export default function FeedPost(props: Props) {
         </div>
       </article>
       <div className="flex justify-center m-2">
-        <ReactionButtons
-          uri={post.post.uri}
-          cid={post.post.cid}
-          reactions={reactions ?? []}
-          setReactions={setReactions}
-        />
+        <ReactionButtons uri={post.post.uri} cid={post.post.cid} />
       </div>
     </div>
   );
