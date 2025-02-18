@@ -43,49 +43,51 @@ async function updateReaction(
       BlueMarilStellarReaction.isRecord(record) &&
       BlueMarilStellarReaction.validateRecord(record)
     ) {
-      //もしAppViewに追加されていない絵文字がリアクションされたら追加する
-      const targetEmoji = await prisma.emoji.findMany({
-        where: { rkey: record.emoji.rkey, repo: record.emoji.repo },
-      });
+      await prisma.$transaction(async (tx) => {
+        //もしAppViewに追加されていない絵文字がリアクションされたら追加する
+        const targetEmoji = await tx.emoji.findMany({
+          where: { rkey: record.emoji.rkey, repo: record.emoji.repo },
+        });
 
-      if (targetEmoji.length <= 0) {
-        console.log(`New Emoji: ${record.emoji.rkey}`);
+        if (targetEmoji.length <= 0) {
+          console.log(`New Emoji: ${record.emoji.rkey}`);
 
-        const emoji = await getEmojiFromPDS(
-          record.emoji.rkey,
-          record.emoji.repo
-        );
+          const emoji = await getEmojiFromPDS(
+            record.emoji.rkey,
+            record.emoji.repo
+          );
 
-        await prisma.emoji.create({
-          data: {
-            record: JSON.stringify(emoji),
-            rkey: record.emoji.rkey,
-            repo: record.emoji.repo,
+          await tx.emoji.create({
+            data: {
+              record: JSON.stringify(emoji),
+              rkey: record.emoji.rkey,
+              repo: record.emoji.repo,
+            },
+          });
+        }
+
+        await tx.reaction.upsert({
+          where: {
+            rkey: event.commit.rkey,
+          },
+          update: {
+            post_uri: record.subject.uri,
+            post_cid: record.subject.cid,
+            authorDid: event.did,
+            emoji_repo: record.emoji.repo,
+            emoji_rkey: record.emoji.rkey,
+            record: JSON.stringify(record),
+          },
+          create: {
+            rkey: event.commit.rkey,
+            post_uri: record.subject.uri,
+            post_cid: record.subject.cid,
+            authorDid: event.did,
+            emoji_repo: record.emoji.repo,
+            emoji_rkey: record.emoji.rkey,
+            record: JSON.stringify(record),
           },
         });
-      }
-
-      await prisma.reaction.upsert({
-        where: {
-          rkey: event.commit.rkey,
-        },
-        update: {
-          post_uri: record.subject.uri,
-          post_cid: record.subject.cid,
-          authorDid: event.did,
-          emoji_repo: record.emoji.repo,
-          emoji_rkey: record.emoji.rkey,
-          record: JSON.stringify(record),
-        },
-        create: {
-          rkey: event.commit.rkey,
-          post_uri: record.subject.uri,
-          post_cid: record.subject.cid,
-          authorDid: event.did,
-          emoji_repo: record.emoji.repo,
-          emoji_rkey: record.emoji.rkey,
-          record: JSON.stringify(record),
-        },
       });
     }
   } catch (e) {
@@ -145,9 +147,15 @@ jetstream.onDelete("blue.maril.stellar.reaction", async (event) => {
   console.log(`Deleted Reaction: ${event.commit.rkey}`);
 
   try {
-    await prisma.reaction.delete({
+    const target = await prisma.reaction.findUnique({
       where: { rkey: event.commit.rkey },
     });
+
+    if (target) {
+      await prisma.reaction.delete({
+        where: { rkey: event.commit.rkey },
+      });
+    }
   } catch (e) {
     console.log(e);
   }
@@ -169,7 +177,7 @@ jetstream.onDelete("blue.moji.collection.item", async (event) => {
   console.log(`Deleted Emoji: ${event.commit.rkey}`);
 
   try {
-    await prisma.emoji.delete({
+    const target = await prisma.emoji.findUnique({
       where: {
         rkey_repo: {
           rkey: event.commit.rkey,
@@ -177,6 +185,17 @@ jetstream.onDelete("blue.moji.collection.item", async (event) => {
         },
       },
     });
+
+    if (target) {
+      await prisma.emoji.delete({
+        where: {
+          rkey_repo: {
+            rkey: event.commit.rkey,
+            repo: event.did,
+          },
+        },
+      });
+    }
   } catch (e) {
     console.log(e);
   }

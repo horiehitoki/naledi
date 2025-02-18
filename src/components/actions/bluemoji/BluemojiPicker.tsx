@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { getEmojis, reaction } from "@/lib/api/stellar";
+import { getEmojis } from "@/lib/api/stellar";
 import { BlueMarilStellarGetEmojis } from "../../../../types/atmosphere";
 import Image from "next/image";
 import * as Tabs from "@radix-ui/react-tabs";
@@ -60,7 +60,7 @@ export default function BluemojiPicker() {
           zIndex: 50,
         }}
       >
-        <div className="w-[348px] border rounded-lg shadow-lg overflow-hidden bg-skin-base">
+        <div className="w-[348px] border rounded-lg shadow-lg overflow-hidden bg-skin-base dark:text-white text-black">
           <div className="p-4 space-y-4">
             {isLoading ? (
               <p className="py-6 text-center">読み込み中...</p>
@@ -107,14 +107,7 @@ export default function BluemojiPicker() {
                           key={emoji.ref.rkey}
                           className="flex flex-col items-center p-1 hover:bg-muted rounded-md transition-colors"
                           title={`:${emoji.ref.rkey}:`}
-                          onClick={() =>
-                            reaction(
-                              agent,
-                              target,
-                              emoji.ref.rkey,
-                              emoji.ref.repo
-                            )
-                          }
+                          onClick={() => {}}
                         >
                           <div className="w-8 h-8 flex items-center justify-center">
                             <Image

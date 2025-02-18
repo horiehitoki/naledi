@@ -65,15 +65,15 @@ export async function getEmojis(limit: number, cursor?: string | null) {
 export async function reaction(
   agent: AtpAgent,
   target: { uri: string; cid: string },
-  rkey: string,
-  repo: string
+  subject: { rkey: string; repo: string },
+  tid: string
 ) {
   const record: BlueMarilStellarReaction.Record = {
     subject: {
       uri: target.uri,
       cid: target.cid,
     },
-    emoji: { rkey, repo },
+    emoji: subject,
   };
 
   if (
@@ -81,12 +81,6 @@ export async function reaction(
     !BlueMarilStellarReaction.validateRecord(record)
   )
     return new Response(null, { status: 400 });
-
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_STELLAR_APPVIEW_URL}/tid/`
-  );
-
-  const tid = await res.text();
 
   if (tid) {
     //リアクションレコードを作成

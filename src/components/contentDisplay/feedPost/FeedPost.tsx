@@ -16,11 +16,12 @@ import Threadline from "@/components/dataDisplay/threadLine/ThreadLine";
 import { getPostId } from "@/lib/utils/link";
 import { getRelativeTime } from "@/lib/utils/time";
 import { getPostFilter } from "@/lib/utils/feed";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import ProfileHoverCard from "../profileHoverCard/ProfileHoverCard";
 import NotFoundEmbed from "@/components/dataDisplay/postEmbed/NotFoundEmbed";
 import ReactionButtons from "@/components/dataDisplay/postActions/ReactionButtons";
+import { Reaction } from "../../../../types/atmosphere/types/blue/maril/stellar/getReactions";
 
 interface Props {
   post: FeedViewPostWithReaction;
@@ -39,6 +40,7 @@ export default function FeedPost(props: Props) {
   const notFound = post.post.viewer === undefined;
   const isAuthorMuted = !notFound && post.post.author?.viewer?.muted;
   const [showPost, setShowPost] = useState(!isAuthorMuted);
+  const [reactions, setReactions] = useState<Reaction[]>(post.reactions);
 
   if (notFound) {
     return (
@@ -152,7 +154,8 @@ export default function FeedPost(props: Props) {
         <ReactionButtons
           uri={post.post.uri}
           cid={post.post.cid}
-          reactions={post.reactions ?? []}
+          reactions={reactions ?? []}
+          setReactions={setReactions}
         />
       </div>
     </div>
