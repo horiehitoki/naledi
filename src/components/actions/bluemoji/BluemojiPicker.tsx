@@ -34,7 +34,7 @@ const EmojiGrid = ({ emojis, onEmojiSelect }: EmojiGridProps) => (
             className="rounded-sm"
           />
         </div>
-        <div className="text-[10px] text-gray-500 dark:text-gray-400 truncate w-full text-center mt-0.5">
+        <div className="text-[10px] truncate w-full text-center mt-0.5">
           {emoji.ref.rkey}
         </div>
       </button>
@@ -50,7 +50,7 @@ const SearchInput = ({
   onChange: (value: string) => void;
 }) => (
   <div className="relative mb-2">
-    <div className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400">
+    <div className="absolute left-2 top-1/2 -translate-y-1/2">
       <BiSearch className="w-4 h-4" />
     </div>
     <input
@@ -58,7 +58,7 @@ const SearchInput = ({
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder="絵文字を検索..."
-      className="w-full pl-8 pr-4 py-1.5 text-sm rounded-md border border-transparent focus:border-blue-500 dark:focus:border-blue-400 outline-none transition-colors"
+      className="w-full pl-8 pr-4 py-1.5 text-sm rounded-md border border-transparent focus:border-blue-500 dark:focus:border-blue-400 outline-none transition-colors text-skin-base bg-skin-base"
     />
   </div>
 );
@@ -142,11 +142,7 @@ export default function BluemojiPicker() {
     }
 
     if (emojis.length === 0) {
-      return (
-        <div className="py-8 text-center text-gray-500 dark:text-gray-400">
-          Bluemojiが見つかりません
-        </div>
-      );
+      return <div className="py-8 text-center">Bluemojiが見つかりません</div>;
     }
 
     const localEmojis = filteredEmojis.filter(
@@ -154,20 +150,20 @@ export default function BluemojiPicker() {
     );
 
     return (
-      <div className="w-full">
+      <div className="w-full text-skin-base">
         <SearchInput value={searchQuery} onChange={setSearchQuery} />
 
         <Tabs.Root defaultValue="local">
           <Tabs.TabsList className="w-full grid grid-cols-2 mb-2">
             <Tabs.TabsTrigger
               value="local"
-              className="px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 border-b-2 border-transparent data-[state=active]:border-blue-600 dark:data-[state=active]:border-blue-400 transition-colors"
+              className="px-4 py-2 text-sm font-medium border-b-2 border-transparent data-[state=active]:border-blue-600 dark:data-[state=active]:border-blue-400 transition-colors"
             >
               マイ絵文字{localEmojis.length > 0 && ` (${localEmojis.length})`}
             </Tabs.TabsTrigger>
             <Tabs.TabsTrigger
               value="global"
-              className="px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 border-b-2 border-transparent data-[state=active]:border-blue-600 dark:data-[state=active]:border-blue-400 transition-colors"
+              className="px-4 py-2 text-sm font-medium border-b-2 border-transparent data-[state=active]:border-blue-600 dark:data-[state=active]:border-blue-400 transition-colors"
             >
               すべての絵文字
               {filteredEmojis.length > 0 && ` (${filteredEmojis.length})`}
@@ -180,7 +176,7 @@ export default function BluemojiPicker() {
                 onEmojiSelect={handleEmojiSelect}
               />
             ) : (
-              <div className="py-8 text-center text-gray-500 dark:text-gray-400">
+              <div className="py-8 text-center">
                 {searchQuery
                   ? "検索結果が見つかりません"
                   : "マイ絵文字がありません"}
@@ -194,9 +190,7 @@ export default function BluemojiPicker() {
                 onEmojiSelect={handleEmojiSelect}
               />
             ) : (
-              <div className="py-8 text-center text-gray-500 dark:text-gray-400">
-                検索結果が見つかりません
-              </div>
+              <div className="py-8 text-center">検索結果が見つかりません</div>
             )}
           </Tabs.TabsContent>
         </Tabs.Root>

@@ -71,7 +71,7 @@ export default function BluemojiContainer() {
   }
 
   return (
-    <div className="max-w-md mx-auto">
+    <div className="max-w-md mx-auto text-skin-base">
       <form className="p-6 space-y-6 rounded-lg shadow-md" onSubmit={onSubmit}>
         <h2 className="text-2xl text-center font-bold text-blue-600">
           Upload Bluemoji
@@ -86,7 +86,7 @@ export default function BluemojiContainer() {
             name="name"
             required
             disabled={isLoading}
-            className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-skin-base bg-skin-base"
           />
         </div>
 
@@ -99,7 +99,7 @@ export default function BluemojiContainer() {
             name="alt"
             required
             disabled={isLoading}
-            className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-skin-base bg-skin-base"
           />
         </div>
 

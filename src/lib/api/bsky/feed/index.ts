@@ -164,8 +164,16 @@ export const getUserReplyPosts = async (
     cursor: cursor,
   });
 
+  const processedFeed = await feedWithReaction(posts.data.feed);
+
   if (!posts.success) throw new Error("Could not fetch replies");
-  return posts;
+  return {
+    ...posts,
+    data: {
+      cursor: posts.data.cursor,
+      feed: processedFeed,
+    },
+  };
 };
 
 export const getUserMediaPosts = async (
@@ -178,9 +186,16 @@ export const getUserMediaPosts = async (
     filter: "posts_with_media",
     cursor: cursor,
   });
+  const processedFeed = await feedWithReaction(posts.data.feed);
 
   if (!posts.success) throw new Error("Could not fetch media posts");
-  return posts;
+  return {
+    ...posts,
+    data: {
+      cursor: posts.data.cursor,
+      feed: processedFeed,
+    },
+  };
 };
 
 export const getUserLikes = async (
@@ -193,9 +208,16 @@ export const getUserLikes = async (
     actor: handle,
     cursor: cursor,
   });
+  const processedFeed = await feedWithReaction(likes.data.feed);
 
   if (!likes.success) throw new Error("Could not fetch likes");
-  return likes;
+  return {
+    ...likes,
+    data: {
+      cursor: likes.data.cursor,
+      feed: processedFeed,
+    },
+  };
 };
 
 export const likePost = async (agent: Agent, uri: string, cid: string) => {

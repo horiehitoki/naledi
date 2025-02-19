@@ -15,20 +15,28 @@ import { getThreadPostFilter } from "@/lib/utils/feed";
 import ProfileHoverCard from "../profileHoverCard/ProfileHoverCard";
 import { Reaction } from "../../../../types/atmosphere/types/blue/maril/stellar/getReactions";
 import ReactionButtons from "@/components/dataDisplay/postActions/ReactionButtons";
+import { useSetReactionState } from "@/state/reactions";
 
 interface Props {
   post: AppBskyFeedDefs.PostView;
-  reactions: Reaction[];
   filter: ContentFilterResult;
+  reactions: Reaction[];
 }
 
 export default function ThreadPost(props: Props) {
-  const { post, filter } = props;
+  const { post, filter, reactions } = props;
   const { author } = post;
   const { showToggle, shouldHide, message } = getThreadPostFilter(post, filter);
   const [hidden, setHidden] = useState(shouldHide);
   const router = useRouter();
   const threadPostRef = useRef<HTMLElement | null>(null);
+  const setReactions = useSetReactionState(post.cid);
+
+  setReactions({
+    uri: post.uri,
+    cid: post.cid,
+    reactions: reactions,
+  });
 
   useEffect(() => {
     if (!threadPostRef.current) return;
@@ -90,7 +98,7 @@ export default function ThreadPost(props: Props) {
         </div>
       </div>
       <PostActions post={post} mode="thread" />
-      <ReactionButtons reactions={props.reactions ?? []} />
+      <ReactionButtons uri={post.uri} cid={post.cid} />
     </article>
   );
 }

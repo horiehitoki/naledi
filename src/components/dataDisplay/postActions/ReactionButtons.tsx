@@ -62,7 +62,7 @@ export default function ReactionButtons({
                     </button>
                   </TooltipTrigger>
 
-                  <TooltipContent className="flex flex-col gap-1 bg-skin-base z-[60] p-3 border border-skin-base rounded-xl max-w-xs shadow-lg m-3">
+                  <TooltipContent className="flex flex-col gap-1 bg-skin-base z-[60] p-3 border border-skin-base rounded-xl max-w-xs shadow-lg m-3 text-skin-base">
                     <div className="text-center text-sm">
                       {group[0].emoji.name}
                     </div>
@@ -93,7 +93,7 @@ export default function ReactionButtons({
             className="rounded-full p-2"
             ref={ref}
           >
-            <FaSmile className="w-4 h-4" />
+            <FaSmile className="w-4 h-4 text-skin-base" />
           </button>
         </div>
       </TooltipProvider>
