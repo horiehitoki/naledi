@@ -28,7 +28,7 @@ export default function ReactionButtons({
   return (
     <div>
       <TooltipProvider>
-        <div className="flex flex-wrap gap-2 dark:text-white text-black">
+        <div className="flex flex-wrap gap-2">
           {[...groupedReactions.values()].map(({ count, group }) => {
             const myReactions = group.filter(
               (r: Reaction) => r.actor.did === agent.did
@@ -49,7 +49,7 @@ export default function ReactionButtons({
                       className={`flex items-center gap-1 px-2 py-1 rounded-lg text-sm ${
                         myReactions.length > 0
                           ? "bg-purple-700 text-white"
-                          : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                          : "bg-skin-base text-gray-300 hover:bg-gray-700"
                       }`}
                     >
                       <Image
@@ -90,10 +90,10 @@ export default function ReactionButtons({
 
           <button
             onClick={() => toggleOpen(ref.current!, { uri, cid })}
-            ref={ref}
             className="rounded-full p-2"
+            ref={ref}
           >
-            <FaSmile className="w-4 h-4 dark:text-white text-black" />
+            <FaSmile className="w-4 h-4" />
           </button>
         </div>
       </TooltipProvider>

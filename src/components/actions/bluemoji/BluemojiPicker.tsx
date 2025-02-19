@@ -9,17 +9,85 @@ import * as Tabs from "@radix-ui/react-tabs";
 import { useAgent } from "@/app/providers/agent";
 import { useEmojiPicker } from "@/app/providers/BluemojiPickerProvider";
 import useReaction from "@/lib/hooks/useReaction";
+import { BiSearch } from "react-icons/bi";
+
+type EmojiGridProps = {
+  emojis: BlueMarilStellarGetEmojis.ItemView[];
+  onEmojiSelect: (emoji: BlueMarilStellarGetEmojis.ItemView) => void;
+};
+
+const EmojiGrid = ({ emojis, onEmojiSelect }: EmojiGridProps) => (
+  <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-7 gap-0.5 max-h-[280px] overflow-y-auto px-1">
+    {emojis.map((emoji) => (
+      <button
+        key={emoji.ref.rkey}
+        className="group flex flex-col items-center p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-all"
+        title={`:${emoji.ref.rkey}:`}
+        onClick={() => onEmojiSelect(emoji)}
+      >
+        <div className="w-8 h-8 flex items-center justify-center group-hover:scale-110 transition-transform">
+          <Image
+            src={`https://cdn.bsky.app/img/feed_thumbnail/plain/${emoji.ref.repo}/${emoji.record.formats.png_128!.ref.$link}@png`}
+            alt={emoji.ref.rkey}
+            width={32}
+            height={32}
+            className="rounded-sm"
+          />
+        </div>
+        <div className="text-[10px] text-gray-500 dark:text-gray-400 truncate w-full text-center mt-0.5">
+          {emoji.ref.rkey}
+        </div>
+      </button>
+    ))}
+  </div>
+);
+
+const SearchInput = ({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+}) => (
+  <div className="relative mb-2">
+    <div className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400">
+      <BiSearch className="w-4 h-4" />
+    </div>
+    <input
+      type="text"
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder="絵文字を検索..."
+      className="w-full pl-8 pr-4 py-1.5 text-sm rounded-md border border-transparent focus:border-blue-500 dark:focus:border-blue-400 outline-none transition-colors"
+    />
+  </div>
+);
+
+const LoadMoreButton = ({
+  onClick,
+  isLoading,
+}: {
+  onClick: () => void;
+  isLoading: boolean;
+}) => (
+  <button
+    onClick={onClick}
+    disabled={isLoading}
+    className="w-full py-2 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 disabled:text-gray-400 dark:disabled:text-gray-600 disabled:cursor-not-allowed transition-colors"
+  >
+    {isLoading ? "読み込み中..." : "もっと見る"}
+  </button>
+);
 
 export default function BluemojiPicker() {
   const { isOpen, position, setIsOpen, target } = useEmojiPicker();
-
   const { handleReaction } = useReaction({
     uri: target.uri,
     cid: target.cid,
   });
-
   const pickerRef = useRef<HTMLDivElement>(null);
   const agent = useAgent();
+  const [searchQuery, setSearchQuery] = useState("");
 
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
@@ -28,14 +96,16 @@ export default function BluemojiPicker() {
         return await getEmojis(20, pageParam);
       },
       initialPageParam: null,
-      getNextPageParam: (lastPage: {
-        data: BlueMarilStellarGetEmojis.OutputSchema;
-      }) => lastPage.data.cursor,
+      getNextPageParam: (lastPage) => lastPage.data.cursor,
     });
 
   const emojis = data
     ? data.pages.flatMap((page) => page.data.items ?? [])
     : [];
+
+  const filteredEmojis = emojis.filter((emoji) =>
+    emoji.ref.rkey.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   useEffect(() => {
     if (!isOpen) return;
@@ -55,111 +125,108 @@ export default function BluemojiPicker() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen, setIsOpen]);
 
-  if (isOpen)
-    return (
-      <div
-        ref={pickerRef}
-        style={{
-          position: "absolute",
-          top: `${position.top}px`,
-          left: `${position.left}px`,
-          zIndex: 50,
-        }}
-      >
-        <div className="w-[348px] border rounded-lg shadow-lg overflow-hidden bg-skin-base dark:text-white text-black">
-          <div className="p-4 space-y-4">
-            {isLoading ? (
-              <p className="py-6 text-center">Loading...</p>
-            ) : emojis.length > 0 ? (
-              <div className="w-full">
-                <Tabs.Root defaultValue="local" className="w-full">
-                  <Tabs.TabsList className="w-full grid grid-cols-2">
-                    <Tabs.TabsTrigger value="local" className="w-full">
-                      My Bluemoji
-                    </Tabs.TabsTrigger>
-                    <Tabs.TabsTrigger value="global" className="w-full">
-                      Global Bluemoji
-                    </Tabs.TabsTrigger>
-                  </Tabs.TabsList>
-                  <Tabs.TabsContent value="local" className="mt-2">
-                    <div className="grid grid-cols-8 gap-1 max-h-[320px] overflow-y-auto p-1">
-                      {emojis
-                        .filter((emoji) => emoji.repo === agent.did)
-                        .map((emoji) => (
-                          <button
-                            key={emoji.ref.rkey}
-                            className="flex flex-col items-center p-1 hover:bg-muted rounded-md transition-colors"
-                            title={`:${emoji.rkey}:`}
-                            onClick={() =>
-                              handleReaction(
-                                emoji.ref.rkey,
-                                emoji.ref.repo,
-                                emoji.record
-                              )
-                            }
-                          >
-                            <div className="w-8 h-8 flex items-center justify-center">
-                              <Image
-                                src={`https://cdn.bsky.app/img/feed_thumbnail/plain/${emoji.record.did}/${emoji.record.formats.png_128!.ref.$link}@png`}
-                                alt={emoji.ref.rkey}
-                                width={32}
-                                height={32}
-                              />
-                            </div>
-                            <div className="text-[10px] text-muted-foreground truncate w-full text-center">
-                              {emoji.ref.rkey}
-                            </div>
-                          </button>
-                        ))}
-                    </div>
-                  </Tabs.TabsContent>
-                  <Tabs.TabsContent value="global" className="mt-2">
-                    <div className="grid grid-cols-8 gap-1 max-h-[320px] overflow-y-auto p-1">
-                      {emojis.map((emoji) => (
-                        <button
-                          key={emoji.ref.rkey}
-                          className="flex flex-col items-center p-1 hover:bg-muted rounded-md transition-colors"
-                          title={`:${emoji.ref.rkey}:`}
-                          onClick={() =>
-                            handleReaction(
-                              emoji.ref.rkey,
-                              emoji.ref.repo,
-                              emoji.record
-                            )
-                          }
-                        >
-                          <div className="w-8 h-8 flex items-center justify-center">
-                            <Image
-                              src={`https://cdn.bsky.app/img/feed_thumbnail/plain/${emoji.ref.repo}/${emoji.record.formats.png_128!.ref.$link}@png`}
-                              alt={emoji.ref.rkey}
-                              width={32}
-                              height={32}
-                            />
-                          </div>
-                          <div className="text-[10px] text-muted-foreground truncate w-full text-center">
-                            {emoji.ref.rkey}
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                  </Tabs.TabsContent>
-                </Tabs.Root>
-              </div>
-            ) : (
-              <p className="py-6 text-center">Bluemojiが見つかりません。</p>
-            )}
+  const handleEmojiSelect = (emoji: BlueMarilStellarGetEmojis.ItemView) => {
+    handleReaction(emoji.ref.rkey, emoji.ref.repo, emoji.record);
+    setIsOpen(false);
+  };
 
-            {hasNextPage && (
-              <button
-                onClick={() => fetchNextPage()}
-                disabled={isFetchingNextPage}
-                className="w-full py-2 text-center text-sm text-blue-500 hover:text-blue-700 disabled:text-gray-400"
-              >
-                {isFetchingNextPage ? "Loading..." : "Load more"}
-              </button>
-            )}
-          </div>
+  if (!isOpen) return null;
+
+  const renderContent = () => {
+    if (isLoading) {
+      return (
+        <div className="flex items-center justify-center py-8">
+          <div className="w-6 h-6 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin" />
         </div>
+      );
+    }
+
+    if (emojis.length === 0) {
+      return (
+        <div className="py-8 text-center text-gray-500 dark:text-gray-400">
+          Bluemojiが見つかりません
+        </div>
+      );
+    }
+
+    const localEmojis = filteredEmojis.filter(
+      (emoji) => emoji.ref.repo === agent.assertDid
+    );
+
+    return (
+      <div className="w-full">
+        <SearchInput value={searchQuery} onChange={setSearchQuery} />
+
+        <Tabs.Root defaultValue="local">
+          <Tabs.TabsList className="w-full grid grid-cols-2 mb-2">
+            <Tabs.TabsTrigger
+              value="local"
+              className="px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 border-b-2 border-transparent data-[state=active]:border-blue-600 dark:data-[state=active]:border-blue-400 transition-colors"
+            >
+              マイ絵文字{localEmojis.length > 0 && ` (${localEmojis.length})`}
+            </Tabs.TabsTrigger>
+            <Tabs.TabsTrigger
+              value="global"
+              className="px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 border-b-2 border-transparent data-[state=active]:border-blue-600 dark:data-[state=active]:border-blue-400 transition-colors"
+            >
+              すべての絵文字
+              {filteredEmojis.length > 0 && ` (${filteredEmojis.length})`}
+            </Tabs.TabsTrigger>
+          </Tabs.TabsList>
+          <Tabs.TabsContent value="local">
+            {localEmojis.length > 0 ? (
+              <EmojiGrid
+                emojis={localEmojis}
+                onEmojiSelect={handleEmojiSelect}
+              />
+            ) : (
+              <div className="py-8 text-center text-gray-500 dark:text-gray-400">
+                {searchQuery
+                  ? "検索結果が見つかりません"
+                  : "マイ絵文字がありません"}
+              </div>
+            )}
+          </Tabs.TabsContent>
+          <Tabs.TabsContent value="global">
+            {filteredEmojis.length > 0 ? (
+              <EmojiGrid
+                emojis={filteredEmojis}
+                onEmojiSelect={handleEmojiSelect}
+              />
+            ) : (
+              <div className="py-8 text-center text-gray-500 dark:text-gray-400">
+                検索結果が見つかりません
+              </div>
+            )}
+          </Tabs.TabsContent>
+        </Tabs.Root>
+
+        {!searchQuery && hasNextPage && (
+          <div className="mt-2 pt-2 border-t dark:border-gray-700">
+            <LoadMoreButton
+              onClick={() => fetchNextPage()}
+              isLoading={isFetchingNextPage}
+            />
+          </div>
+        )}
       </div>
     );
+  };
+
+  return (
+    <div
+      ref={pickerRef}
+      style={{
+        position: "absolute",
+        top: `${position.top}px`,
+        left: `${position.left}px`,
+        zIndex: 50,
+      }}
+      className="w-[360px]"
+    >
+      <div className="w-full rounded-lg shadow-lg border border-gray-200 dark:border-gray-800 bg-skin-base">
+        <div className="p-3">{renderContent()}</div>
+      </div>
+    </div>
+  );
 }

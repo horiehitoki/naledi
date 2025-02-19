@@ -89,7 +89,7 @@ export default function useReaction({ uri, cid }: Props) {
         await reaction(agent, { uri, cid }, { rkey, repo }, tid);
       }
     },
-    500
+    300
   );
 
   return { reactions, groupedReactions, handleReaction };
