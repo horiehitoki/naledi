@@ -15,7 +15,8 @@
             "default": 50,
             "description": "The number of records to return."
           },
-          "cursor": { "type": "string" }
+          "cursor": { "type": "string" },
+          "did": { "type": "string", "format": "at-identifier" }
         }
       },
       "output": {

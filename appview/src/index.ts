@@ -212,6 +212,7 @@ app.get("xrpc" + ids.BlueMarilStellarGetActorReactions, async (c) => {
 app.get("/xrpc/" + ids.BlueMarilStellarGetEmojis, async (c) => {
   try {
     const cursor = getParams(c, "cursor");
+    const did = getParams(c, "did");
     const limit = parseInt(getParams(c, "limit") ?? "50");
 
     if (limit < 1 || limit > 100) {
@@ -225,7 +226,7 @@ app.get("/xrpc/" + ids.BlueMarilStellarGetEmojis, async (c) => {
 
     if (cursor) {
       emojis = await prisma.emoji.findMany({
-        where: {},
+        where: did ? { repo: did } : {},
         cursor: { id: cursor },
         take: limit + 1,
         skip: 1,
@@ -233,7 +234,7 @@ app.get("/xrpc/" + ids.BlueMarilStellarGetEmojis, async (c) => {
       });
     } else {
       emojis = await prisma.emoji.findMany({
-        where: {},
+        where: did ? { repo: did } : {},
         take: limit + 1,
         orderBy: { rkey: "desc" },
       });

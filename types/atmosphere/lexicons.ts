@@ -87,6 +87,10 @@ export const schemaDict = {
             cursor: {
               type: 'string',
             },
+            did: {
+              type: 'string',
+              format: 'at-identifier',
+            },
           },
         },
         output: {

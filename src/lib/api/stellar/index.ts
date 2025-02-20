@@ -46,10 +46,14 @@ export async function getActorReaction(
   }
 }
 
-export async function getEmojis(limit: number, cursor?: string | null) {
+export async function getEmojis(
+  limit: number,
+  cursor?: string | null,
+  did?: string | null
+) {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_STELLAR_APPVIEW_URL}/xrpc/blue.maril.stellar.getEmojis?limit=${limit}${cursor ? `&cursor=${cursor}` : ""}`
+      `${process.env.NEXT_PUBLIC_STELLAR_APPVIEW_URL}/xrpc/blue.maril.stellar.getEmojis?limit=${limit}${did ? `&did=${did}` : ""}${cursor ? `&cursor=${cursor}` : ""}`
     );
 
     const json = await res.json();

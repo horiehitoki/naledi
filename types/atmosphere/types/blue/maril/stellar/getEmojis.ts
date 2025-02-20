@@ -13,6 +13,7 @@ export interface QueryParams {
   /** The number of records to return. */
   limit?: number
   cursor?: string
+  did?: string
 }
 
 export type InputSchema = undefined
