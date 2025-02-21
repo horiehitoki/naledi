@@ -25,6 +25,7 @@ import * as BlueMojiPacksGetPack from './types/blue/moji/packs/getPack'
 import * as BlueMojiPacksGetActorPacks from './types/blue/moji/packs/getActorPacks'
 import * as BlueMojiPacksGetPacks from './types/blue/moji/packs/getPacks'
 import * as BlueMojiRichtextFacet from './types/blue/moji/richtext/facet'
+import * as AppBskyRichtextFacet from './types/app/bsky/richtext/facet'
 import * as ComAtprotoRepoStrongRef from './types/com/atproto/repo/strongRef'
 
 export * as BlueMarilStellarGetActorReactions from './types/blue/maril/stellar/getActorReactions'
@@ -48,18 +49,21 @@ export * as BlueMojiPacksGetPack from './types/blue/moji/packs/getPack'
 export * as BlueMojiPacksGetActorPacks from './types/blue/moji/packs/getActorPacks'
 export * as BlueMojiPacksGetPacks from './types/blue/moji/packs/getPacks'
 export * as BlueMojiRichtextFacet from './types/blue/moji/richtext/facet'
+export * as AppBskyRichtextFacet from './types/app/bsky/richtext/facet'
 export * as ComAtprotoRepoStrongRef from './types/com/atproto/repo/strongRef'
 
 export class AtpBaseClient extends XrpcClient {
   blue: BlueNS
   fyi: FyiNS
   com: ComNS
+  app: AppNS
 
   constructor(options: FetchHandler | FetchHandlerOptions) {
     super(options, schemas)
     this.blue = new BlueNS(this)
     this.fyi = new FyiNS(this)
     this.com = new ComNS(this)
+    this.app = new AppNS(this)
   }
 
   /** @deprecated use `this` instead */
@@ -786,6 +790,34 @@ export class ComAtprotoNS {
 }
 
 export class ComAtprotoRepoNS {
+  _client: XrpcClient
+
+  constructor(client: XrpcClient) {
+    this._client = client
+  }
+}
+
+export class AppNS {
+  _client: XrpcClient
+  bsky: AppBskyNS
+
+  constructor(client: XrpcClient) {
+    this._client = client
+    this.bsky = new AppBskyNS(client)
+  }
+}
+
+export class AppBskyNS {
+  _client: XrpcClient
+  richtext: AppBskyRichtextNS
+
+  constructor(client: XrpcClient) {
+    this._client = client
+    this.richtext = new AppBskyRichtextNS(client)
+  }
+}
+
+export class AppBskyRichtextNS {
   _client: XrpcClient
 
   constructor(client: XrpcClient) {

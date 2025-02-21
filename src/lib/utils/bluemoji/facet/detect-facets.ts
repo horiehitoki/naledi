@@ -10,19 +10,23 @@ export function detectFacets(text: any /*UnicodeString*/): Facet[] | undefined {
   {
     const re = BLUEMOJI_REGEX;
     while ((match = re.exec(text.utf16))) {
-      const start = text.utf16.indexOf(match[0], match.index) - 1;
+      const start =
+        match.index > 0
+          ? text.utf16.indexOf(match[0], match.index)
+          : match.index;
+
       facets.push({
         $type: "app.bsky.richtext.facet",
         index: {
           byteStart: text.utf16IndexToUtf8Index(start),
-          byteEnd: text.utf16IndexToUtf8Index(start + match[0].length + 1)
+          byteEnd: text.utf16IndexToUtf8Index(start + match[0].length + 1),
         },
         features: [
           {
             $type: "blue.moji.richtext.facet",
-            name: match[0]
-          }
-        ]
+            name: match[0],
+          },
+        ],
       });
     }
   }

@@ -108,23 +108,27 @@ export default function PostText(props: Props) {
     } else if (isBluemojiSegment(segment)) {
       const bluemoji = getBluemojiFeature(segment.facet);
       if (bluemoji) {
-        return (
-          <span
-            className="inline-flex items-center whitespace-break-spaces"
-            title={bluemoji.alt || bluemoji.name}
-          >
-            {bluemoji.formats.png_128 ? (
-              <Image
-                src={`https://cdn.bsky.app/img/feed_thumbnail/plain/${bluemoji.did}/${bluemoji.formats.png_128}@png`}
-                alt={bluemoji.name}
-                width={24}
-                height={24}
-              />
-            ) : (
-              <span>{segment.text}</span>
-            )}
-          </span>
-        );
+        content.push({
+          text: segment.text,
+          component: (
+            <span
+              className="inline-flex items-center translate-y-1.5 whitespace-break-spaces"
+              title={bluemoji.alt || bluemoji.name}
+              key={segment.text}
+            >
+              {bluemoji.formats.png_128 ? (
+                <Image
+                  src={`https://cdn.bsky.app/img/feed_thumbnail/plain/${bluemoji.did}/${bluemoji.formats.png_128}@png`}
+                  alt={bluemoji.name}
+                  width={24}
+                  height={24}
+                />
+              ) : (
+                <span>{segment.text}</span>
+              )}
+            </span>
+          ),
+        });
       }
     } else {
       content.push({

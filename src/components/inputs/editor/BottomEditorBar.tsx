@@ -13,6 +13,7 @@ import ThreadGatePicker from "./ThreadGatePicker";
 import { ThreadgateSetting } from "../../../../types/feed";
 import LinkPicker from "./LinkPicker";
 import TagPicker from "./TagPicker";
+import BluemojiAutoComplete from "./BluemojiAutoComplete";
 
 interface Props {
   editor: Editor;
@@ -64,7 +65,7 @@ export default function BottomEditorBar(props: Props) {
           ...files.slice(0, 4).map((file) =>
             Object.assign(file, {
               url: URL.createObjectURL(file),
-            }),
+            })
           ),
         ];
         onUpdateImages(updatedImages);
@@ -80,7 +81,9 @@ export default function BottomEditorBar(props: Props) {
       <div className="border-skin-base border-t">
         <div className="flex flex-wrap justify-between gap-5 mt-3">
           <div className="flex gap-3">
-            <EmojiPicker onEmojiSelect={editor.commands.insertContent} />
+            <BluemojiAutoComplete
+              onEmojiSelect={editor.commands.insertContent}
+            />
             <ImagePicker onShow={setShowDropzone} />
             <TagPicker tags={tags} onUpdateTags={onUpdateTags} />
             <AdultContentPicker

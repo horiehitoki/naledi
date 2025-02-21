@@ -1,6 +1,6 @@
 "use client";
 import { useAgent } from "@/app/providers/agent";
-import { uploadBluemoji } from "@/lib/api/bluemoji/upload/UploadBluemoji";
+import { uploadBluemoji } from "@/lib/utils/bluemoji/upload/UploadBluemoji";
 import { getEmojis } from "@/lib/api/stellar";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { FormEvent, useState } from "react";
@@ -9,6 +9,7 @@ import { RiUploadCloudFill } from "react-icons/ri";
 import Image from "next/image";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { BiTrash } from "react-icons/bi";
+import BluemojiForm from "@/components/forms/BluemojiForm";
 
 export default function BluemojiContainer() {
   const [isLoading, setIsLoading] = useState(false);
@@ -65,6 +66,8 @@ export default function BluemojiContainer() {
       });
 
       setIsLoading(false);
+
+      window.location.reload();
     } catch (e) {
       console.log(e);
 
@@ -106,128 +109,73 @@ export default function BluemojiContainer() {
     : [];
 
   return (
-    <div className="max-w-md mx-auto text-skin-base">
+    <div className="max-w-4xl mx-auto p-6 space-y-8">
+      <div className="rounded-xl border border-slate-200 dark:border-slate-700 p-8">
+        <h2 className="text-3xl font-bold text-center mb-8 text-blue-600">
+          Upload Bluemoji
+        </h2>
+
+        <BluemojiForm isLoading={isLoading} error={error} onSubmit={onSubmit} />
+      </div>
+
       {emojis.length > 0 && (
-        <div>
-          <h2 className="text-2xl text-center font-bold text-blue-600">
-            アップロード済みのBluemoji
+        <div className="rounded-xl border border-slate-200 dark:border-slate-700 p-8">
+          <h2 className="text-3xl font-bold text-center mb-8 text-blue-600">
+            Your Bluemoji
           </h2>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 p-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
             {emojis.map((emoji) => (
               <div
                 key={emoji.ref.rkey}
-                className="rounded-xl p-4 transition-all duration-200 hover:scale-105 hover:shadow-lg flex flex-col items-center space-y-3 border border-slate-200 dark:border-slate-700"
+                className="relative group rounded-xl p-4 transition-all duration-200 hover:scale-105 border border-slate-200 dark:border-slate-700"
               >
-                <div className="relative w-6 h-6 flex items-center justify-center">
-                  <Image
-                    src={`https://cdn.bsky.app/img/feed_thumbnail/plain/${emoji.ref.repo}/${emoji.record.formats.png_128.ref.$link}@png`}
-                    alt={emoji.record.name}
-                    width={48}
-                    height={48}
-                    className="object-contain"
-                  />
+                <div className="flex flex-col items-center space-y-3">
+                  <div className="relative w-12 h-12 flex items-center justify-center">
+                    <Image
+                      src={`https://cdn.bsky.app/img/feed_thumbnail/plain/${emoji.ref.repo}/${emoji.record.formats.png_128.ref.$link}@png`}
+                      alt={emoji.record.name}
+                      width={48}
+                      height={48}
+                      className="object-contain"
+                    />
+                  </div>
+
+                  <p className="text-sm font-medium text-skin-base">
+                    :{emoji.ref.rkey}:
+                  </p>
+
+                  <DropdownMenu.Root>
+                    <DropdownMenu.Trigger asChild>
+                      <button className="bg-red-500 hover:bg-red-600 w-8 h-8 rounded-full transition-colors">
+                        <BiTrash className="mx-auto text-white" />
+                      </button>
+                    </DropdownMenu.Trigger>
+
+                    <DropdownMenu.Portal>
+                      <DropdownMenu.Content
+                        className="bg-skin-base rounded-lg border border-slate-200 dark:border-slate-700 p-4"
+                        sideOffset={5}
+                      >
+                        <p className="text-sm text-skin-base mb-4">
+                          本当に削除しますか？
+                        </p>
+                        <button
+                          onClick={() => deleteBluemoji(emoji.ref.rkey)}
+                          className="w-full bg-red-500 hover:bg-red-600 text-white rounded-lg py-2 px-4 transition-colors flex items-center justify-center space-x-2"
+                        >
+                          <BiTrash />
+                          <span>削除する</span>
+                        </button>
+                      </DropdownMenu.Content>
+                    </DropdownMenu.Portal>
+                  </DropdownMenu.Root>
                 </div>
-
-                <p className="text-sm font-medium">:{emoji.ref.rkey}:</p>
-
-                <DropdownMenu.Root>
-                  <DropdownMenu.Trigger asChild>
-                    <button className="bg-red-500 w-6 h-6 rounded-md">
-                      <BiTrash className="mx-auto" />
-                    </button>
-                  </DropdownMenu.Trigger>
-
-                  <DropdownMenu.Portal>
-                    <DropdownMenu.Content
-                      className="DropdownMenuContent bg-skin-base border border-slate-200 dark:border-slate-700 rounded-md"
-                      sideOffset={5}
-                    >
-                      <DropdownMenu.Item className="DropdownMenuItem text-skin-base">
-                        <div className="p-4">
-                          本当に削除しますか?
-                          <button
-                            onClick={() => deleteBluemoji(emoji.ref.rkey)}
-                            className="bg-red-500 w-12 h-12 rounded-md flex items-center justify-center hover:bg-red-600 transition-colors mx-auto mt-4"
-                          >
-                            <BiTrash className="w-8 h-8" />
-                          </button>
-                        </div>
-                      </DropdownMenu.Item>
-                    </DropdownMenu.Content>
-                  </DropdownMenu.Portal>
-                </DropdownMenu.Root>
               </div>
             ))}
           </div>
         </div>
       )}
-
-      <form className="p-6 space-y-6 rounded-lg shadow-md" onSubmit={onSubmit}>
-        <h2 className="text-2xl text-center font-bold text-blue-600">
-          Upload Bluemoji
-        </h2>
-
-        <div className="space-y-2">
-          <label htmlFor="name" className="block font-medium">
-            Emoji name
-          </label>
-          <input
-            id="name"
-            name="name"
-            required
-            disabled={isLoading}
-            className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-skin-base bg-skin-base"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <label htmlFor="alt" className="block font-medium">
-            Alt
-          </label>
-          <input
-            id="alt"
-            name="alt"
-            required
-            disabled={isLoading}
-            className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-skin-base bg-skin-base"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <label htmlFor="file" className="block font-medium">
-            File
-          </label>
-          <input
-            id="file"
-            name="file"
-            type="file"
-            accept="image/png"
-            required
-            disabled={isLoading}
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="w-full py-3 px-4 rounded-md text-white font-medium bg-blue-600 hover:bg-blue-700 transition-colors flex items-center justify-center"
-          disabled={isLoading}
-        >
-          {isLoading && !error ? (
-            <>
-              <LoaderIcon className="mr-2 h-5 w-5 animate-spin" />
-              Uploading....
-            </>
-          ) : (
-            <>
-              <RiUploadCloudFill className="mr-2 h-5 w-5" />
-              Upload
-            </>
-          )}
-        </button>
-      </form>
-
-      <h1 className="text-red-500">{error && error}</h1>
     </div>
   );
 }

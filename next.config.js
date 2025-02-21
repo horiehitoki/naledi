@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  transpilePackages: ["@atproto/api"],
   images: {
-    unoptimized: true,    
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",

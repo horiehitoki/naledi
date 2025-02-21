@@ -20,6 +20,7 @@ import toast from "react-hot-toast";
 import { ThreadgateSetting } from "../../../../../types/feed";
 import { getLinkFacets } from "@/lib/utils/link";
 import { useAgent } from "@/app/providers/agent";
+import { BluemojiRichText } from "@/lib/utils/bluemoji/facet";
 
 interface Props {
   text: JSONContent;
@@ -51,9 +52,17 @@ export default function usePublishPost(props: Props) {
   return useMutation({
     mutationKey: ["publishPost"],
     mutationFn: async () => {
-      const richText = new RichText({ text: jsonToText(text) });
+      const richText = new BluemojiRichText({
+        text: jsonToText(text),
+      });
+
+      try {
+        await richText.detectFacets(agent);
+      } catch (e) {
+        throw new Error("絵文字が見つかりませんでした。");
+      }
+
       const linkFacets = getLinkFacets(text);
-      await richText.detectFacets(agent);
 
       // add link facets if they exist
       if (Array.isArray(richText.facets)) {
@@ -64,7 +73,7 @@ export default function usePublishPost(props: Props) {
 
       if (richText.graphemeLength > MAX_POST_LENGTH) {
         throw new Error(
-          "Post length exceeds the maximum length of 300 characters",
+          "Post length exceeds the maximum length of 300 characters"
         );
       }
 
@@ -139,7 +148,7 @@ export default function usePublishPost(props: Props) {
               new Uint8Array(await blob.arrayBuffer()),
               {
                 encoding: blob.type,
-              },
+              }
             );
 
             embedImages.images.push({
@@ -201,13 +210,13 @@ export default function usePublishPost(props: Props) {
               try {
                 const image = await fetch(linkCard.image);
                 const blob = await compressImage(
-                  (await image.blob()) as UploadImage,
+                  (await image.blob()) as UploadImage
                 );
                 const uploaded = await agent.uploadBlob(
                   new Uint8Array(await blob.arrayBuffer()),
                   {
                     encoding: blob.type,
-                  },
+                  }
                 );
                 embedExternal.external.thumb = uploaded.data.blob;
               } catch (e) {
@@ -257,7 +266,7 @@ export default function usePublishPost(props: Props) {
 
         await agent.api.app.bsky.feed.threadgate.create(
           { repo: agent.session!.did, rkey: submittedPost.rkey },
-          { post: result.uri, createdAt: new Date().toISOString(), allow },
+          { post: result.uri, createdAt: new Date().toISOString(), allow }
         );
       }
     },

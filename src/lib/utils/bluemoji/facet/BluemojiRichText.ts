@@ -2,15 +2,15 @@ import AtpAgent, {
   RichTextSegment,
   RichText,
   Facet,
-  AppBskyRichtextFacet,
   UnicodeString,
   Entity,
   RichTextProps,
-  RichTextOpts
+  RichTextOpts,
 } from "@atproto/api";
-import * as BlueMojiRichtextFacet from "../client/types/blue/moji/richtext/facet";
-import * as BlueMojiCollectionItem from "../client/types/blue/moji/collection/item";
+import * as BlueMojiCollectionItem from "../../../../../types/atmosphere/types/blue/moji/collection/item";
+import * as BlueMojiRichtextFacet from "../../../../../types/atmosphere/types/blue/moji/richtext/facet";
 import { detectFacets } from "./detect-facets";
+import { AppBskyRichtextFacet } from "../../../../../types/atmosphere";
 
 export const BLUEMOJI_REGEX = new RegExp(
   ":((?!.*--)[A-Za-z0-9-]{4,20}(?<!-)):",
@@ -48,7 +48,7 @@ export class BluemojiRichText extends RichText {
   clone() {
     return new BluemojiRichText({
       text: this.unicodeText.utf16,
-      facets: cloneDeep(this.facets)
+      facets: cloneDeep(this.facets),
     });
   }
 
@@ -109,14 +109,14 @@ export class BluemojiRichText extends RichText {
             const { data: record } = await agent.com.atproto.repo.getRecord({
               repo,
               rkey: feature.name.replace(/:/g, ""),
-              collection: "blue.moji.collection.item"
+              collection: "blue.moji.collection.item",
             });
 
             if (BlueMojiCollectionItem.isRecord(record.value)) {
               feature.alt = record.value.alt;
               feature.did = repo;
               feature.formats = {
-                $type: "blue.moji.richtext.facet#formats_v0"
+                $type: "blue.moji.richtext.facet#formats_v0",
               };
               if (BlueMojiCollectionItem.isFormats_v0(record.value.formats)) {
                 if (record.value.formats.png_128) {
@@ -161,25 +161,27 @@ function entitiesToFacets(text: UnicodeString, entities: Entity[]): Facet[] {
         $type: "app.bsky.richtext.facet",
         index: {
           byteStart: text.utf16IndexToUtf8Index(ent.index.start),
-          byteEnd: text.utf16IndexToUtf8Index(ent.index.end)
+          byteEnd: text.utf16IndexToUtf8Index(ent.index.end),
         },
-        features: [{ $type: "app.bsky.richtext.facet#link", uri: ent.value }]
+        features: [{ $type: "app.bsky.richtext.facet#link", uri: ent.value }],
       });
     } else if (ent.type === "mention") {
       facets.push({
         $type: "app.bsky.richtext.facet",
         index: {
           byteStart: text.utf16IndexToUtf8Index(ent.index.start),
-          byteEnd: text.utf16IndexToUtf8Index(ent.index.end)
+          byteEnd: text.utf16IndexToUtf8Index(ent.index.end),
         },
-        features: [{ $type: "app.bsky.richtext.facet#mention", did: ent.value }]
+        features: [
+          { $type: "app.bsky.richtext.facet#mention", did: ent.value },
+        ],
       });
     } else if (ent.type === "bluemoji") {
       facets.push({
         $type: "app.bsky.richtext.facet",
         index: {
           byteStart: text.utf16IndexToUtf8Index(ent.index.start),
-          byteEnd: text.utf16IndexToUtf8Index(ent.index.end)
+          byteEnd: text.utf16IndexToUtf8Index(ent.index.end),
         },
         features: [
           {
@@ -187,9 +189,9 @@ function entitiesToFacets(text: UnicodeString, entities: Entity[]): Facet[] {
             did: ent.did,
             name: ent.name,
             alt: ent.alt,
-            formats: ent.formats
-          }
-        ]
+            formats: ent.formats,
+          },
+        ],
       });
     }
   }
