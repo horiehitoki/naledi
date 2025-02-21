@@ -1,5 +1,6 @@
 import { type Agent } from "@atproto/api";
 import { getAgentFromServer } from "../agent";
+import feedWithReaction from "@/lib/utils/feedWithReactions";
 
 export const getLists = async (did: string, cursor: string, agent: Agent) => {
   const lists = await agent.app.bsky.graph.getLists({
@@ -22,19 +23,28 @@ export const getListInfo = async (uri: string, agent?: Agent) => {
 export const getListFeed = async (
   agent: Agent,
   uri: string,
-  cursor: string,
+  cursor: string
 ) => {
   const feed = await agent.app.bsky.feed.getListFeed({
     list: uri,
     cursor: cursor,
   });
-  return feed;
+
+  const processedFeed = await feedWithReaction(feed.data.feed);
+
+  return {
+    ...feed,
+    data: {
+      cursor: feed.data.cursor,
+      feed: processedFeed,
+    },
+  };
 };
 
 export const getListMembers = async (
   agent: Agent,
   uri: string,
-  cursor: string,
+  cursor: string
 ) => {
   const list = await agent.app.bsky.graph.getList({
     list: uri,

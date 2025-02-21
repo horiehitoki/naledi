@@ -1,13 +1,15 @@
 "use client";
 
 import FeedPost from "@/components/contentDisplay/feedPost/FeedPost";
-import { AppBskyFeedDefs } from "@atproto/api";
 import { PostView } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
-import { ContentFilterResult } from "../../../types/feed";
+import {
+  ContentFilterResult,
+  FeedViewPostWithReaction,
+} from "../../../types/feed";
 import { memo } from "react";
 
 interface Props {
-  post: AppBskyFeedDefs.FeedViewPost;
+  post: FeedViewPostWithReaction;
   isReply?: boolean;
   filter: ContentFilterResult;
 }

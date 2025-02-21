@@ -155,9 +155,12 @@ export default function FeedPost(props: Props) {
           </div>
         </div>
       </article>
-      <div className="flex justify-center m-2">
-        <ReactionButtons uri={post.post.uri} cid={post.post.cid} />
-      </div>
+
+      {post.reactions && (
+        <div className="flex justify-center m-2">
+          <ReactionButtons uri={post.post.uri} cid={post.post.cid} />
+        </div>
+      )}
     </div>
   );
 }
