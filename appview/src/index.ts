@@ -124,7 +124,7 @@ app.get("/xrpc/" + ids.BlueMarilStellarGetReactions, async (c) => {
   }
 });
 
-app.get("xrpc" + ids.BlueMarilStellarGetActorReactions, async (c) => {
+app.get("/xrpc/" + ids.BlueMarilStellarGetActorReactions, async (c) => {
   try {
     const actor = getParams(c, "actor");
     const cursor = getParams(c, "cursor");

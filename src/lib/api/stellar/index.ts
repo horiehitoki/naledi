@@ -1,6 +1,10 @@
 import AtpAgent from "@atproto/api";
-import { BlueMarilStellarReaction } from "../../../../types/atmosphere";
+import {
+  BlueMarilStellarGetActorReactions,
+  BlueMarilStellarReaction,
+} from "../../../../types/atmosphere";
 import { putATRecords, removeATRecords } from "../atmosphere/record";
+import { FeedViewPostWithReaction } from "../../../../types/feed";
 
 export async function getReactions(
   uri: string,
@@ -24,26 +28,39 @@ export async function getReactions(
   }
 }
 
-export async function getActorReaction(
+export async function getActorReactions(
+  agent: AtpAgent,
   actor: string,
-  limit: number,
   cursor?: string | null
 ) {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_STELLAR_APPVIEW_URL}/xrpc/blue.maril.stellar.getActorReactions?actor=${
-        actor
-      }&limit=${limit}${cursor ? `&cursor=${cursor}` : ""}`
-    );
+  const did = await agent.resolveHandle({ handle: actor });
 
-    const json = await res.json();
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_STELLAR_APPVIEW_URL}/xrpc/blue.maril.stellar.getActorReactions?actor=${
+      did.data.did
+    }${cursor ? `&cursor=${cursor}` : ""}`
+  );
 
-    return { data: json };
-  } catch (e) {
-    console.log(e);
+  const data =
+    (await res.json()) as BlueMarilStellarGetActorReactions.OutputSchema;
 
-    return { data: [] };
-  }
+  //整形
+  const result: FeedViewPostWithReaction[] = await Promise.all(
+    data.feed.map(async (r) => {
+      const post = await agent.getPosts({
+        uris: [r.subject.uri],
+      });
+
+      const reactions = await getReactions(r.subject.uri, r.subject.cid, 20);
+
+      return {
+        post: post.data.posts[0],
+        reactions: reactions.data.reactions,
+      };
+    })
+  );
+
+  return { data: { feed: result } };
 }
 
 export async function getEmojis(

@@ -6,6 +6,7 @@ import {
   getUserLikes,
 } from "../../../api/bsky/feed";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { getActorReactions } from "@/lib/api/stellar";
 
 interface Props {
   mode: UserPostMode;
@@ -32,6 +33,8 @@ export default function useProfilePosts(props: Props) {
         return getUserMediaPosts;
       case "likes":
         return getUserLikes;
+      case "reactions":
+        return getActorReactions;
       default:
         throw new Error("Invalid mode");
     }

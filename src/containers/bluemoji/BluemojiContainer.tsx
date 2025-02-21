@@ -4,8 +4,6 @@ import { uploadBluemoji } from "@/lib/utils/bluemoji/upload/UploadBluemoji";
 import { getEmojis } from "@/lib/api/stellar";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { FormEvent, useState } from "react";
-import { LoaderIcon } from "react-hot-toast";
-import { RiUploadCloudFill } from "react-icons/ri";
 import Image from "next/image";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { BiTrash } from "react-icons/bi";
