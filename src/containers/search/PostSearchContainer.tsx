@@ -58,9 +58,15 @@ export default function PostSearchContainer(props: Props) {
       >
         {posts?.pages
           .flatMap((page) => page?.posts)
-          .map((post, i) => (
+          .map((feed, i) => (
             <Fragment key={i}>
-              {post && <SearchPost key={i} post={post} />}
+              {feed && (
+                <SearchPost
+                  key={i}
+                  post={feed.post}
+                  reactions={feed.reactions}
+                />
+              )}
             </Fragment>
           ))}
       </InfiniteScroll>

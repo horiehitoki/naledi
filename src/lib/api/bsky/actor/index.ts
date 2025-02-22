@@ -67,7 +67,7 @@ export const searchPosts = async (
     if (response.success) {
       const result = await feedWithReaction(response.data.posts);
 
-      return { ...response.data, result };
+      return { ...response.data, posts: result };
     }
   } catch (e) {
     console.error(e);

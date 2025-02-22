@@ -3,7 +3,10 @@
 import FeedPost from "../feedPost/FeedPost";
 import { getPost } from "@/lib/api/bsky/feed";
 import { AppBskyFeedDefs } from "@atproto/api";
-import { ContentFilterResult } from "../../../../types/feed";
+import {
+  ContentFilterResult,
+  FeedViewPostWithReaction,
+} from "../../../../types/feed";
 import { useQuery } from "@tanstack/react-query";
 import NotificationPostSkeleton from "./NotificationPostSkeleton";
 import { useAgent } from "@/app/providers/agent";
@@ -35,7 +38,7 @@ export default function NotificationPost(props: Props) {
       {isLoading && <NotificationPostSkeleton />}
       {post?.data && (
         <FeedPost
-          post={post.data.thread as AppBskyFeedDefs.FeedViewPost}
+          post={post.data.thread as FeedViewPostWithReaction}
           filter={filter}
         />
       )}
