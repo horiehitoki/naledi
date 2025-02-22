@@ -1,8 +1,12 @@
 import { AppBskyFeedDefs } from "@atproto/api";
 import { ProfileView } from "@atproto/api/dist/client/types/app/bsky/actor/defs";
 import {
+  BlockedPost,
   FeedViewPost,
   GeneratorView,
+  NotFoundPost,
+  PostView,
+  ThreadContext,
 } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
 import { Notification } from "@atproto/api/dist/client/types/app/bsky/notification/listNotifications";
 import { Reaction } from "./atmosphere/types/blue/maril/stellar/getReactions";
@@ -12,6 +16,23 @@ export type SavedFeed = GeneratorView & {
 };
 
 export type FeedViewPostWithReaction = FeedViewPost & { reactions: Reaction[] };
+export type ThreadViewPostWithReaction = {
+  post: PostView;
+  parent?:
+    | ThreadViewPostWithReaction
+    | NotFoundPost
+    | BlockedPost
+    | { $type: string; [k: string]: unknown };
+  replies?: (
+    | ThreadViewPostWithReaction
+    | NotFoundPost
+    | BlockedPost
+    | { $type: string; [k: string]: unknown }
+  )[];
+  reactions: Reaction[];
+  threadContext?: ThreadContext;
+  [k: string]: unknown;
+};
 
 export type FeedSearchResult = {
   tid: string;

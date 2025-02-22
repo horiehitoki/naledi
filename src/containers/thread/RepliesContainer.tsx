@@ -1,5 +1,8 @@
 import { AppBskyFeedDefs } from "@atproto/api";
-import { ContentFilterResult } from "../../../types/feed";
+import {
+  ContentFilterResult,
+  ThreadViewPostWithReaction,
+} from "../../../types/feed";
 import BlockedEmbed from "@/components/dataDisplay/postEmbed/BlockedEmbed";
 import NotFoundEmbed from "@/components/dataDisplay/postEmbed/NotFoundEmbed";
 import FeedPost from "@/components/contentDisplay/feedPost/FeedPost";
@@ -7,7 +10,7 @@ import { MAX_REPLIES } from "@/lib/consts/thread";
 import { useState } from "react";
 
 interface Props {
-  replies: AppBskyFeedDefs.ThreadViewPost[];
+  replies: ThreadViewPostWithReaction[];
   contentFilter: ContentFilterResult;
 }
 

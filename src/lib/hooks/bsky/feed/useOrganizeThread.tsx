@@ -1,5 +1,5 @@
 import { AppBskyFeedDefs } from "@atproto/api";
-import { Thread } from "../../../../../types/feed";
+import { Thread, ThreadViewPostWithReaction } from "../../../../../types/feed";
 
 interface Props {
   thread: Thread;
@@ -8,11 +8,11 @@ interface Props {
 export default function useOrganizeThread(props: Props) {
   const { thread } = props;
 
-  const replies = (thread?.replies as AppBskyFeedDefs.ThreadViewPost[]) || [];
+  const replies = (thread?.replies as ThreadViewPostWithReaction[]) || [];
 
   const getConnectedReplies = (
-    post: AppBskyFeedDefs.ThreadViewPost,
-    currentChain: AppBskyFeedDefs.ThreadViewPost[] = []
+    post: ThreadViewPostWithReaction,
+    currentChain: ThreadViewPostWithReaction[] = []
   ) => {
     currentChain.push(post);
 

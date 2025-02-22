@@ -30,6 +30,7 @@ export default function ThreadPost(props: Props) {
   const [hidden, setHidden] = useState(shouldHide);
   const router = useRouter();
   const threadPostRef = useRef<HTMLElement | null>(null);
+
   const setReactions = useSetReactionState(post.cid);
 
   setReactions({
@@ -98,7 +99,12 @@ export default function ThreadPost(props: Props) {
         </div>
       </div>
       <PostActions post={post} mode="thread" />
-      <ReactionButtons uri={post.uri} cid={post.cid} />
+
+      {reactions && (
+        <div className="flex justify-center m-2">
+          <ReactionButtons uri={post.uri} cid={post.cid} />
+        </div>
+      )}
     </article>
   );
 }

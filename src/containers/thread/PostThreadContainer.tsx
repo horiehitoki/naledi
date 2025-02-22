@@ -70,11 +70,9 @@ export default function PostThreadContainer(props: Props) {
     setFilteredReplies(
       replyChains
         .map((replyArr) =>
-          replyArr.some((reply) =>
-            replyIncludes(reply.post.record, textSearch),
-          ),
+          replyArr.some((reply) => replyIncludes(reply.post.record, textSearch))
         )
-        .filter(Boolean).length,
+        .filter(Boolean).length
     );
   }, [replyChains, textSearch]);
 
@@ -128,8 +126,9 @@ export default function PostThreadContainer(props: Props) {
             } p-3 last:border-b md:border-x md:last:rounded-b-2xl`}
           >
             <ThreadPost
-              post={thread?.post as PostView}
+              post={thread?.post}
               filter={contentFilter}
+              reactions={thread?.reactions}
             />
           </div>
           <WhoCanReply post={thread?.post as PostView} />
@@ -163,7 +162,7 @@ export default function PostThreadContainer(props: Props) {
               <>
                 {showReplies &&
                   replyArr.some((reply) =>
-                    replyIncludes(reply.post.record, textSearch),
+                    replyIncludes(reply.post.record, textSearch)
                   ) && (
                     <div
                       className="border-skin-base border border-x-0 first:border-t-0 last:border-b md:border-x md:last:rounded-b-2xl odd:[&:not(:last-child)]:border-b-0 even:[&:not(:last-child)]:border-b-0"

@@ -1,7 +1,19 @@
-import { type Agent, AppBskyActorDefs } from "@atproto/api";
+import { type Agent, AppBskyActorDefs, AppBskyFeedDefs } from "@atproto/api";
 import { getAgentFromServer } from "../agent";
-import { SavedFeed } from "../../../../../types/feed";
+import {
+  SavedFeed,
+  Thread,
+  ThreadViewPostWithReaction,
+} from "../../../../../types/feed";
 import feedWithReaction from "@/lib/utils/feedWithReactions";
+import { getReactions } from "../../stellar";
+import { Reaction } from "../../../../../types/atmosphere/types/blue/maril/stellar/getReactions";
+import {
+  BlockedPost,
+  NotFoundPost,
+  PostView,
+  ThreadViewPost,
+} from "@atproto/api/dist/client/types/app/bsky/feed/defs";
 
 export const getPopularFeeds = async (search?: string, agent?: Agent) => {
   if (!agent) agent = await getAgentFromServer();
@@ -275,13 +287,93 @@ export const getPost = async (agent: Agent, uri: string) => {
   }
 };
 
-export const getPostThread = async (uri: string, agent?: Agent) => {
+export const getPostThread = async (
+  uri: string,
+  agent?: Agent
+): Promise<ThreadViewPostWithReaction> => {
   if (!agent) agent = await getAgentFromServer();
 
   try {
     const posts = await agent.getPostThread({ uri: uri });
-    return posts.data.thread;
+    const thread = posts.data.thread as ThreadViewPost;
+    const parent = thread?.parent as AppBskyFeedDefs.ThreadViewPost;
+    const post = thread.post as PostView;
+    const replies = thread?.replies as AppBskyFeedDefs.ThreadViewPost[];
+
+    const res = await getReactions(post.uri, post.cid, 20);
+    const postWithReactions = { post, reactions: res.data.reactions };
+
+    //再帰的にリアクションを取得
+    async function getNestedReactions(
+      replies: ThreadViewPostWithReaction[]
+    ): Promise<ThreadViewPostWithReaction[]> {
+      return await Promise.all(
+        replies.map(async (reply) => {
+          const res = await getReactions(reply.post.uri, reply.post.cid, 20);
+
+          let nestedReplies = [] as ThreadViewPostWithReaction[];
+
+          if (reply.replies) {
+            nestedReplies = await getNestedReactions(
+              reply.replies as ThreadViewPostWithReaction[]
+            );
+          }
+
+          return {
+            ...reply,
+            reactions: res.data.reactions,
+            replies: nestedReplies,
+          };
+        })
+      );
+    }
+
+    //再帰的に親投稿のリアクションを取得
+    async function getParentReactions(
+      parent: ThreadViewPostWithReaction
+    ): Promise<ThreadViewPostWithReaction> {
+      const res = await getReactions(parent.post.uri, parent.post.cid, 20);
+
+      let nestedParent;
+
+      if (parent.parent) {
+        nestedParent = await getParentReactions(
+          parent.parent as ThreadViewPostWithReaction
+        );
+      }
+
+      return {
+        ...parent,
+        reactions: res.data.reactions,
+        parent: nestedParent,
+      };
+    }
+
+    const repliesWithReactions = await getNestedReactions(
+      replies as ThreadViewPostWithReaction[]
+    );
+
+    if (parent) {
+      const parentWithReactions = await getParentReactions(
+        parent as ThreadViewPostWithReaction
+      );
+
+      return {
+        ...thread,
+        ...postWithReactions,
+        replies: repliesWithReactions,
+        parent: parentWithReactions,
+      } as ThreadViewPostWithReaction;
+    }
+
+    return {
+      ...thread,
+      ...postWithReactions,
+      replies: repliesWithReactions,
+    } as ThreadViewPostWithReaction;
   } catch (e) {
+    console.log(e);
+
     throw e;
   }
 };
