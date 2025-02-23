@@ -1,4 +1,4 @@
-import FeedTabs from "@/components/navigational/feedTabs/FeedTabs";
+import MainLayout from "@/containers/dashboard/DashboardLayout";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -11,10 +11,5 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <>
-      <FeedTabs />
-      {children}
-    </>
-  );
+  return <MainLayout>{children}</MainLayout>;
 }

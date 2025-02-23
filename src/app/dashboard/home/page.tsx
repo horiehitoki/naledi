@@ -1,5 +1,5 @@
-import FeedContainer from "@/containers/posts/FeedContainer";
+import DashboardContainer from "@/containers/dashboard/DashboardContainer";
 
 export default function Home() {
-  return <FeedContainer feed="timeline" mode="feed" />;
+  return <DashboardContainer />;
 }
