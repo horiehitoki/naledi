@@ -15,10 +15,11 @@ import InfiniteScroll from "react-infinite-scroll-component";
 interface Props {
   feed: string;
   mode: "feed" | "list";
+  column?: string;
 }
 
 export default function FeedContainer(props: Props) {
-  const { feed, mode } = props;
+  const { feed, mode, column } = props;
   const {
     refetchFeed,
     feedStatus,
@@ -62,6 +63,7 @@ export default function FeedContainer(props: Props) {
         hasMore={feedHasNextPage}
         loader={<LoadingSpinner />}
         scrollThreshold={0.8}
+        scrollableTarget={column ? `column-${column}` : null}
         className="no-scrollbar"
       >
         {isFetchingFeed && !isFetchingFeedNextPage && <FeedPostSkeleton />}

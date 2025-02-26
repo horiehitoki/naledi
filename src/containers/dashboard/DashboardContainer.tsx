@@ -20,17 +20,25 @@ export default function DashboardContainer() {
 
   if (mode === "deck") {
     return (
-      <div className="flex h-screen w-full overflow-x-auto">
-        <ColumnContainer title="Home">
-          <FeedContainer feed="timeline" mode="feed" />
+      <div className="flex w-full h-screen overflow-x-auto">
+        <ColumnContainer id={"home"} title="Home">
+          <FeedContainer feed="timeline" mode="feed" column="home" />
         </ColumnContainer>
 
         {!isFetching &&
           savedFeeds
             ?.filter((feed) => feed.pinned)
-            .map((feed) => (
-              <ColumnContainer key={feed.did} title={feed.displayName}>
-                <FeedContainer feed={feed.uri} mode="feed" />
+            .map((feed, index) => (
+              <ColumnContainer
+                id={index.toString()}
+                key={feed.did}
+                title={feed.displayName}
+              >
+                <FeedContainer
+                  feed={feed.uri}
+                  mode="feed"
+                  column={index.toString()}
+                />
               </ColumnContainer>
             ))}
       </div>

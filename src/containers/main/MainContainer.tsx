@@ -41,16 +41,7 @@ export default function MainContainer({
         }
       `}
       >
-        <div
-          className={`
-            ${
-              mode === "deck"
-                ? !isHome
-                  ? "bg-skin-base p-4 rounded-lg shadow-xl"
-                  : "w-full h-full"
-                : ""
-            }`}
-        >
+        <div>
           {profile && <TopBar profile={profile} />}
           {children}
         </div>
