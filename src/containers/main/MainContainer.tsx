@@ -23,7 +23,13 @@ export default function MainContainer({
     <main
       className={`
       bg-skin-base flex animate-fade
-      ${mode === "default" ? "justify-center pb-12 md:mt-6 gap-6" : "ml-5"}
+      ${
+        mode === "default"
+          ? "justify-center pb-12 md:mt-6 gap-6"
+          : isHome
+            ? "ml-5"
+            : "ml-5 mt-6"
+      }
       lg:gap-16
     `}
     >

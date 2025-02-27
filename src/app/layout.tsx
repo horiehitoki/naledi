@@ -14,22 +14,22 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: { template: "%s — Stellar", default: "Stellar" },
   description: "Your friendly Bluesky client for the web",
-  metadataBase: new URL("https://useouranos.app"),
+  metadataBase: new URL("https://stellar.maril.blue"),
   other: {
     "fc:frame": "vNext",
     "of:version": "vNext",
     "of:accepts:anonymous": "vNext",
-    "of:image": "https://useouranos.app/opengraph-image.png",
-    "fc:frame:image": "https://useouranos.app/opengraph-image.png",
+    "of:image": "https://stellar.maril.blue/images/ogp.png",
+    "fc:frame:image": "https://stellar.maril.blue/images/ogp.png",
     "fc:frame:button:1": "Home",
     "fc:frame:button:1:action": "link",
-    "fc:frame:button:1:target": "https://useouranos.app",
+    "fc:frame:button:1:target": "https://stellar.maril.blue/",
     "fc:frame:button:2": "About",
     "fc:frame:button:2:action": "link",
-    "fc:frame:button:2:target": "https://useouranos.app/about",
+    "fc:frame:button:2:target": "https://stellar.maril.blue/about",
     "fc:frame:button:3": "GitHub",
     "fc:frame:button:3:action": "link",
-    "fc:frame:button:3:target": "https://github.com/pdelfan/ouranos",
+    "fc:frame:button:3:target": "https://github.com/marukun712/stellar",
   },
 };
 
@@ -41,7 +41,7 @@ export default async function RootLayout({
   const session = await getSessionFromServer();
 
   return (
-    <html lang="en" className="bg-skin-base">
+    <html lang="jp" className="bg-skin-base">
       <head>
         {/* for making the page fullscreen on iOS when added to home */}
         <meta name="mobile-web-app-capable" content="yes" />

@@ -60,7 +60,7 @@ export async function getActorReactions(
     })
   );
 
-  return { data: { feed: result } };
+  return { data: { feed: result, cursor: data.cursor } };
 }
 
 export async function getEmojis(

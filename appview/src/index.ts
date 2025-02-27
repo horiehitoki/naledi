@@ -253,7 +253,7 @@ app.get("/xrpc/" + ids.BlueMarilStellarGetEmojis, async (c) => {
 
     const response: BlueMarilStellarGetEmojis.OutputSchema = {
       items,
-      ...(hasMore && { cursor: emojis[emojis.length - 1].rkey }),
+      ...(hasMore && { cursor: emojis[emojis.length - 1].id }),
     };
 
     return Response.json(response);
