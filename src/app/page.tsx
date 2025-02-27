@@ -51,15 +51,6 @@ export default function Home() {
           </Link>
         </div>
       </section>
-      <div className="animate-fade-up animate-delay-300 mx-auto mt-8 max-w-fit">
-        <Image
-          src="/images/screenshot.png"
-          alt="Stellar desktop screenshot"
-          width={1000}
-          height={830}
-          priority
-        />
-      </div>
       <footer className="animate-fade-up animate-delay-500 text-skin-tertiary mt-16 text-center text-sm font-medium">
         Stellar · {new Date().getFullYear()}
       </footer>

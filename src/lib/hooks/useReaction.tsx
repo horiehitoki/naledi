@@ -13,6 +13,7 @@ type Props = {
 //同じリアクションをグループ化してカウントする
 const groupReactions = (reactions: Reaction[]) => {
   const groupedReactions = new Map();
+  if (!reactions) return groupedReactions;
 
   reactions.forEach((r) => {
     const key = `${r.emojiRef!.rkey}:${r.emojiRef!.repo}`;
@@ -33,6 +34,7 @@ const getMyReactions = (group: Reaction[], myDid: string) => {
 
 export default function useReaction({ uri, cid }: Props) {
   const { reactions } = useReactionState(cid);
+
   const setReactions = useSetReactionState(cid);
   const agent = useAgent();
 
@@ -45,6 +47,8 @@ export default function useReaction({ uri, cid }: Props) {
       repo: string,
       targetEmoji: BlueMojiCollectionItem.ItemView
     ) => {
+      if (!groupedReactions) return;
+
       //自分のリアクションを取得
       const myReactions = getMyReactions(
         groupedReactions.get(`${rkey}:${repo}`)?.group || [],

@@ -41,11 +41,13 @@ export default function FeedPost(props: Props) {
   const [showPost, setShowPost] = useState(!isAuthorMuted);
   const setReactions = useSetReactionState(post.post.cid);
 
-  setReactions({
-    uri: post.post.uri,
-    cid: post.post.cid,
-    reactions: post.reactions,
-  });
+  if (!isParent) {
+    setReactions({
+      uri: post.post.uri,
+      cid: post.post.cid,
+      reactions: post.reactions,
+    });
+  }
 
   if (notFound) {
     return (
