@@ -265,6 +265,74 @@ app.get("/xrpc/" + ids.BlueMarilStellarGetEmojis, async (c) => {
   }
 });
 
+//カスタムフィード
+app.get("/xrpc/app.bsky.feed.getFeedSkeleton/", async (c) => {
+  try {
+    const cursor = getParams(c, "cursor");
+
+    const limit = 5;
+
+    let reactions: ReactionWithEmoji[];
+
+    if (cursor) {
+      reactions = await prisma.reaction.findMany({
+        cursor: { rkey: cursor },
+        take: limit + 1,
+        skip: 1,
+        orderBy: { rkey: "desc" },
+        include: { emoji: true },
+      });
+    } else {
+      reactions = await prisma.reaction.findMany({
+        take: limit + 1,
+        orderBy: { rkey: "desc" },
+        include: { emoji: true },
+      });
+    }
+
+    const hasMore = reactions.length > limit;
+    if (hasMore) {
+      reactions.pop();
+    }
+
+    //feedの整形
+    const feed = await Promise.all(
+      reactions.map(async (reaction) => {
+        return reaction.post_uri;
+      })
+    );
+
+    const response = {
+      feed,
+      ...(hasMore && { cursor: reactions[reactions.length - 1].rkey }),
+    };
+
+    return Response.json(response);
+  } catch (error) {
+    console.error("Err:", error);
+    return new Response(
+      JSON.stringify({
+        error: "Internal server error",
+      }),
+      { status: 500 }
+    );
+  }
+});
+
+app.get("/.well-known/did.json", async (c) => {
+  return Response.json({
+    "@context": ["https://www.w3.org/ns/did/v1"],
+    id: "did:plc:bayg5e3ze2ncrf3shypkvgwl",
+    service: [
+      {
+        id: "#bsky_fg",
+        type: "BskyFeedGenerator",
+        serviceEndpoint: `https://stellar.maril.blue`,
+      },
+    ],
+  });
+});
+
 app.get("/tid/", async (c) => {
   const tid = TID.nextStr();
 
