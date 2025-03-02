@@ -1,27 +1,25 @@
+![logo](./public/images/ogp.png)
+
 # Stellar
 
 Stellar is an AT Protocol web client with emoji reactions.
+This is a fork of [Ouranos](https://github.com/pdelfan/ouranos/).
 
-![stellar](./public/img/ogp.png)
+## Getting Started
 
-# Develop
+Install NPM packages in the project directory.
 
-Write the required environment variables.
-
-```
-DATABASE_URL=
-SESSION_SECRET=
-PRIVATE_KEY_ES256_B64=
+```bash
+npm install
 ```
 
-Run the app.
+Run `npm run dev` and open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-```
-bunx prisma db push
+The following environment variables are required:
 
-bun install
+- `NEXTAUTH_SECRET` (generate one using `openssl rand -base64 32` or visit [https://generate-secret.vercel.app/32](https://generate-secret.vercel.app/32)).
+- `NEXTAUTH_URL` (`http://localhost:3000` while running locally.)
 
-bun run dev
-```
+## License
 
-After that, open http://localhost:5173 in your browser.
+MIT License
