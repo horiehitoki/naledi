@@ -27,8 +27,8 @@ export default function MainContainer({
         mode === "default"
           ? "justify-center pb-12 md:mt-6 gap-6"
           : isHome
-            ? "ml-5"
-            : "ml-5 mt-6"
+            ? "md:ml-5"
+            : "md:ml-5 mt-6"
       }
       lg:gap-16
     `}
