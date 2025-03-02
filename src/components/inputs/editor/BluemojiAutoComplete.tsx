@@ -1,13 +1,12 @@
 "use client";
-
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { getEmojis } from "@/lib/api/stellar";
 import { BlueMarilStellarGetEmojis } from "../../../../types/atmosphere";
 import Button from "@/components/actions/button/Button";
 import { BiSmile } from "react-icons/bi";
 import { useAgent } from "@/app/providers/agent";
-import Picker from "@/components/dataDisplay/bluemoji/BluemojiActions";
+import Picker from "@/components/dataDisplay/bluemoji/Picker";
 
 export default function BluemojiAutoComplete({
   onEmojiSelect,
@@ -15,39 +14,38 @@ export default function BluemojiAutoComplete({
   onEmojiSelect: (emoji: string) => void;
 }) {
   const [showPicker, setShowPicker] = useState(false);
-  const pickerRef = useRef<HTMLDivElement>(null);
   const agent = useAgent();
+  const modalRef = useRef<HTMLDivElement>(null);
 
-  //絵文字の取得
-  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteQuery({
-      queryKey: ["emojis", agent.assertDid],
-      enabled: !!agent.assertDid,
-      queryFn: async ({ pageParam }) => {
-        return await getEmojis(20, pageParam, agent.assertDid);
-      },
-      initialPageParam: null,
-      getNextPageParam: (lastPage) => lastPage.data.cursor,
-    });
+  const {
+    data: localData,
+    isLoading: localIsLoading,
+    fetchNextPage: localFetchNextPage,
+    hasNextPage: localHasNextPage,
+    isFetchingNextPage: localIsFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ["emojis", "local", agent.assertDid],
+    enabled: !!agent.assertDid,
+    queryFn: async ({ pageParam }) => {
+      return await getEmojis(20, pageParam, agent.assertDid);
+    },
+    initialPageParam: null,
+    getNextPageParam: (lastPage) => lastPage.data.cursor,
+  });
 
-  const emojis = data
-    ? data.pages.flatMap((page) => page.data.items ?? [])
+  const localEmojis = localData
+    ? localData.pages.flatMap((page) => page.data.items ?? [])
     : [];
-
-  useEffect(() => {
-    if (!showPicker) return;
-    const handleClickOutside = (event: MouseEvent) => {
-      if (!pickerRef.current?.contains(event.target as Node)) {
-        setShowPicker(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [showPicker]);
 
   const handleEmojiSelect = (emoji: BlueMarilStellarGetEmojis.ItemView) => {
     onEmojiSelect(`:${emoji.ref.rkey}:`);
     setShowPicker(false);
+  };
+
+  const fetchNextPage = (type: "local" | "global") => {
+    if (type === "local") {
+      localFetchNextPage();
+    }
   };
 
   return (
@@ -62,23 +60,37 @@ export default function BluemojiAutoComplete({
         <BiSmile className="text-primary hover:text-primary-dark text-2xl" />
       </Button>
       {showPicker && (
-        <div
-          ref={pickerRef}
-          className="animate-fade animate-duration-200 absolute z-50 mt-2 shadow-md rounded-lg md:bottom-14 w-[360px] bg-skin-base"
-        >
-          <div className="p-3">
-            <Picker
-              localOnly={true}
-              emojis={emojis}
-              isLoading={isLoading}
-              handleEmojiSelect={handleEmojiSelect}
-              fetchNextPage={fetchNextPage}
-              hasNextPage={hasNextPage}
-              isFetchingNextPage={isFetchingNextPage}
-              agentDid={agent.assertDid}
-            />
+        <>
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity"
+            onClick={() => setShowPicker(false)}
+          />
+
+          <div
+            ref={modalRef}
+            className="fixed bottom-0 left-0 right-0 z-50 bg-skin-base border-t border-gray-200 dark:border-gray-800 rounded-t-xl shadow-lg transform transition-transform duration-300 ease-in-out md:mx-auto md:w-1/2"
+            style={{
+              maxHeight: "60vh",
+              overflowY: "auto",
+            }}
+          >
+            <div className="p-4">
+              <Picker
+                localOnly={true}
+                local={localEmojis}
+                global={[]}
+                isLoading={{ local: localIsLoading, global: false }}
+                handleEmojiSelect={handleEmojiSelect}
+                fetchNextPage={fetchNextPage}
+                hasNextPage={{ local: !!localHasNextPage, global: false }}
+                isFetchingNextPage={{
+                  local: localIsFetchingNextPage,
+                  global: false,
+                }}
+              />
+            </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   );

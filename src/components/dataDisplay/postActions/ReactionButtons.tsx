@@ -8,7 +8,6 @@ import { Reaction } from "../../../../types/atmosphere/types/blue/maril/stellar/
 import Image from "next/image";
 import { FaSmile } from "react-icons/fa";
 import { useEmojiPicker } from "@/app/providers/BluemojiPickerProvider";
-import { useRef } from "react";
 import { useAgent } from "@/app/providers/agent";
 import useReaction from "@/lib/hooks/useReaction";
 
@@ -20,7 +19,6 @@ export default function ReactionButtons({
   cid: string;
 }) {
   const { toggleOpen } = useEmojiPicker();
-  const ref = useRef<HTMLButtonElement>(null);
   const agent = useAgent();
 
   const { groupedReactions, handleReaction } = useReaction({ uri, cid });
@@ -31,7 +29,7 @@ export default function ReactionButtons({
         <div className="flex flex-wrap gap-2">
           {[...groupedReactions.values()].map(({ count, group }) => {
             const myReactions = group.filter(
-              (r: Reaction) => r.actor.did === agent.did
+              (r: Reaction) => r.actor?.did === agent.did
             );
 
             if (group[0])
@@ -66,32 +64,35 @@ export default function ReactionButtons({
                     <div className="text-center text-sm">
                       {group[0].emoji.name}
                     </div>
-                    {group.map((r: Reaction) => (
-                      <div
-                        className="flex items-center gap-1 text-sm"
-                        key={r.rkey}
-                      >
-                        <a href={`/dashboard/user/${r.actor.did}`}>
-                          <Image
-                            src={r.actor.avatar}
-                            className="rounded-full"
-                            alt="avatar"
-                            width={20}
-                            height={20}
-                          />
-                        </a>
-                        <span>{r.actor.displayName}</span>
-                      </div>
-                    ))}
+                    {group.map((r: Reaction) => {
+                      if (r.actor) {
+                        return (
+                          <div
+                            className="flex items-center gap-1 text-sm"
+                            key={r.rkey}
+                          >
+                            <a href={`/dashboard/user/${r.actor.did}`}>
+                              <Image
+                                src={r.actor.avatar}
+                                className="rounded-full"
+                                alt="avatar"
+                                width={20}
+                                height={20}
+                              />
+                            </a>
+                            <span>{r.actor.displayName}</span>
+                          </div>
+                        );
+                      }
+                    })}
                   </TooltipContent>
                 </Tooltip>
               );
           })}
 
           <button
-            onClick={() => toggleOpen(ref.current!, { uri, cid })}
+            onClick={() => toggleOpen({ uri, cid })}
             className="rounded-full p-2"
-            ref={ref}
           >
             <FaSmile className="w-4 h-4 text-skin-base" />
           </button>

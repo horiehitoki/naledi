@@ -29,7 +29,7 @@ export default function BluemojiContainer() {
       let name = formData.get("name") as string;
 
       if (!name?.trim()) {
-        setError("絵文字名を入力してください。");
+        setError("Please enter an emoji name.");
         setIsLoading(false);
 
         return;
@@ -41,14 +41,14 @@ export default function BluemojiContainer() {
       const matches = name.match(/:((?!.*--)[A-Za-z0-9-]{4,20}(?<!-)):/);
 
       if (!matches || matches[0] !== name) {
-        setError("無効な絵文字名です。");
+        setError("Invalid emoji name.");
         setIsLoading(false);
 
         return;
       }
 
       if (file.type !== "image/png") {
-        setError("PNGファイルのみアップロード可能です。");
+        setError("Only PNG files can be uploaded.");
         setIsLoading(false);
 
         return;
@@ -69,7 +69,7 @@ export default function BluemojiContainer() {
     } catch (e) {
       console.log(e);
 
-      setError("絵文字のアップロードに失敗しました。");
+      setError("Failed to upload emoji.");
       setIsLoading(false);
 
       return;
@@ -86,13 +86,7 @@ export default function BluemojiContainer() {
     window.location.reload();
   }
 
-  const {
-    data,
-    isLoading: isFetching,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useInfiniteQuery({
+  const { data } = useInfiniteQuery({
     queryKey: ["emojis", agent.assertDid],
     enabled: !!agent.assertDid,
     queryFn: async ({ pageParam }) => {
@@ -109,7 +103,7 @@ export default function BluemojiContainer() {
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-8">
       <div className="rounded-xl border border-slate-200 dark:border-slate-700 p-8">
-        <h2 className="text-3xl font-bold text-center mb-8 text-blue-600">
+        <h2 className="text-3xl font-bold text-center mb-8 text-skin-base">
           Upload Bluemoji
         </h2>
 
@@ -118,7 +112,7 @@ export default function BluemojiContainer() {
 
       {emojis.length > 0 && (
         <div className="rounded-xl border border-slate-200 dark:border-slate-700 p-8">
-          <h2 className="text-3xl font-bold text-center mb-8 text-blue-600">
+          <h2 className="text-3xl font-bold text-center mb-8 text-skin-base">
             Your Bluemoji
           </h2>
 
@@ -156,14 +150,14 @@ export default function BluemojiContainer() {
                         sideOffset={5}
                       >
                         <p className="text-sm text-skin-base mb-4">
-                          本当に削除しますか？
+                          Are you sure you want to delete this?
                         </p>
                         <button
                           onClick={() => deleteBluemoji(emoji.ref.rkey)}
                           className="w-full bg-red-500 hover:bg-red-600 text-white rounded-lg py-2 px-4 transition-colors flex items-center justify-center space-x-2"
                         >
                           <BiTrash />
-                          <span>削除する</span>
+                          <span>Delete</span>
                         </button>
                       </DropdownMenu.Content>
                     </DropdownMenu.Portal>

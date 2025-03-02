@@ -29,7 +29,7 @@ const groupReactions = (reactions: Reaction[]) => {
 
 //グループ名から自分のしたリアクションを取得
 const getMyReactions = (group: Reaction[], myDid: string) => {
-  return group.filter((r) => r.actor.did === myDid);
+  return group.filter((r) => r.actor?.did === myDid);
 };
 
 export default function useReaction({ uri, cid }: Props) {

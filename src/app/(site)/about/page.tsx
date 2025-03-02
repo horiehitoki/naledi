@@ -71,23 +71,6 @@ export default function Page() {
           Frequently Asked Questions
         </h2>
 
-        <h3 className="text-skin-base mb-1 text-lg font-semibold">
-          Is anything stored on your servers?
-        </h3>
-        <p className="text-skin-base">
-          Nothing from Bluesky is stored, every request goes through the
-          official Bluesky servers. When you log in, your session is stored
-          using cookies on your web browser. Any extra feature that exists (or
-          will be added) stores information{" "}
-          <Link
-            href="https://javascript.info/localstorage"
-            className="underline underline-offset-2"
-          >
-            locally
-          </Link>{" "}
-          on your web browser.
-        </p>
-
         <h3 className="text-skin-base mb-1 mt-6 text-lg font-semibold">
           Why do you recommend using an app password to log in?
         </h3>

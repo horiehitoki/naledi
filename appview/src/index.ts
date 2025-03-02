@@ -93,7 +93,12 @@ app.get("/xrpc/" + ids.BlueMarilStellarGetReactions, async (c) => {
     const transformedReactions: BlueMarilStellarGetReactions.Reaction[] =
       await Promise.all(
         reactions.map(async (reaction) => {
-          const profile = await agent.getProfile({ actor: reaction.authorDid });
+          let profile;
+          try {
+            profile = await agent.getProfile({ actor: reaction.authorDid });
+          } catch (e) {
+            profile = { data: null };
+          }
 
           return {
             rkey: reaction.rkey,

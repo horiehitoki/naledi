@@ -1,89 +1,116 @@
 "use client";
-
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { getEmojis } from "@/lib/api/stellar";
 import { BlueMarilStellarGetEmojis } from "../../../../types/atmosphere";
 import { useAgent } from "@/app/providers/agent";
 import { useEmojiPicker } from "@/app/providers/BluemojiPickerProvider";
 import useReaction from "@/lib/hooks/useReaction";
-import Picker from "@/components/dataDisplay/bluemoji/BluemojiActions";
+import Picker from "@/components/dataDisplay/bluemoji/Picker";
 
 export default function BluemojiPicker() {
-  const { isOpen, position, setIsOpen, target } = useEmojiPicker();
+  const { isOpen, setIsOpen, target } = useEmojiPicker();
   const { handleReaction } = useReaction({
     uri: target.uri,
     cid: target.cid,
   });
-
-  const pickerRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
   const agent = useAgent();
 
-  //絵文字の取得
-  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteQuery({
-      queryKey: ["emojis"],
-      queryFn: async ({ pageParam }) => {
-        return await getEmojis(20, pageParam);
-      },
-      initialPageParam: null,
-      getNextPageParam: (lastPage) => lastPage.data.cursor,
-    });
+  // グローバル絵文字の取得
+  const {
+    data: globalData,
+    isLoading: globalIsLoading,
+    fetchNextPage: globalFetchNextPage,
+    hasNextPage: globalHasNextPage,
+    isFetchingNextPage: globalIsFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ["emojis", "global"],
+    queryFn: async ({ pageParam }) => {
+      return await getEmojis(50, pageParam);
+    },
+    initialPageParam: null,
+    getNextPageParam: (lastPage) => lastPage.data.cursor,
+  });
 
-  const emojis = data
-    ? data.pages.flatMap((page) => page.data.items ?? [])
+  // ローカル絵文字の取得
+  const {
+    data: localData,
+    isLoading: localIsLoading,
+    fetchNextPage: localFetchNextPage,
+    hasNextPage: localHasNextPage,
+    isFetchingNextPage: localIsFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ["emojis", "local", agent.did],
+    queryFn: async ({ pageParam }) => {
+      return await getEmojis(50, pageParam, agent.did);
+    },
+    initialPageParam: null,
+    getNextPageParam: (lastPage) => lastPage.data.cursor,
+    enabled: !!agent.did,
+  });
+
+  const globalEmojis = globalData
+    ? globalData.pages.flatMap((page) => page.data.items ?? [])
+    : [];
+  const localEmojis = localData
+    ? localData.pages.flatMap((page) => page.data.items ?? [])
     : [];
 
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Node;
-      if (
-        pickerRef.current &&
-        !pickerRef.current.contains(target) &&
-        !(target instanceof Element && target.closest(".pickerOpen"))
-      ) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isOpen, setIsOpen]);
-
+  // 絵文字選択ハンドラー
   const handleEmojiSelect = (emoji: BlueMarilStellarGetEmojis.ItemView) => {
     handleReaction(emoji.ref.rkey, emoji.ref.repo, emoji.record);
     setIsOpen(false);
   };
 
+  // 次のページを取得する関数
+  const fetchNextPage = (type: "local" | "global") => {
+    if (type === "local") {
+      localFetchNextPage();
+    } else {
+      globalFetchNextPage();
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
-    <div
-      ref={pickerRef}
-      style={{
-        position: "absolute",
-        top: `${position.top}px`,
-        left: `${position.left}px`,
-        zIndex: 50,
-      }}
-      className="w-[360px]"
-    >
-      <div className="w-full rounded-lg shadow-lg border border-gray-200 dark:border-gray-800 bg-skin-base">
-        <div className="p-3">
+    <>
+      <div
+        className="fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity"
+        onClick={() => setIsOpen(false)}
+      />
+
+      <div
+        ref={modalRef}
+        className="fixed bottom-0 left-0 right-0 z-50 bg-skin-base border-t border-gray-200 dark:border-gray-800 rounded-t-xl shadow-lg transform transition-transform duration-300 ease-in-out md:mx-auto md:w-1/2"
+        style={{
+          maxHeight: "60vh",
+          overflowY: "auto",
+        }}
+      >
+        <div className="p-4">
           <Picker
-            localOnly={false}
-            emojis={emojis}
-            isLoading={isLoading}
+            localOnly={!agent.did}
+            global={globalEmojis}
+            local={localEmojis}
+            isLoading={{
+              local: localIsLoading,
+              global: globalIsLoading,
+            }}
             handleEmojiSelect={handleEmojiSelect}
             fetchNextPage={fetchNextPage}
-            hasNextPage={hasNextPage}
-            isFetchingNextPage={isFetchingNextPage}
-            agentDid={agent.assertDid}
+            hasNextPage={{
+              local: !!localHasNextPage,
+              global: !!globalHasNextPage,
+            }}
+            isFetchingNextPage={{
+              local: localIsFetchingNextPage,
+              global: globalIsFetchingNextPage,
+            }}
           />
         </div>
       </div>
-    </div>
+    </>
   );
 }

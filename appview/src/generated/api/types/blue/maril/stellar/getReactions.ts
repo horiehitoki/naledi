@@ -51,7 +51,7 @@ export interface Reaction {
   createdAt: string
   emojiRef?: BlueMarilStellarReaction.EmojiRef
   emoji: BlueMojiCollectionItem.ItemView
-  actor: AppBskyActorDefs.ProfileView
+  actor?: AppBskyActorDefs.ProfileView
   [k: string]: unknown
 }
 

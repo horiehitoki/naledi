@@ -193,7 +193,7 @@ export const schemaDict = {
       },
       reaction: {
         type: 'object',
-        required: ['rkey', 'subject', 'createdAt', 'emoji', 'actor'],
+        required: ['rkey', 'subject', 'createdAt', 'emoji'],
         properties: {
           rkey: {
             type: 'string',

@@ -6,34 +6,39 @@ import { useState } from "react";
 
 export default function Picker({
   localOnly,
-  emojis,
+  global,
+  local,
   isLoading,
   handleEmojiSelect,
   fetchNextPage,
   hasNextPage,
   isFetchingNextPage,
-  agentDid,
 }: {
   localOnly: boolean;
-  emojis: BlueMarilStellarGetEmojis.ItemView[];
-  isLoading: boolean;
+  global: BlueMarilStellarGetEmojis.ItemView[];
+  local: BlueMarilStellarGetEmojis.ItemView[];
+  isLoading: { local: boolean; global: boolean };
   handleEmojiSelect: (emoji: BlueMarilStellarGetEmojis.ItemView) => void;
-  fetchNextPage: () => void;
-  hasNextPage: boolean;
-  isFetchingNextPage: boolean;
-  agentDid?: string;
+  fetchNextPage: (type: "local" | "global") => void;
+  hasNextPage: { local: boolean; global: boolean };
+  isFetchingNextPage: { local: boolean; global: boolean };
 }) {
   const [searchQuery, setSearchQuery] = useState("");
+  const [activeTab, setActiveTab] = useState<"local" | "global">("local");
 
-  const filteredEmojis = emojis.filter((emoji) =>
+  // 検索フィルター
+  const filteredGlobalEmojis = global.filter((emoji) =>
     emoji.ref.rkey.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const localEmojis = agentDid
-    ? filteredEmojis.filter((emoji) => emoji.ref.repo === agentDid)
-    : filteredEmojis;
+  const filteredLocalEmojis = local.filter((emoji) =>
+    emoji.ref.rkey.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-  if (isLoading) {
+  if (
+    (activeTab === "local" && isLoading.local) ||
+    (activeTab === "global" && isLoading.global)
+  ) {
     return (
       <div className="flex items-center justify-center py-8">
         <div className="w-6 h-6 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin" />
@@ -41,7 +46,10 @@ export default function Picker({
     );
   }
 
-  if (emojis.length === 0) {
+  if (
+    (activeTab === "local" && local.length === 0) ||
+    (activeTab === "global" && global.length === 0)
+  ) {
     return (
       <div className="py-8 text-center text-skin-base">Bluemoji not found.</div>
     );
@@ -62,13 +70,18 @@ export default function Picker({
         />
       </div>
 
-      <Tabs.Root defaultValue="local">
+      <Tabs.Root
+        defaultValue="local"
+        onValueChange={(value) => setActiveTab(value as "local" | "global")}
+      >
         <Tabs.TabsList className="w-full grid grid-cols-2 mb-2">
           <Tabs.TabsTrigger
             value="local"
             className="px-4 py-2 text-sm font-medium border-b-2 border-transparent data-[state=active]:border-blue-600 dark:data-[state=active]:border-blue-400 transition-colors"
           >
-            My Bluemoji{localEmojis.length > 0 && ` (${localEmojis.length})`}
+            My Bluemoji
+            {filteredLocalEmojis.length > 0 &&
+              ` (${filteredLocalEmojis.length})`}
           </Tabs.TabsTrigger>
 
           {!localOnly && (
@@ -77,13 +90,17 @@ export default function Picker({
               className="px-4 py-2 text-sm font-medium border-b-2 border-transparent data-[state=active]:border-blue-600 dark:data-[state=active]:border-blue-400 transition-colors"
             >
               Global Bluemoji
-              {filteredEmojis.length > 0 && ` (${filteredEmojis.length})`}
+              {filteredGlobalEmojis.length > 0 &&
+                ` (${filteredGlobalEmojis.length})`}
             </Tabs.TabsTrigger>
           )}
         </Tabs.TabsList>
         <Tabs.TabsContent value="local">
-          {localEmojis.length > 0 ? (
-            <EmojiGrid emojis={localEmojis} onEmojiSelect={handleEmojiSelect} />
+          {filteredLocalEmojis.length > 0 ? (
+            <EmojiGrid
+              emojis={filteredLocalEmojis}
+              onEmojiSelect={handleEmojiSelect}
+            />
           ) : (
             <div className="py-8 text-center">
               {searchQuery
@@ -91,35 +108,48 @@ export default function Picker({
                 : "My Bluemoji not found."}
             </div>
           )}
+
+          {!searchQuery && hasNextPage.local && (
+            <div className="mt-2 pt-2 border-t dark:border-gray-700">
+              <button
+                onClick={() => fetchNextPage("local")}
+                disabled={isFetchingNextPage.local}
+                className="w-full py-2 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 disabled:text-gray-400 dark:disabled:text-gray-600 disabled:cursor-not-allowed transition-colors"
+              >
+                {isFetchingNextPage.local ? "Loading..." : "Load more"}
+              </button>
+            </div>
+          )}
         </Tabs.TabsContent>
         {!localOnly && (
           <Tabs.TabsContent value="global">
-            {filteredEmojis.length > 0 ? (
+            {filteredGlobalEmojis.length > 0 ? (
               <EmojiGrid
-                emojis={filteredEmojis}
+                emojis={filteredGlobalEmojis}
                 onEmojiSelect={handleEmojiSelect}
               />
             ) : (
               <div className="py-8 text-center">No search results found.</div>
             )}
+
+            {!searchQuery && hasNextPage.global && (
+              <div className="mt-2 pt-2 border-t dark:border-gray-700">
+                <button
+                  onClick={() => fetchNextPage("global")}
+                  disabled={isFetchingNextPage.global}
+                  className="w-full py-2 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 disabled:text-gray-400 dark:disabled:text-gray-600 disabled:cursor-not-allowed transition-colors"
+                >
+                  {isFetchingNextPage.global ? "Loading..." : "Load more"}
+                </button>
+              </div>
+            )}
           </Tabs.TabsContent>
         )}
       </Tabs.Root>
-
-      {!searchQuery && hasNextPage && (
-        <div className="mt-2 pt-2 border-t dark:border-gray-700">
-          <button
-            onClick={() => fetchNextPage()}
-            disabled={isFetchingNextPage}
-            className="w-full py-2 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 disabled:text-gray-400 dark:disabled:text-gray-600 disabled:cursor-not-allowed transition-colors"
-          >
-            {isLoading ? "Loading..." : "Load more"}
-          </button>
-        </div>
-      )}
     </div>
   );
 }
+
 const EmojiGrid = ({
   emojis,
   onEmojiSelect,
