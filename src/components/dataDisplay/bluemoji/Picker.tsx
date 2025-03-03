@@ -46,15 +46,6 @@ export default function Picker({
     );
   }
 
-  if (
-    (activeTab === "local" && local.length === 0) ||
-    (activeTab === "global" && global.length === 0)
-  ) {
-    return (
-      <div className="py-8 text-center text-skin-base">Bluemoji not found.</div>
-    );
-  }
-
   return (
     <div className="w-full text-skin-base">
       <div className="relative mb-2">

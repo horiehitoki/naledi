@@ -12,7 +12,6 @@ import {
 } from "./generated/api/index.js";
 import { Agent } from "@atproto/api";
 import { cors } from "hono/cors";
-import { TID } from "@atproto/common";
 
 type ReactionWithEmoji = Reaction & { emoji: Emoji };
 
@@ -332,16 +331,10 @@ app.get("/.well-known/did.json", async (c) => {
       {
         id: "#bsky_fg",
         type: "BskyFeedGenerator",
-        serviceEndpoint: `https://stellar.maril.blue`,
+        serviceEndpoint: `https://appview.maril.blue`,
       },
     ],
   });
-});
-
-app.get("/tid/", async (c) => {
-  const tid = TID.nextStr();
-
-  return c.text(tid);
 });
 
 const port = Number(process.env.PORT);

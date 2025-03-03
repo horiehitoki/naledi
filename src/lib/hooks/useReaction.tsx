@@ -68,10 +68,10 @@ export default function useReaction({ uri, cid }: Props) {
         }));
       } else {
         //リアクションする
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_STELLAR_APPVIEW_URL}/tid/`
-        );
-        const tid = await res.text();
+        const res = await fetch("/api/tid/");
+        const tid = await res.json();
+
+        console.log(tid);
         const actor = await agent.getProfile({ actor: agent.assertDid });
 
         setReactions((prev) => ({
