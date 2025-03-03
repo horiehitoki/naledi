@@ -12,6 +12,8 @@ DB_USER=
 DB_PASS=
 
 DATABASE_URL=postgresql://${DB_USER}:${DB_PASS}@db:5432/postgres?schema=public
+
+PORT=
 ```
 
 Run the app.
@@ -20,4 +22,4 @@ Run the app.
 docker-compose up
 ```
 
-After that, open http://localhost:3000 in your browser.
+After that, open http://localhost:${PORT} in your browser.

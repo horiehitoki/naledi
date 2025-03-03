@@ -344,7 +344,8 @@ app.get("/tid/", async (c) => {
   return c.text(tid);
 });
 
-const port = 3000;
+const port = Number(process.env.PORT);
+
 console.log(`Server is running on http://localhost:${port}`);
 
 serve({
