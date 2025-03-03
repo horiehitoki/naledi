@@ -270,7 +270,7 @@ app.get("/xrpc/" + ids.BlueMarilStellarGetEmojis, async (c) => {
 });
 
 //カスタムフィード
-app.get("/xrpc/app.bsky.feed.getFeedSkeleton/", async (c) => {
+app.get("/xrpc/app.bsky.feed.getFeedSkeleton", async (c) => {
   try {
     const cursor = getParams(c, "cursor");
 
@@ -302,7 +302,7 @@ app.get("/xrpc/app.bsky.feed.getFeedSkeleton/", async (c) => {
     //feedの整形
     const feed = await Promise.all(
       reactions.map(async (reaction) => {
-        return reaction.post_uri;
+        return { post: reaction.post_uri };
       })
     );
 
