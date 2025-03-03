@@ -13,7 +13,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: { template: "%s — Stellar", default: "Stellar" },
-  description: "Your friendly Bluesky client for the web",
+  description: "AT Protocol web client with Bluemoji reactions",
   metadataBase: new URL("https://stellar.maril.blue"),
   other: {
     "fc:frame": "vNext",

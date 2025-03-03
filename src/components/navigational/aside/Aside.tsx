@@ -16,7 +16,7 @@ export default function Aside(props: Props) {
 
   return (
     <aside
-      className={`${mode === "default" ? "sticky h-full" : "absolute right-5"} top-6 hidden md:block`}
+      className={`${mode === "default" ? "sticky h-full" : "absolute right-5 z-50 bg-skin-base rounded-full"} top-6 hidden md:block`}
     >
       <div className="flex flex-col items-center gap-3 lg:flex-row border border-skin-base p-2 rounded-full">
         <ComposeButton />

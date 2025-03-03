@@ -43,7 +43,7 @@ export default function MainContainer({
             ? "w-full md:max-w-xl"
             : isHome
               ? "flex-1 overflow-x-auto"
-              : "w-full md:w-1/3 md:mx-auto"
+              : "w-full md:w-1/4 md:mx-auto"
         }
       `}
       >
