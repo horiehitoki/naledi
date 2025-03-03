@@ -326,7 +326,7 @@ app.get("/xrpc/app.bsky.feed.getFeedSkeleton/", async (c) => {
 app.get("/.well-known/did.json", async (c) => {
   return Response.json({
     "@context": ["https://www.w3.org/ns/did/v1"],
-    id: "did:plc:bayg5e3ze2ncrf3shypkvgwl",
+    id: "did:web:appview.maril.blue",
     service: [
       {
         id: "#bsky_fg",
