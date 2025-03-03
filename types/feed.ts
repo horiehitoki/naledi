@@ -15,7 +15,9 @@ export type SavedFeed = GeneratorView & {
   pinned: boolean;
 };
 
-export type FeedViewPostWithReaction = FeedViewPost & { reactions: Reaction[] };
+export type FeedViewPostWithReaction = FeedViewPost & {
+  reactions?: Reaction[];
+};
 export type ThreadViewPostWithReaction = {
   post: PostView;
   parent?:
@@ -29,7 +31,7 @@ export type ThreadViewPostWithReaction = {
     | BlockedPost
     | { $type: string; [k: string]: unknown }
   )[];
-  reactions: Reaction[];
+  reactions?: Reaction[];
   threadContext?: ThreadContext;
   [k: string]: unknown;
 };

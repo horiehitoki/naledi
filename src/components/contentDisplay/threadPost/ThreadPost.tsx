@@ -20,7 +20,7 @@ import { useSetReactionState } from "@/state/reactions";
 interface Props {
   post: AppBskyFeedDefs.PostView;
   filter: ContentFilterResult;
-  reactions: Reaction[];
+  reactions?: Reaction[];
 }
 
 export default function ThreadPost(props: Props) {
@@ -36,7 +36,7 @@ export default function ThreadPost(props: Props) {
   setReactions({
     uri: post.uri,
     cid: post.cid,
-    reactions: reactions,
+    reactions: reactions!,
   });
 
   useEffect(() => {

@@ -45,7 +45,7 @@ export default function FeedPost(props: Props) {
     setReactions({
       uri: post.post.uri,
       cid: post.post.cid,
-      reactions: post.reactions,
+      reactions: post.reactions!,
     });
   }
 

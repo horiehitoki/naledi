@@ -10,7 +10,8 @@
     "gen-api": "lex gen-api ./types/atmosphere $(find ./lexicons -name '*.json' -type f)"
   },
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "appview/*"
   ],
   "dependencies": {
     "@atproto/api": "^0.13.35",

@@ -1,7 +1,12 @@
 "use client";
 
 import { getHandle } from "@/lib/utils/text";
-import { RichText, AppBskyFeedPost, RichTextSegment } from "@atproto/api";
+import {
+  RichText,
+  AppBskyFeedPost,
+  RichTextSegment,
+  Facet,
+} from "@atproto/api";
 import type { PostView } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
 import Link from "next/link";
 import { Fragment } from "react";
@@ -106,7 +111,7 @@ export default function PostText(props: Props) {
         ),
       });
     } else if (isBluemojiSegment(segment)) {
-      const bluemoji = getBluemojiFeature(segment.facet);
+      const bluemoji = getBluemojiFeature(segment.facet!);
       if (bluemoji) {
         content.push({
           text: segment.text,
@@ -169,7 +174,7 @@ function isBluemojiSegment(segment: RichTextSegment) {
   );
 }
 
-function getBluemojiFeature(facet) {
+function getBluemojiFeature(facet: Facet) {
   if (!facet) return undefined;
   const feature = facet.features.find(
     (f) => f.$type === "blue.moji.richtext.facet"

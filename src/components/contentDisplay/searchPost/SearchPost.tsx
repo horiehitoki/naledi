@@ -17,7 +17,7 @@ import { useSetReactionState } from "@/state/reactions";
 
 interface Props {
   post: AppBskyFeedDefs.PostView;
-  reactions: Reaction[];
+  reactions?: Reaction[];
   isReply?: boolean;
   hasReply?: boolean;
 }
@@ -31,7 +31,7 @@ const SearchPost = memo(function SearchPost(props: Props) {
   setReactions({
     uri: post.uri,
     cid: post.cid,
-    reactions: reactions,
+    reactions: reactions!,
   });
 
   return (

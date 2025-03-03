@@ -34,6 +34,7 @@ export async function copyEmoji(agent: AtpAgent, rkey: string, repo: string) {
 
   const blob = await service.com.atproto.sync.getBlob({
     did: repo,
+    //@ts-ignore
     cid: originalRecord.formats.png_128!.ref,
   });
 

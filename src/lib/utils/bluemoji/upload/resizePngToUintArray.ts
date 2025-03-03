@@ -39,6 +39,7 @@ export async function resizePngToUintArray(
   const imgData = ctx.getImageData(0, 0, size, size);
   const rgbaBuffer = imgData.data.buffer;
 
+  //@ts-ignore
   const apng = UPNG.encode([rgbaBuffer], size, size, 0);
   return new Uint8Array(apng);
 }

@@ -167,6 +167,7 @@ const EmojiGrid = ({
       >
         <div className="w-8 h-8 flex items-center justify-center group-hover:scale-110 transition-transform">
           <Image
+            //@ts-ignore
             src={`https://cdn.bsky.app/img/feed_thumbnail/plain/${emoji.ref.repo}/${emoji.record.formats.png_128!.ref.$link}@png`}
             alt={emoji.ref.rkey}
             width={32}
