@@ -1,3 +1,7 @@
+export const fetchCache = "default-no-store";
+
+export const dynamic = "force-dynamic";
+
 import { NextResponse } from "next/server";
 import { TID } from "@atproto/common";
 
