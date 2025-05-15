@@ -82,7 +82,7 @@ export default function WhoCanReply(props: Props) {
                 key={list.uri}
                 href={{
                   pathname: `/profile/${post.author.handle}/lists/${encodeURIComponent(
-                    list.uri.split(":")[2].split("/")[1],
+                    list.uri.split(":")[3].split("/")[2],
                   )}`,
                   query: { uri: list.uri },
                 }}
