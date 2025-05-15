@@ -11,7 +11,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { memo } from "react";
 import ProfileHoverCard from "../profileHoverCard/ProfileHoverCard";
-import { Reaction } from "../../../../types/atmosphere/types/blue/maril/stellar/getReactions";
+import { Reaction } from "../../../../types/atmosphere/types/org/gunjo/getReactions";
 import ReactionButtons from "@/components/dataDisplay/postActions/ReactionButtons";
 import { useSetReactionState } from "@/state/reactions";
 
@@ -40,14 +40,14 @@ const SearchPost = memo(function SearchPost(props: Props) {
         onClick={(e) => {
           e.stopPropagation();
           router.push(
-            `/dashboard/user/${post.author.handle}/post/${getPostId(post.uri)}`
+            `/profile/${post.author.handle}/post/${getPostId(post.uri)}`
           );
         }}
         className="border-skin-base border border-x-0 p-3 last:border-b hover:cursor-pointer hover:bg-skin-secondary md:border-x odd:[&:not(:last-child)]:border-b-0 even:[&:not(:last-child)]:border-b-0"
       >
         <div className="relative flex items-start gap-3">
           <Link
-            href={`/dashboard/user/${author.handle}`}
+            href={`/profile/${author.handle}`}
             onClick={(e) => {
               e.stopPropagation();
             }}
@@ -63,7 +63,7 @@ const SearchPost = memo(function SearchPost(props: Props) {
           <div className="flex grow flex-col">
             <div className="flex">
               <Link
-                href={`/dashboard/user/${author.handle}`}
+                href={`/profile/${author.handle}`}
                 onClick={(e) => {
                   e.stopPropagation();
                 }}

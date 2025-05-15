@@ -18,7 +18,7 @@ export default function MainContainer({
 }) {
   const mode = useClientModeState();
   const pathname = usePathname();
-  const isHome = pathname === "/dashboard/home";
+  const isHome = pathname === "/home";
   return (
     <main
       className={`

@@ -8,5 +8,4 @@ Disallow: /feeds/
 Disallow: /lists/
 Disallow: /notifications/
 Disallow: /settings/
-Disallow: /sponsorship/
 Disallow: /*?

@@ -7,7 +7,7 @@ import BluemojiPicker from "@/components/actions/bluemoji/BluemojiPicker";
 import MainContainer from "@/containers/main/MainContainer";
 
 export const metadata: Metadata = {
-  title: { template: "%s — Stellar", default: "Stellar" },
+  title: { template: "%s - Naledi", default: "Naledi" },
   description: "Home",
 };
 

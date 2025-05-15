@@ -2,11 +2,11 @@ import Layout from "@/containers/Layout";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: { template: "%s — Stellar", default: "Bluemoji" },
-  description: "Bluemoji",
+  title: { template: "%s - Naledi", default: "Settings" },
+  description: "Settings",
 };
 
-export default function BluemojiLayout({
+export default function SettingsLayout({
   children,
 }: {
   children: React.ReactNode;

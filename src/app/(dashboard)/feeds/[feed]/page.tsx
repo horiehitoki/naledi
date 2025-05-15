@@ -10,7 +10,7 @@ export async function generateMetadata({
   const title = feedInfo.view.displayName ? feedInfo.view.displayName : "Feed";
 
   return {
-    title: title + " — Stellar",
+    title: title + " - Naledi",
     description: "Feed",
   };
 }

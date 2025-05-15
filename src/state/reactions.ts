@@ -1,6 +1,6 @@
 import { atom, useAtomValue, useSetAtom } from "jotai";
 import { atomFamily } from "jotai/utils";
-import { Reaction } from "../../types/atmosphere/types/blue/maril/stellar/getReactions";
+import { Reaction } from "../../types/atmosphere/types/org/gunjo/getReactions";
 
 export const reactionState = atomFamily((id: string) =>
   atom({

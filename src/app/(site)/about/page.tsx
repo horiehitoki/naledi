@@ -149,20 +149,6 @@ export default function Page() {
           .
         </p>
 
-        <h3 className="text-skin-base mb-1 mt-6 text-lg font-semibold">
-          Can I support the project?
-        </h3>
-        <p className="text-skin-base mt-3">
-          If you like to support the project and help keep the site up and running,
-          please follow{" "}
-          <Link
-            href="https://gunjo.org/sponsorship"
-            className="underline underline-offset-2"
-          >
-            the navigation menu
-          </Link>{" "}
-          to become a sponsor.
-        </p>
       </section>
       <footer className="text-skin-tertiary mt-16 text-center text-sm font-medium">
         &copy; {new Date().getFullYear()} <Link href="https://foundation.gunjo.org">Gunjo Foundation, Inc.</Link>

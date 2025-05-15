@@ -66,7 +66,7 @@ export default function SearchList(props: Props) {
       {currentTab === "top" && (
         <PostSearchContainer query={onSearchPost(query)} sort={currentTab} />
       )}
-      {currentTab === "users" && <UserSearchContainer query={query} />}
+      {currentTab === "profile" && <UserSearchContainer query={query} />}
       {currentTab === "feeds" && <FeedSearchContainer query={query} />}
     </section>
   );
