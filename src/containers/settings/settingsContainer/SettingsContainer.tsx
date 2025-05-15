@@ -8,7 +8,7 @@ import {
   BiSolidXCircle,
   BiSolidPalette,
   BiSolidPlanet,
-  BiSupport
+  BiDonateHeart
 } from "react-icons/bi";
 import { MdRemoveRedEye } from "react-icons/md";
 import { BiSolidBellOff } from "react-icons/bi";
@@ -176,8 +176,8 @@ export default async function SettingsContainer() {
             target="_blank"
             className="border-skin-base text-skin-base hover:bg-skin-secondary flex items-center gap-2 border border-x-0 p-3 last:border-b md:border-x md:first:rounded-t-2xl md:last:rounded-b-2xl odd:[&:not(:last-child)]:border-b-0 even:[&:not(:last-child)]:border-b-0"
           >
-            <BiSupport className="text-skin-icon-base text-xl" />
-            Donate
+            <BiDonateHeart className="text-skin-icon-base text-xl" />
+            Become a Sponsor
           </Link>
           <Link
             href="/about"
