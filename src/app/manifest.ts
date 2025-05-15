@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Naledi",
     short_name: "Naledi",
     description: "Naledi is an AT Protocol web client with emoji reactions.",
-    start_url: "/dashboard/home",
+    start_url: "/home",
     display: "standalone",
     background_color: "#fff",
     icons: [
