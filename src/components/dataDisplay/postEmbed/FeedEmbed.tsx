@@ -17,8 +17,8 @@ export default function FeedEmbed(props: Props) {
       {depth < 2 && (
         <Link
           href={{
-            pathname: `/dashboard/feeds/${encodeURIComponent(
-              feed.uri.split(":")[3].split("/")[0],
+            pathname: `/feeds/${encodeURIComponent(
+              feed.uri.split(":")[2].split("/")[0],
             )}`,
             query: { uri: feed.uri },
           }}
