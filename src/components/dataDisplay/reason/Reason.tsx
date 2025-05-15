@@ -23,7 +23,7 @@ export default function Reason(props: Props) {
     <>
       {isRepost && (
         <Link
-          href={`/dashboard/user/${reason.by.handle}`}
+          href={`/profile/${reason.by.handle}`}
           onClick={(e) => e.stopPropagation()}
           className="max-w-fit"
         >

@@ -85,7 +85,7 @@ export default function PostActions(props: Props) {
             )}
             {quoteCount > 0 && (
               <Link
-                href={`/dashboard/user/${post.author.handle}/post/${getPostId(
+                href={`/profile/${post.author.handle}/post/${getPostId(
                   post.uri
                 )}/quotes`}
                 className="text-skin-base flex gap-1 font-semibold"
@@ -98,7 +98,7 @@ export default function PostActions(props: Props) {
             )}
             {likeCount > 0 && (
               <Link
-                href={`/dashboard/user/${post.author.handle}/post/${getPostId(
+                href={`/profile/${post.author.handle}/post/${getPostId(
                   post.uri
                 )}/liked-by`}
                 className="text-skin-base flex gap-1 font-semibold"

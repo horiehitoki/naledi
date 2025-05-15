@@ -26,7 +26,7 @@ export default function ProfileBio(props: Props) {
         component: (
           <Link
             className="text-skin-link-base hover:text-skin-link-hover break-words"
-            href={`/dashboard/user/${getHandle(segment.text)}`}
+            href={`/profile/${getHandle(segment.text)}`}
             key={segment.mention?.did}
             onClick={(e) => e.stopPropagation()}
           >

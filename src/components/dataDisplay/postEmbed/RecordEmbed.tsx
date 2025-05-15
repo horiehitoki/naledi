@@ -28,7 +28,7 @@ export default function RecordEmbed(props: Props) {
         <div
           onClick={(e) => {
             router.push(
-              `/dashboard/user/${record.author.handle}/post/${getPostId(
+              `/profile/${record.author.handle}/post/${getPostId(
                 record.uri,
               )}`,
             );

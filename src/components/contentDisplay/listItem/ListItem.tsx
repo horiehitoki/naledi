@@ -18,8 +18,8 @@ const ListItem = memo(function ListItem(props: Props) {
   return (
     <Link
       href={{
-        pathname: `/dashboard/user/${creator.handle}/lists/${encodeURIComponent(
-          uri.split(":")[3].split("/")[2],
+        pathname: `/profile/${creator.handle}/lists/${encodeURIComponent(
+          uri.split(":")[2].split("/")[1],
         )}`,
         query: { uri: uri },
       }}

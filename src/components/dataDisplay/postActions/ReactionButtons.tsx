@@ -71,7 +71,7 @@ export default function ReactionButtons({
                             className="flex items-center gap-1 text-sm"
                             key={r.rkey}
                           >
-                            <a href={`/dashboard/user/${r.actor.did}`}>
+                            <a href={`/profile/${r.actor.did}`}>
                               <Image
                                 src={r.actor.avatar}
                                 className="rounded-full"

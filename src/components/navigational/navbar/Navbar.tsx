@@ -44,35 +44,35 @@ export default function Navbar() {
   return (
     <nav className="inline-flex flex-col gap-5 lg:ml-1.5">
       <NavItem
-        href="/dashboard/home"
+        href="/home"
         icon={<BiHome className="text-2xl md:text-3xl" />}
         activeIcon={<BiSolidHome className="text-2xl md:text-3xl" />}
         title="Home"
-        isActive={pathname === "/dashboard/home"}
+        isActive={pathname === "/home"}
       />
       <NavItem
-        href="/dashboard/search"
+        href="/search"
         icon={<PiMagnifyingGlassBold className="text-2xl md:text-3xl" />}
         activeIcon={<PiMagnifyingGlassFill className="text-2xl md:text-3xl" />}
         title="Search"
         isActive={pathname.includes("search")}
       />
       <NavItem
-        href="/dashboard/feeds"
+        href="/feeds"
         icon={<BiPlanet className="text-2xl md:text-3xl" />}
         activeIcon={<BiSolidPlanet className="text-2xl md:text-3xl" />}
         title="Feeds"
         isActive={pathname === "/dashboard/feeds"}
       />
       <NavItem
-        href="/dashboard/lists"
+        href="/lists"
         icon={<HiOutlineClipboardList className="text-2xl md:text-3xl" />}
         activeIcon={<HiClipboardList className="text-2xl md:text-3xl" />}
         title="Lists"
         isActive={pathname === "/dashboard/lists"}
       />
       <NavItem
-        href="/dashboard/notifications"
+        href="/notifications"
         icon={<FaRegBell className="text-2xl md:text-3xl" />}
         activeIcon={<FaBell className="text-2xl md:text-3xl" />}
         title="Notifications"
@@ -80,14 +80,14 @@ export default function Navbar() {
         badge={notificationsCount ?? 0}
       />
       <NavItem
-        href="/dashboard/bluemoji"
+        href="/bluemoji"
         icon={<FaRegSmile className="text-2xl md:text-3xl" />}
         activeIcon={<FaSmile className="text-2xl md:text-3xl" />}
         title="Bluemoji"
         isActive={pathname.includes("bluemoji")}
       />
       <NavItem
-        href="/dashboard/settings"
+        href="/settings"
         icon={<BiCog className="text-2xl md:text-3xl" />}
         activeIcon={<BiSolidCog className="text-2xl md:text-3xl" />}
         title="Settings"

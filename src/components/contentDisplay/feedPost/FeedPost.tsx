@@ -92,7 +92,7 @@ export default function FeedPost(props: Props) {
         onClick={(e) => {
           e.stopPropagation();
           router.push(
-            `/dashboard/user/${post.post.author.handle}/post/${getPostId(
+            `/profile/${post.post.author.handle}/post/${getPostId(
               post.post.uri
             )}`
           );
@@ -105,7 +105,7 @@ export default function FeedPost(props: Props) {
           <div
             onClick={(e) => {
               e.stopPropagation();
-              router.push(`/dashboard/user/${author.handle}`);
+              router.push(`/profile/${author.handle}`);
             }}
             className="z-20 shrink-0 hover:brightness-90"
           >
@@ -120,7 +120,7 @@ export default function FeedPost(props: Props) {
             {isParent && !reason && <Threadline />}
             <div className="flex">
               <Link
-                href={`/dashboard/user/${author.handle}`}
+                href={`/profile/${author.handle}`}
                 onClick={(e) => {
                   e.stopPropagation();
                 }}

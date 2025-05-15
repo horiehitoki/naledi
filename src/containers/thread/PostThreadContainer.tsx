@@ -100,7 +100,7 @@ export default function PostThreadContainer(props: Props) {
           />
         )}
         <div className="mt-3 flex justify-center">
-          <Button onClick={() => router.push("/dashboard/home")}>
+          <Button onClick={() => router.push("/home")}>
             Go Home
           </Button>
         </div>
