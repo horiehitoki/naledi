@@ -8,6 +8,7 @@ import {
   BiSolidXCircle,
   BiSolidPalette,
   BiSolidPlanet,
+  BiSupport
 } from "react-icons/bi";
 import { MdRemoveRedEye } from "react-icons/md";
 import { BiSolidBellOff } from "react-icons/bi";
@@ -169,6 +170,14 @@ export default async function SettingsContainer() {
           >
             <TbLicense className="text-skin-icon-base text-xl" />
             License
+          </Link>
+          <Link
+            href="https://donate.stripe.com/aEU8A5c57bmW2DC288"
+            target="_blank"
+            className="border-skin-base text-skin-base hover:bg-skin-secondary flex items-center gap-2 border border-x-0 p-3 last:border-b md:border-x md:first:rounded-t-2xl md:last:rounded-b-2xl odd:[&:not(:last-child)]:border-b-0 even:[&:not(:last-child)]:border-b-0"
+          >
+            <BiSupport className="text-skin-icon-base text-xl" />
+            Donate
           </Link>
           <Link
             href="/about"
