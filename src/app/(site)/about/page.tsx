@@ -30,7 +30,7 @@ export default function Page() {
           About
         </h1>
         <p className="text-skin-base">
-          Gunjo (formerly Morpho) is an open-source{" "}
+          Naledi is an open-source{" "}
           <Link
             href="https://bsky.social/about"
             className="underline underline-offset-2"
@@ -53,25 +53,24 @@ export default function Page() {
           </Link>
           , a decentralized networking technology for social media. This is
           similar to Twitter apps such as Twitterrific or Tweetbot that used
-          Twitter's API in the past. Gunjo was forked from{" "}
+          Twitter's API in the past. Naledi was forked from{" "}
           <Link
-            href="https://github.com/pdelfan/ouranos"
+            href="https://github.com/marukun712/stellar"
             className="underline underline-offset-2"
           >
-            Ouranos
+            Stellar
           </Link>
           , another Bluesky web client.
         </p>
 
         <p className="text-skin-base mt-3">
-          And the app, Gunjo, is being developed by us,{" "}
+          And the app, Naledi, is being developed by us,{" "}
           <Link
             href="https://foundation.gunjo.org"
             className="underline underline-offset-2"
           >
-            Gunjo Foundation
+            Gunjo Foundation, Inc.
           </Link>
-          .
         </p>
 
         <h2 className="text-skin-base mb-6 mt-12 text-2xl font-medium">
@@ -115,7 +114,7 @@ export default function Page() {
         </h3>
         <p className="text-skin-base">
           App passwords allow you to log in and use the app, but restrict
-          third-party clients (ex. Gunjo) from certain functionalities such as
+          third-party clients (ex. Naledi) from certain functionalities such as
           account deletion or generating additional app passwords.
         </p>
 
@@ -125,7 +124,7 @@ export default function Page() {
         <p className="text-skin-base">
           If you have an account on GitHub, you can go to the project's{" "}
           <Link
-            href="https://github.com/gunjo-org/morpho"
+            href="https://github.com/gunjo-org/naledi"
             className="underline underline-offset-2"
           >
             repository
@@ -134,7 +133,7 @@ export default function Page() {
           question, etc). For general questions and anything that else that
           comes to your mind, there is{" "}
           <Link
-            href="https://github.com/gunjo-org/morpho/discussions"
+            href="https://github.com/gunjo-org/naledi/discussions"
             className="underline underline-offset-2"
           >
             Discussions
