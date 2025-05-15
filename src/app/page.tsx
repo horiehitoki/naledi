@@ -1,21 +1,21 @@
 import Image from "next/image";
 import Link from "next/link";
-import { HiSparkles } from "react-icons/hi";
 
 export default function Home() {
   return (
     <main className="mx-auto mt-0 p-5 md:mt-16">
       <header className="mx-auto flex max-w-xl items-center justify-between animate-fade">
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-3 group">
-            <h1 className="font-bold text-3xl flex">
-              <span className="bg-gradient-to-r from-blue-800 to-indigo-900 inline-block text-transparent bg-clip-text">
-                Stellar
-              </span>
-
-              <HiSparkles className="text-yellow-400 ml-2" />
-            </h1>
-          </div>
+          <Link
+            href="https://foundation.gunjo.org"
+          >
+            <Image
+              src="/mark.svg"
+              alt="gunjo logo"
+              width={40}
+              height={40}
+            />
+          </Link>
         </div>
         <Link
           href="/about"
@@ -26,13 +26,13 @@ export default function Home() {
       </header>
       <section className="animate-fade-up animate-delay-150 mx-auto mt-16 max-w-xl">
         <h1 className="text-skin-base max-w-lg text-4xl font-medium">
-          AT Protocol web client with Bluemoji reactions
+          Bluesky client for the web what forked from Ouranos
         </h1>
-
+        
         <ul className="text-skin-secondary mt-5 text-lg font-medium">
-          <li>Custom emoji reactions</li>
-          <li>Open network</li>
-          <li></li>
+          <li>Designed for simplicity</li>
+          <li>Enhanced features</li>
+          <li>Open-source</li>
         </ul>
 
         <div className="mt-6 flex flex-wrap gap-3">
@@ -52,7 +52,7 @@ export default function Home() {
         </div>
       </section>
       <footer className="animate-fade-up animate-delay-500 text-skin-tertiary mt-16 text-center text-sm font-medium">
-        Stellar · {new Date().getFullYear()}
+        &copy; {new Date().getFullYear()} <Link href="https://foundation.gunjo.org">Gunjo Foundation, Inc.</Link>
       </footer>
     </main>
   );

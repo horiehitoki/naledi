@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Login",
-  description: "Stellar is an AT Protocol web client with emoji reactions.",
+  description: "Naledi is an AT Protocol web client with emoji reactions.",
 };
 
 export default async function InventoryLayout({

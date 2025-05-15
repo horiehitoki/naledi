@@ -326,12 +326,12 @@ app.get("/xrpc/app.bsky.feed.getFeedSkeleton", async (c) => {
 app.get("/.well-known/did.json", async (c) => {
   return Response.json({
     "@context": ["https://www.w3.org/ns/did/v1"],
-    id: "did:web:appview.maril.blue",
+    id: "did:web:appview.gunjo.org",
     service: [
       {
         id: "#bsky_fg",
         type: "BskyFeedGenerator",
-        serviceEndpoint: `https://appview.maril.blue`,
+        serviceEndpoint: `https://appview.gunjo.org`,
       },
     ],
   });

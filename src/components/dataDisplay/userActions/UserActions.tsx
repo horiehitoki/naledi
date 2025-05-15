@@ -37,7 +37,7 @@ export default function UserActions(props: Props) {
   const clipboard = useClipboard({ copiedTimeout: 3500 });
 
   const handleShare = useCallback(() => {
-    const shareUrl = `https://stellar.maril.blue/dashboard/user/${author.handle}`;
+    const shareUrl = `https://gunjo.org/dashboard/user/${author.handle}`;
     clipboard.copy(shareUrl);
     toast.success("Link to profile copied to clipboard", {
       id: "Copy profile link",

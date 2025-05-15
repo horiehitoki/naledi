@@ -12,7 +12,6 @@ import { PiSignInBold } from "react-icons/pi";
 import { MdAlternateEmail } from "react-icons/md";
 import { BiSolidLockAlt } from "react-icons/bi";
 import LoadingSpinner from "@/components/status/loadingSpinner/LoadingSpinner";
-import { HiSparkles } from "react-icons/hi";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -59,16 +58,14 @@ export default function LoginForm() {
   if (isRedirecting) {
     return (
       <section className="bg-skin-base border border-skin-base shadow-2xl shadow-primary-light/30 max-w-xs rounded-2xl p-5">
-        <div className="flex items-center gap-6 group justify-center">
-          <h1 className="font-bold text-3xl flex">
-            <span className="bg-gradient-to-r from-blue-800 to-indigo-900 inline-block text-transparent bg-clip-text">
-              Stellar
-            </span>
-
-            <HiSparkles className="text-yellow-400 ml-2" />
-          </h1>
-        </div>
-
+        <Image
+          src="/mark.svg"
+          alt="gunjo logo"
+          width={50}
+          height={50}
+          priority
+          className="mx-auto mb-3"
+        />
         <h1 className="text-skin-base mb-1 text-center text-xl font-semibold">
           Welcome Back
         </h1>
@@ -83,16 +80,13 @@ export default function LoginForm() {
 
   return (
     <section className="bg-skin-base border border-skin-base max-w-xs rounded-2xl p-5 shadow-2xl shadow-primary-light/30">
-      <div className="flex items-center gap-6 group justify-center">
-        <h1 className="font-bold text-3xl flex">
-          <span className="bg-gradient-to-r from-blue-800 to-indigo-900 inline-block text-transparent bg-clip-text">
-            Stellar
-          </span>
-
-          <HiSparkles className="text-yellow-400 ml-2" />
-        </h1>
-      </div>
-
+      <Image
+        src="/mark.svg"
+        alt="gunjo logo"
+        width={50}
+        height={50}
+        className="mx-auto mb-3"
+      />
       <h1 className="text-skin-base mb-1 text-xl font-semibold">Welcome</h1>
       <p className="text-skin-secondary mb-3 text-sm font-medium">
         We recommend using an{" "}

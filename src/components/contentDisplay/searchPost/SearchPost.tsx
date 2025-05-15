@@ -77,7 +77,7 @@ const SearchPost = memo(function SearchPost(props: Props) {
                 </span>
               </Link>
               <span className="text-skin-tertiary whitespace-nowrap font-medium">
-                &nbsp;· {getRelativeTime(indexedAt)}
+                &nbsp;&bull; {getRelativeTime(indexedAt)}
               </span>
             </div>
             <PostText record={post.record} />

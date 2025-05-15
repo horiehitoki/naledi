@@ -1,9 +1,6 @@
-![logo](./public/images/ogp.png)
+# Naledi
 
-# Stellar
-
-Stellar is an AT Protocol web client with emoji reactions.
-This is a fork of [Ouranos](https://github.com/pdelfan/ouranos/).
+Naledi is a fork of [Stellar](https://github.com/marukun712/stellar) with an AT Protocol web client and emoji reactions.
 
 ## Getting Started
 

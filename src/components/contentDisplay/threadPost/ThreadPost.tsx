@@ -13,7 +13,7 @@ import PostHider from "@/components/dataDisplay/postHider/PostHider";
 import Link from "next/link";
 import { getThreadPostFilter } from "@/lib/utils/feed";
 import ProfileHoverCard from "../profileHoverCard/ProfileHoverCard";
-import { Reaction } from "../../../../types/atmosphere/types/blue/maril/stellar/getReactions";
+import { Reaction } from "../../../../types/atmosphere/types/org/gunjo/getReactions";
 import ReactionButtons from "@/components/dataDisplay/postActions/ReactionButtons";
 import { useSetReactionState } from "@/state/reactions";
 

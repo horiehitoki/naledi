@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "About",
-  description: "About Stellar",
+  description: "About Naledi",
 };
 
 export default async function RootLayout({

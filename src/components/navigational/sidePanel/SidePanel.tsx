@@ -3,7 +3,6 @@
 import Navbar from "../navbar/Navbar";
 import Image from "next/image";
 import Button from "@/components/actions/button/Button";
-import { HiSparkles } from "react-icons/hi";
 
 export default function SidePanel() {
   return (
@@ -13,13 +12,13 @@ export default function SidePanel() {
         className="inline mb-8"
       >
         <div className="flex items-center gap-3 group">
-          <h1 className="font-bold text-3xl flex">
-            <span className="bg-gradient-to-r from-blue-800 to-indigo-900 inline-block text-transparent bg-clip-text">
-              Stellar
-            </span>
-
-            <HiSparkles className="text-yellow-400 ml-2" />
-          </h1>
+          <Image
+            src="/mark.svg"
+            alt="gunjo logo"
+            width={44}
+            height={44}
+            priority
+          />
         </div>
       </Button>
       <Navbar />

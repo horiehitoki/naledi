@@ -6,7 +6,6 @@ import { ProfileViewDetailed } from "@atproto/api/dist/client/types/app/bsky/act
 import Image from "next/image";
 import Link from "next/link";
 import { BiCog } from "react-icons/bi";
-import { HiSparkles } from "react-icons/hi";
 
 interface Props {
   profile: ProfileViewDetailed;
@@ -31,16 +30,13 @@ export default function TopBar(props: Props) {
         className="inline"
       >
         <div className="flex items-center gap-2 group">
-          <div className="flex items-center gap-3 group">
-            <h1 className="font-bold text-3xl flex">
-              <span className="bg-gradient-to-r from-blue-800 to-indigo-900 inline-block text-transparent bg-clip-text">
-                Stellar
-              </span>
-
-              <HiSparkles className="text-yellow-400 ml-2" />
-            </h1>
-          </div>
-        </div>
+          <Image
+            src="/mark.svg"
+            alt="gunjo logo"
+            width={30}
+            height={30}
+          />
+        </div>{" "}
       </Button>
       <Link href="/dashboard/settings">
         <BiCog className="text-skin-icon-muted hover:text-skin-icon-base text-2xl md:text-3xl" />

@@ -12,24 +12,24 @@ import ThemeProvider from "./providers/theme";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: { template: "%s — Stellar", default: "Stellar" },
+  title: { template: "%s - Naledi", default: "Naledi" },
   description: "AT Protocol web client with Bluemoji reactions",
-  metadataBase: new URL("https://stellar.maril.blue"),
+  metadataBase: new URL("https://gunjo.org"),
   other: {
     "fc:frame": "vNext",
     "of:version": "vNext",
     "of:accepts:anonymous": "vNext",
-    "of:image": "https://stellar.maril.blue/images/ogp.png",
-    "fc:frame:image": "https://stellar.maril.blue/images/ogp.png",
+    "of:image": "https://gunjo.org/images/ogp.png",
+    "fc:frame:image": "https://gunjo.org/images/ogp.png",
     "fc:frame:button:1": "Home",
     "fc:frame:button:1:action": "link",
-    "fc:frame:button:1:target": "https://stellar.maril.blue/",
+    "fc:frame:button:1:target": "https://gunjo.org/",
     "fc:frame:button:2": "About",
     "fc:frame:button:2:action": "link",
-    "fc:frame:button:2:target": "https://stellar.maril.blue/about",
-    "fc:frame:button:3": "GitHub",
+    "fc:frame:button:2:target": "https://gunjo.org/about",
+    "fc:frame:button:3": "Website",
     "fc:frame:button:3:action": "link",
-    "fc:frame:button:3:target": "https://github.com/marukun712/stellar",
+    "fc:frame:button:3:target": "https://foundation.gunjo.org",
   },
 };
 

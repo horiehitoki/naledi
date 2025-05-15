@@ -4,7 +4,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@radix-ui/react-tooltip";
-import { Reaction } from "../../../../types/atmosphere/types/blue/maril/stellar/getReactions";
+import { Reaction } from "../../../../types/atmosphere/types/org/gunjo/getReactions";
 import Image from "next/image";
 import { FaSmile } from "react-icons/fa";
 import { useEmojiPicker } from "@/app/providers/BluemojiPickerProvider";

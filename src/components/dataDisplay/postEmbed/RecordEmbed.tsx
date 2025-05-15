@@ -54,7 +54,7 @@ export default function RecordEmbed(props: Props) {
                 </span>
               </span>
               <span className="text-skin-tertiary whitespace-nowrap font-medium">
-                &nbsp;· {getRelativeTime(record.indexedAt)}
+                &nbsp;&bull; {getRelativeTime(record.indexedAt)}
               </span>
             </div>
             <div className="mt-1">
