@@ -6,7 +6,7 @@ import {
 } from "@radix-ui/react-tooltip";
 import { Reaction } from "../../../../types/atmosphere/types/org/gunjo/getReactions";
 import Image from "next/image";
-import { FaSmile } from "react-icons/fa";
+import { FaRegSmile } from "react-icons/fa";
 import { useEmojiPicker } from "@/app/providers/BluemojiPickerProvider";
 import { useAgent } from "@/app/providers/agent";
 import useReaction from "@/lib/hooks/useReaction";
@@ -94,7 +94,7 @@ export default function ReactionButtons({
             onClick={() => toggleOpen({ uri, cid })}
             className="rounded-full p-2"
           >
-            <FaSmile className="w-4 h-4 text-skin-base" />
+            <FaRegSmile className="w-4 h-4 text-skin-base" />
           </button>
         </div>
       </TooltipProvider>
