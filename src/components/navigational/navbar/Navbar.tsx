@@ -96,14 +96,14 @@ export default function Navbar() {
       <button
         className="hover:text-skin-base flex items-center text-skin-secondary"
         onClick={() => {
-          setClientMode(clientMode === "default" ? "Deck" : "Default");
+          setClientMode(clientMode === "Default" ? "Deck" : "Default");
         }}
       >
         <div className="relative m-2 md:m-0 text-4xl">
-          {clientMode === "default" ? <BiSquareRounded /> : <BiColumns />}
+          {clientMode === "Default" ? <BiSquareRounded /> : <BiColumns />}
         </div>
         <span className={`hidden text-lg font-medium lg:inline ml-2`}>
-          {clientMode === "default" ? "Default" : "Deck"}
+          {clientMode === "Default" ? "Default" : "Deck"}
         </span>
       </button>
     </nav>
