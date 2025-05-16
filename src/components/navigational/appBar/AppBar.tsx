@@ -13,7 +13,7 @@ import { MdAccountCircle, MdOutlineAccountCircle } from "react-icons/md";
 import { useAgent } from "@/app/providers/agent";
 
 interface Props {
-  profile?: ProfileViewDetailed;
+  profile: ProfileViewDetailed;
 }
 
 export default function AppBar(props: Props) {
