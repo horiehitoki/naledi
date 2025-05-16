@@ -9,7 +9,6 @@ import { BiHome, BiCog, BiSolidHome, BiSolidCog } from "react-icons/bi";
 import { PiMagnifyingGlassBold, PiMagnifyingGlassFill } from "react-icons/pi";
 import { FaRegBell } from "react-icons/fa6";
 import { FaBell } from "react-icons/fa";
-import { HiClipboardList, HiOutlineClipboardList } from "react-icons/hi";
 import { MdAccountCircle, MdOutlineAccountCircle } from "react-icons/md";
 import { useAgent } from "@/app/providers/agent";
 
