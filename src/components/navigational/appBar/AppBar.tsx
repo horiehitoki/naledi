@@ -62,7 +62,7 @@ export default function AppBar() {
         badge={notificationsCount ?? 0}
       />
       <Link
-        href={`/profile/${profile?.handle}`}
+        href="/profile/${profile?.handle}"
         className="hover:brightness-90"
       >
         <Avatar
