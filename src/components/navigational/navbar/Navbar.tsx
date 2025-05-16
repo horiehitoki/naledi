@@ -9,8 +9,10 @@ import {
   BiSolidPlanet,
   BiCog,
   BiSolidCog,
+  BiSquareRounded,
+  BiColumns,
 } from "react-icons/bi";
-import { PiMagnifyingGlassBold, PiMagnifyingGlassFill, PiColumns } from "react-icons/pi";
+import { PiMagnifyingGlassBold, PiMagnifyingGlassFill } from "react-icons/pi";
 import { HiClipboardList, HiOutlineClipboardList } from "react-icons/hi";
 import { FaBell, FaRegBell } from "react-icons/fa6";
 import { getUnreadNotificationsCount } from "@/lib/api/bsky/notification";
@@ -104,10 +106,10 @@ export default function Navbar() {
         }}
       >
         <div className="text-2xl md:text-3xl">
-          {<PiColumns />}
+          {clientMode === "default" ? <BiSquareRounded /> : <BiColumns />}
         </div>
         <span className={`hidden text-lg font-medium lg:inline ml-2`}>
-          {"Columns"}
+          {clientMode === "default" ? "default" : "deck"}
         </span>
       </button>
     </nav>
