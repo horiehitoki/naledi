@@ -93,12 +93,12 @@ export default function Navbar() {
         isActive={pathname.includes("settings")}
       />
       <button
-        className="hover:text-skin-base flex items-center text-skin-secondary"
+        className="hover:text-skin-base flex items-center text-skin-secondary gap-3"
         onClick={() => {
-          setClientMode(clientMode === "default" ? "deck" : "default");
+          setClientMode(clientMode === "default" ? "Deck" : "Default");
         }}
       >
-        <div className="text-2xl md:text-3xl">
+        <div className="relative text-2xl md:text-3xl">
           {clientMode === "default" ? <BiSquareRounded /> : <BiColumns />}
         </div>
         <span className={`hidden text-lg font-medium lg:inline ml-2`}>
