@@ -92,13 +92,6 @@ export default function Navbar() {
         title="Settings"
         isActive={pathname.includes("settings")}
       />
-      <NavItem
-        icon={<PiColumns className="" />}
-        onClick={() => {
-          setClientMode(clientMode === "default" ? "deck" : "default");
-        }}
-        title="Colmuns"
-      />
       <button
         className="hover:text-skin-base flex items-center text-skin-secondary"
         onClick={() => {
