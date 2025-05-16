@@ -10,14 +10,13 @@ import {
   BiCog,
   BiSolidCog,
 } from "react-icons/bi";
-import { PiMagnifyingGlassBold, PiMagnifyingGlassFill } from "react-icons/pi";
+import { PiMagnifyingGlassBold, PiMagnifyingGlassFill, PiColumns } from "react-icons/pi";
 import { HiClipboardList, HiOutlineClipboardList } from "react-icons/hi";
 import { FaBell, FaRegBell } from "react-icons/fa6";
 import { getUnreadNotificationsCount } from "@/lib/api/bsky/notification";
 import { useQuery } from "@tanstack/react-query";
 import { useAgent } from "@/app/providers/agent";
 import { FaRegSmile, FaSmile } from "react-icons/fa";
-import { TbColumns1, TbColumns2 } from "react-icons/tb";
 import { useClientModeState, useSetClientModeState } from "@/state/client";
 
 export default function Navbar() {
@@ -91,15 +90,13 @@ export default function Navbar() {
         title="Settings"
         isActive={pathname.includes("settings")}
       />
-      <button
-        className="text-2xl md:text-3xl"
+      <NavItem
+        icon={<PiColumns className="text-2xl md:text-3xl" />}
         onClick={() => {
           setClientMode(clientMode === "default" ? "deck" : "default");
         }}
-      >
-        <TbColumns2 />
-        Colmuns
-      </button>
+        title="Colmuns"
+      />
     </nav>
   );
 }
