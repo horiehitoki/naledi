@@ -92,17 +92,13 @@ export default function Navbar() {
         isActive={pathname.includes("settings")}
       />
       <button
-        className="hover:text-skin-base flex items-center text-skin-secondary"
+        className="text-2xl md:text-3xl"
         onClick={() => {
-          setClientMode(clientMode === "default" ? "deck" : "Default");
+          setClientMode(clientMode === "default" ? "deck" : "default");
         }}
       >
-        <div className="relative m-2 md:m-0 text-4xl">
-          {clientMode === "default" ? <TbColumns1 /> : <TbColumns2 />}
-        </div>
-        <span className={`hidden text-lg font-medium lg:inline ml-2`}>
-          {clientMode === "default" ? "default" : "Deck"}
-        </span>
+        <TbColumns2 />
+        Colmuns
       </button>
     </nav>
   );
