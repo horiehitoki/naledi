@@ -2,7 +2,7 @@
 
 import NavItem from "./NavItem";
 import { usePathname } from "next/navigation";
-
+import Button from "@mui/material/Button";
 import {
   BiHome,
   BiSolidHome,
@@ -10,8 +10,6 @@ import {
   BiSolidPlanet,
   BiCog,
   BiSolidCog,
-  BiColumns,
-  BiSquareRounded,
 } from "react-icons/bi";
 import { PiMagnifyingGlassBold, PiMagnifyingGlassFill } from "react-icons/pi";
 import { HiClipboardList, HiOutlineClipboardList } from "react-icons/hi";
@@ -19,10 +17,10 @@ import { FaBell, FaRegBell } from "react-icons/fa6";
 import { getUnreadNotificationsCount } from "@/lib/api/bsky/notification";
 import { useQuery } from "@tanstack/react-query";
 import { useAgent } from "@/app/providers/agent";
-import { FaRegSmile, FaSmile } from "react-icons/fa";
+import { FaRegSmile, FaSmile, FaColumns, FaRegWindowMaximize } from "react-icons/fa";
 import { useClientModeState, useSetClientModeState } from "@/state/client";
 
-export Default function Navbar() {
+export default function Navbar() {
   const agent = useAgent();
   const pathname = usePathname();
 
@@ -93,19 +91,20 @@ export Default function Navbar() {
         title="Settings"
         isActive={pathname.includes("settings")}
       />
-      <button
+      <Button
+        sx={textTransform: "capitalize"}
         className="hover:text-skin-base flex items-center text-skin-secondary"
         onClick={() => {
-          setClientMode(clientMode === "Default" ? "Deck" : "Default");
+          setClientMode(clientMode === "default" ? "deck" : "default");
         }}
       >
         <div className="relative m-2 md:m-0 text-4xl">
-          {clientMode === "Default" ? <BiSquareRounded /> : <BiColumns />}
+          {clientMode === "default" ? <FaRegWindowMaximize /> : <FaColumns />}
         </div>
         <span className={`hidden text-lg font-medium lg:inline ml-2`}>
-          {clientMode === "Default" ? "Default" : "Deck"}
+          {clientMode === "default" ? "default" : "deck"}
         </span>
-      </button>
+      </Button>
     </nav>
   );
 }
