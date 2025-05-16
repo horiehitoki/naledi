@@ -3,7 +3,6 @@
 import { usePathname } from "next/navigation";
 import Avatar from "@/components/dataDisplay/avatar/Avatar";
 import { ProfileViewDetailed } from "@atproto/api/dist/client/types/app/bsky/actor/defs";
-import Link from "next/link";
 import NavItem from "../navbar/NavItem";
 import { getUnreadNotificationsCount } from "@/lib/api/bsky/notification";
 import { useQuery } from "@tanstack/react-query";
@@ -61,15 +60,12 @@ export default function AppBar() {
         isActive={pathname.includes("notifications")}
         badge={notificationsCount ?? 0}
       />
-      <Link
+      <NavItem
         href="/profile/${profile?.handle}"
-        className="hover:brightness-90"
-      >
-        <Avatar
-          src={profile.avatar?.replace("avatar", "avatar_thumbnail")}
-          size="sm"
-        />
-      </Link>
+        icon={<{profile.avatar?.replace("avatar", "avatar_thumbnail")} className="text-2xl md:text-3xl" />}
+        title="Profile"
+        isActive={pathname.includes("profile")}
+      />
     </nav>
   );
 }
