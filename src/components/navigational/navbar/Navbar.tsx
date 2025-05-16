@@ -9,7 +9,7 @@ import {
   BiSolidPlanet,
   BiCog,
   BiSolidCog,
-  BiSquareRounded,
+  BiWindow,
   BiColumns,
 } from "react-icons/bi";
 import { PiMagnifyingGlassBold, PiMagnifyingGlassFill } from "react-icons/pi";
@@ -99,7 +99,7 @@ export default function Navbar() {
         }}
       >
         <div className="relative text-2xl md:text-3xl">
-          {clientMode === "Default" ? <BiSquareRounded /> : <BiColumns />}
+          {clientMode === "Default" ? <BiWindow /> : <BiColumns />}
         </div>
         <span className={`hidden text-lg font-medium lg:inline`}>
           {clientMode === "Default" ? "Default" : "Deck"}
