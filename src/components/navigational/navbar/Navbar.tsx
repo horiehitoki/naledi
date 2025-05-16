@@ -22,7 +22,7 @@ import { useAgent } from "@/app/providers/agent";
 import { FaRegSmile, FaSmile } from "react-icons/fa";
 import { useClientModeState, useSetClientModeState } from "@/state/client";
 
-export default function Navbar() {
+export Default function Navbar() {
   const agent = useAgent();
   const pathname = usePathname();
 
