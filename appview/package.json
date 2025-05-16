@@ -1,5 +1,5 @@
 {
-  "name": "stellar-appview",
+  "name": "naledi-appview",
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts"

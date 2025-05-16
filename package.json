@@ -1,6 +1,6 @@
 {
-  "name": "stellar",
-  "version": "0.7.0",
+  "name": "naledi",
+  "version": "0.8.0",
   "private": true,
   "scripts": {
     "dev": "next dev --turbo",

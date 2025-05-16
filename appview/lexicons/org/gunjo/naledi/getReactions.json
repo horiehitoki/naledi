@@ -1,6 +1,6 @@
 {
   "lexicon": 1,
-  "id": "blue.maril.stellar.getReactions",
+  "id": "org.gunjo.naledi.getReactions",
   "defs": {
     "main": {
       "type": "query",
@@ -54,7 +54,7 @@
         "createdAt": { "type": "string", "format": "datetime" },
         "emojiRef": {
           "type": "ref",
-          "ref": "blue.maril.stellar.reaction#emojiRef"
+          "ref": "org.gunjo.naledi.reaction#emojiRef"
         },
         "emoji": {
           "type": "ref",

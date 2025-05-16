@@ -1,6 +1,6 @@
 {
   "lexicon": 1,
-  "id": "blue.maril.stellar.getEmojis",
+  "id": "org.gunjo.naledi.getEmojis",
   "defs": {
     "main": {
       "type": "query",
@@ -30,7 +30,7 @@
               "type": "array",
               "items": {
                 "type": "ref",
-                "ref": "blue.maril.stellar.getEmojis#itemView"
+                "ref": "org.gunjo.naledi.getEmojis#itemView"
               }
             }
           }
@@ -41,7 +41,7 @@
       "type": "object",
       "required": ["ref", "record"],
       "properties": {
-        "ref": { "type": "ref", "ref": "blue.maril.stellar.reaction#emojiRef" },
+        "ref": { "type": "ref", "ref": "org.gunjo.naledi.reaction#emojiRef" },
         "record": { "type": "ref", "ref": "blue.moji.collection.item#itemView" }
       }
     }

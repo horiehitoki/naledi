@@ -1,6 +1,6 @@
-# stellar-appview
+# naledi-appview
 
-This is a Stellar AppView Server.
+This is a Naledi AppView Server.
 
 # Develop
 

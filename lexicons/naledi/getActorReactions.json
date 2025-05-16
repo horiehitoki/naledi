@@ -1,6 +1,6 @@
 {
   "lexicon": 1,
-  "id": "blue.maril.stellar.getActorReactions",
+  "id": "org.gunjo.naledi.getActorReactions",
   "defs": {
     "main": {
       "type": "query",
@@ -30,7 +30,7 @@
               "type": "array",
               "items": {
                 "type": "ref",
-                "ref": "blue.maril.stellar.getActorReactions#actorReaction"
+                "ref": "org.gunjo.naledi.getActorReactions#actorReaction"
               }
             }
           }
@@ -44,7 +44,7 @@
         "subject": { "type": "ref", "ref": "com.atproto.repo.strongRef" },
         "reaction": {
           "type": "ref",
-          "ref": "blue.maril.stellar.getReactions#reaction"
+          "ref": "org.gunjo.naledi.getReactions#reaction"
         }
       }
     }
