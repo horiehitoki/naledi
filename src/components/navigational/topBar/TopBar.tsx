@@ -2,11 +2,16 @@
 
 import Button from "@/components/actions/button/Button";
 import Image from "next/image";
+import BiPlanet from "react-icons/bi";
+import HiClipboardList from "react-icons/hi";
 
 export default function TopBar() {
 
   return (
     <div className="bg-skin-base border-skin-base sticky top-0 z-[60] flex items-center justify-between border-b px-3 py-2.5 transition-all ease-linear md:hidden">
+      <Link href="/lists">
+        <HiClipboardList className="text-skin-icon-muted hover:text-skin-icon-base text-2xl md:text-3xl" />
+      </Link>
       <Button
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         className="inline"
@@ -20,6 +25,9 @@ export default function TopBar() {
           />
         </div>{" "}
       </Button>
+      <Link href="/feeds">
+        <BiPlanet className="text-skin-icon-muted hover:text-skin-icon-base text-2xl md:text-3xl" />
+      </Link>
     </div>
   );
 }

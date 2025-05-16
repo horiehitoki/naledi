@@ -13,6 +13,10 @@ import { HiClipboardList, HiOutlineClipboardList } from "react-icons/hi";
 import { MdAccountCircle, MdOutlineAccountCircle } from "react-icons/md";
 import { useAgent } from "@/app/providers/agent";
 
+interface Props {
+  profile: ProfileViewDetailed;
+}
+
 export default function AppBar() {
   const pathname = usePathname();
   const agent = useAgent();
@@ -29,7 +33,7 @@ export default function AppBar() {
     refetchInterval: 10000,
   });
 
-  const profile = ProfileViewDetailed;
+  const profile = props;
 
   return (
     <nav className="bg-skin-base border-skin-base fixed bottom-0 z-40 flex w-full justify-between gap-6 overflow-auto border-t px-6 pb-8 pt-1 transition-all ease-linear md:hidden">
