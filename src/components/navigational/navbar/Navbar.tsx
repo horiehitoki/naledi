@@ -91,12 +91,25 @@ export default function Navbar() {
         isActive={pathname.includes("settings")}
       />
       <NavItem
-        icon={<PiColumns className="text-2xl md:text-3xl" />}
+        icon={<PiColumns className="" />}
         onClick={() => {
           setClientMode(clientMode === "default" ? "deck" : "default");
         }}
         title="Colmuns"
       />
+      <button
+        className="hover:text-skin-base flex items-center text-skin-secondary"
+        onClick={() => {
+          setClientMode(clientMode === "default" ? "deck" : "default");
+        }}
+      >
+        <div className="text-2xl md:text-3xl">
+          <PiColumns />
+        </div>
+        <span className={`hidden text-lg font-medium lg:inline ml-2`}>
+          "Columns"
+        </span>
+      </button>
     </nav>
   );
 }
