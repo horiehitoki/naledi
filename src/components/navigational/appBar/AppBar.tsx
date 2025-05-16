@@ -13,9 +13,14 @@ import { HiClipboardList, HiOutlineClipboardList } from "react-icons/hi";
 import { MdAccountCircle, MdOutlineAccountCircle } from "react-icons/md";
 import { useAgent } from "@/app/providers/agent";
 
+interface Props {
+  profile: ProfileViewDetailed;
+}
+
 export default function AppBar() {
   const pathname = usePathname();
   const agent = useAgent();
+  const profile = props;
 
   const {
     data: notificationsCount,
