@@ -61,14 +61,14 @@ export default function Navbar() {
         icon={<BiPlanet className="text-2xl md:text-3xl" />}
         activeIcon={<BiSolidPlanet className="text-2xl md:text-3xl" />}
         title="Feeds"
-        isActive={pathname === "/dashboard/feeds"}
+        isActive={pathname === "/feeds"}
       />
       <NavItem
         href="/lists"
         icon={<HiOutlineClipboardList className="text-2xl md:text-3xl" />}
         activeIcon={<HiClipboardList className="text-2xl md:text-3xl" />}
         title="Lists"
-        isActive={pathname === "/dashboard/lists"}
+        isActive={pathname === "/lists"}
       />
       <NavItem
         href="/notifications"

@@ -14,11 +14,11 @@ export default function DashboardContainer() {
     queryFn: async () => getSavedFeeds(agent),
   });
 
-  if (mode === "default") {
+  if (mode === "Default") {
     return <FeedContainer feed="timeline" mode="feed" />;
   }
 
-  if (mode === "deck") {
+  if (mode === "Deck") {
     return (
       <div className="flex w-full h-screen overflow-x-auto">
         <ColumnContainer id={"home"} title="Home">
