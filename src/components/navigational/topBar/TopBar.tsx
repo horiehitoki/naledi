@@ -2,8 +2,8 @@
 
 import Button from "@/components/actions/button/Button";
 import Image from "next/image";
-import BiPlanet from "react-icons/bi";
-import HiClipboardList from "react-icons/hi";
+import { BiPlanet } from "react-icons/bi";
+import { HiClipboardList } from "react-icons/hi";
 
 export default function TopBar() {
 
