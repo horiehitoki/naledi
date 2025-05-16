@@ -3,7 +3,6 @@
 import Button from "@/components/actions/button/Button";
 import Image from "next/image";
 import Link from "next/link";
-import { BiPlanet } from "react-icons/bi";
 
   return (
     <div className="bg-skin-base border-skin-base sticky top-0 z-[60] flex items-center justify-between border-b px-3 py-2.5 transition-all ease-linear md:hidden">
@@ -20,9 +19,6 @@ import { BiPlanet } from "react-icons/bi";
           />
         </div>{" "}
       </Button>
-      <Link href="/feeds">
-        <BiPlanet className="text-skin-icon-muted hover:text-skin-icon-base text-2xl md:text-3xl" />
-      </Link>
     </div>
   );
 }
