@@ -69,7 +69,7 @@ export default function AppBar() {
         badge={notificationsCount ?? 0}
       />
       <NavItem
-        href="/profile/${profile?.handle}"
+        href={"profile/${profile?.handle}"}
         icon={<MdOutlineAccountCircle className="text-2xl md:text-3xl" />}
         activeIcon={<MdAccountCircle className="text-2xl md:text-3xl" />}
         title="Profile"
