@@ -1,10 +1,13 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import Avatar from "@/components/dataDisplay/avatar/Avatar";
+import { ProfileViewDetailed } from "@atproto/api/dist/client/types/app/bsky/actor/defs";
+import Link from "next/link";
 import NavItem from "../navbar/NavItem";
 import { getUnreadNotificationsCount } from "@/lib/api/bsky/notification";
 import { useQuery } from "@tanstack/react-query";
-import { BiHome, BiPlanet, BiSolidHome, BiSolidPlanet } from "react-icons/bi";
+import { BiHome, BiCog, BiSolidHome, BiSolidCog } from "react-icons/bi";
 import { PiMagnifyingGlassBold, PiMagnifyingGlassFill } from "react-icons/pi";
 import { FaRegBell } from "react-icons/fa6";
 import { FaBell } from "react-icons/fa";
@@ -44,18 +47,11 @@ export default function AppBar() {
         isActive={pathname.includes("search")}
       />
       <NavItem
-        href="/feeds"
-        icon={<BiPlanet className="text-2xl md:text-3xl" />}
-        activeIcon={<BiSolidPlanet className="text-2xl md:text-3xl" />}
-        title="Feeds"
-        isActive={pathname === "/feeds"}
-      />
-      <NavItem
-        href="/lists"
-        icon={<HiOutlineClipboardList className="text-2xl md:text-3xl" />}
-        activeIcon={<HiClipboardList className="text-2xl md:text-3xl" />}
-        title="Lists"
-        isActive={pathname === "/lists"}
+        href="/settings"
+        icon={<BiCog className="text-2xl md:text-3xl" />}
+        activeIcon={<BiSolidCog className="text-2xl md:text-3xl" />}
+        title="Settings"
+        isActive={pathname === "/settings"}
       />
       <NavItem
         href="/notifications"
@@ -65,6 +61,15 @@ export default function AppBar() {
         isActive={pathname.includes("notifications")}
         badge={notificationsCount ?? 0}
       />
+      <Link
+        href={`/profile/${profile?.handle}`}
+        className="hover:brightness-90"
+      >
+        <Avatar
+          src={profile.avatar?.replace("avatar", "avatar_thumbnail")}
+          size="sm"
+        />
+      </Link>
     </nav>
   );
 }
