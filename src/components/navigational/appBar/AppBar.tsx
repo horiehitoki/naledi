@@ -11,6 +11,7 @@ import { PiMagnifyingGlassBold, PiMagnifyingGlassFill } from "react-icons/pi";
 import { FaRegBell } from "react-icons/fa6";
 import { FaBell } from "react-icons/fa";
 import { HiClipboardList, HiOutlineClipboardList } from "react-icons/hi";
+import { MdAccountCircle, MdOutlineAccountCircle } from "react-icons/md";
 import { useAgent } from "@/app/providers/agent";
 
 export default function AppBar() {
@@ -62,7 +63,8 @@ export default function AppBar() {
       />
       <NavItem
         href="/profile/${profile?.handle}"
-        icon={<{profile.avatar?.replace("avatar", "avatar_thumbnail")} className="text-2xl md:text-3xl" />}
+        icon={<MdOutlineAccountCircle className="text-2xl md:text-3xl" />}
+        activeIcon={<MdAccountCircle className="text-2xl md:text-3xl" />}
         title="Profile"
         isActive={pathname.includes("profile")}
       />
