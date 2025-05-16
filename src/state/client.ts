@@ -1,9 +1,9 @@
 import { useAtomValue, useSetAtom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
 
-export const clientModeState = atomWithStorage<"default" | "deck">(
+export const clientModeState = atomWithStorage<"Default" | "Deck">(
   "mode",
-  "default"
+  "Default"
 );
 
 export const columnState = atomWithStorage<string[]>("column", ["timeline"]);
