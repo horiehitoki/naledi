@@ -10,13 +10,14 @@ import {
   BiCog,
   BiSolidCog,
 } from "react-icons/bi";
-import { PiMagnifyingGlassBold, PiMagnifyingGlassFill, PiColumns } from "react-icons/pi";
+import { PiMagnifyingGlassBold, PiMagnifyingGlassFill } from "react-icons/pi";
 import { HiClipboardList, HiOutlineClipboardList } from "react-icons/hi";
 import { FaBell, FaRegBell } from "react-icons/fa6";
 import { getUnreadNotificationsCount } from "@/lib/api/bsky/notification";
 import { useQuery } from "@tanstack/react-query";
 import { useAgent } from "@/app/providers/agent";
 import { FaRegSmile, FaSmile } from "react-icons/fa";
+import { TbColumns1, TbColumns2 } from "react-icons/tb";
 import { useClientModeState, useSetClientModeState } from "@/state/client";
 
 export default function Navbar() {
@@ -90,13 +91,19 @@ export default function Navbar() {
         title="Settings"
         isActive={pathname.includes("settings")}
       />
-      <NavItem
+      <button
+        className="hover:text-skin-base flex items-center text-skin-secondary"
         onClick={() => {
-          setClientMode(clientMode === "default" ? "deck" : "default");
+          setClientMode(clientMode === "default" ? "deck" : "Default");
         }}
-        icon={<PiColumns className="hover:text-skin-base flex items-center text-skin-secondary" />}
-        title="Colmuns"
-      />
+      >
+        <div className="relative m-2 md:m-0 text-4xl">
+          {clientMode === "default" ? <TbColumns1 /> : <TbColumns2 />}
+        </div>
+        <span className={`hidden text-lg font-medium lg:inline ml-2`}>
+          {clientMode === "default" ? "default" : "Deck"}
+        </span>
+      </button>
     </nav>
   );
 }
