@@ -104,10 +104,10 @@ export default function Navbar() {
         }}
       >
         <div className="text-2xl md:text-3xl">
-          <PiColumns />
+          {<PiColumns />}
         </div>
         <span className={`hidden text-lg font-medium lg:inline ml-2`}>
-          Columns
+          {"Columns"}
         </span>
       </button>
     </nav>
