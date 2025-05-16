@@ -3,7 +3,7 @@
 import Button from "@/components/actions/button/Button";
 import Image from "next/image";
 
-export default function TopBar() {
+export default function TopBar(props: Props) {
 
   return (
     <div className="bg-skin-base border-skin-base sticky top-0 z-[60] flex items-center justify-between border-b px-3 py-2.5 transition-all ease-linear md:hidden">
