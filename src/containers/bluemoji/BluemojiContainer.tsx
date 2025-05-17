@@ -101,7 +101,7 @@ export default function BluemojiContainer() {
     : [];
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-8">
+    <section className="flex flex-col gap-5">
       <h2 className="text-skin-base mx-3 mb-2 text-2xl font-semibold md:mx-0">
         Bluemoji
       </h2>
@@ -171,6 +171,6 @@ export default function BluemojiContainer() {
           </div>
         </div>
       )}
-    </div>
+    </section>
   );
 }
