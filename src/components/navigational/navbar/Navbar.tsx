@@ -99,10 +99,10 @@ export default function Navbar() {
         }}
       >
         <div className="relative text-2xl md:text-3xl">
-          {clientMode === "Deck" ? <BiColumns /> : <BiWindow />}
+          {clientMode === "Default" ? <BiColumns /> : <BiWindow />}
         </div>
         <span className={`hidden text-lg font-medium lg:inline`}>
-          {clientMode === "Deck" ? "Deck" : "Default"}
+          {clientMode === "Default" ? "Default" : "Deck"}
         </span>
       </button>
     </nav>
