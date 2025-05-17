@@ -17,7 +17,7 @@ export default function BluemojiForm({
         <div>
           <label
             htmlFor="name"
-            className="block text-sm font-medium mb-2 text-skin-base"
+            className="block text-xl font-medium mb-2 text-skin-base"
           >
             Emoji Name
           </label>
@@ -34,7 +34,7 @@ export default function BluemojiForm({
         <div>
           <label
             htmlFor="alt"
-            className="block text-sm font-medium mb-2 text-skin-base"
+            className="block text-xl font-medium mb-2 text-skin-base"
           >
             Alt Text
           </label>

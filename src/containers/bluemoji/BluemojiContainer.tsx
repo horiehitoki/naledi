@@ -101,11 +101,15 @@ export default function BluemojiContainer() {
     : [];
 
   return (
+  <section className="flex flex-col gap-5">
+    <h2 className="text-skin-base mx-3 mb-2 text-2xl font-semibold md:mx-0">
+      Bluemoji
+    </h2>
     <div className="max-w-4xl mx-auto p-6 space-y-8">
       <div className="rounded-xl border border-slate-200 dark:border-slate-700 p-8">
-        <h2 className="text-3xl font-bold text-center mb-8 text-skin-base">
-          Upload Bluemoji
-        </h2>
+        <h3 className="text-skin-base mx-3 mb-2 text-xl font-semibold md:mx-0">
+          Upload
+        </h3>
 
         <BluemojiForm isLoading={isLoading} error={error} onSubmit={onSubmit} />
       </div>
