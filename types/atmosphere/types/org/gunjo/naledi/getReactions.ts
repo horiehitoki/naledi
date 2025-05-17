@@ -7,7 +7,7 @@ import { isObj, hasProp } from '../../../../util'
 import { lexicons } from '../../../../lexicons'
 import { CID } from 'multiformats/cid'
 import * as ComAtprotoRepoStrongRef from '../../../com/atproto/repo/strongRef'
-import * as BlueMarilStellarReaction from './reaction'
+import * as OrgGunjoNalediReaction from './reaction'
 import * as BlueMojiCollectionItem from '../../moji/collection/item'
 import * as AppBskyActorDefs from '../../../app/bsky/actor/defs'
 
@@ -49,7 +49,7 @@ export interface Reaction {
   rkey: string
   subject: ComAtprotoRepoStrongRef.Main
   createdAt: string
-  emojiRef?: BlueMarilStellarReaction.EmojiRef
+  emojiRef?: OrgGunjoNalediReaction.EmojiRef
   emoji: BlueMojiCollectionItem.ItemView
   actor?: AppBskyActorDefs.ProfileView
   [k: string]: unknown
@@ -59,10 +59,10 @@ export function isReaction(v: unknown): v is Reaction {
   return (
     isObj(v) &&
     hasProp(v, '$type') &&
-    v.$type === 'blue.maril.stellar.getReactions#reaction'
+    v.$type === 'org.gunjo.naledi.getReactions#reaction'
   )
 }
 
 export function validateReaction(v: unknown): ValidationResult {
-  return lexicons.validate('blue.maril.stellar.getReactions#reaction', v)
+  return lexicons.validate('org.gunjo.naledi.getReactions#reaction', v)
 }

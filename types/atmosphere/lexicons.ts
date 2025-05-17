@@ -4,9 +4,9 @@
 import { LexiconDoc, Lexicons } from '@atproto/lexicon'
 
 export const schemaDict = {
-  BlueMarilStellarGetActorReactions: {
+  OrgGunjoNalediGetActorReactions: {
     lexicon: 1,
-    id: 'blue.maril.stellar.getActorReactions',
+    id: 'org.gunjo.naledi.getActorReactions',
     defs: {
       main: {
         type: 'query',
@@ -44,7 +44,7 @@ export const schemaDict = {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:blue.maril.stellar.getActorReactions#actorReaction',
+                  ref: 'lex:org.gunjo.naledi.getActorReactions#actorReaction',
                 },
               },
             },
@@ -61,15 +61,15 @@ export const schemaDict = {
           },
           reaction: {
             type: 'ref',
-            ref: 'lex:blue.maril.stellar.getReactions#reaction',
+            ref: 'lex:org.gunjo.naledi.getReactions#reaction',
           },
         },
       },
     },
   },
-  BlueMarilStellarGetEmojis: {
+  OrgGunjoNalediGetEmojis: {
     lexicon: 1,
-    id: 'blue.maril.stellar.getEmojis',
+    id: 'org.gunjo.naledi.getEmojis',
     defs: {
       main: {
         type: 'query',
@@ -106,7 +106,7 @@ export const schemaDict = {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:blue.maril.stellar.getEmojis#itemView',
+                  ref: 'lex:org.gunjo.naledi.getEmojis#itemView',
                 },
               },
             },
@@ -119,7 +119,7 @@ export const schemaDict = {
         properties: {
           ref: {
             type: 'ref',
-            ref: 'lex:blue.maril.stellar.reaction#emojiRef',
+            ref: 'lex:org.gunjo.naledi.reaction#emojiRef',
           },
           record: {
             type: 'ref',
@@ -129,9 +129,9 @@ export const schemaDict = {
       },
     },
   },
-  BlueMarilStellarGetReactions: {
+  OrgGunjoNalediGetReactions: {
     lexicon: 1,
-    id: 'blue.maril.stellar.getReactions',
+    id: 'org.gunjo.naledi.getReactions',
     defs: {
       main: {
         type: 'query',
@@ -184,7 +184,7 @@ export const schemaDict = {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:blue.maril.stellar.getReactions#reaction',
+                  ref: 'lex:org.gunjo.naledi.getReactions#reaction',
                 },
               },
             },
@@ -208,7 +208,7 @@ export const schemaDict = {
           },
           emojiRef: {
             type: 'ref',
-            ref: 'lex:blue.maril.stellar.reaction#emojiRef',
+            ref: 'lex:org.gunjo.naledi.reaction#emojiRef',
           },
           emoji: {
             type: 'ref',
@@ -222,9 +222,9 @@ export const schemaDict = {
       },
     },
   },
-  BlueMarilStellarReaction: {
+  OrgGunjoNalediReaction: {
     lexicon: 1,
-    id: 'blue.maril.stellar.reaction',
+    id: 'org.gunjo.naledi.reaction',
     defs: {
       main: {
         type: 'record',
@@ -240,7 +240,7 @@ export const schemaDict = {
             },
             emoji: {
               type: 'ref',
-              ref: 'lex:blue.maril.stellar.reaction#emojiRef',
+              ref: 'lex:org.gunjo.naledi.reaction#emojiRef',
             },
           },
         },
@@ -500,7 +500,7 @@ export const schemaDict = {
             fallbackText: {
               type: 'string',
               maxLength: 1,
-              default: '◌',
+              default: '&#x25CC;',
             },
           },
         },
@@ -1391,10 +1391,10 @@ export const schemaDict = {
 export const schemas = Object.values(schemaDict)
 export const lexicons: Lexicons = new Lexicons(schemas)
 export const ids = {
-  BlueMarilStellarGetActorReactions: 'blue.maril.stellar.getActorReactions',
-  BlueMarilStellarGetEmojis: 'blue.maril.stellar.getEmojis',
-  BlueMarilStellarGetReactions: 'blue.maril.stellar.getReactions',
-  BlueMarilStellarReaction: 'blue.maril.stellar.reaction',
+  OrgGunjoNalediGetActorReactions: 'org.gunjo.naledi.getActorReactions',
+  OrgGunjoNalediGetEmojis: 'org.gunjo.naledi.getEmojis',
+  OrgGunjoNalediGetReactions: 'org.gunjo.naledi.getReactions',
+  OrgGunjoNalediReaction: 'org.gunjo.naledi.reaction',
   BlueLinkatBoard: 'blue.linkat.board',
   FyiUnravelFrontpagePost: 'fyi.unravel.frontpage.post',
   ComWhtwndBlogEntry: 'com.whtwnd.blog.entry',

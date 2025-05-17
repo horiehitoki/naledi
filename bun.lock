@@ -2,7 +2,7 @@
   "lockfileVersion": 1,
   "workspaces": {
     "": {
-      "name": "stellar",
+      "name": "naledi",
       "dependencies": {
         "@atproto/api": "^0.13.35",
         "@atproto/common": "^0.4.5",

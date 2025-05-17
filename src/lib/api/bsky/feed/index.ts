@@ -6,8 +6,8 @@ import {
   ThreadViewPostWithReaction,
 } from "../../../../../types/feed";
 import feedWithReaction from "@/lib/utils/feedWithReactions";
-import { getReactions } from "../../stellar";
-import { Reaction } from "../../../../../types/atmosphere/types/blue/maril/stellar/getReactions";
+import { getReactions } from "../../naledi";
+import { Reaction } from "../../../../../types/atmosphere/types/org/gunjo/naledi/getReactions";
 import {
   BlockedPost,
   NotFoundPost,

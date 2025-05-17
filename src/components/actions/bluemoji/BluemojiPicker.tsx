@@ -1,8 +1,8 @@
 "use client";
 import { useRef } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { getEmojis } from "@/lib/api/stellar";
-import { BlueMarilStellarGetEmojis } from "../../../../types/atmosphere";
+import { getEmojis } from "@/lib/api/naledi";
+import { OrgGunjoNalediGetEmojis } from "../../../../types/atmosphere";
 import { useAgent } from "@/app/providers/agent";
 import { useEmojiPicker } from "@/app/providers/BluemojiPickerProvider";
 import useReaction from "@/lib/hooks/useReaction";
@@ -58,7 +58,7 @@ export default function BluemojiPicker() {
     : [];
 
   // 絵文字選択ハンドラー
-  const handleEmojiSelect = (emoji: BlueMarilStellarGetEmojis.ItemView) => {
+  const handleEmojiSelect = (emoji: OrgGunjoNalediGetEmojis.ItemView) => {
     handleReaction(emoji.ref.rkey, emoji.ref.repo, emoji.record);
     setIsOpen(false);
   };

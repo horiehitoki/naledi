@@ -33,7 +33,7 @@ export default function AtmosphereNotFoundContainer() {
     <section className="p-3 bg-skin-base border-skin-base md:border-x border-b md:rounded-b-2xl">
       <Alert variant="info" message="No apps found" />
       <p className="font-medium text-skin-base mt-5">
-        Stellar currently supports the following apps in the atmosphere:
+        Naledi currently supports the following apps in the atmosphere:
       </p>
       <ul className="flex flex-col gap-2 mt-2">
         <li>

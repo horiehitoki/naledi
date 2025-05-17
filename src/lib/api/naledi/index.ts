@@ -1,7 +1,7 @@
 import AtpAgent from "@atproto/api";
 import {
-  BlueMarilStellarGetActorReactions,
-  BlueMarilStellarReaction,
+  OrgGunjoNalediGetActorReactions,
+  OrgGunjoNalediReaction,
 } from "../../../../types/atmosphere";
 import { putATRecords, removeATRecords } from "../atmosphere/record";
 import { FeedViewPostWithReaction } from "../../../../types/feed";
@@ -14,7 +14,7 @@ export async function getReactions(
 ) {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_STELLAR_APPVIEW_URL}/xrpc/blue.maril.stellar.getReactions?uri=${
+      `${process.env.NEXT_PUBLIC_NALEDI_APPVIEW_URL}/xrpc/org.gunjo.naledi.getReactions?uri=${
         uri
       }&cid=${cid}&limit=${limit}${cursor ? `&cursor=${cursor}` : ""}`
     );
@@ -36,13 +36,13 @@ export async function getActorReactions(
   const did = await agent.resolveHandle({ handle: actor });
 
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_STELLAR_APPVIEW_URL}/xrpc/blue.maril.stellar.getActorReactions?actor=${
+    `${process.env.NEXT_PUBLIC_NALEDI_APPVIEW_URL}/xrpc/org.gunjo.naledi.getActorReactions?actor=${
       did.data.did
     }${cursor ? `&cursor=${cursor}` : ""}`
   );
 
   const data =
-    (await res.json()) as BlueMarilStellarGetActorReactions.OutputSchema;
+    (await res.json()) as OrgGunjoNalediGetActorReactions.OutputSchema;
 
   //整形
   const result: FeedViewPostWithReaction[] = await Promise.all(
@@ -70,7 +70,7 @@ export async function getEmojis(
 ) {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_STELLAR_APPVIEW_URL}/xrpc/blue.maril.stellar.getEmojis?limit=${limit}${did ? `&did=${did}` : ""}${cursor ? `&cursor=${cursor}` : ""}`
+      `${process.env.NEXT_PUBLIC_NALEDI_APPVIEW_URL}/xrpc/org.gunjo.naledi.getEmojis?limit=${limit}${did ? `&did=${did}` : ""}${cursor ? `&cursor=${cursor}` : ""}`
     );
 
     const json = await res.json();
@@ -89,7 +89,7 @@ export async function reaction(
   subject: { rkey: string; repo: string },
   tid: string
 ) {
-  const record: BlueMarilStellarReaction.Record = {
+  const record: OrgGunjoNalediReaction.Record = {
     subject: {
       uri: target.uri,
       cid: target.cid,
@@ -98,8 +98,8 @@ export async function reaction(
   };
 
   if (
-    !BlueMarilStellarReaction.isRecord(record) &&
-    !BlueMarilStellarReaction.validateRecord(record)
+    !OrgGunjoNalediReaction.isRecord(record) &&
+    !OrgGunjoNalediReaction.validateRecord(record)
   )
     return new Response(null, { status: 400 });
 
@@ -107,7 +107,7 @@ export async function reaction(
     //リアクションレコードを作成
     await putATRecords(
       agent.assertDid,
-      "blue.maril.stellar.reaction",
+      "org.gunjo.naledi.reaction",
       agent,
       tid,
       record
@@ -118,7 +118,7 @@ export async function reaction(
 export async function removeReaction(agent: AtpAgent, rkey: string) {
   await removeATRecords(
     agent.assertDid,
-    "blue.maril.stellar.reaction",
+    "org.gunjo.naledi.reaction",
     agent,
     rkey
   );

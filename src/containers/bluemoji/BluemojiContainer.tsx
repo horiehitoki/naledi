@@ -1,7 +1,7 @@
 "use client";
 import { useAgent } from "@/app/providers/agent";
 import { uploadBluemoji } from "@/lib/utils/bluemoji/upload/UploadBluemoji";
-import { getEmojis } from "@/lib/api/stellar";
+import { getEmojis } from "@/lib/api/naledi";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { FormEvent, useState } from "react";
 import Image from "next/image";

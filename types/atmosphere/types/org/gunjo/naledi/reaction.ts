@@ -17,13 +17,13 @@ export function isRecord(v: unknown): v is Record {
   return (
     isObj(v) &&
     hasProp(v, '$type') &&
-    (v.$type === 'blue.maril.stellar.reaction#main' ||
-      v.$type === 'blue.maril.stellar.reaction')
+    (v.$type === 'org.gunjo.naledi.reaction#main' ||
+      v.$type === 'org.gunjo.naledi.reaction')
   )
 }
 
 export function validateRecord(v: unknown): ValidationResult {
-  return lexicons.validate('blue.maril.stellar.reaction#main', v)
+  return lexicons.validate('org.gunjo.naledi.reaction#main', v)
 }
 
 export interface EmojiRef {
@@ -36,10 +36,10 @@ export function isEmojiRef(v: unknown): v is EmojiRef {
   return (
     isObj(v) &&
     hasProp(v, '$type') &&
-    v.$type === 'blue.maril.stellar.reaction#emojiRef'
+    v.$type === 'org.gunjo.naledi.reaction#emojiRef'
   )
 }
 
 export function validateEmojiRef(v: unknown): ValidationResult {
-  return lexicons.validate('blue.maril.stellar.reaction#emojiRef', v)
+  return lexicons.validate('org.gunjo.naledi.reaction#emojiRef', v)
 }

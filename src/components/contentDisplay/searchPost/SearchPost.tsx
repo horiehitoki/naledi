@@ -11,7 +11,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { memo } from "react";
 import ProfileHoverCard from "../profileHoverCard/ProfileHoverCard";
-import { Reaction } from "../../../../types/atmosphere/types/org/gunjo/getReactions";
+import { Reaction } from "../../../../types/atmosphere/types/org/gunjo/naledi/getReactions";
 import ReactionButtons from "@/components/dataDisplay/postActions/ReactionButtons";
 import { useSetReactionState } from "@/state/reactions";
 

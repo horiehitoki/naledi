@@ -6,9 +6,9 @@ import { jetstream } from "./lib/jetstream/subscription.js";
 import { getParams } from "./utils/params.js";
 import { Emoji, Reaction } from "@prisma/client";
 import {
-  BlueMarilStellarGetReactions,
-  BlueMarilStellarGetActorReactions,
-  BlueMarilStellarGetEmojis,
+  OrgGunjoNalediGetReactions,
+  OrgGunjoNalediGetActorReactions,
+  OrgGunjoNalediGetEmojis,
 } from "./generated/api/index.js";
 import { Agent } from "@atproto/api";
 import { cors } from "hono/cors";
@@ -23,10 +23,10 @@ jetstream.start();
 app.use("*", cors());
 
 app.get("/", (c) => {
-  return c.text("This is a Stellar AppView Server.");
+  return c.text("This is a Naledi AppView Server.");
 });
 
-app.get("/xrpc/" + ids.BlueMarilStellarGetReactions, async (c) => {
+app.get("/xrpc/" + ids.OrgGunjoNalediGetReactions, async (c) => {
   try {
     const uri: string = getParams(c, "uri");
     const cid: string = getParams(c, "cid");
@@ -89,7 +89,7 @@ app.get("/xrpc/" + ids.BlueMarilStellarGetReactions, async (c) => {
     }
 
     //リアクションデータの整形
-    const transformedReactions: BlueMarilStellarGetReactions.Reaction[] =
+    const transformedReactions: OrgGunjoNalediGetReactions.Reaction[] =
       await Promise.all(
         reactions.map(async (reaction) => {
           let profile;
@@ -112,7 +112,7 @@ app.get("/xrpc/" + ids.BlueMarilStellarGetReactions, async (c) => {
       );
 
     //レスポンス
-    const response: BlueMarilStellarGetReactions.OutputSchema = {
+    const response: OrgGunjoNalediGetReactions.OutputSchema = {
       uri,
       ...(cid && { cid }),
       ...(hasMore && { cursor: reactions[reactions.length - 1].rkey }),
@@ -128,7 +128,7 @@ app.get("/xrpc/" + ids.BlueMarilStellarGetReactions, async (c) => {
   }
 });
 
-app.get("/xrpc/" + ids.BlueMarilStellarGetActorReactions, async (c) => {
+app.get("/xrpc/" + ids.OrgGunjoNalediGetActorReactions, async (c) => {
   try {
     const actor = getParams(c, "actor");
     const cursor = getParams(c, "cursor");
@@ -196,7 +196,7 @@ app.get("/xrpc/" + ids.BlueMarilStellarGetActorReactions, async (c) => {
       })
     );
 
-    const response: BlueMarilStellarGetActorReactions.OutputSchema = {
+    const response: OrgGunjoNalediGetActorReactions.OutputSchema = {
       feed,
       ...(hasMore && { cursor: reactions[reactions.length - 1].rkey }),
     };
@@ -213,7 +213,7 @@ app.get("/xrpc/" + ids.BlueMarilStellarGetActorReactions, async (c) => {
   }
 });
 
-app.get("/xrpc/" + ids.BlueMarilStellarGetEmojis, async (c) => {
+app.get("/xrpc/" + ids.OrgGunjoNalediGetEmojis, async (c) => {
   try {
     const cursor = getParams(c, "cursor");
     const did = getParams(c, "did");
@@ -255,7 +255,7 @@ app.get("/xrpc/" + ids.BlueMarilStellarGetEmojis, async (c) => {
       record: JSON.parse(emoji.record),
     }));
 
-    const response: BlueMarilStellarGetEmojis.OutputSchema = {
+    const response: OrgGunjoNalediGetEmojis.OutputSchema = {
       items,
       ...(hasMore && { cursor: emojis[emojis.length - 1].id }),
     };

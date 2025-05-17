@@ -1,8 +1,8 @@
 "use client";
 import { useRef, useState } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { getEmojis } from "@/lib/api/stellar";
-import { BlueMarilStellarGetEmojis } from "../../../../types/atmosphere";
+import { getEmojis } from "@/lib/api/naledi";
+import { OrgGunjoNalediGetEmojis } from "../../../../types/atmosphere";
 import Button from "@/components/actions/button/Button";
 import { BiSmile } from "react-icons/bi";
 import { useAgent } from "@/app/providers/agent";
@@ -37,7 +37,7 @@ export default function BluemojiAutoComplete({
     ? localData.pages.flatMap((page) => page.data.items ?? [])
     : [];
 
-  const handleEmojiSelect = (emoji: BlueMarilStellarGetEmojis.ItemView) => {
+  const handleEmojiSelect = (emoji: OrgGunjoNalediGetEmojis.ItemView) => {
     onEmojiSelect(`:${emoji.ref.rkey}:`);
     setShowPicker(false);
   };

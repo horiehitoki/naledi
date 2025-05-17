@@ -1,7 +1,7 @@
 import { useDebouncedCallback } from "use-debounce";
-import { Reaction } from "../../../types/atmosphere/types/blue/maril/stellar/getReactions";
+import { Reaction } from "../../../types/atmosphere/types/org/gunjo/naledi/getReactions";
 import { BlueMojiCollectionItem } from "../../../types/atmosphere";
-import { reaction, removeReaction } from "../api/stellar";
+import { reaction, removeReaction } from "../api/naledi";
 import { useReactionState, useSetReactionState } from "@/state/reactions";
 import { useAgent } from "@/app/providers/agent";
 

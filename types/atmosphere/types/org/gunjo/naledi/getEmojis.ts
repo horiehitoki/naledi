@@ -6,20 +6,21 @@ import { ValidationResult, BlobRef } from '@atproto/lexicon'
 import { isObj, hasProp } from '../../../../util'
 import { lexicons } from '../../../../lexicons'
 import { CID } from 'multiformats/cid'
-import * as ComAtprotoRepoStrongRef from '../../../com/atproto/repo/strongRef'
-import * as BlueMarilStellarGetReactions from './getReactions'
+import * as OrgGunjoNalediReaction from './reaction'
+import * as BlueMojiCollectionItem from '../../moji/collection/item'
 
 export interface QueryParams {
-  actor: string
+  /** The number of records to return. */
   limit?: number
   cursor?: string
+  did?: string
 }
 
 export type InputSchema = undefined
 
 export interface OutputSchema {
   cursor?: string
-  feed: ActorReaction[]
+  items: ItemView[]
   [k: string]: unknown
 }
 
@@ -38,23 +39,20 @@ export function toKnownErr(e: any) {
   return e
 }
 
-export interface ActorReaction {
-  subject: ComAtprotoRepoStrongRef.Main
-  reaction: BlueMarilStellarGetReactions.Reaction
+export interface ItemView {
+  ref: OrgGunjoNalediReaction.EmojiRef
+  record: BlueMojiCollectionItem.ItemView
   [k: string]: unknown
 }
 
-export function isActorReaction(v: unknown): v is ActorReaction {
+export function isItemView(v: unknown): v is ItemView {
   return (
     isObj(v) &&
     hasProp(v, '$type') &&
-    v.$type === 'blue.maril.stellar.getActorReactions#actorReaction'
+    v.$type === 'org.gunjo.naledi.getEmojis#itemView'
   )
 }
 
-export function validateActorReaction(v: unknown): ValidationResult {
-  return lexicons.validate(
-    'blue.maril.stellar.getActorReactions#actorReaction',
-    v,
-  )
+export function validateItemView(v: unknown): ValidationResult {
+  return lexicons.validate('org.gunjo.naledi.getEmojis#itemView', v)
 }

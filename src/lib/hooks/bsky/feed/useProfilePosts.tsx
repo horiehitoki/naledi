@@ -6,7 +6,7 @@ import {
   getUserLikes,
 } from "../../../api/bsky/feed";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { getActorReactions } from "@/lib/api/stellar";
+import { getActorReactions } from "@/lib/api/naledi";
 
 interface Props {
   mode: UserPostMode;

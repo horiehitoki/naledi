@@ -6,7 +6,7 @@ import {
 import { prisma } from "../db/prisma.js";
 import WebSocket from "ws";
 import {
-  BlueMarilStellarReaction,
+  OrgGunjoNalediReaction,
   BlueMojiCollectionItem,
 } from "../../generated/api/index.js";
 import { getEmojiFromPDS } from "../bluemoji/getEmoji.js";
@@ -14,7 +14,7 @@ import { getEmojiFromPDS } from "../bluemoji/getEmoji.js";
 export const jetstream = new Jetstream({
   ws: WebSocket,
   wantedCollections: [
-    "blue.maril.stellar.reaction",
+    "org.gunjo.naledi.reaction",
     "blue.moji.collection.item",
   ],
 });
@@ -33,15 +33,15 @@ jetstream.on("error", (error) => {
 
 async function updateReaction(
   event:
-    | CommitCreateEvent<"blue.maril.stellar.reaction">
-    | CommitUpdateEvent<"blue.maril.stellar.reaction">
+    | CommitCreateEvent<"org.gunjo.naledi.reaction">
+    | CommitUpdateEvent<"org.gunjo.naledi.reaction">
 ) {
   try {
     const record = event.commit.record;
 
     if (
-      BlueMarilStellarReaction.isRecord(record) &&
-      BlueMarilStellarReaction.validateRecord(record)
+      OrgGunjoNalediReaction.isRecord(record) &&
+      OrgGunjoNalediReaction.validateRecord(record)
     ) {
       await prisma.$transaction(async (tx) => {
         //もしAppViewに追加されていない絵文字がリアクションされたら追加する
@@ -131,19 +131,19 @@ async function updateEmoji(
   }
 }
 
-jetstream.onCreate("blue.maril.stellar.reaction", async (event) => {
+jetstream.onCreate("org.gunjo.naledi.reaction", async (event) => {
   console.log(`New Reaction: ${event.commit.rkey}`);
 
   await updateReaction(event);
 });
 
-jetstream.onUpdate("blue.maril.stellar.reaction", async (event) => {
+jetstream.onUpdate("org.gunjo.naledi.reaction", async (event) => {
   console.log(`Updated Reaction: ${event.commit.rkey}`);
 
   await updateReaction(event);
 });
 
-jetstream.onDelete("blue.maril.stellar.reaction", async (event) => {
+jetstream.onDelete("org.gunjo.naledi.reaction", async (event) => {
   console.log(`Deleted Reaction: ${event.commit.rkey}`);
 
   try {

@@ -1,4 +1,4 @@
-import { BlueMarilStellarGetEmojis } from "../../../../types/atmosphere";
+import { OrgGunjoNalediGetEmojis } from "../../../../types/atmosphere";
 import Image from "next/image";
 import { BiSearch } from "react-icons/bi";
 import * as Tabs from "@radix-ui/react-tabs";
@@ -15,10 +15,10 @@ export default function Picker({
   isFetchingNextPage,
 }: {
   localOnly: boolean;
-  global: BlueMarilStellarGetEmojis.ItemView[];
-  local: BlueMarilStellarGetEmojis.ItemView[];
+  global: OrgGunjoNalediGetEmojis.ItemView[];
+  local: OrgGunjoNalediGetEmojis.ItemView[];
   isLoading: { local: boolean; global: boolean };
-  handleEmojiSelect: (emoji: BlueMarilStellarGetEmojis.ItemView) => void;
+  handleEmojiSelect: (emoji: OrgGunjoNalediGetEmojis.ItemView) => void;
   fetchNextPage: (type: "local" | "global") => void;
   hasNextPage: { local: boolean; global: boolean };
   isFetchingNextPage: { local: boolean; global: boolean };
@@ -145,8 +145,8 @@ const EmojiGrid = ({
   emojis,
   onEmojiSelect,
 }: {
-  emojis: BlueMarilStellarGetEmojis.ItemView[];
-  onEmojiSelect: (emoji: BlueMarilStellarGetEmojis.ItemView) => void;
+  emojis: OrgGunjoNalediGetEmojis.ItemView[];
+  onEmojiSelect: (emoji: OrgGunjoNalediGetEmojis.ItemView) => void;
 }) => (
   <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-7 gap-0.5 max-h-[280px] overflow-y-auto px-1">
     {emojis.map((emoji) => (

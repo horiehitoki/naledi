@@ -4,10 +4,10 @@
 import { XrpcClient, FetchHandler, FetchHandlerOptions } from '@atproto/xrpc'
 import { schemas } from './lexicons'
 import { CID } from 'multiformats/cid'
-import * as BlueMarilStellarGetActorReactions from './types/blue/maril/stellar/getActorReactions'
-import * as BlueMarilStellarGetEmojis from './types/blue/maril/stellar/getEmojis'
-import * as BlueMarilStellarGetReactions from './types/blue/maril/stellar/getReactions'
-import * as BlueMarilStellarReaction from './types/blue/maril/stellar/reaction'
+import * as OrgGunjoNalediGetActorReactions from './types/org/gunjo/naledi/getActorReactions'
+import * as OrgGunjoNalediGetEmojis from './types/org/gunjo/naledi/getEmojis'
+import * as OrgGunjoNalediGetReactions from './types/org/gunjo/naledi/getReactions'
+import * as OrgGunjoNalediReaction from './types/org/gunjo/naledi/reaction'
 import * as BlueLinkatBoard from './types/blue/linkat/board'
 import * as FyiUnravelFrontpagePost from './types/fyi/unravel/frontpage/post'
 import * as ComWhtwndBlogEntry from './types/com/whtwnd/blog/entry'
@@ -28,10 +28,10 @@ import * as BlueMojiRichtextFacet from './types/blue/moji/richtext/facet'
 import * as AppBskyRichtextFacet from './types/app/bsky/richtext/facet'
 import * as ComAtprotoRepoStrongRef from './types/com/atproto/repo/strongRef'
 
-export * as BlueMarilStellarGetActorReactions from './types/blue/maril/stellar/getActorReactions'
-export * as BlueMarilStellarGetEmojis from './types/blue/maril/stellar/getEmojis'
-export * as BlueMarilStellarGetReactions from './types/blue/maril/stellar/getReactions'
-export * as BlueMarilStellarReaction from './types/blue/maril/stellar/reaction'
+export * as OrgGunjoNalediGetActorReactions from './types/org/gunjo/naledi/getActorReactions'
+export * as OrgGunjoNalediGetEmojis from './types/org/gunjo/naledi/getEmojis'
+export * as OrgGunjoNalediGetReactions from './types/org/gunjo/naledi/getReactions'
+export * as OrgGunjoNalediReaction from './types/org/gunjo/naledi/reaction'
 export * as BlueLinkatBoard from './types/blue/linkat/board'
 export * as FyiUnravelFrontpagePost from './types/fyi/unravel/frontpage/post'
 export * as ComWhtwndBlogEntry from './types/com/whtwnd/blog/entry'
@@ -74,29 +74,29 @@ export class AtpBaseClient extends XrpcClient {
 
 export class BlueNS {
   _client: XrpcClient
-  maril: BlueMarilNS
+  gunjo: OrgGunjoNS
   linkat: BlueLinkatNS
   moji: BlueMojiNS
 
   constructor(client: XrpcClient) {
     this._client = client
-    this.maril = new BlueMarilNS(client)
+    this.gunjo = new OrgGunjoNS(client)
     this.linkat = new BlueLinkatNS(client)
     this.moji = new BlueMojiNS(client)
   }
 }
 
-export class BlueMarilNS {
+export class OrgGunjoNS {
   _client: XrpcClient
-  stellar: BlueMarilStellarNS
+  naledi: OrgGunjoNalediNS
 
   constructor(client: XrpcClient) {
     this._client = client
-    this.stellar = new BlueMarilStellarNS(client)
+    this.naledi = new OrgGunjoNalediNS(client)
   }
 }
 
-export class BlueMarilStellarNS {
+export class OrgGunjoNalediNS {
   _client: XrpcClient
   reaction: ReactionRecord
 
@@ -106,11 +106,11 @@ export class BlueMarilStellarNS {
   }
 
   getActorReactions(
-    params?: BlueMarilStellarGetActorReactions.QueryParams,
-    opts?: BlueMarilStellarGetActorReactions.CallOptions,
-  ): Promise<BlueMarilStellarGetActorReactions.Response> {
+    params?: OrgGunjoNalediGetActorReactions.QueryParams,
+    opts?: OrgGunjoNalediGetActorReactions.CallOptions,
+  ): Promise<OrgGunjoNalediGetActorReactions.Response> {
     return this._client.call(
-      'blue.maril.stellar.getActorReactions',
+      'org.gunjo.naledi.getActorReactions',
       params,
       undefined,
       opts,
@@ -118,11 +118,11 @@ export class BlueMarilStellarNS {
   }
 
   getEmojis(
-    params?: BlueMarilStellarGetEmojis.QueryParams,
-    opts?: BlueMarilStellarGetEmojis.CallOptions,
-  ): Promise<BlueMarilStellarGetEmojis.Response> {
+    params?: OrgGunjoNalediGetEmojis.QueryParams,
+    opts?: OrgGunjoNalediGetEmojis.CallOptions,
+  ): Promise<OrgGunjoNalediGetEmojis.Response> {
     return this._client.call(
-      'blue.maril.stellar.getEmojis',
+      'org.gunjo.naledi.getEmojis',
       params,
       undefined,
       opts,
@@ -130,11 +130,11 @@ export class BlueMarilStellarNS {
   }
 
   getReactions(
-    params?: BlueMarilStellarGetReactions.QueryParams,
-    opts?: BlueMarilStellarGetReactions.CallOptions,
-  ): Promise<BlueMarilStellarGetReactions.Response> {
+    params?: OrgGunjoNalediGetReactions.QueryParams,
+    opts?: OrgGunjoNalediGetReactions.CallOptions,
+  ): Promise<OrgGunjoNalediGetReactions.Response> {
     return this._client.call(
-      'blue.maril.stellar.getReactions',
+      'org.gunjo.naledi.getReactions',
       params,
       undefined,
       opts,
@@ -153,10 +153,10 @@ export class ReactionRecord {
     params: Omit<ComAtprotoRepoListRecords.QueryParams, 'collection'>,
   ): Promise<{
     cursor?: string
-    records: { uri: string; value: BlueMarilStellarReaction.Record }[]
+    records: { uri: string; value: OrgGunjoNalediReaction.Record }[]
   }> {
     const res = await this._client.call('com.atproto.repo.listRecords', {
-      collection: 'blue.maril.stellar.reaction',
+      collection: 'org.gunjo.naledi.reaction',
       ...params,
     })
     return res.data
@@ -167,10 +167,10 @@ export class ReactionRecord {
   ): Promise<{
     uri: string
     cid: string
-    value: BlueMarilStellarReaction.Record
+    value: OrgGunjoNalediReaction.Record
   }> {
     const res = await this._client.call('com.atproto.repo.getRecord', {
-      collection: 'blue.maril.stellar.reaction',
+      collection: 'org.gunjo.naledi.reaction',
       ...params,
     })
     return res.data
@@ -181,14 +181,14 @@ export class ReactionRecord {
       ComAtprotoRepoCreateRecord.InputSchema,
       'collection' | 'record'
     >,
-    record: BlueMarilStellarReaction.Record,
+    record: OrgGunjoNalediReaction.Record,
     headers?: Record<string, string>,
   ): Promise<{ uri: string; cid: string }> {
-    record.$type = 'blue.maril.stellar.reaction'
+    record.$type = 'org.gunjo.naledi.reaction'
     const res = await this._client.call(
       'com.atproto.repo.createRecord',
       undefined,
-      { collection: 'blue.maril.stellar.reaction', ...params, record },
+      { collection: 'org.gunjo.naledi.reaction', ...params, record },
       { encoding: 'application/json', headers },
     )
     return res.data
@@ -201,7 +201,7 @@ export class ReactionRecord {
     await this._client.call(
       'com.atproto.repo.deleteRecord',
       undefined,
-      { collection: 'blue.maril.stellar.reaction', ...params },
+      { collection: 'org.gunjo.naledi.reaction', ...params },
       { headers },
     )
   }

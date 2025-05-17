@@ -47,7 +47,7 @@ export default function PostActions(props: Props) {
 
   const handleShare = useCallback(() => {
     const postId = getPostId(post.uri);
-    const shareUrl = `https://gunjo.org/profile/${post.author.handle}/post/${postId}`;
+    const shareUrl = `https://naledi.gunjo.org/profile/${post.author.handle}/post/${postId}`;
     clipboard.copy(shareUrl);
     toast.success("Copied link to post", { id: "Copy post link" });
   }, [clipboard, post.uri, post.author.handle]);

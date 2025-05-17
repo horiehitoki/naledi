@@ -9,7 +9,7 @@ import {
   ThreadContext,
 } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
 import { Notification } from "@atproto/api/dist/client/types/app/bsky/notification/listNotifications";
-import { Reaction } from "./atmosphere/types/blue/maril/stellar/getReactions";
+import { Reaction } from "./atmosphere/types/org/gunjo/naledi/getReactions";
 
 export type SavedFeed = GeneratorView & {
   pinned: boolean;
