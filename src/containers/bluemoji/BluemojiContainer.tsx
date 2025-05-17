@@ -114,7 +114,7 @@ export default function BluemojiContainer() {
         <BluemojiForm isLoading={isLoading} error={error} onSubmit={onSubmit} />
       </div>
 
-      {emojis.length == 0 && (
+      {(
         <div className="rounded-xl border border-slate-200 dark:border-slate-700 p-8">
           <h3 className="text-skin-base mx-3 mb-2 text-xl font-semibold md:mx-0">
             My Bluemoji
