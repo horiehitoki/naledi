@@ -74,7 +74,7 @@ export default function Navbar() {
         href="/notifications"
         icon={<FaRegBell className="text-2xl md:text-3xl" />}
         activeIcon={<FaBell className="text-2xl md:text-3xl" />}
-        title="Notifications"
+        title="Noti"
         isActive={pathname.includes("notifications")}
         badge={notificationsCount ?? 0}
       />
