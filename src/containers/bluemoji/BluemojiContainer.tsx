@@ -8,6 +8,7 @@ import Image from "next/image";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { BiTrash } from "react-icons/bi";
 import BluemojiForm from "@/components/forms/BluemojiForm";
+import FeedAlert from "@/components/feedback/feedAlert/FeedAlert";
 
 export default function BluemojiContainer() {
   const [isLoading, setIsLoading] = useState(false);
@@ -121,7 +122,15 @@ export default function BluemojiContainer() {
           My Bluemoji
         </h3>
 
-        {(
+        {if emojis.length == 0 && (
+        <div className="border-skin-base mt-2 flex w-full flex-col gap-3 rounded-none border border-x-0 p-3 md:rounded-b-2xl md:rounded-t-2xl md:border-x">
+          <div className="mx-3 md:mx-0">
+            <FeedAlert variant="empty" message="My Bluemoji not found." standalone />
+          </div>
+        </div>
+        )}
+
+        {if emojis.length > 0 && (
         <div className="border-skin-base mt-2 flex w-full flex-col gap-3 rounded-none border border-x-0 p-3 md:rounded-b-2xl md:rounded-t-2xl md:border-x">
           <div className="flex flex-wrap items-center justify-between gap-3">
             {emojis.map((emoji) => (
