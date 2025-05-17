@@ -170,6 +170,6 @@ export default function BluemojiContainer() {
           </div>
         </div>
       )}
-    </section>
+    </div>
   );
 }
