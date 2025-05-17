@@ -101,14 +101,14 @@ export default function BluemojiContainer() {
     : [];
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-8">
+    <div className="max-w-4xl mx-auto space-y-8">
       <h2 className="text-skin-base mx-3 mb-2 text-2xl font-semibold md:mx-0">
         Bluemoji
       </h2>
 
       <div className="rounded-xl border border-slate-200 dark:border-slate-700 p-8">
         <h3 className="text-skin-base mx-3 mb-2 text-xl font-semibold md:mx-0">
-          Upload Bluemoji
+          Upload
         </h3>
 
         <BluemojiForm isLoading={isLoading} error={error} onSubmit={onSubmit} />
@@ -117,7 +117,7 @@ export default function BluemojiContainer() {
       {emojis.length > 0 && (
         <div className="rounded-xl border border-slate-200 dark:border-slate-700 p-8">
           <h3 className="text-skin-base mx-3 mb-2 text-xl font-semibold md:mx-0">
-            Your Bluemoji
+            My Bluemoji
           </h3>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
