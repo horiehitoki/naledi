@@ -154,7 +154,7 @@ export default function BluemojiContainer() {
                         </p>
                         <button
                           onClick={() => deleteBluemoji(emoji.ref.rkey)}
-                          className="w-full bg-red-500 hover:bg-red-600 text-white rounded-lg py-2 px-4 transition-colors flex items-center justify-center space-x-2"
+                          className="w-full bg-red-500 hover:bg-red-600 text-white rounded-full py-2 px-4 transition-colors flex items-center justify-center space-x-2"
                         >
                           <BiTrash />
                           <span>Delete</span>
