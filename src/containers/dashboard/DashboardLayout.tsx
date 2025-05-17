@@ -12,7 +12,7 @@ export default function MainLayout({
 
   return (
     <div>
-      {mode === "Default" ? <FeedTabs /> : ""}
+      {mode === "default" ? <FeedTabs /> : ""}
       {children}
     </div>
   );
