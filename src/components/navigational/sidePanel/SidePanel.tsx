@@ -6,7 +6,7 @@ import Button from "@/components/actions/button/Button";
 
 export default function SidePanel() {
   return (
-    <menu className="hidden md:inline-flex items-center lg:items-start flex-col sticky top-6 h-full max-h-[91svh] overflow-y-hidden hover:overflow-y-auto">
+    <menu className="hidden md:inline-flex items-center lg:items-start flex-col sticky top-6 h-full max-h-[91svh] overflow-y-hidden hover:overflow-y-auto no-scrollbar">
       <Button
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         className="inline mb-8"

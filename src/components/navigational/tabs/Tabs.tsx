@@ -10,7 +10,7 @@ export default function Tabs(props: Props) {
 
   return (
     <ScrollArea.Root role="tablist">
-      <div className={`flex flex-nowrap overflow-x-auto ${className}`}>
+      <div className={`flex flex-nowrap overflow-x-auto ${className} no-scrollbar`}>
         {children}
       </div>
       <ScrollArea.Scrollbar orientation="horizontal">
