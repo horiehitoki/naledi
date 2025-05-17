@@ -106,10 +106,10 @@ export default function BluemojiContainer() {
         Bluemoji
       </h2>
 
+      <h3 className="text-skin-base mx-3 mb-2 text-xl font-semibold md:mx-0">
+        Upload Bluemoji
+      </h3>
       <div className="rounded-xl border border-slate-200 dark:border-slate-700 p-8">
-        <h3 className="text-skin-base mx-3 mb-2 text-xl font-semibold md:mx-0">
-          Upload Bluemoji
-        </h3>
         <BluemojiForm isLoading={isLoading} error={error} onSubmit={onSubmit} />
       </div>
 
