@@ -123,10 +123,8 @@ export default function BluemojiContainer() {
         </h3>
 
         {emojis.length == 0 && (
-        <div className="border-skin-base mt-2 flex w-full flex-col gap-3 rounded-none border border-x-0 p-3 md:rounded-b-2xl md:rounded-t-2xl md:border-x">
-          <div className="mx-3 md:mx-0">
-            <FeedAlert variant="empty" message="My Bluemoji not found." standalone />
-          </div>
+        <div className="mx-3 md:mx-0">
+          <FeedAlert variant="empty" message="My Bluemoji not found." standalone />
         </div>
         )}
 
