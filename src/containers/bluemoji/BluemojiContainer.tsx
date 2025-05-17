@@ -111,7 +111,7 @@ export default function BluemojiContainer() {
           Upload Bluemoji
         </h3>
 
-        <div className="rounded-xl border border-slate-200 dark:border-slate-700 p-8">
+        <div className="border-skin-base mt-2 flex w-full flex-col gap-3 rounded-none border border-x-0 p-3 md:rounded-b-2xl md:rounded-t-2xl md:border-x">
           <BluemojiForm isLoading={isLoading} error={error} onSubmit={onSubmit} />
         </div>
       </section>
@@ -122,8 +122,8 @@ export default function BluemojiContainer() {
         </h3>
 
         {(
-        <div className="rounded-xl border border-slate-200 dark:border-slate-700 p-8">
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+        <div className="border-skin-base mt-2 flex w-full flex-col gap-3 rounded-none border border-x-0 p-3 md:rounded-b-2xl md:rounded-t-2xl md:border-x">
+          <div className="flex flex-wrap items-center justify-between gap-3">
             {emojis.map((emoji) => (
               <div
                 key={emoji.ref.rkey}
